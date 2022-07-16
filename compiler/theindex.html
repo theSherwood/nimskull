@@ -467,9 +467,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="addDecl" href="#addDecl"><span>addDecl:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="lookups: addDecl(c: PContext; sym: PSym)" href="sem/lookups.html#addDecl%2CPContext%2CPSym">lookups: addDecl(c: PContext; sym: PSym)</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="lookups: addDecl(c: PContext; sym: PSym; info: TLineInfo)" href="sem/lookups.html#addDecl%2CPContext%2CPSym%2CTLineInfo">lookups: addDecl(c: PContext; sym: PSym; info: TLineInfo)</a></li>
+          data-doc-search-tag="lookups: addDecl(c: PContext; sym: PSym; info = sym.info; scope = c.currentScope)" href="sem/lookups.html#addDecl%2CPContext%2CPSym%2Cobject%2Cref%20TScope">lookups: addDecl(c: PContext; sym: PSym; info = sym.info; scope = c.currentScope)</a></li>
           </ul></dd>
 <dt><a name="addDeclaredLoc" href="#addDeclaredLoc"><span>addDeclaredLoc:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -482,12 +480,6 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="astmsgs: addDeclaredLocMaybe(result: var string; conf: ConfigRef; sym: PSym)" href="ast/astmsgs.html#addDeclaredLocMaybe%2Cstring%2CConfigRef%2CPSym">astmsgs: addDeclaredLocMaybe(result: var string; conf: ConfigRef; sym: PSym)</a></li>
           <li><a class="reference external"
           data-doc-search-tag="astmsgs: addDeclaredLocMaybe(result: var string; conf: ConfigRef; typ: PType)" href="ast/astmsgs.html#addDeclaredLocMaybe%2Cstring%2CConfigRef%2CPType">astmsgs: addDeclaredLocMaybe(result: var string; conf: ConfigRef; typ: PType)</a></li>
-          </ul></dd>
-<dt><a name="addDeclAt" href="#addDeclAt"><span>addDeclAt:</span></a></dt><dd><ul class="simple">
-<li><a class="reference external"
-          data-doc-search-tag="lookups: addDeclAt(c: PContext; scope: PScope; sym: PSym)" href="sem/lookups.html#addDeclAt%2CPContext%2CPScope%2CPSym">lookups: addDeclAt(c: PContext; scope: PScope; sym: PSym)</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="lookups: addDeclAt(c: PContext; scope: PScope; sym: PSym; info: TLineInfo)" href="sem/lookups.html#addDeclAt%2CPContext%2CPScope%2CPSym%2CTLineInfo">lookups: addDeclAt(c: PContext; scope: PScope; sym: PSym; info: TLineInfo)</a></li>
           </ul></dd>
 <dt><a name="addDep" href="#addDep"><span>addDep:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -2734,6 +2726,12 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="liftdestructors: createTypeBoundOps(g: ModuleGraph; c: PContext; orig: PType; info: TLineInfo;
                    idgen: IdGenerator)" href="sem/liftdestructors.html#createTypeBoundOps%2CModuleGraph%2CPContext%2CPType%2CTLineInfo%2CIdGenerator">liftdestructors: createTypeBoundOps(g: ModuleGraph; c: PContext; orig: PType; info: TLineInfo;
                    idgen: IdGenerator)</a></li>
+          </ul></dd>
+<dt><a name="createUndeclaredIdentifierError" href="#createUndeclaredIdentifierError"><span>createUndeclaredIdentifierError:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="lookups: createUndeclaredIdentifierError(c: PContext; n: PNode; name: string;
+                                candidates: seq[SemSpellCandidate] = @[]): PNode" href="sem/lookups.html#createUndeclaredIdentifierError%2CPContext%2CPNode%2Cstring%2Cseq%5BSemSpellCandidate%5D">lookups: createUndeclaredIdentifierError(c: PContext; n: PNode; name: string;
+                                candidates: seq[SemSpellCandidate] = @[]): PNode</a></li>
           </ul></dd>
 <dt><a name="csEmpty" href="#csEmpty"><span>csEmpty:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -20351,9 +20349,9 @@ window.addEventListener('DOMContentLoaded', main);
      style: set[Style] = {}): string" href="front/cli_reporter.html#wrap%2CConfigRef%2Cstring%2CForegroundColor%2Cset%5BStyle%5D">cli_reporter: wrap(conf: ConfigRef; str: string; color: ForegroundColor;
      style: set[Style] = {}): string</a></li>
           </ul></dd>
-<dt><a name="wrapErrorInSubTree" href="#wrapErrorInSubTree"><span>wrapErrorInSubTree:</span></a></dt><dd><ul class="simple">
+<dt><a name="wrapError" href="#wrapError"><span>wrapError:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="errorhandling: wrapErrorInSubTree(conf: ConfigRef; wrongNodeContainer: PNode): PNode" href="ast/errorhandling.html#wrapErrorInSubTree.t%2CConfigRef%2CPNode">errorhandling: wrapErrorInSubTree(conf: ConfigRef; wrongNodeContainer: PNode): PNode</a></li>
+          data-doc-search-tag="errorhandling: wrapError(conf: ConfigRef; wrongNodeContainer: PNode): PNode" href="ast/errorhandling.html#wrapError.t%2CConfigRef%2CPNode">errorhandling: wrapError(conf: ConfigRef; wrongNodeContainer: PNode): PNode</a></li>
           </ul></dd>
 <dt><a name="wrapIfErrorInSubTree" href="#wrapIfErrorInSubTree"><span>wrapIfErrorInSubTree:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -20818,7 +20816,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2022-07-14 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2022-07-16 00:00:00 UTC</small>
       </div>
     </div>
   </div>
