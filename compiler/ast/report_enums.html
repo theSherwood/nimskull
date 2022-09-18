@@ -120,6 +120,7 @@ window.addEventListener('DOMContentLoaded', main);
                              ## compilation errors, warnings and hints
   repCmd = &quot;Cmd&quot;, ## Report related to execution of the external command -
                    ## start of the command, execution failure, succes and so on.
+  repVM = &quot;VM&quot;,             ## Report related to embedded virtual machine
   repDebug = &quot;Debug&quot;, ## Side channel for the compiler debug report. Sem
                        ## expansion traces and other helper messages designed specifically to
                        ## aid development of the compiler
@@ -190,7 +191,25 @@ window.addEventListener('DOMContentLoaded', main);
   rparPragmaBeforeGenericParameters, rparTemplMissingEndClose,
   rparTemplInvalidExpression, rparInvalidFilter,
   rparInconsistentSpacing = &quot;Spacing&quot;, rparPragmaNotFollowingTypeName,
-  rparEnablePreviewDotOps = &quot;DotLikeOps&quot;, rsemFatalError, rsemUserError = &quot;UserError&quot;, ## `{.error: }`
+  rparEnablePreviewDotOps = &quot;DotLikeOps&quot;, rvmOpcParseExpectedExpression,
+  rvmTooManyRegistersRequired, rvmMissingImportcCompleteStruct,
+  rvmCannotFindBreakTarget, rvmNotUnused, rvmUserError, rvmNotAFieldSymbol,
+  rvmTooLargetOffset, rvmUnhandledException, rvmCannotGenerateCode,
+  rvmCannotCast, rvmGlobalError, ## Error report that was declared as 'global' in the
+                                  ## VM - with current 'globalError-is-a-control-flow-mechanism' approach
+                                  ## this report is largely meaningless, and used only to raise exception.
+  rvmInvalidBindSym, rvmBadExpandToAst, rvmCannotEvaluateAtComptime,
+  rvmCannotImportc, rvmCannotCreateNullElement, rvmInvalidObjectConstructor,
+  rvmNoClosureIterators, rvmCannotCallMethod, rvmCallingNonRoutine,
+  rvmCannotModifyTypechecked, rvmNilAccess, rvmAccessOutOfBounds,
+  rvmAccessTypeMismatch, rvmAccessNoLocation, rvmDerefUnsupportedPtr,
+  rvmErrInternal, rvmIndexError, rvmOutOfRange, rvmOverOrUnderflow,
+  rvmDivisionByConstZero, rvmNodeNotASymbol, rvmNodeNotAProcSymbol,
+  rvmNodeNotAFieldSymbol, rvmIllegalConv, rvmMissingCacheKey,
+  rvmCacheKeyAlreadyExists, rvmFieldNotFound, rvmFieldInavailable,
+  rvmCannotSetChild, rvmCannotAddChild, rvmCannotGetChild, rvmNoType,
+  rvmNotAField, rvmUnsupportedNonNil, rvmTooManyIterations, rvmStackTrace,
+  rsemFatalError, rsemUserError = &quot;UserError&quot;, ## `{.error: }`
   rsemUsageIsError, rsemCompilesError, rsemCustomError, rsemCustomPrintMsgAndNodeError, ## just like custom error, prints a message and renders wrongNode
   rsemTypeMismatch, rsemTypeKindMismatch, rsemAmbiguous, rsemAmbiguousIdent, rsemCustomUserError, ## just like customer error, but reported as a errUser in msgs
   rsemNodeNotAllowed,       ## Generated in `filters.nim`
@@ -314,28 +333,9 @@ window.addEventListener('DOMContentLoaded', main);
   rsemOnOrOffExpected, rsemCallconvExpected, rsemUnknownExperimental,
   rsemDuplicateCaseLabel, rsemExpressionIsNotAPath, rsemResultMustBorrowFirst,
   rsemCannotDetermineBorrowTarget, rsemCannotBorrow, rsemBorrowOutlivesSource,
-  rsemImmutableBorrowMutation, rsemVmOpcParseExpectedExpression,
-  rsemTooManyRegistersRequired, rsemVmCannotFindBreakTarget, rsemVmNotUnused,
-  rsemNotAFieldSymbol, rsemVmTooLargetOffset, rsemVmUnhandledException,
-  rsemVmCannotGenerateCode, rsemVmCannotCast, rsemVmGlobalError, ## Error report that was declared as 'global' in the
-                                                                  ## VM - with current 'globalError-is-a-control-flow-mechanism' approach
-                                                                  ## this report is largely meaningless, and used only to raise exception.
-  rsemVmInvalidBindSym, rsemVmBadExpandToAst, rsemVmCannotEvaluateAtComptime,
-  rsemVmCannotImportc, rsemVmCannotCreateNullElement,
-  rsemVmInvalidObjectConstructor, rsemVmNoClosureIterators,
-  rsemVmCannotCallMethod, rsemVmCallingNonRoutine,
-  rsemVmCannotModifyTypechecked, rsemVmNilAccess, rsemVmAccessOutOfBounds,
-  rsemVmAccessTypeMismatch, rsemVmAccessNoLocation, rsemVmDerefUnsupportedPtr,
-  rsemVmErrInternal, rsemVmIndexError, rsemVmOutOfRange, rsemVmOverOrUnderflow,
-  rsemVmDivisionByConstZero, rsemVmNodeNotASymbol, rsemVmNodeNotAProcSymbol,
-  rsemVmNodeNotAFieldSymbol, rsemVmIllegalConv, rsemVmMissingCacheKey,
-  rsemVmCacheKeyAlreadyExists, rsemVmFieldNotFound, rsemVmFieldInavailable,
-  rsemVmCannotSetChild, rsemVmCannotAddChild, rsemVmCannotGetChild,
-  rsemVmNoType, rsemVmNotAField, rsemVmUnsupportedNonNil,
-  rsemVmTooManyIterations, rsemMissingImportcCompleteStruct, rsemCyclicTree,
-  rsemCyclicDependency, rsemConstExprExpected,
-  rsemRttiRequestForIncompleteObject, rsemExpectedNimcallProc,
-  rsemExpectedExhaustiveCaseForComputedGoto,
+  rsemImmutableBorrowMutation, rsemCyclicTree, rsemCyclicDependency,
+  rsemConstExprExpected, rsemRttiRequestForIncompleteObject,
+  rsemExpectedNimcallProc, rsemExpectedExhaustiveCaseForComputedGoto,
   rsemExpectedUnholyEnumForComputedGoto, rsemTooManyEntriesForComputedGoto,
   rsemExpectedLow0ForComputedGoto, rsemExpectedCaseForComputedGoto,
   rsemDisallowedRangeForComputedGoto, rsemExpectedCallForCxxPattern,
@@ -401,8 +401,7 @@ window.addEventListener('DOMContentLoaded', main);
   rsemUnsafeSetLen = &quot;UnsafeSetLen&quot;, rsemUnsafeDefault = &quot;UnsafeDefault&quot;,
   rsemBindDeprecated, rsemUncollectableRefCycle = &quot;CycleCreated&quot;,
   rsemObservableStores = &quot;ObservableStores&quot;,
-  rsemCaseTransition = &quot;CaseTransition&quot;, rsemUseOfGc = &quot;GcMem&quot;,
-  rsemVmStackTrace, rsemUserHint = &quot;User&quot;, ## `{.hint: .}` pragma encountereed
+  rsemCaseTransition = &quot;CaseTransition&quot;, rsemUseOfGc = &quot;GcMem&quot;, rsemUserHint = &quot;User&quot;, ## `{.hint: .}` pragma encountereed
   rsemLinterReport = &quot;Name&quot;, rsemLinterReportUse = &quot;Name&quot;,
   rsemHintLibDependency, rsemXDeclaredButNotUsed = &quot;XDeclaredButNotUsed&quot;,
   rsemDuplicateModuleImport = &quot;DuplicateModuleImport&quot;,
@@ -449,10 +448,14 @@ window.addEventListener('DOMContentLoaded', main);
   rbackCompiling = &quot;Compiling&quot;, rbackLinking = &quot;Link&quot;">ReportKind</a></li>
   <li><a class="reference" href="#ReportKinds"
     title="ReportKinds = set[ReportKind]">ReportKinds</a></li>
+  <li><a class="reference" href="#SemOrVMReportKind"
+    title="SemOrVMReportKind = range[low(VMReportKind) .. high(SemReportKind)]">SemOrVMReportKind</a></li>
   <li><a class="reference" href="#SemReportErrorKind"
     title="SemReportErrorKind = range[rsemUserError .. rsemWrappedError]">SemReportErrorKind</a></li>
   <li><a class="reference" href="#SemReportKind"
     title="SemReportKind = range[rsemFatalError .. rsemImplicitObjConv]">SemReportKind</a></li>
+  <li><a class="reference" href="#VMReportKind"
+    title="VMReportKind = range[rvmOpcParseExpectedExpression .. rvmStackTrace]">VMReportKind</a></li>
 
   </ul>
 </li>
@@ -477,6 +480,8 @@ window.addEventListener('DOMContentLoaded', main);
     title="repBackendKinds = {rbackCannotWriteScript..rbackLinking}">repBackendKinds</a></li>
   <li><a class="reference" href="#repCmdKinds"
     title="repCmdKinds = {rcmdFailedExecution..rcmdRunnableExamplesSuccess}">repCmdKinds</a></li>
+  <li><a class="reference" href="#repDataPassKinds"
+    title="repDataPassKinds: ReportKinds = {rintStackTrace..rintEchoMessage}">repDataPassKinds</a></li>
   <li><a class="reference" href="#repDebugKinds"
     title="repDebugKinds = {rdbgVmExecTraceFull..rdbgOptionsPop}">repDebugKinds</a></li>
   <li><a class="reference" href="#repDebugTraceKinds"
@@ -486,12 +491,12 @@ window.addEventListener('DOMContentLoaded', main);
     title="repErrorKinds: ReportKinds = {rintCannotOpenFile..rintNotImplemented,
                               rextUnknownCCompiler..rextInvalidPackageName,
                               rlexMalformedUnderscores..rlexUnclosedComment,
-                              rparInvalidIndentation..rparInvalidFilter,
+                              rparInvalidIndentation..rparInvalidFilter, rvmOpcParseExpectedExpression..rvmTooManyIterations,
                               rsemUserError..rsemEmptyAsm, rcmdFailedExecution, rbackCannotWriteScript..rbackCannotProduceAssembly}">repErrorKinds</a></li>
   <li><a class="reference" href="#repExternalKinds"
     title="repExternalKinds = {rextUnknownCCompiler..rextPath}">repExternalKinds</a></li>
   <li><a class="reference" href="#repFatalKinds"
-    title="repFatalKinds: ReportKinds = {rintUnknown..rintIce}">repFatalKinds</a></li>
+    title="repFatalKinds: ReportKinds = {rintUnknown..rintIce, rsemFatalError}">repFatalKinds</a></li>
   <li><a class="reference" href="#repHintGroups"
     title="repHintGroups = [(&quot;all&quot;, {rintSource..rintSuccessX, rextConf..rextPath,
                           rlexLineTooLong..rlexSourceCodeFilterOutput,
@@ -526,7 +531,10 @@ window.addEventListener('DOMContentLoaded', main);
   <li><a class="reference" href="#repStrictNotNilWarnings"
     title="repStrictNotNilWarnings = {rsemStrictNotNilExpr, rsemStrictNotNilResult}">repStrictNotNilWarnings</a></li>
   <li><a class="reference" href="#repTraceKinds"
-    title="repTraceKinds: ReportKinds = {rsemVmStackTrace, rintStackTrace}">repTraceKinds</a></li>
+    title="repTraceKinds: ReportKinds = {rintStackTrace, rvmStackTrace,
+                              rdbgVmExecTraceFull..rdbgOptionsPop}">repTraceKinds</a></li>
+  <li><a class="reference" href="#repVMKinds"
+    title="repVMKinds = {rvmOpcParseExpectedExpression..rvmStackTrace}">repVMKinds</a></li>
   <li><a class="reference" href="#repWarningGroups"
     title="repWarningGroups = [(&quot;all&quot;, {rintWarnCannotOpenFile..rintWarnFileChanged,
                              rextDeprecated, rlexDeprecatedOctalPrefix,
@@ -604,6 +612,14 @@ window.addEventListener('DOMContentLoaded', main);
     title="rsemWarningKinds = {rsemUserWarning..rsemUseOfGc}">rsemWarningKinds</a></li>
   <li><a class="reference" href="#rstWarnings"
     title="rstWarnings = {rbackRstTestUnsupported..rbackRstRstStyle}">rstWarnings</a></li>
+  <li><a class="reference" href="#rvmErrorKinds"
+    title="rvmErrorKinds = {rvmOpcParseExpectedExpression..rvmTooManyIterations}">rvmErrorKinds</a></li>
+  <li><a class="reference" href="#rvmHintKinds"
+    title="rvmHintKinds = {}">rvmHintKinds</a></li>
+  <li><a class="reference" href="#rvmTraceKinds"
+    title="rvmTraceKinds = {rvmStackTrace}">rvmTraceKinds</a></li>
+  <li><a class="reference" href="#rvmWarningKinds"
+    title="rvmWarningKinds = {}">rvmWarningKinds</a></li>
 
   </ul>
 </li>
@@ -612,7 +628,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -629,9 +645,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L933"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L943"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L933" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L943" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -641,9 +657,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L929"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L939"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L929" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L939" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -653,9 +669,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L931"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L941"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L931" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L941" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -665,9 +681,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L935"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L945"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L935" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L945" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -677,9 +693,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L937"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L947"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L937" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L947" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -689,9 +705,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L923"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L929"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L923" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L929" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -701,9 +717,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L924"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L932"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L924" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L932" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -715,6 +731,7 @@ class="link-seesrc" target="_blank">Source</a>
                              <span class="Comment">## compilation errors, warnings and hints</span>
   <span class="Identifier">repCmd</span> <span class="Other">=</span> <span class="StringLit">&quot;Cmd&quot;</span><span class="Other">,</span> <span class="Comment">## Report related to execution of the external command -</span>
                    <span class="Comment">## start of the command, execution failure, succes and so on.</span>
+  <span class="Identifier">repVM</span> <span class="Other">=</span> <span class="StringLit">&quot;VM&quot;</span><span class="Other">,</span>             <span class="Comment">## Report related to embedded virtual machine</span>
   <span class="Identifier">repDebug</span> <span class="Other">=</span> <span class="StringLit">&quot;Debug&quot;</span><span class="Other">,</span> <span class="Comment">## Side channel for the compiler debug report. Sem</span>
                        <span class="Comment">## expansion traces and other helper messages designed specifically to</span>
                        <span class="Comment">## aid development of the compiler</span>
@@ -728,7 +745,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Kinds of the toplevel reports. Only dispatches on report topics, such as sem, parse, macro (for <tt class="docutils literal"><span class="pre"><span class="Identifier">echo</span></span></tt> in compile-time code) and so on. Subdivision is based on different phases of the compiler operation, and not on report's state itself, as those are completely orthogonal to each other (lexer might provide errors and hints, parser can provide errors, hints and warnings)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L2"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L2"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L2" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -795,7 +812,25 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">rparPragmaBeforeGenericParameters</span><span class="Other">,</span> <span class="Identifier">rparTemplMissingEndClose</span><span class="Other">,</span>
   <span class="Identifier">rparTemplInvalidExpression</span><span class="Other">,</span> <span class="Identifier">rparInvalidFilter</span><span class="Other">,</span>
   <span class="Identifier">rparInconsistentSpacing</span> <span class="Other">=</span> <span class="StringLit">&quot;Spacing&quot;</span><span class="Other">,</span> <span class="Identifier">rparPragmaNotFollowingTypeName</span><span class="Other">,</span>
-  <span class="Identifier">rparEnablePreviewDotOps</span> <span class="Other">=</span> <span class="StringLit">&quot;DotLikeOps&quot;</span><span class="Other">,</span> <span class="Identifier">rsemFatalError</span><span class="Other">,</span> <span class="Identifier">rsemUserError</span> <span class="Other">=</span> <span class="StringLit">&quot;UserError&quot;</span><span class="Other">,</span> <span class="Comment">## `{.error: }`</span>
+  <span class="Identifier">rparEnablePreviewDotOps</span> <span class="Other">=</span> <span class="StringLit">&quot;DotLikeOps&quot;</span><span class="Other">,</span> <span class="Identifier">rvmOpcParseExpectedExpression</span><span class="Other">,</span>
+  <span class="Identifier">rvmTooManyRegistersRequired</span><span class="Other">,</span> <span class="Identifier">rvmMissingImportcCompleteStruct</span><span class="Other">,</span>
+  <span class="Identifier">rvmCannotFindBreakTarget</span><span class="Other">,</span> <span class="Identifier">rvmNotUnused</span><span class="Other">,</span> <span class="Identifier">rvmUserError</span><span class="Other">,</span> <span class="Identifier">rvmNotAFieldSymbol</span><span class="Other">,</span>
+  <span class="Identifier">rvmTooLargetOffset</span><span class="Other">,</span> <span class="Identifier">rvmUnhandledException</span><span class="Other">,</span> <span class="Identifier">rvmCannotGenerateCode</span><span class="Other">,</span>
+  <span class="Identifier">rvmCannotCast</span><span class="Other">,</span> <span class="Identifier">rvmGlobalError</span><span class="Other">,</span> <span class="Comment">## Error report that was declared as 'global' in the</span>
+                                  <span class="Comment">## VM - with current 'globalError-is-a-control-flow-mechanism' approach</span>
+                                  <span class="Comment">## this report is largely meaningless, and used only to raise exception.</span>
+  <span class="Identifier">rvmInvalidBindSym</span><span class="Other">,</span> <span class="Identifier">rvmBadExpandToAst</span><span class="Other">,</span> <span class="Identifier">rvmCannotEvaluateAtComptime</span><span class="Other">,</span>
+  <span class="Identifier">rvmCannotImportc</span><span class="Other">,</span> <span class="Identifier">rvmCannotCreateNullElement</span><span class="Other">,</span> <span class="Identifier">rvmInvalidObjectConstructor</span><span class="Other">,</span>
+  <span class="Identifier">rvmNoClosureIterators</span><span class="Other">,</span> <span class="Identifier">rvmCannotCallMethod</span><span class="Other">,</span> <span class="Identifier">rvmCallingNonRoutine</span><span class="Other">,</span>
+  <span class="Identifier">rvmCannotModifyTypechecked</span><span class="Other">,</span> <span class="Identifier">rvmNilAccess</span><span class="Other">,</span> <span class="Identifier">rvmAccessOutOfBounds</span><span class="Other">,</span>
+  <span class="Identifier">rvmAccessTypeMismatch</span><span class="Other">,</span> <span class="Identifier">rvmAccessNoLocation</span><span class="Other">,</span> <span class="Identifier">rvmDerefUnsupportedPtr</span><span class="Other">,</span>
+  <span class="Identifier">rvmErrInternal</span><span class="Other">,</span> <span class="Identifier">rvmIndexError</span><span class="Other">,</span> <span class="Identifier">rvmOutOfRange</span><span class="Other">,</span> <span class="Identifier">rvmOverOrUnderflow</span><span class="Other">,</span>
+  <span class="Identifier">rvmDivisionByConstZero</span><span class="Other">,</span> <span class="Identifier">rvmNodeNotASymbol</span><span class="Other">,</span> <span class="Identifier">rvmNodeNotAProcSymbol</span><span class="Other">,</span>
+  <span class="Identifier">rvmNodeNotAFieldSymbol</span><span class="Other">,</span> <span class="Identifier">rvmIllegalConv</span><span class="Other">,</span> <span class="Identifier">rvmMissingCacheKey</span><span class="Other">,</span>
+  <span class="Identifier">rvmCacheKeyAlreadyExists</span><span class="Other">,</span> <span class="Identifier">rvmFieldNotFound</span><span class="Other">,</span> <span class="Identifier">rvmFieldInavailable</span><span class="Other">,</span>
+  <span class="Identifier">rvmCannotSetChild</span><span class="Other">,</span> <span class="Identifier">rvmCannotAddChild</span><span class="Other">,</span> <span class="Identifier">rvmCannotGetChild</span><span class="Other">,</span> <span class="Identifier">rvmNoType</span><span class="Other">,</span>
+  <span class="Identifier">rvmNotAField</span><span class="Other">,</span> <span class="Identifier">rvmUnsupportedNonNil</span><span class="Other">,</span> <span class="Identifier">rvmTooManyIterations</span><span class="Other">,</span> <span class="Identifier">rvmStackTrace</span><span class="Other">,</span>
+  <span class="Identifier">rsemFatalError</span><span class="Other">,</span> <span class="Identifier">rsemUserError</span> <span class="Other">=</span> <span class="StringLit">&quot;UserError&quot;</span><span class="Other">,</span> <span class="Comment">## `{.error: }`</span>
   <span class="Identifier">rsemUsageIsError</span><span class="Other">,</span> <span class="Identifier">rsemCompilesError</span><span class="Other">,</span> <span class="Identifier">rsemCustomError</span><span class="Other">,</span> <span class="Identifier">rsemCustomPrintMsgAndNodeError</span><span class="Other">,</span> <span class="Comment">## just like custom error, prints a message and renders wrongNode</span>
   <span class="Identifier">rsemTypeMismatch</span><span class="Other">,</span> <span class="Identifier">rsemTypeKindMismatch</span><span class="Other">,</span> <span class="Identifier">rsemAmbiguous</span><span class="Other">,</span> <span class="Identifier">rsemAmbiguousIdent</span><span class="Other">,</span> <span class="Identifier">rsemCustomUserError</span><span class="Other">,</span> <span class="Comment">## just like customer error, but reported as a errUser in msgs</span>
   <span class="Identifier">rsemNodeNotAllowed</span><span class="Other">,</span>       <span class="Comment">## Generated in `filters.nim`</span>
@@ -919,28 +954,9 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">rsemOnOrOffExpected</span><span class="Other">,</span> <span class="Identifier">rsemCallconvExpected</span><span class="Other">,</span> <span class="Identifier">rsemUnknownExperimental</span><span class="Other">,</span>
   <span class="Identifier">rsemDuplicateCaseLabel</span><span class="Other">,</span> <span class="Identifier">rsemExpressionIsNotAPath</span><span class="Other">,</span> <span class="Identifier">rsemResultMustBorrowFirst</span><span class="Other">,</span>
   <span class="Identifier">rsemCannotDetermineBorrowTarget</span><span class="Other">,</span> <span class="Identifier">rsemCannotBorrow</span><span class="Other">,</span> <span class="Identifier">rsemBorrowOutlivesSource</span><span class="Other">,</span>
-  <span class="Identifier">rsemImmutableBorrowMutation</span><span class="Other">,</span> <span class="Identifier">rsemVmOpcParseExpectedExpression</span><span class="Other">,</span>
-  <span class="Identifier">rsemTooManyRegistersRequired</span><span class="Other">,</span> <span class="Identifier">rsemVmCannotFindBreakTarget</span><span class="Other">,</span> <span class="Identifier">rsemVmNotUnused</span><span class="Other">,</span>
-  <span class="Identifier">rsemNotAFieldSymbol</span><span class="Other">,</span> <span class="Identifier">rsemVmTooLargetOffset</span><span class="Other">,</span> <span class="Identifier">rsemVmUnhandledException</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmCannotGenerateCode</span><span class="Other">,</span> <span class="Identifier">rsemVmCannotCast</span><span class="Other">,</span> <span class="Identifier">rsemVmGlobalError</span><span class="Other">,</span> <span class="Comment">## Error report that was declared as 'global' in the</span>
-                                                                  <span class="Comment">## VM - with current 'globalError-is-a-control-flow-mechanism' approach</span>
-                                                                  <span class="Comment">## this report is largely meaningless, and used only to raise exception.</span>
-  <span class="Identifier">rsemVmInvalidBindSym</span><span class="Other">,</span> <span class="Identifier">rsemVmBadExpandToAst</span><span class="Other">,</span> <span class="Identifier">rsemVmCannotEvaluateAtComptime</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmCannotImportc</span><span class="Other">,</span> <span class="Identifier">rsemVmCannotCreateNullElement</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmInvalidObjectConstructor</span><span class="Other">,</span> <span class="Identifier">rsemVmNoClosureIterators</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmCannotCallMethod</span><span class="Other">,</span> <span class="Identifier">rsemVmCallingNonRoutine</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmCannotModifyTypechecked</span><span class="Other">,</span> <span class="Identifier">rsemVmNilAccess</span><span class="Other">,</span> <span class="Identifier">rsemVmAccessOutOfBounds</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmAccessTypeMismatch</span><span class="Other">,</span> <span class="Identifier">rsemVmAccessNoLocation</span><span class="Other">,</span> <span class="Identifier">rsemVmDerefUnsupportedPtr</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmErrInternal</span><span class="Other">,</span> <span class="Identifier">rsemVmIndexError</span><span class="Other">,</span> <span class="Identifier">rsemVmOutOfRange</span><span class="Other">,</span> <span class="Identifier">rsemVmOverOrUnderflow</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmDivisionByConstZero</span><span class="Other">,</span> <span class="Identifier">rsemVmNodeNotASymbol</span><span class="Other">,</span> <span class="Identifier">rsemVmNodeNotAProcSymbol</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmNodeNotAFieldSymbol</span><span class="Other">,</span> <span class="Identifier">rsemVmIllegalConv</span><span class="Other">,</span> <span class="Identifier">rsemVmMissingCacheKey</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmCacheKeyAlreadyExists</span><span class="Other">,</span> <span class="Identifier">rsemVmFieldNotFound</span><span class="Other">,</span> <span class="Identifier">rsemVmFieldInavailable</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmCannotSetChild</span><span class="Other">,</span> <span class="Identifier">rsemVmCannotAddChild</span><span class="Other">,</span> <span class="Identifier">rsemVmCannotGetChild</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmNoType</span><span class="Other">,</span> <span class="Identifier">rsemVmNotAField</span><span class="Other">,</span> <span class="Identifier">rsemVmUnsupportedNonNil</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmTooManyIterations</span><span class="Other">,</span> <span class="Identifier">rsemMissingImportcCompleteStruct</span><span class="Other">,</span> <span class="Identifier">rsemCyclicTree</span><span class="Other">,</span>
-  <span class="Identifier">rsemCyclicDependency</span><span class="Other">,</span> <span class="Identifier">rsemConstExprExpected</span><span class="Other">,</span>
-  <span class="Identifier">rsemRttiRequestForIncompleteObject</span><span class="Other">,</span> <span class="Identifier">rsemExpectedNimcallProc</span><span class="Other">,</span>
-  <span class="Identifier">rsemExpectedExhaustiveCaseForComputedGoto</span><span class="Other">,</span>
+  <span class="Identifier">rsemImmutableBorrowMutation</span><span class="Other">,</span> <span class="Identifier">rsemCyclicTree</span><span class="Other">,</span> <span class="Identifier">rsemCyclicDependency</span><span class="Other">,</span>
+  <span class="Identifier">rsemConstExprExpected</span><span class="Other">,</span> <span class="Identifier">rsemRttiRequestForIncompleteObject</span><span class="Other">,</span>
+  <span class="Identifier">rsemExpectedNimcallProc</span><span class="Other">,</span> <span class="Identifier">rsemExpectedExhaustiveCaseForComputedGoto</span><span class="Other">,</span>
   <span class="Identifier">rsemExpectedUnholyEnumForComputedGoto</span><span class="Other">,</span> <span class="Identifier">rsemTooManyEntriesForComputedGoto</span><span class="Other">,</span>
   <span class="Identifier">rsemExpectedLow0ForComputedGoto</span><span class="Other">,</span> <span class="Identifier">rsemExpectedCaseForComputedGoto</span><span class="Other">,</span>
   <span class="Identifier">rsemDisallowedRangeForComputedGoto</span><span class="Other">,</span> <span class="Identifier">rsemExpectedCallForCxxPattern</span><span class="Other">,</span>
@@ -1006,8 +1022,7 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">rsemUnsafeSetLen</span> <span class="Other">=</span> <span class="StringLit">&quot;UnsafeSetLen&quot;</span><span class="Other">,</span> <span class="Identifier">rsemUnsafeDefault</span> <span class="Other">=</span> <span class="StringLit">&quot;UnsafeDefault&quot;</span><span class="Other">,</span>
   <span class="Identifier">rsemBindDeprecated</span><span class="Other">,</span> <span class="Identifier">rsemUncollectableRefCycle</span> <span class="Other">=</span> <span class="StringLit">&quot;CycleCreated&quot;</span><span class="Other">,</span>
   <span class="Identifier">rsemObservableStores</span> <span class="Other">=</span> <span class="StringLit">&quot;ObservableStores&quot;</span><span class="Other">,</span>
-  <span class="Identifier">rsemCaseTransition</span> <span class="Other">=</span> <span class="StringLit">&quot;CaseTransition&quot;</span><span class="Other">,</span> <span class="Identifier">rsemUseOfGc</span> <span class="Other">=</span> <span class="StringLit">&quot;GcMem&quot;</span><span class="Other">,</span>
-  <span class="Identifier">rsemVmStackTrace</span><span class="Other">,</span> <span class="Identifier">rsemUserHint</span> <span class="Other">=</span> <span class="StringLit">&quot;User&quot;</span><span class="Other">,</span> <span class="Comment">## `{.hint: .}` pragma encountereed</span>
+  <span class="Identifier">rsemCaseTransition</span> <span class="Other">=</span> <span class="StringLit">&quot;CaseTransition&quot;</span><span class="Other">,</span> <span class="Identifier">rsemUseOfGc</span> <span class="Other">=</span> <span class="StringLit">&quot;GcMem&quot;</span><span class="Other">,</span> <span class="Identifier">rsemUserHint</span> <span class="Other">=</span> <span class="StringLit">&quot;User&quot;</span><span class="Other">,</span> <span class="Comment">## `{.hint: .}` pragma encountereed</span>
   <span class="Identifier">rsemLinterReport</span> <span class="Other">=</span> <span class="StringLit">&quot;Name&quot;</span><span class="Other">,</span> <span class="Identifier">rsemLinterReportUse</span> <span class="Other">=</span> <span class="StringLit">&quot;Name&quot;</span><span class="Other">,</span>
   <span class="Identifier">rsemHintLibDependency</span><span class="Other">,</span> <span class="Identifier">rsemXDeclaredButNotUsed</span> <span class="Other">=</span> <span class="StringLit">&quot;XDeclaredButNotUsed&quot;</span><span class="Other">,</span>
   <span class="Identifier">rsemDuplicateModuleImport</span> <span class="Other">=</span> <span class="StringLit">&quot;DuplicateModuleImport&quot;</span><span class="Other">,</span>
@@ -1058,9 +1073,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Different naming scheme is used for a reports with different categories - this enum exists only to make it easier to work with different report kinds, without having to manage seven different enum types.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L34"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L36"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L36" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1070,9 +1085,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L917"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L923"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L917" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L923" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="SemOrVMReportKind">
+<dt><pre><a href="report_enums.html#SemOrVMReportKind"><span class="Identifier">SemOrVMReportKind</span></a> <span class="Other">=</span> <span class="Identifier">range</span><span class="Other">[</span><span class="Identifier">low</span><span class="Other">(</span><a href="report_enums.html#VMReportKind"><span class="Identifier">VMReportKind</span></a><span class="Other">)</span> <span class="Operator">..</span> <span class="Identifier">high</span><span class="Other">(</span><a href="report_enums.html#SemReportKind"><span class="Identifier">SemReportKind</span></a><span class="Other">)</span><span class="Other">]</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L935"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L935" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1082,9 +1109,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L927"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L937"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L927" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L937" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1094,9 +1121,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L926"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L934"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L926" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L934" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="VMReportKind">
+<dt><pre><a href="report_enums.html#VMReportKind"><span class="Identifier">VMReportKind</span></a> <span class="Other">=</span> <span class="Identifier">range</span><span class="Other">[</span><span class="Identifier">rvmOpcParseExpectedExpression</span> <span class="Operator">..</span> <span class="Identifier">rvmStackTrace</span><span class="Other">]</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L933"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L933" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1111,9 +1150,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L988"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1005"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L988" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1005" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1123,9 +1162,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L990"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1007"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L990" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1007" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1135,9 +1174,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L989"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1006"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L989" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1006" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1147,9 +1186,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L970"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L987"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L970" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L987" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1159,9 +1198,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L972"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L989"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L972" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L989" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1171,9 +1210,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L971"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L988"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L971" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L988" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1183,9 +1222,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1043"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1068"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1043" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1068" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1195,9 +1234,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L987"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1004"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L987" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1004" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1207,9 +1246,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L969"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L986"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L969" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L986" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="repDataPassKinds">
+<dt><pre><a href="report_enums.html#repDataPassKinds"><span class="Identifier">repDataPassKinds</span></a><span class="Other">:</span> <a href="report_enums.html#ReportKinds"><span class="Identifier">ReportKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rintStackTrace</span><span class="Other">..</span><span class="DecNumber">rintEchoMessage</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1064"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1064" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1219,9 +1270,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L975"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L992"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L975" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L992" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1232,9 +1283,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L976"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L993"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L976" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L993" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1242,15 +1293,15 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><a href="report_enums.html#repErrorKinds"><span class="Identifier">repErrorKinds</span></a><span class="Other">:</span> <a href="report_enums.html#ReportKinds"><span class="Identifier">ReportKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rintCannotOpenFile</span><span class="Other">..</span><span class="DecNumber">rintNotImplemented</span><span class="Other">,</span>
                               <span class="DecNumber">rextUnknownCCompiler</span><span class="Other">..</span><span class="DecNumber">rextInvalidPackageName</span><span class="Other">,</span>
                               <span class="DecNumber">rlexMalformedUnderscores</span><span class="Other">..</span><span class="DecNumber">rlexUnclosedComment</span><span class="Other">,</span>
-                              <span class="DecNumber">rparInvalidIndentation</span><span class="Other">..</span><span class="DecNumber">rparInvalidFilter</span><span class="Other">,</span>
+                              <span class="DecNumber">rparInvalidIndentation</span><span class="Other">..</span><span class="DecNumber">rparInvalidFilter</span><span class="Other">,</span> <span class="DecNumber">rvmOpcParseExpectedExpression</span><span class="Other">..</span><span class="DecNumber">rvmTooManyIterations</span><span class="Other">,</span>
                               <span class="DecNumber">rsemUserError</span><span class="Other">..</span><span class="DecNumber">rsemEmptyAsm</span><span class="Other">,</span> <span class="DecNumber">rcmdFailedExecution</span><span class="Other">,</span> <span class="DecNumber">rbackCannotWriteScript</span><span class="Other">..</span><span class="DecNumber">rbackCannotProduceAssembly</span><span class="Other">}</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1033"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1054"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1033" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1054" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1260,21 +1311,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L993"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1010"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L993" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1010" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="repFatalKinds">
-<dt><pre><a href="report_enums.html#repFatalKinds"><span class="Identifier">repFatalKinds</span></a><span class="Other">:</span> <a href="report_enums.html#ReportKinds"><span class="Identifier">ReportKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rintUnknown</span><span class="Other">..</span><span class="DecNumber">rintIce</span><span class="Other">}</span></pre></dt>
+<dt><pre><a href="report_enums.html#repFatalKinds"><span class="Identifier">repFatalKinds</span></a><span class="Other">:</span> <a href="report_enums.html#ReportKinds"><span class="Identifier">ReportKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rintUnknown</span><span class="Other">..</span><span class="DecNumber">rintIce</span><span class="Other">,</span> <span class="DecNumber">rsemFatalError</span><span class="Other">}</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1042"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1067"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1042" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1067" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1291,9 +1342,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1108"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1168"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1108" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1168" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1307,9 +1358,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1024"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1044"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1024" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1044" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1319,9 +1370,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1000"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1017"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1000" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1017" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1331,9 +1382,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L942"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L952"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L942" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L952" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1343,9 +1394,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1095"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1155"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1095" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1155" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1355,9 +1406,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L963"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L980"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L963" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L980" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1367,9 +1418,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L966"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L983"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L966" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L983" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1379,9 +1430,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L949"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L959"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L949" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L959" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1391,9 +1442,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1090"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1150"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1090" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1150" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1403,9 +1454,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L956"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L973"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L956" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L973" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1415,21 +1466,34 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1100"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1160"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1100" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1160" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="repTraceKinds">
-<dt><pre><a href="report_enums.html#repTraceKinds"><span class="Identifier">repTraceKinds</span></a><span class="Other">:</span> <a href="report_enums.html#ReportKinds"><span class="Identifier">ReportKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rsemVmStackTrace</span><span class="Other">,</span> <span class="DecNumber">rintStackTrace</span><span class="Other">}</span></pre></dt>
+<dt><pre><a href="report_enums.html#repTraceKinds"><span class="Identifier">repTraceKinds</span></a><span class="Other">:</span> <a href="report_enums.html#ReportKinds"><span class="Identifier">ReportKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rintStackTrace</span><span class="Other">,</span> <span class="DecNumber">rvmStackTrace</span><span class="Other">,</span>
+                              <span class="DecNumber">rdbgVmExecTraceFull</span><span class="Other">..</span><span class="DecNumber">rdbgOptionsPop</span><span class="Other">}</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1022"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1040"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1022" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1040" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="repVMKinds">
+<dt><pre><a href="report_enums.html#repVMKinds"><span class="Identifier">repVMKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rvmOpcParseExpectedExpression</span><span class="Other">..</span><span class="DecNumber">rvmStackTrace</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L966"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L966" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1444,9 +1508,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1115"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1175"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1115" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1175" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1459,9 +1523,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1013"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1030"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1013" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1030" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1471,9 +1535,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L994"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1011"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L994" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1011" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1483,9 +1547,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L996"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1013"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L996" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1013" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1495,9 +1559,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L995"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1012"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L995" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1012" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1507,9 +1571,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1009"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1026"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1009" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1026" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1519,9 +1583,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1008"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1025"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1008" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1025" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1531,9 +1595,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1005"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1022"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1005" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1022" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1543,9 +1607,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Fatal internal compilation reports
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1003"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1020"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1003" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1020" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1555,9 +1619,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1007"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1024"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1007" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1024" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1567,9 +1631,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1006"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1023"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1006" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1023" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1579,9 +1643,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L945"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L955"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L945" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L955" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1591,9 +1655,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L943"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L953"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L943" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L953" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1603,9 +1667,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L944"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L954"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L944" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L954" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1615,9 +1679,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L951"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L961"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L951" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L961" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1627,9 +1691,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L950"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L960"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L950" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L960" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1639,9 +1703,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L952"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L962"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L952" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L962" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1651,9 +1715,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L957"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L974"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L957" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L974" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1663,9 +1727,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L959"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L976"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L959" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L976" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1687,9 +1751,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1073"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1133"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1073" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1133" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1701,9 +1765,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1066"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1126"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1066" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1126" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1715,9 +1779,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1057"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1117"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1057" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1117" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1730,9 +1794,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L1047"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L1107"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1047" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1107" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1742,9 +1806,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L958"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L975"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L958" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L975" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1754,9 +1818,57 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/104f004ec4a7fd0998f434dbd6bad07ef6fc9788/compiler/ast/report_enums.nim#L920"
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L926"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L920" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L926" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="rvmErrorKinds">
+<dt><pre><a href="report_enums.html#rvmErrorKinds"><span class="Identifier">rvmErrorKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rvmOpcParseExpectedExpression</span><span class="Other">..</span><span class="DecNumber">rvmTooManyIterations</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L970"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L970" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="rvmHintKinds">
+<dt><pre><a href="report_enums.html#rvmHintKinds"><span class="Identifier">rvmHintKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L967"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L967" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="rvmTraceKinds">
+<dt><pre><a href="report_enums.html#rvmTraceKinds"><span class="Identifier">rvmTraceKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rvmStackTrace</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L968"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L968" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="rvmWarningKinds">
+<dt><pre><a href="report_enums.html#rvmWarningKinds"><span class="Identifier">rvmWarningKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7c45c41a6a83175fe9095c3b09ee7ba0078527a9/compiler/ast/report_enums.nim#L969"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L969" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1770,7 +1882,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2022-09-15 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2022-09-18 00:00:00 UTC</small>
       </div>
     </div>
   </div>

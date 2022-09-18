@@ -41,6 +41,8 @@ reportAst	ast/reports.html#reportAst,ReportKind,PNode,string,PType,PSym	reports:
 reportTyp	ast/reports.html#reportTyp,ReportKind,PType,PNode,PSym,string	reports: reportTyp(kind: ReportKind; typ: PType; ast: PNode = nil; sym: PSym = nil;\n          str: string = &quot;&quot;): SemReport	
 reportStr	ast/reports.html#reportStr,ReportKind,string,PNode,PType,PSym	reports: reportStr(kind: ReportKind; str: string; ast: PNode = nil; typ: PType = nil;\n          sym: PSym = nil): SemReport	
 reportSym	ast/reports.html#reportSym,ReportKind,PSym,PNode,string,PType	reports: reportSym(kind: ReportKind; sym: PSym; ast: PNode = nil; str: string = &quot;&quot;;\n          typ: PType = nil): SemReport	
+VMReport	ast/reports.html#VMReport	reports: VMReport	
+severity	ast/reports.html#severity,VMReport	reports: severity(vm: VMReport): ReportSeverity	
 withIt	ast/reports.html#withIt.t,untyped,untyped	reports: withIt(expr: untyped; body: untyped): untyped	
 tern	ast/reports.html#tern.t,bool,untyped,untyped	reports: tern(predicate: bool; tBranch: untyped; fBranch: untyped): untyped	
 CmdReport	ast/reports.html#CmdReport	reports: CmdReport	
@@ -83,6 +85,8 @@ kind	ast/reports.html#kind,Report	reports: kind(report: Report): ReportKind
 location	ast/reports.html#location,Report	reports: location(report: Report): Option[TLineInfo]	
 reportInst	ast/reports.html#reportInst,Report	reports: reportInst(report: Report): ReportLineInfo	
 reportFrom	ast/reports.html#reportFrom,Report	reports: reportFrom(report: Report): ReportLineInfo	
+context	ast/reports.html#context,Report	reports: context(report: Report): seq[ReportContext]	
+context=	ast/reports.html#context=,Report,seq[ReportContext]	reports: context=(report: var Report; context: seq[ReportContext])	
 reportFrom=	ast/reports.html#reportFrom=,Report,ReportLineInfo	reports: reportFrom=(report: var Report; loc: ReportLineInfo)	
 category	ast/reports.html#category,ReportKind	reports: category(kind: ReportKind): ReportCategory	
 severity	ast/reports.html#severity,ReportTypes,ReportKinds,ReportKinds	reports: severity(report: ReportTypes; asError: ReportKinds;\n         asWarning: ReportKinds = default(ReportKinds)): ReportSeverity	
@@ -93,6 +97,7 @@ isValid	ast/reports.html#isValid,ReportLineInfo	reports: isValid(point: ReportLi
 reportHere	ast/reports.html#reportHere.t,R	reports: reportHere[R: ReportTypes](report: R): R	
 wrap	ast/reports.html#wrap,sinkLexerReport	reports: wrap(rep: sink LexerReport): Report	
 wrap	ast/reports.html#wrap,sinkParserReport	reports: wrap(rep: sink ParserReport): Report	
+wrap	ast/reports.html#wrap,sinkVMReport	reports: wrap(rep: sink VMReport): Report	
 wrap	ast/reports.html#wrap,sinkSemReport	reports: wrap(rep: sink SemReport): Report	
 wrap	ast/reports.html#wrap,sinkBackendReport	reports: wrap(rep: sink BackendReport): Report	
 wrap	ast/reports.html#wrap,sinkCmdReport	reports: wrap(rep: sink CmdReport): Report	
@@ -112,7 +117,7 @@ contains	ast/reports.html#contains,ReportSet,ReportId	reports: contains(s: var R
 addReport	ast/reports.html#addReport,ReportList,sinkReport	reports: addReport(list: var ReportList; report: sink Report): ReportId	
 addReport	ast/reports.html#addReport,ReportList,R	reports: addReport[R: ReportTypes](list: var ReportList; report: R): ReportId	
 getReport	ast/reports.html#getReport,ReportList,ReportId	reports: getReport(list: ReportList; id: ReportId): Report	
-actualType	ast/reports.html#actualType,SemReport	reports: actualType(r: SemReport): PType	
-formalType	ast/reports.html#formalType,SemReport	reports: formalType(r: SemReport): PType	
+actualType	ast/reports.html#actualType	reports: actualType(r: SemReport | VMReport): PType	
+formalType	ast/reports.html#formalType	reports: formalType(r: SemReport | VMReport): PType	
 formalTypeKind	ast/reports.html#formalTypeKind,SemReport	reports: formalTypeKind(r: SemReport): set[TTypeKind]	
-symstr	ast/reports.html#symstr,SemReport	reports: symstr(r: SemReport): string	
+symstr	ast/reports.html#symstr	reports: symstr(r: SemReport | VMReport): string	
