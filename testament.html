@@ -110,6 +110,7 @@ window.addEventListener('DOMContentLoaded', main);
 <ul class="simple"><li><a class="reference" id="writing-tests-test-execution-options_toc" href="#writing-tests-test-execution-options">Test execution options</a></li>
 <li><a class="reference" id="writing-tests-compiler-output-assertions_toc" href="#writing-tests-compiler-output-assertions">Compiler output assertions</a></li>
 <li><a class="reference" id="writing-tests-binary-output-assertions_toc" href="#writing-tests-binary-output-assertions">Binary output assertions</a></li>
+<li><a class="reference" id="writing-tests-labels_toc" href="#writing-tests-labels">Labels</a></li>
 </ul><li><a class="reference" id="reading-test-outputs_toc" href="#reading-test-outputs">Reading test outputs</a></li>
 <ul class="simple"><li><a class="reference" id="reading-test-outputs-structured-mismatches_toc" href="#reading-test-outputs-structured-mismatches">Structured mismatches</a></li>
 </ul><li><a class="reference" id="test-examples_toc" href="#test-examples">Test Examples</a></li>
@@ -120,7 +121,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/678b4b0b385188900e86c09858e9e85c37412bd5/doc/testament.rst#L1"
+href="https://github.com/nim-works/nimskull/tree/e514eb62cf4c94a784dc5e6ca960eac877d887be/doc/testament.rst#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/doc/testament.rst#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -171,7 +172,7 @@ class="link-seesrc" target="_blank">Source</a>
 <span class="Identifier">disabled</span><span class="Punctuation">:</span> <span class="StringLit">&quot;32bit&quot;</span> <span class="Comment"># ...or architectures</span>
 <span class="Identifier">disabled</span><span class="Punctuation">:</span> <span class="StringLit">&quot;i386&quot;</span>
 <span class="Identifier">disabled</span><span class="Punctuation">:</span> <span class="Identifier">true</span>    <span class="Comment"># ...or can disable the test entirely</span></pre></li>
-<li><tt class="docutils literal"><span class="pre">knownIssue</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">knownIssue</span></tt> description of the test that currently fails but should execute successfully; it is a known bug that must be fixed in the future. Can be used several times in specification.</li>
 </ul>
 
 <h2><a class="toc-backref" id="writing-tests-compiler-output-assertions" href="#writing-tests-compiler-output-assertions">Compiler output assertions</a></h2><ul class="simple"><li><tt class="docutils literal"><span class="pre">errormsg</span></tt>: Error message the test should print, if any.</li>
@@ -208,6 +209,90 @@ class="link-seesrc" target="_blank">Source</a>
 <li><a class="reference external" href="https://github.com/nim-works/nimskull/blob/devel/testament/specs.nim#L238">This is not the full spec of Testament, check the Testament Spec on GitHub, see parseSpec().</a></li>
 <li><a class="reference external" href="https://github.com/nim-works/nimskull/tree/devel/tests">Nim itself uses Testament, so there are plenty of test examples.</a></li>
 <li><a class="reference external" href="https://github.com/nim-works/nimskull/blob/9a110047cbe2826b1d4afe63e3a1f5a08422b73f/tests/effects/teffects1.nim">Testament supports inlined error messages on tests, basically comments with the expected error directly on the code.</a></li>
+</ul>
+
+<h2><a class="toc-backref" id="writing-tests-labels" href="#writing-tests-labels">Labels</a></h2><p>Testament specification supports a <tt class="docutils literal"><span class="pre"><span class="Identifier">labels</span><span class="Punctuation">:</span></span></tt> tag that allows for non-hierarchical categorization of tests. Things can be split in different directories, but still properly mention involved language features.</p>
+<p>Tags should be added if the test specifically targets one of the features (such as code generation failure in certain case that was added as a text) or involves high-level language feature (such as macros, procedures, enums etc). For example -- unless the test specifically deals with some for-loop feature there is no need to add <tt class="docutils literal"><span class="pre"><span class="Identifier">for_loop</span></span></tt> tag.</p>
+<p>General rule of tag construction is -- avoid long and overly specific tags, since it would be impossible to break down every single tests accordingly. There is a clear need to balance out precision and usability. Use your best judgement and don't hesitate to ask for clarification if you are stuck.</p>
+<p>Tag names can consist <em>one or more lowercase words in a singular form</em> separated by underscores, each word either narrowing down the scope (<tt class="docutils literal"><span class="pre"><span class="Identifier">interop_c</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">interop_cpp</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">backend_c</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">gc</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">gc_orc</span></span></tt> etc.) or simply being a part of a longer phrase (<tt class="docutils literal"><span class="pre"><span class="Identifier">top_level</span></span></tt>).</p>
+<p>Please do check whether the tag is already present before adding new one. To generate a new list of all tags used in the code you can run code below. If you notice any seemingly duplicate tags (e.g. <tt class="docutils literal"><span class="pre"><span class="Identifier">error_compile</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">error_compilation</span></span></tt>) please correct the code to leave the most common one.</p>
+<pre class="listing"><span class="program">rg</span> <span class="option">--no-filename</span>  <span class="option">-g</span> <span class="option">&quot;*.nim&quot;</span> <span class="option">&quot;labels: &quot;</span> <span class="Operator">|</span> <span class="program">sd</span> <span class="option">'labels:\s+&quot;(.*?)&quot;'</span> <span class="option">'$1'</span> <span class="Operator">|</span> <span class="program">tr</span> <span class="option">' '</span> <span class="option">'\n'</span> <span class="Operator">|</span> <span class="program">sort</span> <span class="Operator">|</span> <span class="program">uniq</span> <span class="option">-c</span></pre><ul class="simple"><li>Type-related<ul class="simple"><li><tt class="docutils literal"><span class="pre">array</span></tt>: Array type is tested</li>
+<li><tt class="docutils literal"><span class="pre">distinct</span></tt>: <tt class="docutils literal"><span class="pre"><span class="Keyword">distinct</span></span></tt> type is involved</li>
+<li><tt class="docutils literal"><span class="pre">enum</span></tt>: Enumeration type is involved</li>
+<li><tt class="docutils literal"><span class="pre">ptr</span></tt>: Default <tt class="docutils literal"><span class="pre"><span class="Keyword">ptr</span> <span class="Identifier">T</span></span></tt> type</li>
+<li><tt class="docutils literal"><span class="pre">range</span></tt>: Default <tt class="docutils literal"><span class="pre"><span class="Identifier">range</span><span class="Punctuation">[</span><span class="Identifier">low</span><span class="Operator">..</span><span class="Identifier">high</span><span class="Punctuation">]</span></span></tt> type</li>
+<li><tt class="docutils literal"><span class="pre">ref</span></tt>: Default <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span> <span class="Identifier">T</span></span></tt> type</li>
+<li><tt class="docutils literal"><span class="pre">char</span></tt>: Character type is involved</li>
+<li><tt class="docutils literal"><span class="pre">seq</span></tt>: Default <tt class="docutils literal"><span class="pre"><span class="Identifier">seq</span><span class="Punctuation">[</span><span class="Identifier">T</span><span class="Punctuation">]</span></span></tt> type</li>
+<li><tt class="docutils literal"><span class="pre">int</span></tt>: Integer or other integral type is used</li>
+<li><tt class="docutils literal"><span class="pre">float</span></tt>: <tt class="docutils literal"><span class="pre"><span class="Identifier">float</span></span></tt> or other floating point type is used</li>
+</ul>
+</li>
+<li>Compiler diagnostics<ul class="simple"><li><tt class="docutils literal"><span class="pre">error_compilation</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">error_compile</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">error_message</span></tt>: Test is specifically targeting formatting or content of the error message.</li>
+</ul>
+</li>
+<li>Code detail<ul class="simple"><li><tt class="docutils literal"><span class="pre">local</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">top_level</span></tt>: Language construct is specifically tested when it is placed in the top level of the module -- and not inside procedure/method definition.</li>
+<li><tt class="docutils literal"><span class="pre">32_bit</span></tt>: Test explicitly involves 32-bit data handling</li>
+</ul>
+</li>
+<li>Language feature<ul class="simple"><li>Definitions<ul class="simple"><li><tt class="docutils literal"><span class="pre">proc</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">template</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">union</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">macro</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">iterator</span></tt>:</li>
+</ul>
+</li>
+<li>Code detail<ul class="simple"><li><tt class="docutils literal"><span class="pre">overload</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">exception</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">generic</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">const</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">import</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">module</span></tt>:</li>
+</ul>
+</li>
+<li>Other<ul class="simple"><li><tt class="docutils literal"><span class="pre">pragma</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">subtyping</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">resolution</span></tt>: Overloading resolution</li>
+<li><tt class="docutils literal"><span class="pre">typedesc</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">var</span></tt>: Mutable variable declaration</li>
+<li><tt class="docutils literal"><span class="pre">conversion</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">alias</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">constructor</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">identifier</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">scope</span></tt>:</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Expectations<ul class="simple"><li><tt class="docutils literal"><span class="pre">error_runtime</span></tt>: Runtime error expected</li>
+</ul>
+</li>
+<li>Compilation details<ul class="simple"><li><tt class="docutils literal"><span class="pre">gc</span></tt>: Garbage collector is involved</li>
+<li><tt class="docutils literal"><span class="pre">backend_c</span></tt>: Testing something directly related or requiring C backend</li>
+<li><tt class="docutils literal"><span class="pre">codegen</span></tt>: Code generation is involved</li>
+<li><tt class="docutils literal"><span class="pre">mode_release</span></tt>: Compiled in release mode</li>
+<li><tt class="docutils literal"><span class="pre">js</span></tt>:</li>
+</ul>
+</li>
+<li>Standard library<ul class="simple"><li><tt class="docutils literal"><span class="pre">stdlib</span></tt>: Standard library module</li>
+<li><tt class="docutils literal"><span class="pre">system</span></tt>: Types and procedures imported by default in every compiled module</li>
+<li><tt class="docutils literal"><span class="pre">table</span></tt>: Standard library <tt class="docutils literal"><span class="pre"><span class="Identifier">std</span><span class="Operator">/</span><span class="Identifier">table</span></span></tt> module tested</li>
+<li><tt class="docutils literal"><span class="pre">macro_API</span></tt>: Publicly exposed macro API for operations on the AST</li>
+</ul>
+</li>
+<li>Other:<ul class="simple"><li><tt class="docutils literal"><span class="pre">alignment</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">arithmetic</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">atomics</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">bitwise</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">gensym</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">index</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">inline</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">shift</span></tt>:</li>
+</ul>
+</li>
 </ul>
 
 <h1><a class="toc-backref" id="reading-test-outputs" href="#reading-test-outputs">Reading test outputs</a></h1><p>Testament supports two different modes of interaction with the compiler - structured and unstructured. Unstructured interaction mode (currently default) allows user to specify exact compiler output that should be produced by the test and then compares it based on <tt class="docutils literal"><span class="pre">nimoutFull</span></tt> configuration options.</p>
