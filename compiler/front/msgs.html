@@ -133,18 +133,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="exactEquals(a, b: TLineInfo): bool">exactEquals(a, b: TLineInfo): bool</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">fileInfoIdx
-      <li><a class="reference" href="#fileInfoIdx%2CConfigRef%2CAbsoluteFile"
-    title="fileInfoIdx(conf: ConfigRef; filename: AbsoluteFile): FileIndex">fileInfoIdx(conf: ConfigRef; filename: AbsoluteFile): FileIndex</a></li>
-  <li><a class="reference" href="#fileInfoIdx%2CConfigRef%2CAbsoluteFile%2Cbool"
-    title="fileInfoIdx(conf: ConfigRef; filename: AbsoluteFile; isKnownFile: var bool): FileIndex">fileInfoIdx(conf: ConfigRef; filename: AbsoluteFile; isKnownFile: var bool): FileIndex</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">fileInfoKnown
-      <li><a class="reference" href="#fileInfoKnown%2CConfigRef%2CAbsoluteFile"
-    title="fileInfoKnown(conf: ConfigRef; filename: AbsoluteFile): bool">fileInfoKnown(conf: ConfigRef; filename: AbsoluteFile): bool</a></li>
-
-  </ul>
   <ul class="simple nested-toc-section">flushDot
       <li><a class="reference" href="#flushDot%2CConfigRef"
     title="flushDot(conf: ConfigRef)">flushDot(conf: ConfigRef)</a></li>
@@ -186,7 +174,11 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">handleReport
-      <li><a class="reference" href="#handleReport%2CConfigRef%2CReportId%2CInstantiationInfo%2CTErrorHandling"
+      <li><a class="reference" href="#handleReport%2CConfigRef%2CLexerDiag%2CInstantiationInfo%2CTErrorHandling"
+    title="handleReport(conf: ConfigRef; diag: LexerDiag; reportFrom: InstantiationInfo;
+             eh: TErrorHandling = doNothing)">handleReport(conf: ConfigRef; diag: LexerDiag; reportFrom: InstantiationInfo;
+             eh: TErrorHandling = doNothing)</a></li>
+  <li><a class="reference" href="#handleReport%2CConfigRef%2CReportId%2CInstantiationInfo%2CTErrorHandling"
     title="handleReport(conf: ConfigRef; id: ReportId; reportFrom: InstantiationInfo;
              eh: TErrorHandling = doNothing)">handleReport(conf: ConfigRef; id: ReportId; reportFrom: InstantiationInfo;
              eh: TErrorHandling = doNothing)</a></li>
@@ -208,6 +200,16 @@ window.addEventListener('DOMContentLoaded', main);
     title="joinAnyOf[T](values: seq[T]; quote: bool = false): string">joinAnyOf[T](values: seq[T]; quote: bool = false): string</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">lexDiagToLegacyReportKind
+      <li><a class="reference" href="#lexDiagToLegacyReportKind%2CLexerDiagKind"
+    title="lexDiagToLegacyReportKind(diag: LexerDiagKind): ReportKind">lexDiagToLegacyReportKind(diag: LexerDiagKind): ReportKind</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">lexerDiagToLegacyReport
+      <li><a class="reference" href="#lexerDiagToLegacyReport%2CLexerDiag"
+    title="lexerDiagToLegacyReport(diag: LexerDiag): Report">lexerDiagToLegacyReport(diag: LexerDiag): Report</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">listHints
       <li><a class="reference" href="#listHints%2CConfigRef"
     title="listHints(conf: ConfigRef)">listHints(conf: ConfigRef)</a></li>
@@ -223,11 +225,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="log(s: string)">log(s: string)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">makeCString
-      <li><a class="reference" href="#makeCString%2Cstring"
-    title="makeCString(s: string): Rope">makeCString(s: string): Rope</a></li>
-
-  </ul>
   <ul class="simple nested-toc-section">msgQuit
       <li><a class="reference" href="#msgQuit%2Cint8"
     title="msgQuit(x: int8)">msgQuit(x: int8)</a></li>
@@ -238,13 +235,6 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">msgWrite
       <li><a class="reference" href="#msgWrite%2CConfigRef%2Cstring%2CMsgFlags"
     title="msgWrite(conf: ConfigRef; s: string; flags: MsgFlags = {})">msgWrite(conf: ConfigRef; s: string; flags: MsgFlags = {})</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">newLineInfo
-      <li><a class="reference" href="#newLineInfo%2CConfigRef%2CAbsoluteFile%2Cint%2Cint"
-    title="newLineInfo(conf: ConfigRef; filename: AbsoluteFile; line, col: int): TLineInfo">newLineInfo(conf: ConfigRef; filename: AbsoluteFile; line, col: int): TLineInfo</a></li>
-  <li><a class="reference" href="#newLineInfo%2CFileIndex%2Cint%2Cint"
-    title="newLineInfo(fileInfoIdx: FileIndex; line, col: int): TLineInfo">newLineInfo(fileInfoIdx: FileIndex; line, col: int): TLineInfo</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">numLines
@@ -307,11 +297,6 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">temporaryStringError
       <li><a class="reference" href="#temporaryStringError%2CConfigRef%2CTLineInfo%2Cstring"
     title="temporaryStringError(conf: ConfigRef; info: TLineInfo; text: string)">temporaryStringError(conf: ConfigRef; info: TLineInfo; text: string)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">toCChar
-      <li><a class="reference" href="#toCChar%2Cchar%2Cstring"
-    title="toCChar(c: char; result: var string)">toCChar(c: char; result: var string)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">toColumn
@@ -394,11 +379,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="globalReport(conf: ConfigRef; info: TLineInfo; report: ReportTypes)">globalReport(conf: ConfigRef; info: TLineInfo; report: ReportTypes)</a></li>
   <li><a class="reference" href="#globalReport.t%2CConfigRef%2CReportTypes"
     title="globalReport(conf: ConfigRef; report: ReportTypes)">globalReport(conf: ConfigRef; report: ReportTypes)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">instLoc
-      <li><a class="reference" href="#instLoc.t%2Cint"
-    title="instLoc(depth: int = -2): InstantiationInfo">instLoc(depth: int = -2): InstantiationInfo</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">internalAssert
@@ -486,7 +466,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -497,7 +477,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../utils/ropes.html">../utils/ropes</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>, <a class="reference external" href="../utils/strutils2.html">../utils/strutils2</a>, <a class="reference external" href="../ast/reports.html">../ast/reports</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="options.html">options</a>, <a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>
+<a class="reference external" href="../utils/ropes.html">../utils/ropes</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>, <a class="reference external" href="../ast/reports.html">../ast/reports</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="options.html">options</a>, <a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/lexer.html">../ast/lexer</a>
 </dl></div>
 <div class="section" id="10">
 <h1><a class="toc-backref" href="#10">Consts</a></h1>
@@ -508,9 +488,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L158"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L54"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L158" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L54" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -520,9 +500,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L159"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L55"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L159" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L55" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -532,9 +512,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L142"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L38"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L142" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L38" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -544,90 +524,51 @@ class="link-seesrc" target="_blank">Source</a>
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
 <div id="$,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#%24%2CConfigRef%2CTLineInfo"><span class="Identifier">`$`</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#%24%2CConfigRef%2CTLineInfo"><span class="Identifier">`$`</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L327"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L223"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L327" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="$,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#%24%2CTLineInfo"><span class="Identifier">`$`</span></a><span class="Other">(</span><span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span class="Identifier">error</span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#%24%2CTLineInfo"><span class="Identifier">`$`</span></a><span class="Other">(</span><span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span class="Identifier">error</span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L329"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L225"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L329" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L225" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="==,TLineInfo,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#%3D%3D%2CTLineInfo%2CTLineInfo"><span class="Identifier">`==`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#%3D%3D%2CTLineInfo%2CTLineInfo"><span class="Identifier">`==`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L407"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L303"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L407" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L303" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="exactEquals,TLineInfo,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#exactEquals%2CTLineInfo%2CTLineInfo"><span class="Identifier">exactEquals</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#exactEquals%2CTLineInfo%2CTLineInfo"><span class="Identifier">exactEquals</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L410"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L306"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L410" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="fileInfoIdx,ConfigRef,AbsoluteFile">
-<dt><pre><span class="Keyword">proc</span> <a href="#fileInfoIdx%2CConfigRef%2CAbsoluteFile"><span class="Identifier">fileInfoIdx</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">filename</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L124"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="fileInfoIdx,ConfigRef,AbsoluteFile,bool">
-<dt><pre><span class="Keyword">proc</span> <a href="#fileInfoIdx%2CConfigRef%2CAbsoluteFile%2Cbool"><span class="Identifier">fileInfoIdx</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">filename</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a><span class="Other">;</span> <span class="Identifier">isKnownFile</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L95"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L95" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="fileInfoKnown,ConfigRef,AbsoluteFile">
-<dt><pre><span class="Keyword">proc</span> <a href="#fileInfoKnown%2CConfigRef%2CAbsoluteFile"><span class="Identifier">fileInfoKnown</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">filename</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L85"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L85" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L306" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -637,9 +578,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 safe to call multiple times
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L36"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L30"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L36" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L30" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -650,9 +591,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Format absolute file path for error message reporting. If path is not registered in the <tt class="docutils literal"><span class="pre"><span class="Identifier">filenameToIndexTbl</span></span></tt> and is not a path to the compiler source, return it unchanged. If configuration is nil also return path unchanged.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L269"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L165"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L269" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L165" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -663,47 +604,47 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generate and write report for the successful compilation parameters
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L710"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L668"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L710" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L668" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getContext,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#getContext%2CConfigRef%2CTLineInfo"><span class="Identifier">getContext</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">lastinfo</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="../ast/reports.html#ReportContext"><span class="Identifier">ReportContext</span></a><span class="Other">]</span> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#getContext%2CConfigRef%2CTLineInfo"><span class="Identifier">getContext</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">lastinfo</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="../ast/reports.html#ReportContext"><span class="Identifier">ReportContext</span></a><span class="Other">]</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Get list of context context entries from the current message context information. Context messages can later be used in the <tt class="docutils literal"><span class="pre"><span class="Identifier">SemReport</span><span class="Operator">.</span><span class="Identifier">context</span></span></tt> field
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L413"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L309"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L413" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L309" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getHash,ConfigRef,FileIndex">
-<dt><pre><span class="Keyword">proc</span> <a href="#getHash%2CConfigRef%2CFileIndex"><span class="Identifier">getHash</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#getHash%2CConfigRef%2CFileIndex"><span class="Identifier">getHash</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L223"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L119"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getInfoContext,ConfigRef,int">
-<dt><pre><span class="Keyword">proc</span> <a href="#getInfoContext%2CConfigRef%2Cint"><span class="Identifier">getInfoContext</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">index</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#getInfoContext%2CConfigRef%2Cint"><span class="Identifier">getInfoContext</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">index</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L176"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L72"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L176" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L72" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -713,50 +654,64 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L161"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L57"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getSurroundingSrc,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#getSurroundingSrc%2CConfigRef%2CTLineInfo"><span class="Identifier">getSurroundingSrc</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#getSurroundingSrc%2CConfigRef%2CTLineInfo"><span class="Identifier">getSurroundingSrc</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L458"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L354"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L458" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L354" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="handleReport,ConfigRef,LexerDiag,InstantiationInfo,TErrorHandling">
+<dt><pre><span class="Keyword">proc</span> <a href="#handleReport%2CConfigRef%2CLexerDiag%2CInstantiationInfo%2CTErrorHandling"><span class="Identifier">handleReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">diag</span><span class="Other">:</span> <a href="../ast/lexer.html#LexerDiag"><span class="Identifier">LexerDiag</span></a><span class="Other">;</span>
+                  <span class="Identifier">reportFrom</span><span class="Other">:</span> <a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a><span class="Other">;</span> <span class="Identifier">eh</span><span class="Other">:</span> <a href="options.html#TErrorHandling"><span class="Identifier">TErrorHandling</span></a> <span class="Other">=</span> <span class="Identifier">doNothing</span><span class="Other">)</span> {.
+    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L496"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L496" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="handleReport,ConfigRef,ReportId,InstantiationInfo,TErrorHandling">
-<dt><pre><span class="Keyword">proc</span> <a href="#handleReport%2CConfigRef%2CReportId%2CInstantiationInfo%2CTErrorHandling"><span class="Identifier">handleReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <a href="../ast/ast_types.html#ReportId"><span class="Identifier">ReportId</span></a><span class="Other">;</span> <span class="Identifier">reportFrom</span><span class="Other">:</span> <a href="../ast/reports.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a><span class="Other">;</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#handleReport%2CConfigRef%2CReportId%2CInstantiationInfo%2CTErrorHandling"><span class="Identifier">handleReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <a href="../ast/ast_types.html#ReportId"><span class="Identifier">ReportId</span></a><span class="Other">;</span> <span class="Identifier">reportFrom</span><span class="Other">:</span> <a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a><span class="Other">;</span>
                   <span class="Identifier">eh</span><span class="Other">:</span> <a href="options.html#TErrorHandling"><span class="Identifier">TErrorHandling</span></a> <span class="Other">=</span> <span class="Identifier">doNothing</span><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L494"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L390"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L494" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L390" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="handleReport,ConfigRef,Report,InstantiationInfo,TErrorHandling">
-<dt><pre><span class="Keyword">proc</span> <a href="#handleReport%2CConfigRef%2CReport%2CInstantiationInfo%2CTErrorHandling"><span class="Identifier">handleReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">r</span><span class="Other">:</span> <a href="../ast/reports.html#Report"><span class="Identifier">Report</span></a><span class="Other">;</span> <span class="Identifier">reportFrom</span><span class="Other">:</span> <a href="../ast/reports.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a><span class="Other">;</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#handleReport%2CConfigRef%2CReport%2CInstantiationInfo%2CTErrorHandling"><span class="Identifier">handleReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">r</span><span class="Other">:</span> <a href="../ast/reports.html#Report"><span class="Identifier">Report</span></a><span class="Other">;</span> <span class="Identifier">reportFrom</span><span class="Other">:</span> <a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a><span class="Other">;</span>
                   <span class="Identifier">eh</span><span class="Other">:</span> <a href="options.html#TErrorHandling"><span class="Identifier">TErrorHandling</span></a> <span class="Other">=</span> <span class="Identifier">doNothing</span><span class="Other">)</span> {.<span class="Identifier">noinline</span><span class="Other">,</span>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L465"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L361"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L465" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L361" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -767,9 +722,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L601"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L559"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L601" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L559" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -780,9 +735,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L558"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L516"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L558" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L516" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -792,9 +747,35 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L572"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L530"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L572" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L530" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="lexDiagToLegacyReportKind,LexerDiagKind">
+<dt><pre><span class="Keyword">func</span> <a href="#lexDiagToLegacyReportKind%2CLexerDiagKind"><span class="Identifier">lexDiagToLegacyReportKind</span></a><span class="Other">(</span><span class="Identifier">diag</span><span class="Other">:</span> <a href="../ast/lexer.html#LexerDiagKind"><span class="Identifier">LexerDiagKind</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/report_enums.html#ReportKind"><span class="Identifier">ReportKind</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L452"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L452" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="lexerDiagToLegacyReport,LexerDiag">
+<dt><pre><span class="Keyword">func</span> <a href="#lexerDiagToLegacyReport%2CLexerDiag"><span class="Identifier">lexerDiagToLegacyReport</span></a><span class="Other">(</span><span class="Identifier">diag</span><span class="Other">:</span> <a href="../ast/lexer.html#LexerDiag"><span class="Identifier">LexerDiag</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/reports.html#Report"><span class="Identifier">Report</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L474"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L474" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -805,9 +786,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L678"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L636"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L678" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L636" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -818,9 +799,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L673"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L631"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L673" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L631" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -831,21 +812,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L358"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L254"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L358" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="makeCString,string">
-<dt><pre><span class="Keyword">proc</span> <a href="#makeCString%2Cstring"><span class="Identifier">makeCString</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="../utils/ropes.html#Rope"><span class="Identifier">Rope</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L55"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L55" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L254" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -855,9 +824,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L148"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L44"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L148" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L44" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -867,9 +836,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L149"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L45"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L149" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -883,48 +852,22 @@ class="link-seesrc" target="_blank">Source</a>
 <p>This procedure is used as a default implementation of the <tt class="docutils literal"><span class="pre"><span class="Identifier">ConfigRef</span><span class="Operator">.</span><span class="Identifier">writeHook</span></span></tt>.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L331"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L227"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L331" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="newLineInfo,ConfigRef,AbsoluteFile,int,int">
-<dt><pre><span class="Keyword">proc</span> <a href="#newLineInfo%2CConfigRef%2CAbsoluteFile%2Cint%2Cint"><span class="Identifier">newLineInfo</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">filename</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a><span class="Other">;</span> <span class="Identifier">line</span><span class="Other">,</span> <span class="Identifier">col</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> {.
-    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L139"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L139" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="newLineInfo,FileIndex,int,int">
-<dt><pre><span class="Keyword">proc</span> <a href="#newLineInfo%2CFileIndex%2Cint%2Cint"><span class="Identifier">newLineInfo</span></a><span class="Other">(</span><span class="Identifier">fileInfoIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">line</span><span class="Other">,</span> <span class="Identifier">col</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L128"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L128" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L227" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="numLines,ConfigRef,FileIndex">
-<dt><pre><span class="Keyword">proc</span> <a href="#numLines%2CConfigRef%2CFileIndex"><span class="Identifier">numLines</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#numLines%2CConfigRef%2CFileIndex"><span class="Identifier">numLines</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 xxx there's an off by 1 error that should be fixed; if a file ends with &quot;foo&quot; or &quot;foon&quot; it will return same number of lines (ie, a trailing empty line is discounted)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L436"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L332"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L436" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L332" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -934,34 +877,34 @@ class="link-seesrc" target="_blank">Source</a>
 
 Remove one entry from the message context information stack
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L172"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L68"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L172" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="pushInfoContext,ConfigRef,TLineInfo,PSym">
-<dt><pre><span class="Keyword">proc</span> <a href="#pushInfoContext%2CConfigRef%2CTLineInfo%2CPSym"><span class="Identifier">pushInfoContext</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">detail</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#pushInfoContext%2CConfigRef%2CTLineInfo%2CPSym"><span class="Identifier">pushInfoContext</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">detail</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Add entry to the message context information stack.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L164"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L60"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L164" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="quotedFilename,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#quotedFilename%2CConfigRef%2CTLineInfo"><span class="Identifier">quotedFilename</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../utils/ropes.html#Rope"><span class="Identifier">Rope</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#quotedFilename%2CConfigRef%2CTLineInfo"><span class="Identifier">quotedFilename</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../utils/ropes.html#Rope"><span class="Identifier">Rope</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L665"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L623"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L665" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L623" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -973,35 +916,35 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L550"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L508"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L550" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L508" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="setDirtyFile,ConfigRef,FileIndex,AbsoluteFile">
-<dt><pre><span class="Keyword">proc</span> <a href="#setDirtyFile%2CConfigRef%2CFileIndex%2CAbsoluteFile"><span class="Identifier">setDirtyFile</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">filename</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a><span class="Other">)</span> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#setDirtyFile%2CConfigRef%2CFileIndex%2CAbsoluteFile"><span class="Identifier">setDirtyFile</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">filename</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L214"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L110"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L214" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L110" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="setHash,ConfigRef,FileIndex,string">
-<dt><pre><span class="Keyword">proc</span> <a href="#setHash%2CConfigRef%2CFileIndex%2Cstring"><span class="Identifier">setHash</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">hash</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#setHash%2CConfigRef%2CFileIndex%2Cstring"><span class="Identifier">setHash</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">hash</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L219"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L115"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L219" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L115" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1011,22 +954,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L162"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L58"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L162" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L58" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="sourceLine,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#sourceLine%2CConfigRef%2CTLineInfo"><span class="Identifier">sourceLine</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#sourceLine%2CConfigRef%2CTLineInfo"><span class="Identifier">sourceLine</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 1-based index (matches editor line numbers); 1st line is for i.line = 1 last valid line is <tt class="docutils literal"><span class="pre"><span class="Identifier">numLines</span></span></tt> inclusive
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L448"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L344"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L448" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L344" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1036,9 +979,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L151"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L47"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L151" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L47" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1049,188 +992,176 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L144"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L40"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L144" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L40" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="temporaryStringError,ConfigRef,TLineInfo,string">
-<dt><pre><span class="Keyword">proc</span> <a href="#temporaryStringError%2CConfigRef%2CTLineInfo%2Cstring"><span class="Identifier">temporaryStringError</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">text</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#temporaryStringError%2CConfigRef%2CTLineInfo%2Cstring"><span class="Identifier">temporaryStringError</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">text</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L540"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L436"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L540" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="toCChar,char,string">
-<dt><pre><span class="Keyword">proc</span> <a href="#toCChar%2Cchar%2Cstring"><span class="Identifier">toCChar</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Identifier">char</span><span class="Other">;</span> <span class="Identifier">result</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">string</span><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L44"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L44" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L436" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toColumn,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#toColumn%2CTLineInfo"><span class="Identifier">toColumn</span></a><span class="Other">(</span><span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#toColumn%2CTLineInfo"><span class="Identifier">toColumn</span></a><span class="Other">(</span><span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L306"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L202"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L306" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L202" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toFileLineCol,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#toFileLineCol%2CConfigRef%2CTLineInfo"><span class="Identifier">toFileLineCol</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#toFileLineCol%2CConfigRef%2CTLineInfo"><span class="Identifier">toFileLineCol</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Construct <tt class="docutils literal"><span class="pre"><span class="Identifier">file</span><span class="Punctuation">(</span><span class="Identifier">line</span><span class="Punctuation">,</span> <span class="Identifier">col</span><span class="Punctuation">)</span></span></tt> string from report location information
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L312"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L208"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L312" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L208" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toFileLineCol,InstantiationInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#toFileLineCol%2CInstantiationInfo"><span class="Identifier">toFileLineCol</span></a><span class="Other">(</span><span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/reports.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#toFileLineCol%2CInstantiationInfo"><span class="Identifier">toFileLineCol</span></a><span class="Other">(</span><span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L309"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L205"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L309" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L205" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toFilenameOption,ConfigRef,FileIndex,FilenameOption">
-<dt><pre><span class="Keyword">proc</span> <a href="#toFilenameOption%2CConfigRef%2CFileIndex%2CFilenameOption"><span class="Identifier">toFilenameOption</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">opt</span><span class="Other">:</span> <a href="in_options.html#FilenameOption"><span class="Identifier">FilenameOption</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#toFilenameOption%2CConfigRef%2CFileIndex%2CFilenameOption"><span class="Identifier">toFilenameOption</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">opt</span><span class="Other">:</span> <a href="in_options.html#FilenameOption"><span class="Identifier">FilenameOption</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L247"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L143"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L247" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L143" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toFullPath,ConfigRef,FileIndex">
-<dt><pre><span class="Keyword">proc</span> <a href="#toFullPath%2CConfigRef%2CFileIndex"><span class="Identifier">toFullPath</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#toFullPath%2CConfigRef%2CFileIndex"><span class="Identifier">toFullPath</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L203"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L99"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L203" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L99" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toFullPathConsiderDirty,ConfigRef,FileIndex">
-<dt><pre><span class="Keyword">proc</span> <a href="#toFullPathConsiderDirty%2CConfigRef%2CFileIndex"><span class="Identifier">toFullPathConsiderDirty</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#toFullPathConsiderDirty%2CConfigRef%2CFileIndex"><span class="Identifier">toFullPathConsiderDirty</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L227"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L123"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L227" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L123" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toLinenumber,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#toLinenumber%2CTLineInfo"><span class="Identifier">toLinenumber</span></a><span class="Other">(</span><span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#toLinenumber%2CTLineInfo"><span class="Identifier">toLinenumber</span></a><span class="Other">(</span><span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L303"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L199"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L303" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L199" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toMsgFilename,ConfigRef,FileIndex">
-<dt><pre><span class="Keyword">proc</span> <a href="#toMsgFilename%2CConfigRef%2CFileIndex"><span class="Identifier">toMsgFilename</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#toMsgFilename%2CConfigRef%2CFileIndex"><span class="Identifier">toMsgFilename</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L297"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L193"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L297" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L193" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toProjPath,ConfigRef,FileIndex">
-<dt><pre><span class="Keyword">proc</span> <a href="#toProjPath%2CConfigRef%2CFileIndex"><span class="Identifier">toProjPath</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#toProjPath%2CConfigRef%2CFileIndex"><span class="Identifier">toProjPath</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L194"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L90"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L194" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toReportLineInfo,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#toReportLineInfo%2CConfigRef%2CTLineInfo"><span class="Identifier">toReportLineInfo</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/reports.html#ReportLineInfo"><span class="Identifier">ReportLineInfo</span></a> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#toReportLineInfo%2CConfigRef%2CTLineInfo"><span class="Identifier">toReportLineInfo</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/reports.html#ReportLineInfo"><span class="Identifier">ReportLineInfo</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L209"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L105"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L209" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L105" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toReportPoint,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">proc</span> <a href="#toReportPoint%2CConfigRef%2CTLineInfo"><span class="Identifier">toReportPoint</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/reports.html#ReportLineInfo"><span class="Identifier">ReportLineInfo</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#toReportPoint%2CConfigRef%2CTLineInfo"><span class="Identifier">toReportPoint</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/reports.html#ReportLineInfo"><span class="Identifier">ReportLineInfo</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Construct report location instance based on the information from <tt class="docutils literal"><span class="pre"><span class="Identifier">info</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L317"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L213"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L317" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L213" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="uniqueModuleName,ConfigRef,FileIndex">
-<dt><pre><span class="Keyword">proc</span> <a href="#uniqueModuleName%2CConfigRef%2CFileIndex"><span class="Identifier">uniqueModuleName</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fid</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#uniqueModuleName%2CConfigRef%2CFileIndex"><span class="Identifier">uniqueModuleName</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fid</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 The unique module name is guaranteed to only contain {'A'..'Z', 'a'..'z', '0'..'9', '_'} so that it is useful as a C identifier snippet.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L683"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L641"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L683" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L641" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1245,34 +1176,34 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L593"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L551"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L593" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L551" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="globalAssert.t,ConfigRef,untyped,TLineInfo,string">
 <dt><pre><span class="Keyword">template</span> <a href="#globalAssert.t%2CConfigRef%2Cuntyped%2CTLineInfo%2Cstring"><span class="Identifier">globalAssert</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">cond</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">;</span>
-                      <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> <span class="Other">=</span> <span class="Identifier">unknownLineInfo</span><span class="Other">;</span> <span class="Identifier">arg</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span></pre></dt>
+                      <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> <span class="Other">=</span> <span class="Identifier">unknownLineInfo</span><span class="Other">;</span> <span class="Identifier">arg</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span></pre></dt>
 <dd>
 
 avoids boilerplate
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L504"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L400"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L504" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L400" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="globalReport.t,ConfigRef,TLineInfo,ReportTypes">
-<dt><pre><span class="Keyword">template</span> <a href="#globalReport.t%2CConfigRef%2CTLineInfo%2CReportTypes"><span class="Identifier">globalReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="../ast/reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">)</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#globalReport.t%2CConfigRef%2CTLineInfo%2CReportTypes"><span class="Identifier">globalReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="../ast/reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">)</span></pre></dt>
 <dd>
 
 <tt class="docutils literal"><span class="pre"><span class="Identifier">local</span></span></tt> means compilation keeps going until errorMax is reached (via <tt class="docutils literal"><span class="pre"><span class="Identifier">doNothing</span></span></tt>), <tt class="docutils literal"><span class="pre"><span class="Identifier">global</span></span></tt> means it stops.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L513"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L409"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L513" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L409" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1282,23 +1213,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L520"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L416"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L520" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="instLoc.t,int">
-<dt><pre><span class="Keyword">template</span> <a href="#instLoc.t%2Cint"><span class="Identifier">instLoc</span></a><span class="Other">(</span><span class="Identifier">depth</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Other">=</span> <span class="DecNumber">-2</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/reports.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a></pre></dt>
-<dd>
-
-<p>grabs where in the compiler an error was instanced to ease debugging.</p>
-<p>whether to use full paths depends on --excessiveStackTrace compiler option.</p>
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L27"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L27" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L416" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1308,22 +1225,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 Causes an internal error if the provided condition evaluates to false
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L658"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L616"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L658" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L616" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="internalAssert.t,ConfigRef,bool,TLineInfo,string">
-<dt><pre><span class="Keyword">template</span> <a href="#internalAssert.t%2CConfigRef%2Cbool%2CTLineInfo%2Cstring"><span class="Identifier">internalAssert</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">condition</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span>
+<dt><pre><span class="Keyword">template</span> <a href="#internalAssert.t%2CConfigRef%2Cbool%2CTLineInfo%2Cstring"><span class="Identifier">internalAssert</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">condition</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span>
                         <span class="Identifier">failMsg</span><span class="Other">:</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span></pre></dt>
 <dd>
 
 Causes an internal error if the provided condition evaluates to false
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L650"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L608"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L650" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L608" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1333,34 +1250,34 @@ class="link-seesrc" target="_blank">Source</a>
 
 Causes an internal error
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L642"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L600"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L642" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L600" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="internalError.t,ConfigRef,TLineInfo,string">
-<dt><pre><span class="Keyword">template</span> <a href="#internalError.t%2CConfigRef%2CTLineInfo%2Cstring"><span class="Identifier">internalError</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">fail</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#internalError.t%2CConfigRef%2CTLineInfo%2Cstring"><span class="Identifier">internalError</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">fail</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
 <dd>
 
 Causes an internal error
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L632"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L590"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L632" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L590" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="internalError.t,ConfigRef,TLineInfo,InternalReportKind,string">
-<dt><pre><span class="Keyword">template</span> <a href="#internalError.t%2CConfigRef%2CTLineInfo%2CInternalReportKind%2Cstring"><span class="Identifier">internalError</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span>
+<dt><pre><span class="Keyword">template</span> <a href="#internalError.t%2CConfigRef%2CTLineInfo%2CInternalReportKind%2Cstring"><span class="Identifier">internalError</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span>
                        <span class="Identifier">repKind</span><span class="Other">:</span> <a href="../ast/report_enums.html#InternalReportKind"><span class="Identifier">InternalReportKind</span></a><span class="Other">;</span> <span class="Identifier">fail</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
 <dd>
 
 Causes an internal error
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L623"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L581"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L623" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L581" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1371,45 +1288,45 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L612"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L570"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L612" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L570" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="localReport.t,ConfigRef,TLineInfo,ReportTypes">
-<dt><pre><span class="Keyword">template</span> <a href="#localReport.t%2CConfigRef%2CTLineInfo%2CReportTypes"><span class="Identifier">localReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="../ast/reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">)</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#localReport.t%2CConfigRef%2CTLineInfo%2CReportTypes"><span class="Identifier">localReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="../ast/reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">)</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L524"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L420"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L524" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L420" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="localReport.t,ConfigRef,TLineInfo,ReportTypes_2">
-<dt><pre><span class="Keyword">template</span> <a href="#localReport.t%2CConfigRef%2CTLineInfo%2CReportTypes_2"><span class="Identifier">localReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="../ast/reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">)</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#localReport.t%2CConfigRef%2CTLineInfo%2CReportTypes_2"><span class="Identifier">localReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="../ast/reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">)</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L529"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L425"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L529" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L425" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="localReport.t,ConfigRef,TLineInfo,ReportTypes_3">
-<dt><pre><span class="Keyword">template</span> <a href="#localReport.t%2CConfigRef%2CTLineInfo%2CReportTypes_3"><span class="Identifier">localReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="../ast/reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">)</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#localReport.t%2CConfigRef%2CTLineInfo%2CReportTypes_3"><span class="Identifier">localReport</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="../ast/reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">)</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L609"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L567"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L609" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L567" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1419,9 +1336,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L533"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L429"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L533" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L429" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1431,9 +1348,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L547"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L443"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L547" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L443" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1443,9 +1360,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L543"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L439"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L543" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L439" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1456,9 +1373,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L605"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L563"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L605" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L563" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1468,81 +1385,81 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L561"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L519"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L561" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L519" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toFilename.t,ConfigRef,FileIndex">
-<dt><pre><span class="Keyword">template</span> <a href="#toFilename.t%2CConfigRef%2CFileIndex"><span class="Identifier">toFilename</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#toFilename.t%2CConfigRef%2CFileIndex"><span class="Identifier">toFilename</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L188"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L84"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L188" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toFilename.t,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">template</span> <a href="#toFilename.t%2CConfigRef%2CTLineInfo"><span class="Identifier">toFilename</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#toFilename.t%2CConfigRef%2CTLineInfo"><span class="Identifier">toFilename</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L235"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L131"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L235" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L131" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toFullPath.t,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">template</span> <a href="#toFullPath.t%2CConfigRef%2CTLineInfo"><span class="Identifier">toFullPath</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#toFullPath.t%2CConfigRef%2CTLineInfo"><span class="Identifier">toFullPath</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L241"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L137"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L241" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toFullPathConsiderDirty.t,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">template</span> <a href="#toFullPathConsiderDirty.t%2CConfigRef%2CTLineInfo"><span class="Identifier">toFullPathConsiderDirty</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#toFullPathConsiderDirty.t%2CConfigRef%2CTLineInfo"><span class="Identifier">toFullPathConsiderDirty</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L244"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L140"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L244" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L140" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toMsgFilename.t,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">template</span> <a href="#toMsgFilename.t%2CConfigRef%2CTLineInfo"><span class="Identifier">toMsgFilename</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#toMsgFilename.t%2CConfigRef%2CTLineInfo"><span class="Identifier">toMsgFilename</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L300"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L196"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L300" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L196" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="toProjPath.t,ConfigRef,TLineInfo">
-<dt><pre><span class="Keyword">template</span> <a href="#toProjPath.t%2CConfigRef%2CTLineInfo"><span class="Identifier">toProjPath</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dt><pre><span class="Keyword">template</span> <a href="#toProjPath.t%2CConfigRef%2CTLineInfo"><span class="Identifier">toProjPath</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/front/msgs.nim#L238"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/front/msgs.nim#L134"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L238" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/msgs.nim#L134" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1551,7 +1468,7 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="19">
 <h1><a class="toc-backref" href="#19">Exports</a></h1>
 <dl class="item">
-<a href="../ast/reports.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a>, <a href="options.html#TErrorHandling"><span class="Identifier">TErrorHandling</span></a>
+<a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a>, <a href="options.html#TErrorHandling"><span class="Identifier">TErrorHandling</span></a>
 </dl></div>
 
   </div>

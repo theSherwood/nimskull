@@ -116,12 +116,31 @@ window.addEventListener('DOMContentLoaded', main);
   when defined(nimsuggest):
       previousToken: TLineInfo
 
-  config*: ConfigRef">Lexer</a></li>
-  <li><a class="reference" href="#NumericalBase"
-    title="NumericalBase = enum
-  base10,                   ## base10 is listed as the first element,
-                             ## so that it is the correct default value
-  base2, base8, base16">NumericalBase</a></li>
+  config*: ConfigRef
+  diags: seq[LexerDiag]">Lexer</a></li>
+  <li><a class="reference" href="#LexerDiag"
+    title="LexerDiag = object
+  msg*: string
+  location*: TLineInfo       ## diagnostic location
+  instLoc*: InstantiationInfo ## instantiation in lexer's source
+  case kind*: LexerDiagKind
+  of lexDiagNameXShouldBeY:
+      wanted*: string
+      got*: string
+
+  else:
+      nil">LexerDiag</a></li>
+  <li><a class="reference" href="#LexerDiagKind"
+    title="LexerDiagKind = enum
+  lexDiagInternalError,     ## lexer programming error
+  lexDiagMalformedUnderscores, lexDiagMalformedTrailingUnderscre,
+  lexDiagInvalidToken, lexDiagNoTabs, lexDiagInvalidIntegerPrefix,
+  lexDiagInvalidIntegerSuffix, lexDiagNumberNotInRange, lexDiagExpectedHex,
+  lexDiagInvalidIntegerLiteral, lexDiagInvalidCharLiteral,
+  lexDiagMissingClosingApostrophe, lexDiagInvalidUnicodeCodepoint,
+  lexDiagUnclosedTripleString, lexDiagUnclosedSingleString,
+  lexDiagUnclosedComment, lexDiagDeprecatedOctalPrefix = &quot;OctalEscape&quot;,
+  lexDiagLineTooLong = &quot;LineTooLong&quot;, lexDiagNameXShouldBeY = &quot;Name&quot;">LexerDiagKind</a></li>
   <li><a class="reference" href="#Token"
     title="Token = object
   tokType*: TokType          ## the type of the token
@@ -136,20 +155,22 @@ window.addEventListener('DOMContentLoaded', main);
   strongSpaceB*: int8        ## trailing spaces of an operator
   literal*: string           ## the parsed (string) literal; and
                              ## documentation comments are here too
-  line*, col*: int">Token</a></li>
+  line*, col*: int
+  error*: LexerDiag          ## error diagnostic if `tokType` is `tkError`">Token</a></li>
   <li><a class="reference" href="#TokType"
     title="TokType = enum
-  tkInvalid = &quot;tkInvalid&quot;, tkEof = &quot;[EOF]&quot;, tkSymbol = &quot;tkSymbol&quot;,
-  tkAddr = &quot;addr&quot;, tkAnd = &quot;and&quot;, tkAs = &quot;as&quot;, tkAsm = &quot;asm&quot;, tkBind = &quot;bind&quot;,
-  tkBlock = &quot;block&quot;, tkBreak = &quot;break&quot;, tkCase = &quot;case&quot;, tkCast = &quot;cast&quot;,
-  tkConcept = &quot;concept&quot;, tkConst = &quot;const&quot;, tkContinue = &quot;continue&quot;,
-  tkConverter = &quot;converter&quot;, tkDefer = &quot;defer&quot;, tkDiscard = &quot;discard&quot;,
-  tkDistinct = &quot;distinct&quot;, tkDiv = &quot;div&quot;, tkDo = &quot;do&quot;, tkElif = &quot;elif&quot;,
-  tkElse = &quot;else&quot;, tkEnd = &quot;end&quot;, tkEnum = &quot;enum&quot;, tkExcept = &quot;except&quot;,
-  tkExport = &quot;export&quot;, tkFinally = &quot;finally&quot;, tkFor = &quot;for&quot;, tkFrom = &quot;from&quot;,
-  tkFunc = &quot;func&quot;, tkIf = &quot;if&quot;, tkImport = &quot;import&quot;, tkIn = &quot;in&quot;,
-  tkInclude = &quot;include&quot;, tkInterface = &quot;interface&quot;, tkIs = &quot;is&quot;,
-  tkIsnot = &quot;isnot&quot;, tkIterator = &quot;iterator&quot;, tkLet = &quot;let&quot;, tkMacro = &quot;macro&quot;,
+  tkInvalid = &quot;tkInvalid&quot;, tkError = &quot;tkError&quot;, tkEof = &quot;[EOF]&quot;,
+  tkSymbol = &quot;tkSymbol&quot;, tkAddr = &quot;addr&quot;, tkAnd = &quot;and&quot;, tkAs = &quot;as&quot;,
+  tkAsm = &quot;asm&quot;, tkBind = &quot;bind&quot;, tkBlock = &quot;block&quot;, tkBreak = &quot;break&quot;,
+  tkCase = &quot;case&quot;, tkCast = &quot;cast&quot;, tkConcept = &quot;concept&quot;, tkConst = &quot;const&quot;,
+  tkContinue = &quot;continue&quot;, tkConverter = &quot;converter&quot;, tkDefer = &quot;defer&quot;,
+  tkDiscard = &quot;discard&quot;, tkDistinct = &quot;distinct&quot;, tkDiv = &quot;div&quot;, tkDo = &quot;do&quot;,
+  tkElif = &quot;elif&quot;, tkElse = &quot;else&quot;, tkEnd = &quot;end&quot;, tkEnum = &quot;enum&quot;,
+  tkExcept = &quot;except&quot;, tkExport = &quot;export&quot;, tkFinally = &quot;finally&quot;,
+  tkFor = &quot;for&quot;, tkFrom = &quot;from&quot;, tkFunc = &quot;func&quot;, tkIf = &quot;if&quot;,
+  tkImport = &quot;import&quot;, tkIn = &quot;in&quot;, tkInclude = &quot;include&quot;,
+  tkInterface = &quot;interface&quot;, tkIs = &quot;is&quot;, tkIsnot = &quot;isnot&quot;,
+  tkIterator = &quot;iterator&quot;, tkLet = &quot;let&quot;, tkMacro = &quot;macro&quot;,
   tkMethod = &quot;method&quot;, tkMixin = &quot;mixin&quot;, tkMod = &quot;mod&quot;, tkNil = &quot;nil&quot;,
   tkNot = &quot;not&quot;, tkNotin = &quot;notin&quot;, tkObject = &quot;object&quot;, tkOf = &quot;of&quot;,
   tkOr = &quot;or&quot;, tkOut = &quot;out&quot;, tkProc = &quot;proc&quot;, tkPtr = &quot;ptr&quot;, tkRaise = &quot;raise&quot;,
@@ -182,7 +203,15 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#10" id="60">Consts</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#MaxLineLength"
+      <li><a class="reference" href="#LexDiagsError"
+    title="LexDiagsError = {lexDiagMalformedUnderscores..lexDiagUnclosedComment}">LexDiagsError</a></li>
+  <li><a class="reference" href="#LexDiagsFatal"
+    title="LexDiagsFatal = {lexDiagInternalError}">LexDiagsFatal</a></li>
+  <li><a class="reference" href="#LexDiagsHint"
+    title="LexDiagsHint = {lexDiagLineTooLong..lexDiagNameXShouldBeY}">LexDiagsHint</a></li>
+  <li><a class="reference" href="#LexDiagsWarning"
+    title="LexDiagsWarning = {lexDiagDeprecatedOctalPrefix}">LexDiagsWarning</a></li>
+  <li><a class="reference" href="#MaxLineLength"
     title="MaxLineLength = 80">MaxLineLength</a></li>
   <li><a class="reference" href="#numChars"
     title="numChars: set[char] = {'0'..'9', 'a'..'z', 'A'..'Z'}">numChars</a></li>
@@ -213,6 +242,11 @@ window.addEventListener('DOMContentLoaded', main);
     title="closeLexer(lex: var Lexer)">closeLexer(lex: var Lexer)</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">diagOffset
+      <li><a class="reference" href="#diagOffset%2CLexer"
+    title="diagOffset(L: Lexer): int">diagOffset(L: Lexer): int</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">getIndentWidth
       <li><a class="reference" href="#getIndentWidth%2CFileIndex%2CPLLStream%2CIdentCache%2CConfigRef"
     title="getIndentWidth(fileIdx: FileIndex; inputstream: PLLStream; cache: IdentCache;
@@ -221,7 +255,9 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">getLineInfo
-      <li><a class="reference" href="#getLineInfo%2CLexer%2CToken"
+      <li><a class="reference" href="#getLineInfo%2CLexer"
+    title="getLineInfo(L: Lexer): TLineInfo">getLineInfo(L: Lexer): TLineInfo</a></li>
+  <li><a class="reference" href="#getLineInfo%2CLexer%2CToken"
     title="getLineInfo(L: Lexer; tok: Token): TLineInfo">getLineInfo(L: Lexer; tok: Token): TLineInfo</a></li>
 
   </ul>
@@ -284,21 +320,11 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
 </li>
 <li>
-  <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
+  <a class="reference reference-toplevel" href="#15" id="65">Iterators</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">localReport
-      <li><a class="reference" href="#localReport.t%2CLexer%2CReportTypes"
-    title="localReport(L: Lexer; report: ReportTypes): untyped">localReport(L: Lexer; report: ReportTypes): untyped</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">localReportPos
-      <li><a class="reference" href="#localReportPos.t%2CLexer%2CReportTypes%2Cint"
-    title="localReportPos(L: Lexer; report: ReportTypes; pos: int): untyped">localReportPos(L: Lexer; report: ReportTypes; pos: int): untyped</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">localReportTok
-      <li><a class="reference" href="#localReportTok.t%2CLexer%2CReportTypes%2CToken"
-    title="localReportTok(L: Lexer; report: ReportTypes; tok: Token): untyped">localReportTok(L: Lexer; report: ReportTypes; tok: Token): untyped</a></li>
+      <ul class="simple nested-toc-section">errorsHintsAndWarnings
+      <li><a class="reference" href="#errorsHintsAndWarnings.i%2CLexer%2Cint"
+    title="errorsHintsAndWarnings(L: Lexer; diagOffset = 0): LexerDiag">errorsHintsAndWarnings(L: Lexer; diagOffset = 0): LexerDiag</a></li>
 
   </ul>
 
@@ -309,7 +335,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -320,14 +346,14 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../utils/platform.html">../utils/platform</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>, <a class="reference external" href="wordrecg.html">wordrecg</a>, <a class="reference external" href="nimlexbase.html">nimlexbase</a>, <a class="reference external" href="llstream.html">llstream</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="reports.html">reports</a>, <a class="reference external" href="idents.html">idents</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>
+<a class="reference external" href="../utils/platform.html">../utils/platform</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>, <a class="reference external" href="numericbase.html">numericbase</a>, <a class="reference external" href="wordrecg.html">wordrecg</a>, <a class="reference external" href="nimlexbase.html">nimlexbase</a>, <a class="reference external" href="llstream.html">llstream</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="idents.html">idents</a>, <a class="reference external" href="../front/options.html">../front/options</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
 <div id="Lexer">
 <dt><pre><a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="nimlexbase.html#TBaseLexer"><span class="Identifier">TBaseLexer</span></a>
-  <span class="Identifier">fileIdx</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a>
+  <span class="Identifier">fileIdx</span><span class="Operator">*</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a>
   <span class="Identifier">indentAhead</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>          <span class="Comment">## if &gt; 0 an indentation has already been read</span>
                              <span class="Comment">## this is needed because scanning comments</span>
                              <span class="Comment">## needs so much look-ahead</span>
@@ -338,29 +364,60 @@ class="link-seesrc" target="_blank">Source</a>
       <span class="Identifier">previousToken</span><span class="Other">:</span> <span class="Identifier">TLineInfo</span>
 
   <span class="Identifier">config</span><span class="Operator">*</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a>
+  <span class="Identifier">diags</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="lexer.html#LexerDiag"><span class="Identifier">LexerDiag</span></a><span class="Other">]</span>
 </pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L130"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L195"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L130" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L195" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="NumericalBase">
-<dt><pre><a href="lexer.html#NumericalBase"><span class="Identifier">NumericalBase</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
-  <span class="Identifier">base10</span><span class="Other">,</span>                   <span class="Comment">## base10 is listed as the first element,</span>
-                             <span class="Comment">## so that it is the correct default value</span>
-  <span class="Identifier">base2</span><span class="Other">,</span> <span class="Identifier">base8</span><span class="Other">,</span> <span class="Identifier">base16</span></pre></dt>
+<div id="LexerDiag">
+<dt><pre><a href="lexer.html#LexerDiag"><span class="Identifier">LexerDiag</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">msg</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+  <span class="Identifier">location</span><span class="Operator">*</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a>       <span class="Comment">## diagnostic location</span>
+  <span class="Identifier">instLoc</span><span class="Operator">*</span><span class="Other">:</span> <a href="lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a> <span class="Comment">## instantiation in lexer's source</span>
+  <span class="Keyword">case</span> <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="lexer.html#LexerDiagKind"><span class="Identifier">LexerDiagKind</span></a>
+  <span class="Keyword">of</span> <span class="Identifier">lexDiagNameXShouldBeY</span><span class="Other">:</span>
+      <span class="Identifier">wanted</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+      <span class="Identifier">got</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+
+  <span class="Keyword">else</span><span class="Other">:</span>
+      <span class="Keyword">nil</span>
+
+  </pre></dt>
+<dd>
+
+<tt class="docutils literal"><span class="pre"><span class="Identifier">Diag</span></span></tt>nostic data from the Lexer, mostly errors
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L143"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L143" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="LexerDiagKind">
+<dt><pre><a href="lexer.html#LexerDiagKind"><span class="Identifier">LexerDiagKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">lexDiagInternalError</span><span class="Other">,</span>     <span class="Comment">## lexer programming error</span>
+  <span class="Identifier">lexDiagMalformedUnderscores</span><span class="Other">,</span> <span class="Identifier">lexDiagMalformedTrailingUnderscre</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagInvalidToken</span><span class="Other">,</span> <span class="Identifier">lexDiagNoTabs</span><span class="Other">,</span> <span class="Identifier">lexDiagInvalidIntegerPrefix</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagInvalidIntegerSuffix</span><span class="Other">,</span> <span class="Identifier">lexDiagNumberNotInRange</span><span class="Other">,</span> <span class="Identifier">lexDiagExpectedHex</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagInvalidIntegerLiteral</span><span class="Other">,</span> <span class="Identifier">lexDiagInvalidCharLiteral</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagMissingClosingApostrophe</span><span class="Other">,</span> <span class="Identifier">lexDiagInvalidUnicodeCodepoint</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagUnclosedTripleString</span><span class="Other">,</span> <span class="Identifier">lexDiagUnclosedSingleString</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagUnclosedComment</span><span class="Other">,</span> <span class="Identifier">lexDiagDeprecatedOctalPrefix</span> <span class="Other">=</span> <span class="StringLit">&quot;OctalEscape&quot;</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagLineTooLong</span> <span class="Other">=</span> <span class="StringLit">&quot;LineTooLong&quot;</span><span class="Other">,</span> <span class="Identifier">lexDiagNameXShouldBeY</span> <span class="Other">=</span> <span class="StringLit">&quot;Name&quot;</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L110"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L98"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L110" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L98" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -372,37 +429,39 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">ident</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a>             <span class="Comment">## the parsed identifier</span>
   <span class="Identifier">iNumber</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">BiggestInt</span>       <span class="Comment">## the parsed integer literal</span>
   <span class="Identifier">fNumber</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">BiggestFloat</span>     <span class="Comment">## the parsed floating point literal</span>
-  <span class="Identifier">base</span><span class="Operator">*</span><span class="Other">:</span> <a href="lexer.html#NumericalBase"><span class="Identifier">NumericalBase</span></a>       <span class="Comment">## the numerical base; only valid for int</span>
+  <span class="Identifier">base</span><span class="Operator">*</span><span class="Other">:</span> <a href="numericbase.html#NumericalBase"><span class="Identifier">NumericalBase</span></a>       <span class="Comment">## the numerical base; only valid for int</span>
                              <span class="Comment">## or float literals</span>
   <span class="Identifier">strongSpaceA</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int8</span>        <span class="Comment">## leading spaces of an operator</span>
   <span class="Identifier">strongSpaceB</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int8</span>        <span class="Comment">## trailing spaces of an operator</span>
   <span class="Identifier">literal</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>           <span class="Comment">## the parsed (string) literal; and</span>
                              <span class="Comment">## documentation comments are here too</span>
   <span class="Identifier">line</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">col</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
-</pre></dt>
+  <span class="Identifier">error</span><span class="Operator">*</span><span class="Other">:</span> <a href="lexer.html#LexerDiag"><span class="Identifier">LexerDiag</span></a>          <span class="Comment">## error diagnostic if `tokType` is `tkError`</span>
+  </pre></dt>
 <dd>
 
 a Nim token
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L115"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L173"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L115" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L173" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="TokType">
 <dt><pre><a href="lexer.html#TokType"><span class="Identifier">TokType</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
-  <span class="Identifier">tkInvalid</span> <span class="Other">=</span> <span class="StringLit">&quot;tkInvalid&quot;</span><span class="Other">,</span> <span class="Identifier">tkEof</span> <span class="Other">=</span> <span class="StringLit">&quot;[EOF]&quot;</span><span class="Other">,</span> <span class="Identifier">tkSymbol</span> <span class="Other">=</span> <span class="StringLit">&quot;tkSymbol&quot;</span><span class="Other">,</span>
-  <span class="Identifier">tkAddr</span> <span class="Other">=</span> <span class="StringLit">&quot;addr&quot;</span><span class="Other">,</span> <span class="Identifier">tkAnd</span> <span class="Other">=</span> <span class="StringLit">&quot;and&quot;</span><span class="Other">,</span> <span class="Identifier">tkAs</span> <span class="Other">=</span> <span class="StringLit">&quot;as&quot;</span><span class="Other">,</span> <span class="Identifier">tkAsm</span> <span class="Other">=</span> <span class="StringLit">&quot;asm&quot;</span><span class="Other">,</span> <span class="Identifier">tkBind</span> <span class="Other">=</span> <span class="StringLit">&quot;bind&quot;</span><span class="Other">,</span>
-  <span class="Identifier">tkBlock</span> <span class="Other">=</span> <span class="StringLit">&quot;block&quot;</span><span class="Other">,</span> <span class="Identifier">tkBreak</span> <span class="Other">=</span> <span class="StringLit">&quot;break&quot;</span><span class="Other">,</span> <span class="Identifier">tkCase</span> <span class="Other">=</span> <span class="StringLit">&quot;case&quot;</span><span class="Other">,</span> <span class="Identifier">tkCast</span> <span class="Other">=</span> <span class="StringLit">&quot;cast&quot;</span><span class="Other">,</span>
-  <span class="Identifier">tkConcept</span> <span class="Other">=</span> <span class="StringLit">&quot;concept&quot;</span><span class="Other">,</span> <span class="Identifier">tkConst</span> <span class="Other">=</span> <span class="StringLit">&quot;const&quot;</span><span class="Other">,</span> <span class="Identifier">tkContinue</span> <span class="Other">=</span> <span class="StringLit">&quot;continue&quot;</span><span class="Other">,</span>
-  <span class="Identifier">tkConverter</span> <span class="Other">=</span> <span class="StringLit">&quot;converter&quot;</span><span class="Other">,</span> <span class="Identifier">tkDefer</span> <span class="Other">=</span> <span class="StringLit">&quot;defer&quot;</span><span class="Other">,</span> <span class="Identifier">tkDiscard</span> <span class="Other">=</span> <span class="StringLit">&quot;discard&quot;</span><span class="Other">,</span>
-  <span class="Identifier">tkDistinct</span> <span class="Other">=</span> <span class="StringLit">&quot;distinct&quot;</span><span class="Other">,</span> <span class="Identifier">tkDiv</span> <span class="Other">=</span> <span class="StringLit">&quot;div&quot;</span><span class="Other">,</span> <span class="Identifier">tkDo</span> <span class="Other">=</span> <span class="StringLit">&quot;do&quot;</span><span class="Other">,</span> <span class="Identifier">tkElif</span> <span class="Other">=</span> <span class="StringLit">&quot;elif&quot;</span><span class="Other">,</span>
-  <span class="Identifier">tkElse</span> <span class="Other">=</span> <span class="StringLit">&quot;else&quot;</span><span class="Other">,</span> <span class="Identifier">tkEnd</span> <span class="Other">=</span> <span class="StringLit">&quot;end&quot;</span><span class="Other">,</span> <span class="Identifier">tkEnum</span> <span class="Other">=</span> <span class="StringLit">&quot;enum&quot;</span><span class="Other">,</span> <span class="Identifier">tkExcept</span> <span class="Other">=</span> <span class="StringLit">&quot;except&quot;</span><span class="Other">,</span>
-  <span class="Identifier">tkExport</span> <span class="Other">=</span> <span class="StringLit">&quot;export&quot;</span><span class="Other">,</span> <span class="Identifier">tkFinally</span> <span class="Other">=</span> <span class="StringLit">&quot;finally&quot;</span><span class="Other">,</span> <span class="Identifier">tkFor</span> <span class="Other">=</span> <span class="StringLit">&quot;for&quot;</span><span class="Other">,</span> <span class="Identifier">tkFrom</span> <span class="Other">=</span> <span class="StringLit">&quot;from&quot;</span><span class="Other">,</span>
-  <span class="Identifier">tkFunc</span> <span class="Other">=</span> <span class="StringLit">&quot;func&quot;</span><span class="Other">,</span> <span class="Identifier">tkIf</span> <span class="Other">=</span> <span class="StringLit">&quot;if&quot;</span><span class="Other">,</span> <span class="Identifier">tkImport</span> <span class="Other">=</span> <span class="StringLit">&quot;import&quot;</span><span class="Other">,</span> <span class="Identifier">tkIn</span> <span class="Other">=</span> <span class="StringLit">&quot;in&quot;</span><span class="Other">,</span>
-  <span class="Identifier">tkInclude</span> <span class="Other">=</span> <span class="StringLit">&quot;include&quot;</span><span class="Other">,</span> <span class="Identifier">tkInterface</span> <span class="Other">=</span> <span class="StringLit">&quot;interface&quot;</span><span class="Other">,</span> <span class="Identifier">tkIs</span> <span class="Other">=</span> <span class="StringLit">&quot;is&quot;</span><span class="Other">,</span>
-  <span class="Identifier">tkIsnot</span> <span class="Other">=</span> <span class="StringLit">&quot;isnot&quot;</span><span class="Other">,</span> <span class="Identifier">tkIterator</span> <span class="Other">=</span> <span class="StringLit">&quot;iterator&quot;</span><span class="Other">,</span> <span class="Identifier">tkLet</span> <span class="Other">=</span> <span class="StringLit">&quot;let&quot;</span><span class="Other">,</span> <span class="Identifier">tkMacro</span> <span class="Other">=</span> <span class="StringLit">&quot;macro&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkInvalid</span> <span class="Other">=</span> <span class="StringLit">&quot;tkInvalid&quot;</span><span class="Other">,</span> <span class="Identifier">tkError</span> <span class="Other">=</span> <span class="StringLit">&quot;tkError&quot;</span><span class="Other">,</span> <span class="Identifier">tkEof</span> <span class="Other">=</span> <span class="StringLit">&quot;[EOF]&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkSymbol</span> <span class="Other">=</span> <span class="StringLit">&quot;tkSymbol&quot;</span><span class="Other">,</span> <span class="Identifier">tkAddr</span> <span class="Other">=</span> <span class="StringLit">&quot;addr&quot;</span><span class="Other">,</span> <span class="Identifier">tkAnd</span> <span class="Other">=</span> <span class="StringLit">&quot;and&quot;</span><span class="Other">,</span> <span class="Identifier">tkAs</span> <span class="Other">=</span> <span class="StringLit">&quot;as&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkAsm</span> <span class="Other">=</span> <span class="StringLit">&quot;asm&quot;</span><span class="Other">,</span> <span class="Identifier">tkBind</span> <span class="Other">=</span> <span class="StringLit">&quot;bind&quot;</span><span class="Other">,</span> <span class="Identifier">tkBlock</span> <span class="Other">=</span> <span class="StringLit">&quot;block&quot;</span><span class="Other">,</span> <span class="Identifier">tkBreak</span> <span class="Other">=</span> <span class="StringLit">&quot;break&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkCase</span> <span class="Other">=</span> <span class="StringLit">&quot;case&quot;</span><span class="Other">,</span> <span class="Identifier">tkCast</span> <span class="Other">=</span> <span class="StringLit">&quot;cast&quot;</span><span class="Other">,</span> <span class="Identifier">tkConcept</span> <span class="Other">=</span> <span class="StringLit">&quot;concept&quot;</span><span class="Other">,</span> <span class="Identifier">tkConst</span> <span class="Other">=</span> <span class="StringLit">&quot;const&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkContinue</span> <span class="Other">=</span> <span class="StringLit">&quot;continue&quot;</span><span class="Other">,</span> <span class="Identifier">tkConverter</span> <span class="Other">=</span> <span class="StringLit">&quot;converter&quot;</span><span class="Other">,</span> <span class="Identifier">tkDefer</span> <span class="Other">=</span> <span class="StringLit">&quot;defer&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkDiscard</span> <span class="Other">=</span> <span class="StringLit">&quot;discard&quot;</span><span class="Other">,</span> <span class="Identifier">tkDistinct</span> <span class="Other">=</span> <span class="StringLit">&quot;distinct&quot;</span><span class="Other">,</span> <span class="Identifier">tkDiv</span> <span class="Other">=</span> <span class="StringLit">&quot;div&quot;</span><span class="Other">,</span> <span class="Identifier">tkDo</span> <span class="Other">=</span> <span class="StringLit">&quot;do&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkElif</span> <span class="Other">=</span> <span class="StringLit">&quot;elif&quot;</span><span class="Other">,</span> <span class="Identifier">tkElse</span> <span class="Other">=</span> <span class="StringLit">&quot;else&quot;</span><span class="Other">,</span> <span class="Identifier">tkEnd</span> <span class="Other">=</span> <span class="StringLit">&quot;end&quot;</span><span class="Other">,</span> <span class="Identifier">tkEnum</span> <span class="Other">=</span> <span class="StringLit">&quot;enum&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkExcept</span> <span class="Other">=</span> <span class="StringLit">&quot;except&quot;</span><span class="Other">,</span> <span class="Identifier">tkExport</span> <span class="Other">=</span> <span class="StringLit">&quot;export&quot;</span><span class="Other">,</span> <span class="Identifier">tkFinally</span> <span class="Other">=</span> <span class="StringLit">&quot;finally&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkFor</span> <span class="Other">=</span> <span class="StringLit">&quot;for&quot;</span><span class="Other">,</span> <span class="Identifier">tkFrom</span> <span class="Other">=</span> <span class="StringLit">&quot;from&quot;</span><span class="Other">,</span> <span class="Identifier">tkFunc</span> <span class="Other">=</span> <span class="StringLit">&quot;func&quot;</span><span class="Other">,</span> <span class="Identifier">tkIf</span> <span class="Other">=</span> <span class="StringLit">&quot;if&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkImport</span> <span class="Other">=</span> <span class="StringLit">&quot;import&quot;</span><span class="Other">,</span> <span class="Identifier">tkIn</span> <span class="Other">=</span> <span class="StringLit">&quot;in&quot;</span><span class="Other">,</span> <span class="Identifier">tkInclude</span> <span class="Other">=</span> <span class="StringLit">&quot;include&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkInterface</span> <span class="Other">=</span> <span class="StringLit">&quot;interface&quot;</span><span class="Other">,</span> <span class="Identifier">tkIs</span> <span class="Other">=</span> <span class="StringLit">&quot;is&quot;</span><span class="Other">,</span> <span class="Identifier">tkIsnot</span> <span class="Other">=</span> <span class="StringLit">&quot;isnot&quot;</span><span class="Other">,</span>
+  <span class="Identifier">tkIterator</span> <span class="Other">=</span> <span class="StringLit">&quot;iterator&quot;</span><span class="Other">,</span> <span class="Identifier">tkLet</span> <span class="Other">=</span> <span class="StringLit">&quot;let&quot;</span><span class="Other">,</span> <span class="Identifier">tkMacro</span> <span class="Other">=</span> <span class="StringLit">&quot;macro&quot;</span><span class="Other">,</span>
   <span class="Identifier">tkMethod</span> <span class="Other">=</span> <span class="StringLit">&quot;method&quot;</span><span class="Other">,</span> <span class="Identifier">tkMixin</span> <span class="Other">=</span> <span class="StringLit">&quot;mixin&quot;</span><span class="Other">,</span> <span class="Identifier">tkMod</span> <span class="Other">=</span> <span class="StringLit">&quot;mod&quot;</span><span class="Other">,</span> <span class="Identifier">tkNil</span> <span class="Other">=</span> <span class="StringLit">&quot;nil&quot;</span><span class="Other">,</span>
   <span class="Identifier">tkNot</span> <span class="Other">=</span> <span class="StringLit">&quot;not&quot;</span><span class="Other">,</span> <span class="Identifier">tkNotin</span> <span class="Other">=</span> <span class="StringLit">&quot;notin&quot;</span><span class="Other">,</span> <span class="Identifier">tkObject</span> <span class="Other">=</span> <span class="StringLit">&quot;object&quot;</span><span class="Other">,</span> <span class="Identifier">tkOf</span> <span class="Other">=</span> <span class="StringLit">&quot;of&quot;</span><span class="Other">,</span>
   <span class="Identifier">tkOr</span> <span class="Other">=</span> <span class="StringLit">&quot;or&quot;</span><span class="Other">,</span> <span class="Identifier">tkOut</span> <span class="Other">=</span> <span class="StringLit">&quot;out&quot;</span><span class="Other">,</span> <span class="Identifier">tkProc</span> <span class="Other">=</span> <span class="StringLit">&quot;proc&quot;</span><span class="Other">,</span> <span class="Identifier">tkPtr</span> <span class="Other">=</span> <span class="StringLit">&quot;ptr&quot;</span><span class="Other">,</span> <span class="Identifier">tkRaise</span> <span class="Other">=</span> <span class="StringLit">&quot;raise&quot;</span><span class="Other">,</span>
@@ -431,9 +490,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L54"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L53"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L54" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L53" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -443,9 +502,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L97"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L96"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L97" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L96" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -454,15 +513,63 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="10">
 <h1><a class="toc-backref" href="#10">Consts</a></h1>
 <dl class="item">
+<div id="LexDiagsError">
+<dt><pre><a href="lexer.html#LexDiagsError"><span class="Identifier">LexDiagsError</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">lexDiagMalformedUnderscores</span><span class="Other">..</span><span class="DecNumber">lexDiagUnclosedComment</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L157"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L157" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="LexDiagsFatal">
+<dt><pre><a href="lexer.html#LexDiagsFatal"><span class="Identifier">LexDiagsFatal</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">lexDiagInternalError</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L156"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L156" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="LexDiagsHint">
+<dt><pre><a href="lexer.html#LexDiagsHint"><span class="Identifier">LexDiagsHint</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">lexDiagLineTooLong</span><span class="Other">..</span><span class="DecNumber">lexDiagNameXShouldBeY</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L159"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L159" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="LexDiagsWarning">
+<dt><pre><a href="lexer.html#LexDiagsWarning"><span class="Identifier">LexDiagsWarning</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">lexDiagDeprecatedOctalPrefix</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L158"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L158" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="MaxLineLength">
 <dt><pre><a href="lexer.html#MaxLineLength"><span class="Identifier">MaxLineLength</span></a> <span class="Other">=</span> <span class="DecNumber">80</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L43"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L42"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L43" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L42" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -472,9 +579,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L44"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L43"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L44" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L43" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -485,9 +592,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L47"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L46"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L47" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -497,9 +604,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L45"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L44"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L44" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -509,9 +616,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L46"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L45"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -521,9 +628,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L107"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L169"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L107" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L169" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -533,9 +640,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L106"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L168"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L106" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -550,9 +657,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L167"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L248"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L167" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L248" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -562,36 +669,59 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L223"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L305"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L305" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="diagOffset,Lexer">
+<dt><pre><span class="Keyword">func</span> <a href="#diagOffset%2CLexer"><span class="Identifier">diagOffset</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+return value represents a point in time where all existing diagnostics are considered in the past, used in conjunction with <tt class="docutils literal"><span class="pre"><span class="Identifier">errorsHintsAndWarnings</span></span></tt>
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L208"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L208" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getIndentWidth,FileIndex,PLLStream,IdentCache,ConfigRef">
-<dt><pre><span class="Keyword">proc</span> <a href="#getIndentWidth%2CFileIndex%2CPLLStream%2CIdentCache%2CConfigRef"><span class="Identifier">getIndentWidth</span></a><span class="Other">(</span><span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">inputstream</span><span class="Other">:</span> <a href="llstream.html#PLLStream"><span class="Identifier">PLLStream</span></a><span class="Other">;</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#getIndentWidth%2CFileIndex%2CPLLStream%2CIdentCache%2CConfigRef"><span class="Identifier">getIndentWidth</span></a><span class="Other">(</span><span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">inputstream</span><span class="Other">:</span> <a href="llstream.html#PLLStream"><span class="Identifier">PLLStream</span></a><span class="Other">;</span>
                     <span class="Identifier">cache</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">config</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L1374"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L1499"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1374" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1499" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="getLineInfo,Lexer">
+<dt><pre><span class="Keyword">proc</span> <a href="#getLineInfo%2CLexer"><span class="Identifier">getLineInfo</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">)</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L311"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L311" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getLineInfo,Lexer,Token">
-<dt><pre><span class="Keyword">proc</span> <a href="#getLineInfo%2CLexer%2CToken"><span class="Identifier">getLineInfo</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">tok</span><span class="Other">:</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#getLineInfo%2CLexer%2CToken"><span class="Identifier">getLineInfo</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">tok</span><span class="Other">:</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a><span class="Other">)</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L142"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L223"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L142" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -601,9 +731,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 assumes ident is binary operator already
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L1389"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L1514"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1389" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1514" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -613,9 +743,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Calculates the precedence of the given token.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L967"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L1090"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L967" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1090" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -625,9 +755,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L187"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L269"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L187" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L269" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -637,9 +767,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 is this the <tt class="docutils literal"><span class="pre"><span class="Identifier">i</span></span></tt>dentifier a keyword?
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L148"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L229"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L148" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L229" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -649,9 +779,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L145"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L226"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L145" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L226" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -661,9 +791,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L157"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L238"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L157" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L238" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -673,23 +803,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L1009"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L1132"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1009" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1132" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="openLexer,Lexer,FileIndex,PLLStream,IdentCache,ConfigRef">
-<dt><pre><span class="Keyword">proc</span> <a href="#openLexer%2CLexer%2CFileIndex%2CPLLStream%2CIdentCache%2CConfigRef"><span class="Identifier">openLexer</span></a><span class="Other">(</span><span class="Identifier">lex</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="ast_types.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">inputstream</span><span class="Other">:</span> <a href="llstream.html#PLLStream"><span class="Identifier">PLLStream</span></a><span class="Other">;</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#openLexer%2CLexer%2CFileIndex%2CPLLStream%2CIdentCache%2CConfigRef"><span class="Identifier">openLexer</span></a><span class="Other">(</span><span class="Identifier">lex</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">inputstream</span><span class="Other">:</span> <a href="llstream.html#PLLStream"><span class="Identifier">PLLStream</span></a><span class="Other">;</span>
                <span class="Identifier">cache</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">config</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L207"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L289"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L207" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L289" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -702,9 +832,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L219"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L301"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L219" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L301" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -714,9 +844,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L179"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L261"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L179" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L261" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -727,64 +857,40 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L183"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L265"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L183" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L265" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="rawGetTok,Lexer,Token">
 <dt><pre><span class="Keyword">proc</span> <a href="#rawGetTok%2CLexer%2CToken"><span class="Identifier">rawGetTok</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">tok</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L1196"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L1493"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1196" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1493" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 
 </dl></div>
-<div class="section" id="18">
-<h1><a class="toc-backref" href="#18">Templates</a></h1>
+<div class="section" id="15">
+<h1><a class="toc-backref" href="#15">Iterators</a></h1>
 <dl class="item">
-<div id="localReport.t,Lexer,ReportTypes">
-<dt><pre><span class="Keyword">template</span> <a href="#localReport.t%2CLexer%2CReportTypes"><span class="Identifier">localReport</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
+<div id="errorsHintsAndWarnings.i,Lexer,int">
+<dt><pre><span class="Keyword">iterator</span> <a href="#errorsHintsAndWarnings.i%2CLexer%2Cint"><span class="Identifier">errorsHintsAndWarnings</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">diagOffset</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">)</span><span class="Other">:</span> <a href="lexer.html#LexerDiag"><span class="Identifier">LexerDiag</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+iterate over all diagnostics (excluding fatal) from the beginning, or from the point in time specificed via <tt class="docutils literal"><span class="pre"><span class="Identifier">diagOffset</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L275"
+href="https://github.com/nim-works/nimskull/tree/107f2f7663302bf7c6aba064c52a5e80096805dd/compiler/ast/lexer.nim#L213"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L275" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="localReportPos.t,Lexer,ReportTypes,int">
-<dt><pre><span class="Keyword">template</span> <a href="#localReportPos.t%2CLexer%2CReportTypes%2Cint"><span class="Identifier">localReportPos</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">;</span> <span class="Identifier">pos</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L282"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L282" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="localReportTok.t,Lexer,ReportTypes,Token">
-<dt><pre><span class="Keyword">template</span> <a href="#localReportTok.t%2CLexer%2CReportTypes%2CToken"><span class="Identifier">localReportTok</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">report</span><span class="Other">:</span> <a href="reports.html#ReportTypes"><span class="Identifier">ReportTypes</span></a><span class="Other">;</span> <span class="Identifier">tok</span><span class="Other">:</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2769d7de8f4eefdfd2e7c5242e27110ceaf945ed/compiler/ast/lexer.nim#L278"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L278" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L213" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
