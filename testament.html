@@ -121,7 +121,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/6f45bcbb38e6e7fb4e7d3b46ea24d3063a406d43/doc/testament.rst#L1"
+href="https://github.com/nim-works/nimskull/tree/f76e64ab41d9bb340b3b9d8e0569eb9b97f33e83/doc/testament.rst#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/doc/testament.rst#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -216,20 +216,23 @@ class="link-seesrc" target="_blank">Source</a>
 <p>General rule of tag construction is -- avoid long and overly specific tags, since it would be impossible to break down every single tests accordingly. There is a clear need to balance out precision and usability. Use your best judgement and don't hesitate to ask for clarification if you are stuck.</p>
 <p>Tag names can consist <em>one or more lowercase words in a singular form</em> separated by underscores, each word either narrowing down the scope (<tt class="docutils literal"><span class="pre"><span class="Identifier">interop_c</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">interop_cpp</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">backend_c</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">gc</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">gc_orc</span></span></tt> etc.) or simply being a part of a longer phrase (<tt class="docutils literal"><span class="pre"><span class="Identifier">top_level</span></span></tt>).</p>
 <p>Please do check whether the tag is already present before adding new one. To generate a new list of all tags used in the code you can run code below. If you notice any seemingly duplicate tags (e.g. <tt class="docutils literal"><span class="pre"><span class="Identifier">error_compile</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">error_compilation</span></span></tt>) please correct the code to leave the most common one.</p>
-<pre class="listing"><span class="program">rg</span> <span class="option">--no-filename</span>  <span class="option">-g</span> <span class="option">&quot;*.nim&quot;</span> <span class="option">&quot;labels: &quot;</span> <span class="Operator">|</span> <span class="program">sd</span> <span class="option">'labels:\s+&quot;(.*?)&quot;'</span> <span class="option">'$1'</span> <span class="Operator">|</span> <span class="program">tr</span> <span class="option">' '</span> <span class="option">'\n'</span> <span class="Operator">|</span> <span class="program">sort</span> <span class="Operator">|</span> <span class="program">uniq</span> <span class="option">-c</span></pre><ul class="simple"><li>Type-related<ul class="simple"><li><tt class="docutils literal"><span class="pre">array</span></tt>: Array type is tested</li>
+<pre class="listing"><span class="program">grep</span> <span class="option">-R</span> <span class="option">&quot;labels: &quot;</span> <span class="Operator">|</span>
+    <span class="program">sed</span> <span class="option">-r</span> <span class="option">'s/labels:\s+&quot;(.*?)&quot;/\1/'</span> <span class="Operator">|</span>
+    <span class="program">tr</span> <span class="option">' '</span> <span class="option">'\n'</span> <span class="Operator">|</span>
+    <span class="program">sort</span> <span class="Operator">|</span>
+    <span class="program">uniq</span> <span class="option">-c</span></pre><ul class="simple"><li>Type-related<ul class="simple"><li><tt class="docutils literal"><span class="pre">array</span></tt>: Array type is tested</li>
 <li><tt class="docutils literal"><span class="pre">distinct</span></tt>: <tt class="docutils literal"><span class="pre"><span class="Keyword">distinct</span></span></tt> type is involved</li>
-<li><tt class="docutils literal"><span class="pre">enum</span></tt>: Enumeration type is involved</li>
+<li><tt class="docutils literal"><span class="pre">enum</span></tt>: <tt class="docutils literal"><span class="pre"><span class="Keyword">enum</span></span></tt> type is involved</li>
 <li><tt class="docutils literal"><span class="pre">ptr</span></tt>: Default <tt class="docutils literal"><span class="pre"><span class="Keyword">ptr</span> <span class="Identifier">T</span></span></tt> type</li>
 <li><tt class="docutils literal"><span class="pre">range</span></tt>: Default <tt class="docutils literal"><span class="pre"><span class="Identifier">range</span><span class="Punctuation">[</span><span class="Identifier">low</span><span class="Operator">..</span><span class="Identifier">high</span><span class="Punctuation">]</span></span></tt> type</li>
 <li><tt class="docutils literal"><span class="pre">ref</span></tt>: Default <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span> <span class="Identifier">T</span></span></tt> type</li>
 <li><tt class="docutils literal"><span class="pre">char</span></tt>: Character type is involved</li>
 <li><tt class="docutils literal"><span class="pre">seq</span></tt>: Default <tt class="docutils literal"><span class="pre"><span class="Identifier">seq</span><span class="Punctuation">[</span><span class="Identifier">T</span><span class="Punctuation">]</span></span></tt> type</li>
-<li><tt class="docutils literal"><span class="pre">int</span></tt>: Integer or other integral type is used</li>
+<li><tt class="docutils literal"><span class="pre">int</span></tt>: <tt class="docutils literal"><span class="pre"><span class="Identifier">int</span></span></tt> or other integral type is used</li>
 <li><tt class="docutils literal"><span class="pre">float</span></tt>: <tt class="docutils literal"><span class="pre"><span class="Identifier">float</span></span></tt> or other floating point type is used</li>
 </ul>
 </li>
-<li>Compiler diagnostics<ul class="simple"><li><tt class="docutils literal"><span class="pre">error_compilation</span></tt>:</li>
-<li><tt class="docutils literal"><span class="pre">error_compile</span></tt>:</li>
+<li>Compiler diagnostics<ul class="simple"><li><tt class="docutils literal"><span class="pre">error_compile</span></tt>: Test is expecting compilation error.</li>
 <li><tt class="docutils literal"><span class="pre">error_message</span></tt>: Test is specifically targeting formatting or content of the error message.</li>
 </ul>
 </li>
@@ -255,9 +258,10 @@ class="link-seesrc" target="_blank">Source</a>
 </li>
 <li>Other<ul class="simple"><li><tt class="docutils literal"><span class="pre">pragma</span></tt>:</li>
 <li><tt class="docutils literal"><span class="pre">subtyping</span></tt>:</li>
-<li><tt class="docutils literal"><span class="pre">resolution</span></tt>: Overloading resolution</li>
+<li><tt class="docutils literal"><span class="pre">resolution</span></tt>: Overloading resolution for procedure calls.</li>
 <li><tt class="docutils literal"><span class="pre">typedesc</span></tt>:</li>
-<li><tt class="docutils literal"><span class="pre">var</span></tt>: Mutable variable declaration</li>
+<li><tt class="docutils literal"><span class="pre">var</span></tt>: Mutable variable declaration -- variable declaration statement, not to be confused with <tt class="docutils literal"><span class="pre">var_arg</span></tt> tag which refers to the mutable argument in a callable declaration.</li>
+<li><tt class="docutils literal"><span class="pre">var_arg</span></tt>: Mutable argument to in a callable declaration (procedure, method, convert, iterator etc.)</li>
 <li><tt class="docutils literal"><span class="pre">conversion</span></tt>:</li>
 <li><tt class="docutils literal"><span class="pre">alias</span></tt>:</li>
 <li><tt class="docutils literal"><span class="pre">constructor</span></tt>:</li>
@@ -274,7 +278,9 @@ class="link-seesrc" target="_blank">Source</a>
 <li><tt class="docutils literal"><span class="pre">backend_c</span></tt>: Testing something directly related or requiring C backend</li>
 <li><tt class="docutils literal"><span class="pre">codegen</span></tt>: Code generation is involved</li>
 <li><tt class="docutils literal"><span class="pre">mode_release</span></tt>: Compiled in release mode</li>
+<li><tt class="docutils literal"><span class="pre">mode_danger</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">js</span></tt>:</li>
+<li><tt class="docutils literal"><span class="pre">cpp</span></tt></li>
 </ul>
 </li>
 <li>Standard library<ul class="simple"><li><tt class="docutils literal"><span class="pre">stdlib</span></tt>: Standard library module</li>
