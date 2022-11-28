@@ -99,27 +99,25 @@ window.addEventListener('DOMContentLoaded', main);
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#Atomic"
-    title="Atomic[T] {.importcpp: &quot;std::atomic&quot;, completeStruct.} = object
-  raw: T">Atomic</a></li>
+    title="Atomic[T] = object
+  when T is Trivial:
+    when sizeof(T) == 1:
+      value
+    elif sizeof(T) == 2:
+      value
+    elif sizeof(T) == 4:
+      value
+    elif sizeof(T) == 8:
+      value
+  else:
+      nonAtomicValue
+      guard">Atomic</a></li>
   <li><a class="reference" href="#AtomicFlag"
-    title="AtomicFlag {.importcpp: &quot;std::atomic_flag&quot;, size: 1.} = object">AtomicFlag</a></li>
+    title="AtomicFlag {.importc: &quot;atomic_flag&quot;, size: 1.} = object">AtomicFlag</a></li>
   <li><a class="reference" href="#MemoryOrder"
-    title="MemoryOrder {.importcpp: &quot;std::memory_order&quot;.} = enum
-  moRelaxed, ## No ordering constraints. Only the atomicity and ordering against
-              ## other atomic operations is guaranteed.
-  moConsume, ## This ordering is currently discouraged as it's semantics are
-              ## being revised. Acquire operations should be preferred.
-  moAcquire, ## When applied to a load operation, no reads or writes in the
-              ## current thread can be reordered before this operation.
-  moRelease, ## When applied to a store operation, no reads or writes in the
-              ## current thread can be reorderd after this operation.
-  moAcquireRelease, ## When applied to a read-modify-write operation, this behaves like
-                     ## both an acquire and a release operation.
-  moSequentiallyConsistent ## Behaves like Acquire when applied to load, like Release when
-                           ## applied to a store and like AcquireRelease when applied to a
-                           ## read-modify-write operation.
-                           ## Also guarantees that all threads observe the same total ordering
-                           ## with other moSequentiallyConsistent operations.">MemoryOrder</a></li>
+    title="MemoryOrder {.importc: &quot;memory_order&quot;.} = enum
+  moRelaxed, moConsume, moAcquire, moRelease, moAcquireRelease,
+  moSequentiallyConsistent">MemoryOrder</a></li>
 
   </ul>
 </li>
@@ -152,32 +150,58 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">compareExchange
-      <li><a class="reference" href="#compareExchange%2CAtomic%5BT%5D%2CT%2CT%2CMemoryOrder"
-    title="compareExchange[T](location: var Atomic[T]; expected: var T; desired: T;
-                   order: MemoryOrder = moSequentiallyConsistent): bool">compareExchange[T](location: var Atomic[T]; expected: var T; desired: T;
-                   order: MemoryOrder = moSequentiallyConsistent): bool</a></li>
-  <li><a class="reference" href="#compareExchange%2CAtomic%5BT%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"
-    title="compareExchange[T](location: var Atomic[T]; expected: var T; desired: T;
-                   success, failure: MemoryOrder): bool">compareExchange[T](location: var Atomic[T]; expected: var T; desired: T;
-                   success, failure: MemoryOrder): bool</a></li>
+      <li><a class="reference" href="#compareExchange%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CT%2CMemoryOrder"
+    title="compareExchange[T: not Trivial](location: var Atomic[T]; expected: var T;
+                                desired: T;
+                                order: MemoryOrder = moSequentiallyConsistent): bool">compareExchange[T: not Trivial](location: var Atomic[T]; expected: var T;
+                                desired: T;
+                                order: MemoryOrder = moSequentiallyConsistent): bool</a></li>
+  <li><a class="reference" href="#compareExchange%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"
+    title="compareExchange[T: not Trivial](location: var Atomic[T]; expected: var T;
+                                desired: T; success, failure: MemoryOrder): bool">compareExchange[T: not Trivial](location: var Atomic[T]; expected: var T;
+                                desired: T; success, failure: MemoryOrder): bool</a></li>
+  <li><a class="reference" href="#compareExchange%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CT%2CMemoryOrder"
+    title="compareExchange[T: Trivial](location: var Atomic[T]; expected: var T;
+                            desired: T;
+                            order: MemoryOrder = moSequentiallyConsistent): bool">compareExchange[T: Trivial](location: var Atomic[T]; expected: var T;
+                            desired: T;
+                            order: MemoryOrder = moSequentiallyConsistent): bool</a></li>
+  <li><a class="reference" href="#compareExchange%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"
+    title="compareExchange[T: Trivial](location: var Atomic[T]; expected: var T;
+                            desired: T; success, failure: MemoryOrder): bool">compareExchange[T: Trivial](location: var Atomic[T]; expected: var T;
+                            desired: T; success, failure: MemoryOrder): bool</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">compareExchangeWeak
-      <li><a class="reference" href="#compareExchangeWeak%2CAtomic%5BT%5D%2CT%2CT%2CMemoryOrder"
-    title="compareExchangeWeak[T](location: var Atomic[T]; expected: var T; desired: T;
-                       order: MemoryOrder = moSequentiallyConsistent): bool">compareExchangeWeak[T](location: var Atomic[T]; expected: var T; desired: T;
-                       order: MemoryOrder = moSequentiallyConsistent): bool</a></li>
-  <li><a class="reference" href="#compareExchangeWeak%2CAtomic%5BT%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"
-    title="compareExchangeWeak[T](location: var Atomic[T]; expected: var T; desired: T;
-                       success, failure: MemoryOrder): bool">compareExchangeWeak[T](location: var Atomic[T]; expected: var T; desired: T;
-                       success, failure: MemoryOrder): bool</a></li>
+      <li><a class="reference" href="#compareExchangeWeak%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CT%2CMemoryOrder"
+    title="compareExchangeWeak[T: not Trivial](location: var Atomic[T]; expected: var T;
+                                    desired: T; order: MemoryOrder = moSequentiallyConsistent): bool">compareExchangeWeak[T: not Trivial](location: var Atomic[T]; expected: var T;
+                                    desired: T; order: MemoryOrder = moSequentiallyConsistent): bool</a></li>
+  <li><a class="reference" href="#compareExchangeWeak%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"
+    title="compareExchangeWeak[T: not Trivial](location: var Atomic[T]; expected: var T;
+                                    desired: T; success, failure: MemoryOrder): bool">compareExchangeWeak[T: not Trivial](location: var Atomic[T]; expected: var T;
+                                    desired: T; success, failure: MemoryOrder): bool</a></li>
+  <li><a class="reference" href="#compareExchangeWeak%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CT%2CMemoryOrder"
+    title="compareExchangeWeak[T: Trivial](location: var Atomic[T]; expected: var T;
+                                desired: T;
+                                order: MemoryOrder = moSequentiallyConsistent): bool">compareExchangeWeak[T: Trivial](location: var Atomic[T]; expected: var T;
+                                desired: T;
+                                order: MemoryOrder = moSequentiallyConsistent): bool</a></li>
+  <li><a class="reference" href="#compareExchangeWeak%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"
+    title="compareExchangeWeak[T: Trivial](location: var Atomic[T]; expected: var T;
+                                desired: T; success, failure: MemoryOrder): bool">compareExchangeWeak[T: Trivial](location: var Atomic[T]; expected: var T;
+                                desired: T; success, failure: MemoryOrder): bool</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">exchange
-      <li><a class="reference" href="#exchange%2CAtomic%5BT%5D%2CT%2CMemoryOrder"
-    title="exchange[T](location: var Atomic[T]; desired: T;
-            order: MemoryOrder = moSequentiallyConsistent): T">exchange[T](location: var Atomic[T]; desired: T;
-            order: MemoryOrder = moSequentiallyConsistent): T</a></li>
+      <li><a class="reference" href="#exchange%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CMemoryOrder"
+    title="exchange[T: not Trivial](location: var Atomic[T]; desired: T;
+                         order: MemoryOrder = moSequentiallyConsistent): T">exchange[T: not Trivial](location: var Atomic[T]; desired: T;
+                         order: MemoryOrder = moSequentiallyConsistent): T</a></li>
+  <li><a class="reference" href="#exchange%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CMemoryOrder"
+    title="exchange[T: Trivial](location: var Atomic[T]; desired: T;
+                     order: MemoryOrder = moSequentiallyConsistent): T">exchange[T: Trivial](location: var Atomic[T]; desired: T;
+                     order: MemoryOrder = moSequentiallyConsistent): T</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fence
@@ -221,8 +245,14 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">load
-      <li><a class="reference" href="#load%2CAtomic%5BT%5D%2CMemoryOrder"
-    title="load[T](location: var Atomic[T]; order: MemoryOrder = moSequentiallyConsistent): T">load[T](location: var Atomic[T]; order: MemoryOrder = moSequentiallyConsistent): T</a></li>
+      <li><a class="reference" href="#load%2CAtomic%5BT%3A%20not%20Trivial%5D%2CMemoryOrder"
+    title="load[T: not Trivial](location: var Atomic[T];
+                     order: MemoryOrder = moSequentiallyConsistent): T">load[T: not Trivial](location: var Atomic[T];
+                     order: MemoryOrder = moSequentiallyConsistent): T</a></li>
+  <li><a class="reference" href="#load%2CAtomic%5BT%3A%20Trivial%5D%2CMemoryOrder"
+    title="load[T: Trivial](location: var Atomic[T];
+                 order: MemoryOrder = moSequentiallyConsistent): T">load[T: Trivial](location: var Atomic[T];
+                 order: MemoryOrder = moSequentiallyConsistent): T</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">signalFence
@@ -231,10 +261,14 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">store
-      <li><a class="reference" href="#store%2CAtomic%5BT%5D%2CT%2CMemoryOrder"
-    title="store[T](location: var Atomic[T]; desired: T;
-         order: MemoryOrder = moSequentiallyConsistent)">store[T](location: var Atomic[T]; desired: T;
-         order: MemoryOrder = moSequentiallyConsistent)</a></li>
+      <li><a class="reference" href="#store%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CMemoryOrder"
+    title="store[T: not Trivial](location: var Atomic[T]; desired: T;
+                      order: MemoryOrder = moSequentiallyConsistent)">store[T: not Trivial](location: var Atomic[T]; desired: T;
+                      order: MemoryOrder = moSequentiallyConsistent)</a></li>
+  <li><a class="reference" href="#store%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CMemoryOrder"
+    title="store[T: Trivial](location: var Atomic[T]; desired: T;
+                  order: MemoryOrder = moSequentiallyConsistent)">store[T: Trivial](location: var Atomic[T]; desired: T;
+                  order: MemoryOrder = moSequentiallyConsistent)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">testAndSet
@@ -247,12 +281,23 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
 </li>
+<li>
+  <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
+  <ul class="simple simple-toc-section">
+      <ul class="simple nested-toc-section">nonAtomicType
+      <li><a class="reference" href="#nonAtomicType.t%2Ctypedesc%5BTrivial%5D"
+    title="nonAtomicType(T: typedesc[Trivial]): untyped">nonAtomicType(T: typedesc[Trivial]): untyped</a></li>
+
+  </ul>
+
+  </ul>
+</li>
 
 </ul>
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -305,56 +350,54 @@ class="link-seesrc" target="_blank">Source</a>
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
 <div id="Atomic">
-<dt><pre><a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> {.<span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;std::atomic&quot;</span><span class="Other">,</span> <span class="Identifier">completeStruct</span>.} <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">raw</span><span class="Other">:</span> <span class="Identifier">T</span>
-</pre></dt>
+<dt><pre><a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Keyword">when</span> <span class="Identifier">T</span> <span class="Identifier">is</span> Trivial<span class="Other">:</span>
+    <span class="Keyword">when</span> <span class="Identifier">sizeof</span><span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">==</span> <span class="DecNumber">1</span><span class="Other">:</span>
+      <span class="Identifier">value</span>
+    <span class="Keyword">elif</span> <span class="Identifier">sizeof</span><span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">==</span> <span class="DecNumber">2</span><span class="Other">:</span>
+      <span class="Identifier">value</span>
+    <span class="Keyword">elif</span> <span class="Identifier">sizeof</span><span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">==</span> <span class="DecNumber">4</span><span class="Other">:</span>
+      <span class="Identifier">value</span>
+    <span class="Keyword">elif</span> <span class="Identifier">sizeof</span><span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">==</span> <span class="DecNumber">8</span><span class="Other">:</span>
+      <span class="Identifier">value</span>
+  <span class="Keyword">else</span><span class="Other">:</span>
+      <span class="Identifier">nonAtomicValue</span>
+      <span class="Identifier">guard</span>
+
+  </pre></dt>
 <dd>
 
-An atomic object with underlying type <tt class="docutils literal"><span class="pre"><span class="Identifier">T</span></span></tt>.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L92"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L182"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L92" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L182" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="AtomicFlag">
-<dt><pre><a href="atomics.html#AtomicFlag"><span class="Identifier">AtomicFlag</span></a> {.<span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;std::atomic_flag&quot;</span><span class="Other">,</span> <span class="Identifier">size</span><span class="Other">:</span> <span class="DecNumber">1</span>.} <span class="Other">=</span> <span class="Keyword">object</span>
-  </pre></dt>
+<dt><pre><a href="atomics.html#AtomicFlag"><span class="Identifier">AtomicFlag</span></a> {.<span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;atomic_flag&quot;</span><span class="Other">,</span> <span class="Identifier">size</span><span class="Other">:</span> <span class="DecNumber">1</span>.} <span class="Other">=</span> <span class="Keyword">object</span></pre></dt>
 <dd>
 
-An atomic boolean state.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L96"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L180"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L96" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L180" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="MemoryOrder">
-<dt><pre><a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> {.<span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;std::memory_order&quot;</span>.} <span class="Other">=</span> <span class="Keyword">enum</span>
-  <span class="Identifier">moRelaxed</span><span class="Other">,</span> <span class="Comment">## No ordering constraints. Only the atomicity and ordering against</span>
-              <span class="Comment">## other atomic operations is guaranteed.</span>
-  <span class="Identifier">moConsume</span><span class="Other">,</span> <span class="Comment">## This ordering is currently discouraged as it's semantics are</span>
-              <span class="Comment">## being revised. Acquire operations should be preferred.</span>
-  <span class="Identifier">moAcquire</span><span class="Other">,</span> <span class="Comment">## When applied to a load operation, no reads or writes in the</span>
-              <span class="Comment">## current thread can be reordered before this operation.</span>
-  <span class="Identifier">moRelease</span><span class="Other">,</span> <span class="Comment">## When applied to a store operation, no reads or writes in the</span>
-              <span class="Comment">## current thread can be reorderd after this operation.</span>
-  <span class="Identifier">moAcquireRelease</span><span class="Other">,</span> <span class="Comment">## When applied to a read-modify-write operation, this behaves like</span>
-                     <span class="Comment">## both an acquire and a release operation.</span>
-  <span class="Identifier">moSequentiallyConsistent</span> <span class="Comment">## Behaves like Acquire when applied to load, like Release when</span>
-                           <span class="Comment">## applied to a store and like AcquireRelease when applied to a</span>
-                           <span class="Comment">## read-modify-write operation.</span>
-                           <span class="Comment">## Also guarantees that all threads observe the same total ordering</span>
-                           <span class="Comment">## with other moSequentiallyConsistent operations.</span></pre></dt>
+<dt><pre><a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> {.<span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;memory_order&quot;</span>.} <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">moRelaxed</span><span class="Other">,</span> <span class="Identifier">moConsume</span><span class="Other">,</span> <span class="Identifier">moAcquire</span><span class="Other">,</span> <span class="Identifier">moRelease</span><span class="Other">,</span> <span class="Identifier">moAcquireRelease</span><span class="Other">,</span>
+  <span class="Identifier">moSequentiallyConsistent</span></pre></dt>
 <dd>
 
-Specifies how non-atomic operations can be reordered around atomic operations.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L60"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L165"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L165" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -369,9 +412,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Atomically increments the atomic integer by some <tt class="docutils literal"><span class="pre"><span class="Identifier">value</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L409"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L291"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L409" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L291" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -381,9 +424,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Atomically decrements the atomic integer by some <tt class="docutils literal"><span class="pre"><span class="Identifier">value</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L413"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L295"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L413" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L295" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -393,9 +436,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Atomically decrements the atomic integer by some <tt class="docutils literal"><span class="pre"><span class="Identifier">value</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L405"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L287"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L405" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L287" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -405,236 +448,347 @@ class="link-seesrc" target="_blank">Source</a>
 
 Atomically increments the atomic integer by some <tt class="docutils literal"><span class="pre"><span class="Identifier">value</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L401"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L283"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L401" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L283" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="clear,AtomicFlag,MemoryOrder">
 <dt><pre><span class="Keyword">proc</span> <a href="#clear%2CAtomicFlag%2CMemoryOrder"><span class="Identifier">clear</span></a><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#AtomicFlag"><span class="Identifier">AtomicFlag</span></a><span class="Other">;</span>
            <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.clear(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Atomically sets the value of the atomic flag to false.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L155"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L155" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="compareExchange,Atomic[T],T,T,MemoryOrder">
-<dt><pre><span class="Keyword">proc</span> <a href="#compareExchange%2CAtomic%5BT%5D%2CT%2CT%2CMemoryOrder"><span class="Identifier">compareExchange</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
-                        <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.compare_exchange_strong(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;atomic_flag_clear_explicit&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;stdatomic.h&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Atomically compares the value of the atomic object with the <tt class="docutils literal"><span class="pre"><span class="Identifier">expected</span></span></tt> value and performs exchange with the <tt class="docutils literal"><span class="pre"><span class="Identifier">desired</span></span></tt> one if equal or load if not. Returns true if the exchange was successful.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L112"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L210"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L112" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L210" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="compareExchange,Atomic[T],T,T,MemoryOrder,MemoryOrder">
-<dt><pre><span class="Keyword">proc</span> <a href="#compareExchange%2CAtomic%5BT%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"><span class="Identifier">compareExchange</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
-                        <span class="Identifier">success</span><span class="Other">,</span> <span class="Identifier">failure</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.compare_exchange_strong(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="compareExchange,Atomic[T: not Trivial],T,T,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#compareExchange%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CT%2CMemoryOrder"><span class="Identifier">compareExchange</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">not</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span>
+                                     <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Same as above, but allows for different memory orders for success and failure.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L117"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L277"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L117" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L277" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="compareExchangeWeak,Atomic[T],T,T,MemoryOrder">
-<dt><pre><span class="Keyword">proc</span> <a href="#compareExchangeWeak%2CAtomic%5BT%5D%2CT%2CT%2CMemoryOrder"><span class="Identifier">compareExchangeWeak</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span>
-                            <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
-                            <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.compare_exchange_weak(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="compareExchange,Atomic[T: not Trivial],T,T,MemoryOrder,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#compareExchange%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"><span class="Identifier">compareExchange</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">not</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span>
+                                     <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">success</span><span class="Other">,</span> <span class="Identifier">failure</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Same as above, but is allowed to fail spuriously.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L121"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L265"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L121" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L265" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="compareExchangeWeak,Atomic[T],T,T,MemoryOrder,MemoryOrder">
-<dt><pre><span class="Keyword">proc</span> <a href="#compareExchangeWeak%2CAtomic%5BT%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"><span class="Identifier">compareExchangeWeak</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span>
-                            <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">success</span><span class="Other">,</span> <span class="Identifier">failure</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.compare_exchange_weak(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="compareExchange,Atomic[T: Trivial],T,T,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#compareExchange%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CT%2CMemoryOrder"><span class="Identifier">compareExchange</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span>
+                                 <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
+                                 <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Same as above, but allows for different memory orders for success and failure.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L124"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L225"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L225" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="exchange,Atomic[T],T,MemoryOrder">
-<dt><pre><span class="Keyword">proc</span> <a href="#exchange%2CAtomic%5BT%5D%2CT%2CMemoryOrder"><span class="Identifier">exchange</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
-                 <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.exchange(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="compareExchange,Atomic[T: Trivial],T,T,MemoryOrder,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#compareExchange%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"><span class="Identifier">compareExchange</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span>
+                                 <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">success</span><span class="Other">,</span> <span class="Identifier">failure</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Atomically replaces the value of the atomic object with the <tt class="docutils literal"><span class="pre"><span class="Identifier">desired</span></span></tt> value and returns the old value.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L108"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L223"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L108" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="compareExchangeWeak,Atomic[T: not Trivial],T,T,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#compareExchangeWeak%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CT%2CMemoryOrder"><span class="Identifier">compareExchangeWeak</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">not</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span>
+    <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L280"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L280" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="compareExchangeWeak,Atomic[T: not Trivial],T,T,MemoryOrder,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#compareExchangeWeak%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"><span class="Identifier">compareExchangeWeak</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">not</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span>
+    <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">success</span><span class="Other">,</span> <span class="Identifier">failure</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.<span class="Identifier">inline</span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L274"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L274" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="compareExchangeWeak,Atomic[T: Trivial],T,T,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#compareExchangeWeak%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CT%2CMemoryOrder"><span class="Identifier">compareExchangeWeak</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span>
+                                     <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L230"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L230" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="compareExchangeWeak,Atomic[T: Trivial],T,T,MemoryOrder,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#compareExchangeWeak%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CT%2CMemoryOrder%2CMemoryOrder"><span class="Identifier">compareExchangeWeak</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">expected</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">;</span>
+                                     <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">success</span><span class="Other">,</span> <span class="Identifier">failure</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L228"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L228" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="exchange,Atomic[T: not Trivial],T,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#exchange%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CMemoryOrder"><span class="Identifier">exchange</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">not</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
+                              <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L260"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L260" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="exchange,Atomic[T: Trivial],T,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#exchange%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CMemoryOrder"><span class="Identifier">exchange</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
+                          <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L221"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L221" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="fence,MemoryOrder">
-<dt><pre><span class="Keyword">proc</span> <a href="#fence%2CMemoryOrder"><span class="Identifier">fence</span></a><span class="Other">(</span><span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a><span class="Other">)</span> {.<span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;std::atomic_thread_fence(@)&quot;</span><span class="Other">,</span>
-                                 <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#fence%2CMemoryOrder"><span class="Identifier">fence</span></a><span class="Other">(</span><span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a><span class="Other">)</span> {.<span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;atomic_thread_fence&quot;</span><span class="Other">,</span>
+                                 <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;stdatomic.h&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Ensures memory ordering without using atomic operations.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L158"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L212"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L158" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L212" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="fetchAdd,Atomic[T: SomeInteger],T,MemoryOrder">
 <dt><pre><span class="Keyword">proc</span> <a href="#fetchAdd%2CAtomic%5BT%3A%20SomeInteger%5D%2CT%2CMemoryOrder"><span class="Identifier">fetchAdd</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="system.html#SomeInteger"><span class="Identifier">SomeInteger</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
                               <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.fetch_add(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Atomically adds a <tt class="docutils literal"><span class="pre"><span class="Identifier">value</span></span></tt> to the atomic integer and returns the original value.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L130"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L234"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L130" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L234" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="fetchAnd,Atomic[T: SomeInteger],T,MemoryOrder">
 <dt><pre><span class="Keyword">proc</span> <a href="#fetchAnd%2CAtomic%5BT%3A%20SomeInteger%5D%2CT%2CMemoryOrder"><span class="Identifier">fetchAnd</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="system.html#SomeInteger"><span class="Identifier">SomeInteger</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
                               <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.fetch_and(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Atomically replaces the atomic integer with it's bitwise AND with the specified <tt class="docutils literal"><span class="pre"><span class="Identifier">value</span></span></tt> and returns the original value.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L138"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L238"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L138" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L238" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="fetchOr,Atomic[T: SomeInteger],T,MemoryOrder">
 <dt><pre><span class="Keyword">proc</span> <a href="#fetchOr%2CAtomic%5BT%3A%20SomeInteger%5D%2CT%2CMemoryOrder"><span class="Identifier">fetchOr</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="system.html#SomeInteger"><span class="Identifier">SomeInteger</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
                              <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.fetch_or(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Atomically replaces the atomic integer with it's bitwise OR with the specified <tt class="docutils literal"><span class="pre"><span class="Identifier">value</span></span></tt> and returns the original value.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L142"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L240"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L142" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L240" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="fetchSub,Atomic[T: SomeInteger],T,MemoryOrder">
 <dt><pre><span class="Keyword">proc</span> <a href="#fetchSub%2CAtomic%5BT%3A%20SomeInteger%5D%2CT%2CMemoryOrder"><span class="Identifier">fetchSub</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="system.html#SomeInteger"><span class="Identifier">SomeInteger</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
                               <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.fetch_sub(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Atomically subtracts a <tt class="docutils literal"><span class="pre"><span class="Identifier">value</span></span></tt> to the atomic integer and returns the original value.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L134"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L236"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L134" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L236" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="fetchXor,Atomic[T: SomeInteger],T,MemoryOrder">
 <dt><pre><span class="Keyword">proc</span> <a href="#fetchXor%2CAtomic%5BT%3A%20SomeInteger%5D%2CT%2CMemoryOrder"><span class="Identifier">fetchXor</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="system.html#SomeInteger"><span class="Identifier">SomeInteger</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
                               <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.fetch_xor(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Atomically replaces the atomic integer with it's bitwise XOR with the specified <tt class="docutils literal"><span class="pre"><span class="Identifier">value</span></span></tt> and returns the original value.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L146"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L242"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L146" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L242" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="load,Atomic[T],MemoryOrder">
-<dt><pre><span class="Keyword">proc</span> <a href="#load%2CAtomic%5BT%5D%2CMemoryOrder"><span class="Identifier">load</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span>
-             <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.load(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="load,Atomic[T: not Trivial],MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#load%2CAtomic%5BT%3A%20not%20Trivial%5D%2CMemoryOrder"><span class="Identifier">load</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">not</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span>
+                          <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Atomically obtains the value of the atomic object.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L101"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L252"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L101" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L252" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="load,Atomic[T: Trivial],MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#load%2CAtomic%5BT%3A%20Trivial%5D%2CMemoryOrder"><span class="Identifier">load</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span>
+                      <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span> {.<span class="Identifier">inline</span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L217"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L217" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="signalFence,MemoryOrder">
-<dt><pre><span class="Keyword">proc</span> <a href="#signalFence%2CMemoryOrder"><span class="Identifier">signalFence</span></a><span class="Other">(</span><span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a><span class="Other">)</span> {.<span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;std::atomic_signal_fence(@)&quot;</span><span class="Other">,</span>
-                                       <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#signalFence%2CMemoryOrder"><span class="Identifier">signalFence</span></a><span class="Other">(</span><span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a><span class="Other">)</span> {.<span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;atomic_signal_fence&quot;</span><span class="Other">,</span>
+                                       <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;stdatomic.h&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+                                       <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Prevents reordering of accesses by the compiler as would fence, but inserts no CPU instructions for memory ordering.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L161"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L213"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L213" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="store,Atomic[T],T,MemoryOrder">
-<dt><pre><span class="Keyword">proc</span> <a href="#store%2CAtomic%5BT%5D%2CT%2CMemoryOrder"><span class="Identifier">store</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
-              <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.store(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="store,Atomic[T: not Trivial],T,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#store%2CAtomic%5BT%3A%20not%20Trivial%5D%2CT%2CMemoryOrder"><span class="Identifier">store</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">not</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
+                           <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
 <dd>
 
-Atomically replaces the value of the atomic object with the <tt class="docutils literal"><span class="pre"><span class="Identifier">desired</span></span></tt> value.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L104"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L256"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L104" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L256" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="store,Atomic[T: Trivial],T,MemoryOrder">
+<dt><pre><span class="Keyword">proc</span> <a href="#store%2CAtomic%5BT%3A%20Trivial%5D%2CT%2CMemoryOrder"><span class="Identifier">store</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#Atomic"><span class="Identifier">Atomic</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">desired</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
+                       <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span> {.<span class="Identifier">inline</span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L219"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L219" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="testAndSet,AtomicFlag,MemoryOrder">
 <dt><pre><span class="Keyword">proc</span> <a href="#testAndSet%2CAtomicFlag%2CMemoryOrder"><span class="Identifier">testAndSet</span></a><span class="Other">(</span><span class="Identifier">location</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="atomics.html#AtomicFlag"><span class="Identifier">AtomicFlag</span></a><span class="Other">;</span>
                 <span class="Identifier">order</span><span class="Other">:</span> <a href="atomics.html#MemoryOrder"><span class="Identifier">MemoryOrder</span></a> <span class="Other">=</span> <span class="Identifier">moSequentiallyConsistent</span><span class="Other">)</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a> {.
-    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;#.test_and_set(@)&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;atomic&gt;&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;atomic_flag_test_and_set_explicit&quot;</span><span class="Other">,</span> <span class="Identifier">header</span><span class="Other">:</span> <span class="StringLit">&quot;&lt;stdatomic.h&gt;&quot;</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Atomically sets the atomic flag to true and returns the original value.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/50c61297284279cfd3cc817d69d2a58fa1907016/lib/pure/concurrency/atomics.nim#L152"
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L209"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L152" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L209" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+
+</dl></div>
+<div class="section" id="18">
+<h1><a class="toc-backref" href="#18">Templates</a></h1>
+<dl class="item">
+<div id="nonAtomicType.t,typedesc[Trivial]">
+<dt><pre><span class="Keyword">template</span> <a href="#nonAtomicType.t%2Ctypedesc%5BTrivial%5D"><span class="Identifier">nonAtomicType</span></a><span class="Other">(</span><span class="Identifier">T</span><span class="Other">:</span> <a href="system.html#typedesc"><span class="Identifier">typedesc</span></a><span class="Other">[</span><span class="Identifier">Trivial</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="system.html#untyped"><span class="Identifier">untyped</span></a></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/7f76f05c31892d20a8e31e8d2db9731ed408dadf/lib/pure/concurrency/atomics.nim#L65"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/pure/concurrency/atomics.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -648,7 +802,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2022-11-25 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2022-11-28 00:00:00 UTC</small>
       </div>
     </div>
   </div>
