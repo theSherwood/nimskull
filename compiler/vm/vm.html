@@ -114,50 +114,11 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
 </li>
 <li>
-  <a class="reference reference-toplevel" href="#10" id="60">Consts</a>
-  <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#evalPass"
-    title="evalPass = (open: myOpen, process: myProcess, close: myClose, isFrontend: false)">evalPass</a></li>
-
-  </ul>
-</li>
-<li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">evalConstExpr
-      <li><a class="reference" href="#evalConstExpr%2CPSym%2CIdGenerator%2CModuleGraph%2CPNode"
-    title="evalConstExpr(module: PSym; idgen: IdGenerator; g: ModuleGraph; e: PNode): PNode">evalConstExpr(module: PSym; idgen: IdGenerator; g: ModuleGraph; e: PNode): PNode</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">evalExpr
-      <li><a class="reference" href="#evalExpr%2CTCtx%2CPNode"
-    title="evalExpr(c: var TCtx; n: PNode): PNode">evalExpr(c: var TCtx; n: PNode): PNode</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">evalMacroCall
-      <li><a class="reference" href="#evalMacroCall%2CPSym%2CIdGenerator%2CModuleGraph%2Cref.int%2CPNode%2CPSym"
-    title="evalMacroCall(module: PSym; idgen: IdGenerator; g: ModuleGraph;
-              templInstCounter: ref int; n: PNode; sym: PSym): PNode">evalMacroCall(module: PSym; idgen: IdGenerator; g: ModuleGraph;
-              templInstCounter: ref int; n: PNode; sym: PSym): PNode</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">evalStaticExpr
-      <li><a class="reference" href="#evalStaticExpr%2CPSym%2CIdGenerator%2CModuleGraph%2CPNode%2CPSym"
-    title="evalStaticExpr(module: PSym; idgen: IdGenerator; g: ModuleGraph; e: PNode;
-               prc: PSym): PNode">evalStaticExpr(module: PSym; idgen: IdGenerator; g: ModuleGraph; e: PNode;
-               prc: PSym): PNode</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">evalStaticStmt
-      <li><a class="reference" href="#evalStaticStmt%2CPSym%2CIdGenerator%2CModuleGraph%2CPNode%2CPSym"
-    title="evalStaticStmt(module: PSym; idgen: IdGenerator; g: ModuleGraph; e: PNode;
-               prc: PSym)">evalStaticStmt(module: PSym; idgen: IdGenerator; g: ModuleGraph; e: PNode;
-               prc: PSym)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">execProc
-      <li><a class="reference" href="#execProc%2CTCtx%2CPSym%2CopenArray%5BPNode%5D"
-    title="execProc(c: var TCtx; sym: PSym; args: openArray[PNode]): PNode">execProc(c: var TCtx; sym: PSym; args: openArray[PNode]): PNode</a></li>
+      <ul class="simple nested-toc-section">ensureKind
+      <li><a class="reference" href="#ensureKind%2CTFullReg%2CTRegisterKind%2CVmMemoryManager"
+    title="ensureKind(n: var TFullReg; k: TRegisterKind; mm: var VmMemoryManager)">ensureKind(n: var TFullReg; k: TRegisterKind; mm: var VmMemoryManager)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">execute
@@ -167,40 +128,26 @@ window.addEventListener('DOMContentLoaded', main);
         cb: proc (c: TCtx; r: TFullReg): PNode): ExecutionResult</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">getGlobalValue
-      <li><a class="reference" href="#getGlobalValue%2CTCtx%2CPSym"
-    title="getGlobalValue(c: TCtx; s: PSym): PNode">getGlobalValue(c: TCtx; s: PSym): PNode</a></li>
+  <ul class="simple nested-toc-section">initLocReg
+      <li><a class="reference" href="#initLocReg%2CTFullReg%2CPVmType%2CVmMemoryManager"
+    title="initLocReg(r: var TFullReg; typ: PVmType; mm: var VmMemoryManager)">initLocReg(r: var TFullReg; typ: PVmType; mm: var VmMemoryManager)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">setGlobalValue
-      <li><a class="reference" href="#setGlobalValue%2CTCtx%2CPSym%2CPNode"
-    title="setGlobalValue(c: var TCtx; s: PSym; val: PNode)">setGlobalValue(c: var TCtx; s: PSym; val: PNode)</a></li>
+  <ul class="simple nested-toc-section">loadEmptyReg
+      <li><a class="reference" href="#loadEmptyReg%2CTFullReg%2CPVmType%2CTLineInfo%2CVmMemoryManager"
+    title="loadEmptyReg(r: var TFullReg; typ: PVmType; info: TLineInfo;
+             mm: var VmMemoryManager): bool">loadEmptyReg(r: var TFullReg; typ: PVmType; info: TLineInfo;
+             mm: var VmMemoryManager): bool</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">setupCompileTimeVar
-      <li><a class="reference" href="#setupCompileTimeVar%2CPSym%2CIdGenerator%2CModuleGraph%2CPNode"
-    title="setupCompileTimeVar(module: PSym; idgen: IdGenerator; g: ModuleGraph; n: PNode)">setupCompileTimeVar(module: PSym; idgen: IdGenerator; g: ModuleGraph; n: PNode)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">setupGlobalCtx
-      <li><a class="reference" href="#setupGlobalCtx%2CPSym%2CModuleGraph%2CIdGenerator"
-    title="setupGlobalCtx(module: PSym; graph: ModuleGraph; idgen: IdGenerator)">setupGlobalCtx(module: PSym; graph: ModuleGraph; idgen: IdGenerator)</a></li>
+  <ul class="simple nested-toc-section">regToNode
+      <li><a class="reference" href="#regToNode%2CTCtx%2CTFullReg%2CPType%2CTLineInfo"
+    title="regToNode(c: TCtx; x: TFullReg; typ: PType; info: TLineInfo): PNode">regToNode(c: TCtx; x: TFullReg; typ: PType; info: TLineInfo): PNode</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">toException
       <li><a class="reference" href="#toException%2CsinkVMReport"
     title="toException(r: sink VMReport): ref VmError">toException(r: sink VMReport): ref VmError</a></li>
-
-  </ul>
-
-  </ul>
-</li>
-<li>
-  <a class="reference reference-toplevel" href="#15" id="65">Iterators</a>
-  <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">genericParamsInMacroCall
-      <li><a class="reference" href="#genericParamsInMacroCall.i%2CPSym%2CPNode"
-    title="genericParamsInMacroCall(macroSym: PSym; call: PNode): (PSym, PNode)">genericParamsInMacroCall(macroSym: PSym; call: PNode): (PSym, PNode)</a></li>
 
   </ul>
 
@@ -224,18 +171,12 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
 </li>
-<li>
-  <a class="reference reference-toplevel" href="#19" id="69">Exports</a>
-  <ul class="simple simple-toc-section">
-    
-  </ul>
-</li>
 
 </ul>
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -246,7 +187,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/errorhandling.html">../ast/errorhandling</a>, <a class="reference external" href="../ast/errorreporting.html">../ast/errorreporting</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/renderer.html">../ast/renderer</a>, <a class="reference external" href="../ast/trees.html">../ast/trees</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/typesrenderer.html">../ast/typesrenderer</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../utils/debugutils.html">../utils/debugutils</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../utils/int128.html">../utils/int128</a>, <a class="reference external" href="../utils/btrees.html">../utils/btrees</a>, <a class="reference external" href="../utils/bitsets.html">../utils/bitsets</a>, <a class="reference external" href="../sem/sighashes.html">../sem/sighashes</a>, <a class="reference external" href="../sem/macrocacheimpl.html">../sem/macrocacheimpl</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="../sem/passes.html">../sem/passes</a>, <a class="reference external" href="../sem/evaltempl.html">../sem/evaltempl</a>, <a class="reference external" href="vmprofiler.html">vmprofiler</a>, <a class="reference external" href="gorgeimpl.html">gorgeimpl</a>, <a class="reference external" href="vmchecks.html">vmchecks</a>, <a class="reference external" href="vmcompilerserdes.html">vmcompilerserdes</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmdeps.html">vmdeps</a>, <a class="reference external" href="vmerrors.html">vmerrors</a>, <a class="reference external" href="vmhooks.html">vmhooks</a>, <a class="reference external" href="vmjit.html">vmjit</a>, <a class="reference external" href="vmmemory.html">vmmemory</a>, <a class="reference external" href="vmobjects.html">vmobjects</a>, <a class="reference external" href="vmops.html">vmops</a>, <a class="reference external" href="vmtypegen.html">vmtypegen</a>, <a class="reference external" href="vmtypes.html">vmtypes</a>, <a class="reference external" href="../ast/reports_vm.html">../ast/reports_vm</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/reports_debug.html">../ast/reports_debug</a>, <a class="reference external" href="../ast/reports_internal.html">../ast/reports_internal</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>, <a class="reference external" href="../ast/reports.html">../ast/reports</a>
+<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/errorreporting.html">../ast/errorreporting</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/renderer.html">../ast/renderer</a>, <a class="reference external" href="../ast/trees.html">../ast/trees</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/typesrenderer.html">../ast/typesrenderer</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../utils/int128.html">../utils/int128</a>, <a class="reference external" href="../utils/btrees.html">../utils/btrees</a>, <a class="reference external" href="../utils/bitsets.html">../utils/bitsets</a>, <a class="reference external" href="../sem/sighashes.html">../sem/sighashes</a>, <a class="reference external" href="../sem/macrocacheimpl.html">../sem/macrocacheimpl</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="../sem/evaltempl.html">../sem/evaltempl</a>, <a class="reference external" href="vmprofiler.html">vmprofiler</a>, <a class="reference external" href="gorgeimpl.html">gorgeimpl</a>, <a class="reference external" href="vmchecks.html">vmchecks</a>, <a class="reference external" href="vmcompilerserdes.html">vmcompilerserdes</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmdeps.html">vmdeps</a>, <a class="reference external" href="vmerrors.html">vmerrors</a>, <a class="reference external" href="vmjit.html">vmjit</a>, <a class="reference external" href="vmmemory.html">vmmemory</a>, <a class="reference external" href="vmobjects.html">vmobjects</a>, <a class="reference external" href="vmtypes.html">vmtypes</a>, <a class="reference external" href="../ast/reports_vm.html">../ast/reports_vm</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/reports_debug.html">../ast/reports_debug</a>, <a class="reference external" href="../ast/reports_internal.html">../ast/reports_internal</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>, <a class="reference external" href="../ast/reports.html">../ast/reports</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -260,9 +201,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3234"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L3161"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3234" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3161" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -272,26 +213,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3238"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L3165"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3238" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-
-</dl></div>
-<div class="section" id="10">
-<h1><a class="toc-backref" href="#10">Consts</a></h1>
-<dl class="item">
-<div id="evalPass">
-<dt><pre><a href="vm.html#evalPass"><span class="Identifier">evalPass</span></a> <span class="Other">=</span> <span class="Other">(</span><span class="Identifier">open</span><span class="Other">:</span> <span class="Identifier">myOpen</span><span class="Other">,</span> <span class="Identifier">process</span><span class="Other">:</span> <span class="Identifier">myProcess</span><span class="Other">,</span> <span class="Identifier">close</span><span class="Other">:</span> <span class="Identifier">myClose</span><span class="Other">,</span> <span class="Identifier">isFrontend</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">)</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3509"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3509" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3165" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -300,102 +224,16 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="evalConstExpr,PSym,IdGenerator,ModuleGraph,PNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#evalConstExpr%2CPSym%2CIdGenerator%2CModuleGraph%2CPNode"><span class="Identifier">evalConstExpr</span></a><span class="Other">(</span><span class="Identifier">module</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">;</span> <span class="Identifier">g</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">e</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
-    <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">VmError</span><span class="Other">,</span>
-    <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span> <span class="Identifier">ResultErrorRef[vm.ExecErrorReport]</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span>
-    <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span>
-                     <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ExecIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="ensureKind,TFullReg,TRegisterKind,VmMemoryManager">
+<dt><pre><span class="Keyword">func</span> <a href="#ensureKind%2CTFullReg%2CTRegisterKind%2CVmMemoryManager"><span class="Identifier">ensureKind</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TFullReg"><span class="Identifier">TFullReg</span></a><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <a href="vm_enums.html#TRegisterKind"><span class="Identifier">TRegisterKind</span></a><span class="Other">;</span> <span class="Identifier">mm</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmMemoryManager"><span class="Identifier">VmMemoryManager</span></a><span class="Other">)</span> {.
+    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3543"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L293"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3543" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="evalExpr,TCtx,PNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#evalExpr%2CTCtx%2CPNode"><span class="Identifier">evalExpr</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span>
-    <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">VmError</span><span class="Other">,</span>
-    <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span> <span class="Identifier">ResultErrorRef[vm.ExecErrorReport]</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span>
-    <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span>
-                     <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ExecIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3435"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3435" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="evalMacroCall,PSym,IdGenerator,ModuleGraph,ref.int,PNode,PSym">
-<dt><pre><span class="Keyword">proc</span> <a href="#evalMacroCall%2CPSym%2CIdGenerator%2CModuleGraph%2Cref.int%2CPNode%2CPSym"><span class="Identifier">evalMacroCall</span></a><span class="Other">(</span><span class="Identifier">module</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">;</span> <span class="Identifier">g</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span>
-                   <span class="Identifier">templInstCounter</span><span class="Other">:</span> <span class="Keyword">ref</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span> <span class="Identifier">sym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
-    <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">VmError</span><span class="Other">,</span>
-    <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span> <span class="Identifier">ResultErrorRef[vm.ExecErrorReport]</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span>
-    <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span>
-                     <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ExecIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3586"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3586" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="evalStaticExpr,PSym,IdGenerator,ModuleGraph,PNode,PSym">
-<dt><pre><span class="Keyword">proc</span> <a href="#evalStaticExpr%2CPSym%2CIdGenerator%2CModuleGraph%2CPNode%2CPSym"><span class="Identifier">evalStaticExpr</span></a><span class="Other">(</span><span class="Identifier">module</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">;</span> <span class="Identifier">g</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">e</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span>
-                    <span class="Identifier">prc</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span>
-    <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">VmError</span><span class="Other">,</span> <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span>
-    <span class="Identifier">ResultErrorRef[vm.ExecErrorReport]</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span>
-    <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ExecIOEffect</span><span class="Other">,</span>
-    <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3546"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3546" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="evalStaticStmt,PSym,IdGenerator,ModuleGraph,PNode,PSym">
-<dt><pre><span class="Keyword">proc</span> <a href="#evalStaticStmt%2CPSym%2CIdGenerator%2CModuleGraph%2CPNode%2CPSym"><span class="Identifier">evalStaticStmt</span></a><span class="Other">(</span><span class="Identifier">module</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">;</span> <span class="Identifier">g</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">e</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span>
-                    <span class="Identifier">prc</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span>
-    <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">VmError</span><span class="Other">,</span> <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span>
-    <span class="Identifier">ResultErrorRef[vm.ExecErrorReport]</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span>
-    <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ExecIOEffect</span><span class="Other">,</span>
-    <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3549"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3549" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="execProc,TCtx,PSym,openArray[PNode]">
-<dt><pre><span class="Keyword">proc</span> <a href="#execProc%2CTCtx%2CPSym%2CopenArray%5BPNode%5D"><span class="Identifier">execProc</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">sym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">args</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
-    <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span>
-    <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span>
-    <span class="Identifier">ResultErrorRef[vm.ExecErrorReport]</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span>
-    <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ExecIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3371"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3371" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L293" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -409,65 +247,49 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3250"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L3173"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3250" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3173" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="getGlobalValue,TCtx,PSym">
-<dt><pre><span class="Keyword">proc</span> <a href="#getGlobalValue%2CTCtx%2CPSym"><span class="Identifier">getGlobalValue</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="initLocReg,TFullReg,PVmType,VmMemoryManager">
+<dt><pre><span class="Keyword">func</span> <a href="#initLocReg%2CTFullReg%2CPVmType%2CVmMemoryManager"><span class="Identifier">initLocReg</span></a><span class="Other">(</span><span class="Identifier">r</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TFullReg"><span class="Identifier">TFullReg</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="vmdef.html#PVmType"><span class="Identifier">PVmType</span></a><span class="Other">;</span> <span class="Identifier">mm</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmMemoryManager"><span class="Identifier">VmMemoryManager</span></a><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Does not perform type checking, so ensure that <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span><span class="Operator">.</span><span class="Identifier">typ</span></span></tt> matches the global's type
+Transitions <tt class="docutils literal"><span class="pre"><span class="Identifier">r</span></span></tt> to a location register storing a location of type <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3450"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L298"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3450" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L298" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="setGlobalValue,TCtx,PSym,PNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#setGlobalValue%2CTCtx%2CPSym%2CPNode"><span class="Identifier">setGlobalValue</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="loadEmptyReg,TFullReg,PVmType,TLineInfo,VmMemoryManager">
+<dt><pre><span class="Keyword">func</span> <a href="#loadEmptyReg%2CTFullReg%2CPVmType%2CTLineInfo%2CVmMemoryManager"><span class="Identifier">loadEmptyReg</span></a><span class="Other">(</span><span class="Identifier">r</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TFullReg"><span class="Identifier">TFullReg</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="vmdef.html#PVmType"><span class="Identifier">PVmType</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span>
+                  <span class="Identifier">mm</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmMemoryManager"><span class="Identifier">VmMemoryManager</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Does not do type checking so ensure the <tt class="docutils literal"><span class="pre"><span class="Identifier">val</span></span></tt> matches the <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span><span class="Operator">.</span><span class="Identifier">typ</span></span></tt>
+If a value of <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt> fits into a register, transitions <tt class="docutils literal"><span class="pre"><span class="Identifier">r</span></span></tt> to the correct state, loads the default value and returns true. Returns false otherwise
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3459"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L790"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3459" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L790" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="setupCompileTimeVar,PSym,IdGenerator,ModuleGraph,PNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#setupCompileTimeVar%2CPSym%2CIdGenerator%2CModuleGraph%2CPNode"><span class="Identifier">setupCompileTimeVar</span></a><span class="Other">(</span><span class="Identifier">module</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">;</span> <span class="Identifier">g</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span>
-                         <span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span>
-    <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">VmError</span><span class="Other">,</span> <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span>
-    <span class="Identifier">ResultErrorRef[vm.ExecErrorReport]</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span>
-    <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ExecIOEffect</span><span class="Other">,</span>
-    <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="regToNode,TCtx,TFullReg,PType,TLineInfo">
+<dt><pre><span class="Keyword">proc</span> <a href="#regToNode%2CTCtx%2CTFullReg%2CPType%2CTLineInfo"><span class="Identifier">regToNode</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">x</span><span class="Other">:</span> <a href="vmdef.html#TFullReg"><span class="Identifier">TFullReg</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Deserializes the value stored by <tt class="docutils literal"><span class="pre"><span class="Identifier">x</span></span></tt> to a <tt class="docutils literal"><span class="pre"><span class="Identifier">PNode</span></span></tt> of type <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3554"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L465"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3554" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="setupGlobalCtx,PSym,ModuleGraph,IdGenerator">
-<dt><pre><span class="Keyword">proc</span> <a href="#setupGlobalCtx%2CPSym%2CModuleGraph%2CIdGenerator"><span class="Identifier">setupGlobalCtx</span></a><span class="Other">(</span><span class="Identifier">module</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3467"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3467" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L465" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -477,27 +299,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Implements the <tt class="docutils literal"><span class="pre"><span class="Identifier">toException</span></span></tt> interface for use with <tt class="docutils literal"><span class="pre"><span class="Identifier">Result</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L229"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L218"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L229" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-
-</dl></div>
-<div class="section" id="15">
-<h1><a class="toc-backref" href="#15">Iterators</a></h1>
-<dl class="item">
-<div id="genericParamsInMacroCall.i,PSym,PNode">
-<dt><pre><span class="Keyword">iterator</span> <a href="#genericParamsInMacroCall.i%2CPSym%2CPNode"><span class="Identifier">genericParamsInMacroCall</span></a><span class="Other">(</span><span class="Identifier">macroSym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">call</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">,</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L3570"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3570" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L218" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -512,9 +316,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L600"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L589"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L600" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L589" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -524,9 +328,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L610"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L599"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L610" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L599" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -536,18 +340,13 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/0a1586fba5c1e120d4a477a238058bbac2e23f89/compiler/vm/vm.nim#L605"
+href="https://github.com/nim-works/nimskull/tree/e55c8f34f4d84ebb7de365edc5699a7dc5cffa20/compiler/vm/vm.nim#L594"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L605" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L594" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 
-</dl></div>
-<div class="section" id="19">
-<h1><a class="toc-backref" href="#19">Exports</a></h1>
-<dl class="item">
-<a href="vmhooks.html#getInt,VmArgs,Natural"><span class="Identifier">getInt</span></a>, <a href="vmhooks.html#getHandle,VmArgs,Natural"><span class="Identifier">getHandle</span></a>, <a href="vmhooks.html#getVar,VmArgs,Natural"><span class="Identifier">getVar</span></a>, <a href="vmhooks.html#getString,VmArgs,Natural"><span class="Identifier">getString</span></a>, <a href="vmhooks.html#setResult,VmArgs,BiggestFloat"><span class="Identifier">setResult</span></a>, <a href="vmhooks.html#setResult,VmArgs,openArray[char]"><span class="Identifier">setResult</span></a>, <a href="vmhooks.html#getBool,VmArgs,Natural"><span class="Identifier">getBool</span></a>, <a href="vmhooks.html#setResult,VmArgs,BiggestInt"><span class="Identifier">setResult</span></a>, <a href="vmhooks.html#setResult,VmArgs,AbsoluteDir"><span class="Identifier">setResult</span></a>, <a href="vmhooks.html#numArgs,VmArgs"><span class="Identifier">numArgs</span></a>, <a href="vmhooks.html#setResult,VmArgs,PNode"><span class="Identifier">setResult</span></a>, <a href="vmhooks.html#getFloat,VmArgs,Natural"><span class="Identifier">getFloat</span></a>, <a href="vmhooks.html#getNode,VmArgs,Natural"><span class="Identifier">getNode</span></a>, <a href="vmhooks.html#getResultHandle,VmArgs"><span class="Identifier">getResultHandle</span></a>, <a href="vmhooks.html#setResult,VmArgs,bool"><span class="Identifier">setResult</span></a>, <a href="vmops.html#registerOs2Ops,TCtx"><span class="Identifier">registerOs2Ops</span></a>, <a href="vmops.html#registerOsOps,TCtx"><span class="Identifier">registerOsOps</span></a>, <a href="vmops.html#registerAdditionalOps,TCtx,bool"><span class="Identifier">registerAdditionalOps</span></a>, <a href="vmops.html#registerIoReadOps,TCtx"><span class="Identifier">registerIoReadOps</span></a>, <a href="vmops.html#registerBasicOps,TCtx"><span class="Identifier">registerBasicOps</span></a>, <a href="vmops.html#registerCompileTimeOps,TCtx"><span class="Identifier">registerCompileTimeOps</span></a>, <a href="vmops.html#registerIoWriteOps,TCtx"><span class="Identifier">registerIoWriteOps</span></a>, <a href="vmops.html#registerMacroOps,TCtx"><span class="Identifier">registerMacroOps</span></a>, <a href="vmops.html#registerDebugOps,TCtx"><span class="Identifier">registerDebugOps</span></a>
 </dl></div>
 
   </div>
