@@ -104,33 +104,74 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#ExecErrorReport"
-    title="ExecErrorReport = object
-  stackTrace*: VMReport      ## The report storing the stack-trace
-  report*: VMReport          ## The report detailing the error">ExecErrorReport</a></li>
-  <li><a class="reference" href="#ExecutionResult"
-    title="ExecutionResult = Result[PNode, ExecErrorReport]">ExecutionResult</a></li>
+      <li><a class="reference" href="#VmThread"
+    title="VmThread = object
+  pc: int                    ## the program counter. Points to the instruction to execute next
+  frame: StackFrameIndex     ## the index of the active stack frame">VmThread</a></li>
+  <li><a class="reference" href="#YieldReason"
+    title="YieldReason = object
+  case kind*: YieldReasonKind
+  of yrkDone:
+      reg*: Option[TRegister] ## the register that holds the result, or
+                              ## 'none', if there is no result
+    
+  of yrkError:
+      error*: VMReport
+
+  of yrkQuit:
+      exitCode*: int
+
+  of yrkMissingProcedure:
+      entry*: FunctionIndex  ## the entry of the procedure that is a stub">YieldReason</a></li>
+  <li><a class="reference" href="#YieldReasonKind"
+    title="YieldReasonKind = enum
+  yrkDone,                  ## execution is done. There is no more code to execute
+  yrkError, ## an error occurred. No clear distinction between fatal (the thread
+             ## must not be resumed) and non-fatal (the thread may be resumed) is
+             ## made yet, so all errors should be treated as fatal
+  yrkQuit,                  ## a call to ``quit`` was executed. The thread can't be resumed
+  yrkMissingProcedure ## a procedure stub was called. The stub has to be resolved before
+                      ## 
+                      ## continuing execution">YieldReasonKind</a></li>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">ensureKind
+      <ul class="simple nested-toc-section">=copy
+      <li><a class="reference" href="#%3Dcopy%2CVmThread%2CVmThread"
+    title="`=copy`(x: var VmThread; y: VmThread)">`=copy`(x: var VmThread; y: VmThread)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">createStackTrace
+      <li><a class="reference" href="#createStackTrace%2CTCtx%2CVmThread%2Cint"
+    title="createStackTrace(c: TCtx; thread: VmThread; recursionLimit: int = 100): VMReport">createStackTrace(c: TCtx; thread: VmThread; recursionLimit: int = 100): VMReport</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">dispose
+      <li><a class="reference" href="#dispose%2CTCtx%2CsinkVmThread"
+    title="dispose(c: var TCtx; t: sink VmThread)">dispose(c: var TCtx; t: sink VmThread)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">ensureKind
       <li><a class="reference" href="#ensureKind%2CTFullReg%2CTRegisterKind%2CVmMemoryManager"
     title="ensureKind(n: var TFullReg; k: TRegisterKind; mm: var VmMemoryManager)">ensureKind(n: var TFullReg; k: TRegisterKind; mm: var VmMemoryManager)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">execute
-      <li><a class="reference" href="#execute%2CTCtx%2Cint%2CsinkTStackFrame%2Cproc%28TCtx%2CTFullReg%29"
-    title="execute(c: var TCtx; start: int; frame: sink TStackFrame;
-        cb: proc (c: TCtx; r: TFullReg): PNode): ExecutionResult">execute(c: var TCtx; start: int; frame: sink TStackFrame;
-        cb: proc (c: TCtx; r: TFullReg): PNode): ExecutionResult</a></li>
+      <li><a class="reference" href="#execute%2CTCtx%2CVmThread"
+    title="execute(c: var TCtx; thread: var VmThread): YieldReason">execute(c: var TCtx; thread: var VmThread): YieldReason</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">initLocReg
       <li><a class="reference" href="#initLocReg%2CTFullReg%2CPVmType%2CVmMemoryManager"
     title="initLocReg(r: var TFullReg; typ: PVmType; mm: var VmMemoryManager)">initLocReg(r: var TFullReg; typ: PVmType; mm: var VmMemoryManager)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">initVmThread
+      <li><a class="reference" href="#initVmThread%2CTCtx%2Cint%2CsinkTStackFrame"
+    title="initVmThread(c: var TCtx; pc: int; frame: sink TStackFrame): VmThread">initVmThread(c: var TCtx; pc: int; frame: sink TStackFrame): VmThread</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">loadEmptyReg
@@ -145,18 +186,18 @@ window.addEventListener('DOMContentLoaded', main);
     title="regToNode(c: TCtx; x: TFullReg; typ: PType; info: TLineInfo): PNode">regToNode(c: TCtx; x: TFullReg; typ: PType; info: TLineInfo): PNode</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">toException
-      <li><a class="reference" href="#toException%2CsinkVMReport"
-    title="toException(r: sink VMReport): ref VmError">toException(r: sink VMReport): ref VmError</a></li>
-
-  </ul>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">strVal
+      <ul class="simple nested-toc-section">source
+      <li><a class="reference" href="#source.t%2CTCtx%2CVmThread"
+    title="source(c: TCtx; t: VmThread): TLineInfo">source(c: TCtx; t: VmThread): TLineInfo</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">strVal
       <li><a class="reference" href="#strVal.t%2CTFullReg"
     title="strVal(r: TFullReg): untyped">strVal(r: TFullReg): untyped</a></li>
 
@@ -176,46 +217,83 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">This file implements the new evaluation engine for Nim code. An instruction is 1-3 int32s in memory, it is a register based VM.</p>
+  <p class="module-desc"><p>This file implements the new evaluation engine for Nim code. An instruction is 1-3 int32s in memory, it is a register based VM. # TODO: update the above -- it doesn't reflect reality anymore</p>
+<p>To use the VM once has to first set up an execution environment, which is represented by <tt class="docutils literal"><span class="pre">TCtx</span></tt>. In order to execute something, a <tt class="docutils literal"><span class="pre">VmThread</span></tt> instance is required and can be created with <tt class="docutils literal"><span class="pre">initVmThread</span></tt>. Only a single thread may exist for a given <tt class="docutils literal"><span class="pre">TCtx</span></tt> at a time -- creating multiple ones, even if the others are not used, is not allowed.</p>
+</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/errorreporting.html">../ast/errorreporting</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/renderer.html">../ast/renderer</a>, <a class="reference external" href="../ast/trees.html">../ast/trees</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/typesrenderer.html">../ast/typesrenderer</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../utils/int128.html">../utils/int128</a>, <a class="reference external" href="../utils/btrees.html">../utils/btrees</a>, <a class="reference external" href="../utils/bitsets.html">../utils/bitsets</a>, <a class="reference external" href="../sem/sighashes.html">../sem/sighashes</a>, <a class="reference external" href="../sem/macrocacheimpl.html">../sem/macrocacheimpl</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="../sem/evaltempl.html">../sem/evaltempl</a>, <a class="reference external" href="vmprofiler.html">vmprofiler</a>, <a class="reference external" href="gorgeimpl.html">gorgeimpl</a>, <a class="reference external" href="vmchecks.html">vmchecks</a>, <a class="reference external" href="vmcompilerserdes.html">vmcompilerserdes</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmdeps.html">vmdeps</a>, <a class="reference external" href="vmerrors.html">vmerrors</a>, <a class="reference external" href="vmjit.html">vmjit</a>, <a class="reference external" href="vmmemory.html">vmmemory</a>, <a class="reference external" href="vmobjects.html">vmobjects</a>, <a class="reference external" href="vmtypes.html">vmtypes</a>, <a class="reference external" href="../ast/reports_vm.html">../ast/reports_vm</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/reports_debug.html">../ast/reports_debug</a>, <a class="reference external" href="../ast/reports_internal.html">../ast/reports_internal</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>, <a class="reference external" href="../ast/reports.html">../ast/reports</a>
+<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/errorreporting.html">../ast/errorreporting</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/renderer.html">../ast/renderer</a>, <a class="reference external" href="../ast/trees.html">../ast/trees</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/typesrenderer.html">../ast/typesrenderer</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../utils/int128.html">../utils/int128</a>, <a class="reference external" href="../utils/btrees.html">../utils/btrees</a>, <a class="reference external" href="../utils/bitsets.html">../utils/bitsets</a>, <a class="reference external" href="../sem/sighashes.html">../sem/sighashes</a>, <a class="reference external" href="../sem/macrocacheimpl.html">../sem/macrocacheimpl</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="../sem/evaltempl.html">../sem/evaltempl</a>, <a class="reference external" href="vmprofiler.html">vmprofiler</a>, <a class="reference external" href="gorgeimpl.html">gorgeimpl</a>, <a class="reference external" href="vmchecks.html">vmchecks</a>, <a class="reference external" href="vmcompilerserdes.html">vmcompilerserdes</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmdeps.html">vmdeps</a>, <a class="reference external" href="vmerrors.html">vmerrors</a>, <a class="reference external" href="vmmemory.html">vmmemory</a>, <a class="reference external" href="vmobjects.html">vmobjects</a>, <a class="reference external" href="vmtypes.html">vmtypes</a>, <a class="reference external" href="../ast/reports_vm.html">../ast/reports_vm</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/reports_debug.html">../ast/reports_debug</a>, <a class="reference external" href="../ast/reports_internal.html">../ast/reports_internal</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>, <a class="reference external" href="../ast/reports.html">../ast/reports</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<div id="ExecErrorReport">
-<dt><pre><a href="vm.html#ExecErrorReport"><span class="Identifier">ExecErrorReport</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">stackTrace</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/reports_vm.html#VMReport"><span class="Identifier">VMReport</span></a>      <span class="Comment">## The report storing the stack-trace</span>
-  <span class="Identifier">report</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/reports_vm.html#VMReport"><span class="Identifier">VMReport</span></a>          <span class="Comment">## The report detailing the error</span>
+<div id="VmThread">
+<dt><pre><a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">pc</span><span class="Other">:</span> <span class="Identifier">int</span>                    <span class="Comment">## the program counter. Points to the instruction to execute next</span>
+  <span class="Identifier">frame</span><span class="Other">:</span> <a href="vmdef.html#StackFrameIndex"><span class="Identifier">StackFrameIndex</span></a>     <span class="Comment">## the index of the active stack frame</span>
   </pre></dt>
 <dd>
 
-
+This is beginning of splitting up <tt class="docutils literal"><span class="pre">TCtx</span></tt>. A <tt class="docutils literal"><span class="pre">VmThread</span></tt> is meant to encapsulate the state that makes up a single execution. This includes things like the program counter, stack frames, active exception, etc.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L3161"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L95"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3161" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L95" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="ExecutionResult">
-<dt><pre><a href="vm.html#ExecutionResult"><span class="Identifier">ExecutionResult</span></a> <span class="Other">=</span> <span class="Identifier">Result</span><span class="Other">[</span><a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">,</span> <a href="vm.html#ExecErrorReport"><span class="Identifier">ExecErrorReport</span></a><span class="Other">]</span></pre></dt>
+<div id="YieldReason">
+<dt><pre><a href="vm.html#YieldReason"><span class="Identifier">YieldReason</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Keyword">case</span> <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="vm.html#YieldReasonKind"><span class="Identifier">YieldReasonKind</span></a>
+  <span class="Keyword">of</span> <span class="Identifier">yrkDone</span><span class="Other">:</span>
+      <span class="Identifier">reg</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">Option</span><span class="Other">[</span><a href="vmdef.html#TRegister"><span class="Identifier">TRegister</span></a><span class="Other">]</span> <span class="Comment">## the register that holds the result, or</span>
+                              <span class="Comment">## 'none', if there is no result</span>
+    
+  <span class="Keyword">of</span> <span class="Identifier">yrkError</span><span class="Other">:</span>
+      <span class="Identifier">error</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/reports_vm.html#VMReport"><span class="Identifier">VMReport</span></a>
+
+  <span class="Keyword">of</span> <span class="Identifier">yrkQuit</span><span class="Other">:</span>
+      <span class="Identifier">exitCode</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
+
+  <span class="Keyword">of</span> <span class="Identifier">yrkMissingProcedure</span><span class="Other">:</span>
+      <span class="Identifier">entry</span><span class="Operator">*</span><span class="Other">:</span> <a href="vmdef.html#FunctionIndex"><span class="Identifier">FunctionIndex</span></a>  <span class="Comment">## the entry of the procedure that is a stub</span>
+    
+  </pre></dt>
+<dd>
+
+The result of a single execution step (i.e. a call to <tt class="docutils literal"><span class="pre">execute</span></tt>)
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L118"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L118" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="YieldReasonKind">
+<dt><pre><a href="vm.html#YieldReasonKind"><span class="Identifier">YieldReasonKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">yrkDone</span><span class="Other">,</span>                  <span class="Comment">## execution is done. There is no more code to execute</span>
+  <span class="Identifier">yrkError</span><span class="Other">,</span> <span class="Comment">## an error occurred. No clear distinction between fatal (the thread</span>
+             <span class="Comment">## must not be resumed) and non-fatal (the thread may be resumed) is</span>
+             <span class="Comment">## made yet, so all errors should be treated as fatal</span>
+  <span class="Identifier">yrkQuit</span><span class="Other">,</span>                  <span class="Comment">## a call to ``quit`` was executed. The thread can't be resumed</span>
+  <span class="Identifier">yrkMissingProcedure</span> <span class="Comment">## a procedure stub was called. The stub has to be resolved before</span>
+                      <span class="Comment">## </span>
+                      <span class="Comment">## continuing execution</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L3165"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L105"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3165" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L105" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -224,6 +302,44 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
+<div id="=copy,VmThread,VmThread">
+<dt><pre><span class="Keyword">proc</span> <a href="#%3Dcopy%2CVmThread%2CVmThread"><span class="Identifier">`=copy`</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a><span class="Other">;</span> <span class="Identifier">y</span><span class="Other">:</span> <a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a><span class="Other">)</span> {.<span class="Identifier">error</span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L3173"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3173" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="createStackTrace,TCtx,VmThread,int">
+<dt><pre><span class="Keyword">proc</span> <a href="#createStackTrace%2CTCtx%2CVmThread%2Cint"><span class="Identifier">createStackTrace</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">thread</span><span class="Other">:</span> <a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a><span class="Other">;</span> <span class="Identifier">recursionLimit</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Other">=</span> <span class="DecNumber">100</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/reports_vm.html#VMReport"><span class="Identifier">VMReport</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Generates a stack-trace report starting at frame <tt class="docutils literal"><span class="pre"><span class="Identifier">sframe</span></span></tt> (inclusive). The amount of entries in the trace is limited to <tt class="docutils literal"><span class="pre"><span class="Identifier">recursionLimit</span></span></tt>, further entries are skipped, though the entry function is always included in the trace
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L137"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="dispose,TCtx,sinkVmThread">
+<dt><pre><span class="Keyword">proc</span> <a href="#dispose%2CTCtx%2CsinkVmThread"><span class="Identifier">dispose</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">t</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Cleans up and frees all VM data owned by <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt>
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L3186"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3186" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="ensureKind,TFullReg,TRegisterKind,VmMemoryManager">
 <dt><pre><span class="Keyword">func</span> <a href="#ensureKind%2CTFullReg%2CTRegisterKind%2CVmMemoryManager"><span class="Identifier">ensureKind</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TFullReg"><span class="Identifier">TFullReg</span></a><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <a href="vm_enums.html#TRegisterKind"><span class="Identifier">TRegisterKind</span></a><span class="Other">;</span> <span class="Identifier">mm</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmMemoryManager"><span class="Identifier">VmMemoryManager</span></a><span class="Other">)</span> {.
     <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
@@ -231,25 +347,24 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L293"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L308"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L293" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L308" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="execute,TCtx,int,sinkTStackFrame,proc(TCtx,TFullReg)">
-<dt><pre><span class="Keyword">proc</span> <a href="#execute%2CTCtx%2Cint%2CsinkTStackFrame%2Cproc%28TCtx%2CTFullReg%29"><span class="Identifier">execute</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">start</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">frame</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="vmdef.html#TStackFrame"><span class="Identifier">TStackFrame</span></a><span class="Other">;</span>
-             <span class="Identifier">cb</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">r</span><span class="Other">:</span> <a href="vmdef.html#TFullReg"><span class="Identifier">TFullReg</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vm.html#ExecutionResult"><span class="Identifier">ExecutionResult</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
+<div id="execute,TCtx,VmThread">
+<dt><pre><span class="Keyword">proc</span> <a href="#execute%2CTCtx%2CVmThread"><span class="Identifier">execute</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">thread</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vm.html#YieldReason"><span class="Identifier">YieldReason</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
     <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span>
     <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">,</span>
     <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ExecIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Executes the VM thread until it yields. The reason for yielding together with associated data is returned as a <tt class="docutils literal"><span class="pre">YieldReason</span></tt> object
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L3173"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L3195"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3173" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3195" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -260,9 +375,24 @@ class="link-seesrc" target="_blank">Source</a>
 
 Transitions <tt class="docutils literal"><span class="pre"><span class="Identifier">r</span></span></tt> to a location register storing a location of type <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L298"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L313"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L298" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L313" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="initVmThread,TCtx,int,sinkTStackFrame">
+<dt><pre><span class="Keyword">proc</span> <a href="#initVmThread%2CTCtx%2Cint%2CsinkTStackFrame"><span class="Identifier">initVmThread</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">pc</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">frame</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="vmdef.html#TStackFrame"><span class="Identifier">TStackFrame</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Sets up a <tt class="docutils literal"><span class="pre">VmThread</span></tt> instance that will start execution at <tt class="docutils literal"><span class="pre"><span class="Identifier">pc</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">frame</span></span></tt> provides the initial stack frame.<div class="admonition admonition-info"><span class="admonition-info-text"><b>Note:</b></span>
+due to an implementation limitation, there can currently only exist a single <tt class="docutils literal"><span class="pre">VmThread</span></tt> instance for a <tt class="docutils literal"><span class="pre">TCtx</span></tt></div>
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L3175"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3175" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -274,9 +404,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 If a value of <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt> fits into a register, transitions <tt class="docutils literal"><span class="pre"><span class="Identifier">r</span></span></tt> to the correct state, loads the default value and returns true. Returns false otherwise
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L790"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L805"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L790" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L805" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -287,21 +417,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Deserializes the value stored by <tt class="docutils literal"><span class="pre"><span class="Identifier">x</span></span></tt> to a <tt class="docutils literal"><span class="pre"><span class="Identifier">PNode</span></span></tt> of type <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L465"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L480"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L465" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="toException,sinkVMReport">
-<dt><pre><span class="Keyword">func</span> <a href="#toException%2CsinkVMReport"><span class="Identifier">toException</span></a><span class="Other">(</span><span class="Identifier">r</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="../ast/reports_vm.html#VMReport"><span class="Identifier">VMReport</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">ref</span> <a href="vmerrors.html#VmError"><span class="Identifier">VmError</span></a> {.<span class="Identifier">noinline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Implements the <tt class="docutils literal"><span class="pre"><span class="Identifier">toException</span></span></tt> interface for use with <tt class="docutils literal"><span class="pre"><span class="Identifier">Result</span></span></tt>
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L218"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L218" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L480" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -310,15 +428,27 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="18">
 <h1><a class="toc-backref" href="#18">Templates</a></h1>
 <dl class="item">
+<div id="source.t,TCtx,VmThread">
+<dt><pre><span class="Keyword">template</span> <a href="#source.t%2CTCtx%2CVmThread"><span class="Identifier">source</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">t</span><span class="Other">:</span> <a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a></pre></dt>
+<dd>
+
+Gets the source-code information for the instruction the program counter of <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt> currently points to
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L3215"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L3215" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="strVal.t,TFullReg">
 <dt><pre><span class="Keyword">template</span> <a href="#strVal.t%2CTFullReg"><span class="Identifier">strVal</span></a><span class="Other">(</span><span class="Identifier">r</span><span class="Other">:</span> <a href="vmdef.html#TFullReg"><span class="Identifier">TFullReg</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L589"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L604"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L589" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L604" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -328,9 +458,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L599"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L614"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L599" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L614" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -340,9 +470,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/1f865bde608d1d6c6b30a5e17cbd9d9c7ebdbf85/compiler/vm/vm.nim#L594"
+href="https://github.com/nim-works/nimskull/tree/802754d0428ae5126072e2096e594f7269839f92/compiler/vm/vm.nim#L609"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L594" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L609" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
