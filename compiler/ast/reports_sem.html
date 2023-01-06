@@ -147,24 +147,6 @@ window.addEventListener('DOMContentLoaded', main);
   stepNodeToNode, stepNodeToSym, stepIdentToSym, stepSymNodeToNode,
   stepNodeFlagsToNode, stepNodeTypeToNode, stepTypeTypeToType,
   stepResolveOverload, stepNodeSigMatch, stepWrongNode, stepError, stepTrack">DebugSemStepKind</a></li>
-  <li><a class="reference" href="#MismatchInfo"
-    title="MismatchInfo = object
-  kind*: MismatchKind        ## reason for mismatch
-  pos*: int ## position of provided argument that mismatches. This doesn't always correspond to
-            ## the *expression* subnode index (e.g. `.=`) nor the *target parameter* index (varargs)
-  arg*: PNode                ## the node of the mismatching provided argument
-  formal*: PSym ## parameter that mismatches against provided argument
-                ## its position can differ from `arg` because of varargs">MismatchInfo</a></li>
-  <li><a class="reference" href="#SemCallMismatch"
-    title="SemCallMismatch = object
-  target*: PSym              ## Procedure that was tried for an overload resolution
-  firstMismatch*: MismatchInfo ## mismatch info for better error messages
-  diag*: SemDiagnostics
-  diagnosticsEnabled*: bool  ## Set by sfExplain. efExplain or notFoundError ignore this">SemCallMismatch</a></li>
-  <li><a class="reference" href="#SemDiagnostics"
-    title="SemDiagnostics = object
-  diagnosticsTarget*: PSym   ## The concept sym that didn't match
-  reports*: seq[SemReport]   ## The reports that explain why the concept didn't match">SemDiagnostics</a></li>
   <li><a class="reference" href="#SemGcUnsafetyKind"
     title="SemGcUnsafetyKind = enum
   sgcuCallsUnsafe, sgcuAccessesGcGlobal, sgcuIndirectCallVia,
@@ -209,8 +191,9 @@ window.addEventListener('DOMContentLoaded', main);
       nilIssue*: Nilability
       nilHistory*: seq[SemNilHistory]
 
-  of rsemExpectedIdentifierInExpr, rsemExpectedOrdinal, rsemIdentExpectedInExpr,
-     rsemFieldOkButAssignedValueInvalid:
+  of rsemExpectedIdentifierInExpr, rsemExpectedIdentifierWithExprContext,
+     rsemExpectedOrdinal, rsemFieldOkButAssignedValueInvalid,
+     rsemUseOrDiscardExpr, rsemOnlyDeclaredIdentifierFoundIsError:
       wrongNode*: PNode
 
   of rsemWarnGcUnsafeListing, rsemErrGcUnsafeListing:
@@ -227,7 +210,10 @@ window.addEventListener('DOMContentLoaded', main);
       effectListing*: tuple[tags, exceptions: seq[PType]]
 
   of rsemReportCountMismatch, rsemWrongNumberOfVariables:
-      countMismatch*: tuple[expected, got: Int128]
+      countMismatch*: tuple[expected, got: int]
+
+  of rsemReportBigOrdsEnergy:
+      expectedCount*, got*: Int128
 
   of rsemInvalidExtern:
       externName*: string
@@ -242,12 +228,16 @@ window.addEventListener('DOMContentLoaded', main);
       isUnsafeAddr*: bool
 
   of rsemUndeclaredIdentifier, rsemCallNotAProcOrField:
-      potentiallyRecursive*: bool
-      explicitCall*: bool    ## Whether `rsemCallNotAProcOrField` error was
-                             ## caused by expression with explicit dot call: `obj.cal()`
-      unexpectedCandidate*: seq[PSym] ## Symbols that are syntactically
-                                      ## valid in this context, but semantically are not allowed - for
-                                      ## example `object.iterator()` call outside of the `for` loop.
+      recursiveDeps*: seq[tuple[importer, importee: FileIndex]]
+      notProcOrField*: PNode ## `rsemCallNotAProcOrField`, the field
+      explicitCall*: bool    ## Whether `rsemCallNotAProcOrField`
+                             ##   error was due to an explicit dot
+                             ##   call expression, eg: `obj.cal()`
+      unexpectedCandidate*: seq[PSym] ## Symbols that are syntactically valid
+                                      ##   in this context, but semantically
+                                      ##   are not allowed - for example
+                                      ##   `object.iterator()` call outside
+                                      ##   of a `for` loop.
     
   of rsemDisjointFields, rsemUnsafeRuntimeDiscriminantInit,
      rsemConflictingDiscriminantInit, rsemMissingCaseBranches,
@@ -283,8 +273,8 @@ window.addEventListener('DOMContentLoaded', main);
                           allowedFlags: TTypeAllowedFlags]
 
   of rsemCallTypeMismatch, rsemNonMatchingCandidates:
-      callMismatches*: seq[SemCallMismatch] ## Description of all the
-                                            ## failed candidates.
+      callMismatches*: seq[SemCallMismatch] ## Description of all the failed
+                                            ## candidates.
     
   of rsemStaticOutOfBounds:
       indexSpec*: tuple[usedIdx, minIdx, maxIdx: Int128]
@@ -306,12 +296,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="SemSideEffectCallKind = enum
   ssefUsesGlobalState, ssefCallsSideEffect, ssefCallsViaHiddenIndirection,
   ssefCallsViaIndirection, ssefParameterMutation">SemSideEffectCallKind</a></li>
-  <li><a class="reference" href="#SemSpellCandidate"
-    title="SemSpellCandidate = object
-  dist*: int
-  depth*: int
-  sym*: PSym
-  isLocal*: bool">SemSpellCandidate</a></li>
   <li><a class="reference" href="#TraceSemReport"
     title="TraceSemReport = object of DebugReportBase
   case kind*: ReportKind
@@ -382,18 +366,12 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
 </li>
-<li>
-  <a class="reference reference-toplevel" href="#19" id="69">Exports</a>
-  <ul class="simple simple-toc-section">
-    
-  </ul>
-</li>
 
 </ul>
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -404,7 +382,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="ast_types.html">ast_types</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="reports_base_sem.html">reports_base_sem</a>, <a class="reference external" href="../sem/nilcheck_enums.html">../sem/nilcheck_enums</a>, <a class="reference external" href="../utils/int128.html">../utils/int128</a>
+<a class="reference external" href="report_enums.html">report_enums</a>, <a class="reference external" href="ast_types.html">ast_types</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="reports_base.html">reports_base</a>, <a class="reference external" href="reports_base_sem.html">reports_base_sem</a>, <a class="reference external" href="../sem/nilcheck_enums.html">../sem/nilcheck_enums</a>, <a class="reference external" href="../utils/int128.html">../utils/int128</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -416,15 +394,15 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">calleeSym</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a>
   <span class="Identifier">calleeScope</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
   <span class="Identifier">call</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a>
-  <span class="Identifier">error</span><span class="Operator">*</span><span class="Other">:</span> <a href="reports_sem.html#SemCallMismatch"><span class="Identifier">SemCallMismatch</span></a>
+  <span class="Identifier">error</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#SemCallMismatch"><span class="Identifier">SemCallMismatch</span></a>
 </pre></dt>
 <dd>
 
 stripped down version of <tt class="docutils literal"><span class="pre"><span class="Identifier">sigmatch</span><span class="Operator">.</span><span class="Identifier">TCandidate</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L248"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L229"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L248" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L229" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -451,7 +429,7 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Keyword">of</span> <span class="Identifier">stepNodeSigMatch</span><span class="Other">,</span> <span class="Identifier">stepResolveOverload</span><span class="Other">:</span>
       <span class="Identifier">filters</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#TSymKinds"><span class="Identifier">TSymKinds</span></a>
       <span class="Identifier">candidate</span><span class="Operator">*</span><span class="Other">:</span> <a href="reports_sem.html#DebugCallableCandidate"><span class="Identifier">DebugCallableCandidate</span></a>
-      <span class="Identifier">errors</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="reports_sem.html#SemCallMismatch"><span class="Identifier">SemCallMismatch</span></a><span class="Other">]</span>
+      <span class="Identifier">errors</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_types.html#SemCallMismatch"><span class="Identifier">SemCallMismatch</span></a><span class="Other">]</span>
 
   <span class="Keyword">else</span><span class="Other">:</span>
       <span class="Keyword">nil</span>
@@ -461,9 +439,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L257"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L238"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L257" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L238" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -474,9 +452,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L231"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L212"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L231" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L212" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -489,60 +467,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L234"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L215"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L234" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="MismatchInfo">
-<dt><pre><a href="reports_sem.html#MismatchInfo"><span class="Identifier">MismatchInfo</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#MismatchKind"><span class="Identifier">MismatchKind</span></a>        <span class="Comment">## reason for mismatch</span>
-  <span class="Identifier">pos</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Comment">## position of provided argument that mismatches. This doesn't always correspond to</span>
-            <span class="Comment">## the *expression* subnode index (e.g. `.=`) nor the *target parameter* index (varargs)</span>
-  <span class="Identifier">arg</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a>                <span class="Comment">## the node of the mismatching provided argument</span>
-  <span class="Identifier">formal</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a> <span class="Comment">## parameter that mismatches against provided argument</span>
-                <span class="Comment">## its position can differ from `arg` because of varargs</span>
-  </pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L37"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L37" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="SemCallMismatch">
-<dt><pre><a href="reports_sem.html#SemCallMismatch"><span class="Identifier">SemCallMismatch</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">target</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a>              <span class="Comment">## Procedure that was tried for an overload resolution</span>
-  <span class="Identifier">firstMismatch</span><span class="Operator">*</span><span class="Other">:</span> <a href="reports_sem.html#MismatchInfo"><span class="Identifier">MismatchInfo</span></a> <span class="Comment">## mismatch info for better error messages</span>
-  <span class="Identifier">diag</span><span class="Operator">*</span><span class="Other">:</span> <a href="reports_sem.html#SemDiagnostics"><span class="Identifier">SemDiagnostics</span></a>
-  <span class="Identifier">diagnosticsEnabled</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>  <span class="Comment">## Set by sfExplain. efExplain or notFoundError ignore this</span>
-  </pre></dt>
-<dd>
-
-Description of the single candidate mismatch. This type is later used to construct meaningful type mismatch message, and must contain all the necessary information to provide meaningful sorting, collapse and other operations.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L45"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="SemDiagnostics">
-<dt><pre><a href="reports_sem.html#SemDiagnostics"><span class="Identifier">SemDiagnostics</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">diagnosticsTarget</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a>   <span class="Comment">## The concept sym that didn't match</span>
-  <span class="Identifier">reports</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="reports_sem.html#SemReport"><span class="Identifier">SemReport</span></a><span class="Other">]</span>   <span class="Comment">## The reports that explain why the concept didn't match</span>
-  </pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L33"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L33" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L215" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -554,9 +481,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L20"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L21"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L20" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L21" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -571,9 +498,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 keep history for each transition
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L62"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L34"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L62" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -583,7 +510,7 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">typ</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PType"><span class="Identifier">PType</span></a>
   <span class="Identifier">sym</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a>
   <span class="Identifier">str</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">spellingCandidates</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="reports_sem.html#SemSpellCandidate"><span class="Identifier">SemSpellCandidate</span></a><span class="Other">]</span>
+  <span class="Identifier">spellingCandidates</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_types.html#SemSpellCandidate"><span class="Identifier">SemSpellCandidate</span></a><span class="Other">]</span>
   <span class="Keyword">case</span> <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="report_enums.html#ReportKind"><span class="Identifier">ReportKind</span></a>
   <span class="Keyword">of</span> <span class="Identifier">rsemDuplicateModuleImport</span><span class="Other">:</span>
       <span class="Identifier">previous</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a>
@@ -611,8 +538,9 @@ class="link-seesrc" target="_blank">Source</a>
       <span class="Identifier">nilIssue</span><span class="Operator">*</span><span class="Other">:</span> <a href="../sem/nilcheck_enums.html#Nilability"><span class="Identifier">Nilability</span></a>
       <span class="Identifier">nilHistory</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="reports_sem.html#SemNilHistory"><span class="Identifier">SemNilHistory</span></a><span class="Other">]</span>
 
-  <span class="Keyword">of</span> <span class="Identifier">rsemExpectedIdentifierInExpr</span><span class="Other">,</span> <span class="Identifier">rsemExpectedOrdinal</span><span class="Other">,</span> <span class="Identifier">rsemIdentExpectedInExpr</span><span class="Other">,</span>
-     <span class="Identifier">rsemFieldOkButAssignedValueInvalid</span><span class="Other">:</span>
+  <span class="Keyword">of</span> <span class="Identifier">rsemExpectedIdentifierInExpr</span><span class="Other">,</span> <span class="Identifier">rsemExpectedIdentifierWithExprContext</span><span class="Other">,</span>
+     <span class="Identifier">rsemExpectedOrdinal</span><span class="Other">,</span> <span class="Identifier">rsemFieldOkButAssignedValueInvalid</span><span class="Other">,</span>
+     <span class="Identifier">rsemUseOrDiscardExpr</span><span class="Other">,</span> <span class="Identifier">rsemOnlyDeclaredIdentifierFoundIsError</span><span class="Other">:</span>
       <span class="Identifier">wrongNode</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a>
 
   <span class="Keyword">of</span> <span class="Identifier">rsemWarnGcUnsafeListing</span><span class="Other">,</span> <span class="Identifier">rsemErrGcUnsafeListing</span><span class="Other">:</span>
@@ -629,7 +557,10 @@ class="link-seesrc" target="_blank">Source</a>
       <span class="Identifier">effectListing</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">tags</span><span class="Other">,</span> <span class="Identifier">exceptions</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">]</span><span class="Other">]</span>
 
   <span class="Keyword">of</span> <span class="Identifier">rsemReportCountMismatch</span><span class="Other">,</span> <span class="Identifier">rsemWrongNumberOfVariables</span><span class="Other">:</span>
-      <span class="Identifier">countMismatch</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">expected</span><span class="Other">,</span> <span class="Identifier">got</span><span class="Other">:</span> <a href="../utils/int128.html#Int128"><span class="Identifier">Int128</span></a><span class="Other">]</span>
+      <span class="Identifier">countMismatch</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">expected</span><span class="Other">,</span> <span class="Identifier">got</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">]</span>
+
+  <span class="Keyword">of</span> <span class="Identifier">rsemReportBigOrdsEnergy</span><span class="Other">:</span>
+      <span class="Identifier">expectedCount</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">got</span><span class="Operator">*</span><span class="Other">:</span> <a href="../utils/int128.html#Int128"><span class="Identifier">Int128</span></a>
 
   <span class="Keyword">of</span> <span class="Identifier">rsemInvalidExtern</span><span class="Other">:</span>
       <span class="Identifier">externName</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
@@ -644,12 +575,16 @@ class="link-seesrc" target="_blank">Source</a>
       <span class="Identifier">isUnsafeAddr</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
 
   <span class="Keyword">of</span> <span class="Identifier">rsemUndeclaredIdentifier</span><span class="Other">,</span> <span class="Identifier">rsemCallNotAProcOrField</span><span class="Other">:</span>
-      <span class="Identifier">potentiallyRecursive</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
-      <span class="Identifier">explicitCall</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>    <span class="Comment">## Whether `rsemCallNotAProcOrField` error was</span>
-                             <span class="Comment">## caused by expression with explicit dot call: `obj.cal()`</span>
-      <span class="Identifier">unexpectedCandidate</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">]</span> <span class="Comment">## Symbols that are syntactically</span>
-                                      <span class="Comment">## valid in this context, but semantically are not allowed - for</span>
-                                      <span class="Comment">## example `object.iterator()` call outside of the `for` loop.</span>
+      <span class="Identifier">recursiveDeps</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">importer</span><span class="Other">,</span> <span class="Identifier">importee</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">]</span><span class="Other">]</span>
+      <span class="Identifier">notProcOrField</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a> <span class="Comment">## `rsemCallNotAProcOrField`, the field</span>
+      <span class="Identifier">explicitCall</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>    <span class="Comment">## Whether `rsemCallNotAProcOrField`</span>
+                             <span class="Comment">##   error was due to an explicit dot</span>
+                             <span class="Comment">##   call expression, eg: `obj.cal()`</span>
+      <span class="Identifier">unexpectedCandidate</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">]</span> <span class="Comment">## Symbols that are syntactically valid</span>
+                                      <span class="Comment">##   in this context, but semantically</span>
+                                      <span class="Comment">##   are not allowed - for example</span>
+                                      <span class="Comment">##   `object.iterator()` call outside</span>
+                                      <span class="Comment">##   of a `for` loop.</span>
     
   <span class="Keyword">of</span> <span class="Identifier">rsemDisjointFields</span><span class="Other">,</span> <span class="Identifier">rsemUnsafeRuntimeDiscriminantInit</span><span class="Other">,</span>
      <span class="Identifier">rsemConflictingDiscriminantInit</span><span class="Other">,</span> <span class="Identifier">rsemMissingCaseBranches</span><span class="Other">,</span>
@@ -675,7 +610,7 @@ class="link-seesrc" target="_blank">Source</a>
      <span class="Identifier">rsemIllegalConversion</span><span class="Other">,</span> <span class="Identifier">rsemConceptInferenceFailed</span><span class="Other">,</span> <span class="Identifier">rsemCannotCastTypes</span><span class="Other">,</span>
      <span class="Identifier">rsemGenericTypeExpected</span><span class="Other">,</span> <span class="Identifier">rsemCannotBeOfSubtype</span><span class="Other">,</span>
      <span class="Identifier">rsemDifferentTypeForReintroducedSymbol</span><span class="Other">:</span>
-      <span class="Identifier">typeMismatch</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="reports_base_sem.html#SemTypeMismatch"><span class="Identifier">SemTypeMismatch</span></a><span class="Other">]</span>
+      <span class="Identifier">typeMismatch</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_types.html#SemTypeMismatch"><span class="Identifier">SemTypeMismatch</span></a><span class="Other">]</span>
 
   <span class="Keyword">of</span> <span class="Identifier">rsemSymbolKindMismatch</span><span class="Other">:</span>
       <span class="Identifier">expectedSymbolKind</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">set</span><span class="Other">[</span><a href="ast_types.html#TSymKind"><span class="Identifier">TSymKind</span></a><span class="Other">]</span>
@@ -685,8 +620,8 @@ class="link-seesrc" target="_blank">Source</a>
                           <span class="Identifier">allowedFlags</span><span class="Other">:</span> <a href="ast_types.html#TTypeAllowedFlags"><span class="Identifier">TTypeAllowedFlags</span></a><span class="Other">]</span>
 
   <span class="Keyword">of</span> <span class="Identifier">rsemCallTypeMismatch</span><span class="Other">,</span> <span class="Identifier">rsemNonMatchingCandidates</span><span class="Other">:</span>
-      <span class="Identifier">callMismatches</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="reports_sem.html#SemCallMismatch"><span class="Identifier">SemCallMismatch</span></a><span class="Other">]</span> <span class="Comment">## Description of all the</span>
-                                            <span class="Comment">## failed candidates.</span>
+      <span class="Identifier">callMismatches</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_types.html#SemCallMismatch"><span class="Identifier">SemCallMismatch</span></a><span class="Other">]</span> <span class="Comment">## Description of all the failed</span>
+                                            <span class="Comment">## candidates.</span>
     
   <span class="Keyword">of</span> <span class="Identifier">rsemStaticOutOfBounds</span><span class="Other">:</span>
       <span class="Identifier">indexSpec</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">usedIdx</span><span class="Other">,</span> <span class="Identifier">minIdx</span><span class="Other">,</span> <span class="Identifier">maxIdx</span><span class="Other">:</span> <a href="../utils/int128.html#Int128"><span class="Identifier">Int128</span></a><span class="Other">]</span>
@@ -700,7 +635,7 @@ class="link-seesrc" target="_blank">Source</a>
       <span class="Identifier">linterFail</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">wanted</span><span class="Other">,</span> <span class="Identifier">got</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">]</span>
 
   <span class="Keyword">of</span> <span class="Identifier">rsemDiagnostics</span><span class="Other">:</span>
-      <span class="Identifier">diag</span><span class="Operator">*</span><span class="Other">:</span> <a href="reports_sem.html#SemDiagnostics"><span class="Identifier">SemDiagnostics</span></a>
+      <span class="Identifier">diag</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#SemDiagnostics"><span class="Identifier">SemDiagnostics</span></a>
 
   <span class="Keyword">else</span><span class="Other">:</span>
       <span class="Keyword">nil</span>
@@ -710,9 +645,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L69"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L41"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L69" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L41" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -724,26 +659,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L26"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L27"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L26" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="SemSpellCandidate">
-<dt><pre><a href="reports_sem.html#SemSpellCandidate"><span class="Identifier">SemSpellCandidate</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">dist</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
-  <span class="Identifier">depth</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
-  <span class="Identifier">sym</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a>
-  <span class="Identifier">isLocal</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
-</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L56"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L56" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L27" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -767,9 +685,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L284"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L265"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L284" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L265" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -785,9 +703,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L324"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L305"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L324" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L305" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -797,9 +715,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L322"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L303"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L322" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L303" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -811,9 +729,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L337"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L318"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L337" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L318" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -824,9 +742,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L344"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L325"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L344" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L325" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -837,9 +755,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L306"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L287"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L306" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L287" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -850,43 +768,38 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L331"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L312"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L331" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L312" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="severity,SemReport">
-<dt><pre><span class="Keyword">func</span> <a href="#severity%2CSemReport"><span class="Identifier">severity</span></a><span class="Other">(</span><span class="Identifier">report</span><span class="Other">:</span> <a href="reports_sem.html#SemReport"><span class="Identifier">SemReport</span></a><span class="Other">)</span><span class="Other">:</span> <a href="reports_base.html#ReportSeverity"><span class="Identifier">ReportSeverity</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">func</span> <a href="#severity%2CSemReport"><span class="Identifier">severity</span></a><span class="Other">(</span><span class="Identifier">report</span><span class="Other">:</span> <a href="reports_sem.html#SemReport"><span class="Identifier">SemReport</span></a><span class="Other">)</span><span class="Other">:</span> <a href="report_enums.html#ReportSeverity"><span class="Identifier">ReportSeverity</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L299"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L280"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L299" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L280" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="severity,TraceSemReport">
-<dt><pre><span class="Keyword">func</span> <a href="#severity%2CTraceSemReport"><span class="Identifier">severity</span></a><span class="Other">(</span><span class="Identifier">report</span><span class="Other">:</span> <a href="reports_sem.html#TraceSemReport"><span class="Identifier">TraceSemReport</span></a><span class="Other">)</span><span class="Other">:</span> <a href="reports_base.html#ReportSeverity"><span class="Identifier">ReportSeverity</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">func</span> <a href="#severity%2CTraceSemReport"><span class="Identifier">severity</span></a><span class="Other">(</span><span class="Identifier">report</span><span class="Other">:</span> <a href="reports_sem.html#TraceSemReport"><span class="Identifier">TraceSemReport</span></a><span class="Other">)</span><span class="Other">:</span> <a href="report_enums.html#ReportSeverity"><span class="Identifier">ReportSeverity</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_sem.nim#L352"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_sem.nim#L333"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L352" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_sem.nim#L333" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 
-</dl></div>
-<div class="section" id="19">
-<h1><a class="toc-backref" href="#19">Exports</a></h1>
-<dl class="item">
-<a href="reports_base_sem.html#ReportContext"><span class="Identifier">ReportContext</span></a>, <a href="reports_base_sem.html#ReportContextKind"><span class="Identifier">ReportContextKind</span></a>, <a href="reports_base_sem.html#SemTypeMismatch"><span class="Identifier">SemTypeMismatch</span></a>
 </dl></div>
 
   </div>
@@ -896,7 +809,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-01-03 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-01-06 00:00:00 UTC</small>
       </div>
     </div>
   </div>

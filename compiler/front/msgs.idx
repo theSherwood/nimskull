@@ -42,13 +42,20 @@ getContext	front/msgs.html#getContext,ConfigRef,TLineInfo	msgs: getContext(conf:
 numLines	front/msgs.html#numLines,ConfigRef,FileIndex	msgs: numLines(conf: ConfigRef; fileIdx: FileIndex): int	
 sourceLine	front/msgs.html#sourceLine,ConfigRef,TLineInfo	msgs: sourceLine(conf: ConfigRef; i: TLineInfo): string	
 getSurroundingSrc	front/msgs.html#getSurroundingSrc,ConfigRef,TLineInfo	msgs: getSurroundingSrc(conf: ConfigRef; info: TLineInfo): string	
+joinAnyOf	front/msgs.html#joinAnyOf,seq[T],bool	msgs: joinAnyOf[T](values: seq[T]; quote: bool = false): string	
+createSemIllformedAstMsg	front/msgs.html#createSemIllformedAstMsg.t,PNode,set[TNodeKind]	msgs: createSemIllformedAstMsg(node: PNode; expected: set[TNodeKind]): string	
+astDiagVmToLegacyReportKind	front/msgs.html#astDiagVmToLegacyReportKind,AstDiagVmKind	msgs: astDiagVmToLegacyReportKind(evt: AstDiagVmKind): ReportKind	
+astDiagVmGenToLegacyReportKind	front/msgs.html#astDiagVmGenToLegacyReportKind,AstDiagVmGenKind	msgs: astDiagVmGenToLegacyReportKind(diag: AstDiagVmGenKind): ReportKind	
+astDiagToLegacyReportKind	front/msgs.html#astDiagToLegacyReportKind,AstDiagKind,Option[AstDiagVmGenKind],Option[AstDiagVmKind]	msgs: astDiagToLegacyReportKind(diag: AstDiagKind; vmGenDiag: Option[AstDiagVmGenKind] = none(\n    AstDiagVmGenKind); vmEvent: Option[AstDiagVmKind] = none(AstDiagVmKind)): ReportKind	
+astDiagToLegacyReportKind	front/msgs.html#astDiagToLegacyReportKind,PAstDiag	msgs: astDiagToLegacyReportKind(diag: PAstDiag): ReportKind	
+astDiagToLegacyReport	front/msgs.html#astDiagToLegacyReport,PAstDiag	msgs: astDiagToLegacyReport(diag: PAstDiag): Report	
+report	front/msgs.html#report,ConfigRef,PNode	msgs: report(conf: ConfigRef; node: PNode): TErrorHandling	
+getReport	front/msgs.html#getReport,PNode	msgs: getReport(err: PNode): Report	
 handleReport	front/msgs.html#handleReport,ConfigRef,Report,InstantiationInfo,TErrorHandling	msgs: handleReport(conf: ConfigRef; r: Report; reportFrom: InstantiationInfo;\n             eh: TErrorHandling = doNothing)	
-handleReport	front/msgs.html#handleReport,ConfigRef,ReportId,InstantiationInfo,TErrorHandling	msgs: handleReport(conf: ConfigRef; id: ReportId; reportFrom: InstantiationInfo;\n             eh: TErrorHandling = doNothing)	
 globalAssert	front/msgs.html#globalAssert.t,ConfigRef,untyped,TLineInfo,string	msgs: globalAssert(conf: ConfigRef; cond: untyped; info: TLineInfo = unknownLineInfo;\n             arg = &quot;&quot;)	
 globalReport	front/msgs.html#globalReport.t,ConfigRef,TLineInfo,ReportTypes	msgs: globalReport(conf: ConfigRef; info: TLineInfo; report: ReportTypes)	
 globalReport	front/msgs.html#globalReport.t,ConfigRef,ReportTypes	msgs: globalReport(conf: ConfigRef; report: ReportTypes)	
 localReport	front/msgs.html#localReport.t,ConfigRef,TLineInfo,ReportTypes	msgs: localReport(conf: ConfigRef; info: TLineInfo; report: ReportTypes)	
-localReport	front/msgs.html#localReport.t,ConfigRef,TLineInfo,ReportTypes_2	msgs: localReport(conf: ConfigRef; info: TLineInfo; report: ReportTypes)	
 localReport	front/msgs.html#localReport.t,ConfigRef,PNode,SemReport	msgs: localReport(conf: ConfigRef; node: PNode; report: SemReport)	
 temporaryStringError	front/msgs.html#temporaryStringError,ConfigRef,TLineInfo,string	msgs: temporaryStringError(conf: ConfigRef; info: TLineInfo; text: string)	
 localReport	front/msgs.html#localReport.t,ConfigRef,ReportTypes	msgs: localReport(conf: ConfigRef; report: ReportTypes)	
@@ -56,14 +63,13 @@ localReport	front/msgs.html#localReport.t,ConfigRef,Report	msgs: localReport(con
 lexDiagToLegacyReportKind	front/msgs.html#lexDiagToLegacyReportKind,LexerDiagKind	msgs: lexDiagToLegacyReportKind(diag: LexerDiagKind): ReportKind	
 lexerDiagToLegacyReport	front/msgs.html#lexerDiagToLegacyReport,LexerDiag	msgs: lexerDiagToLegacyReport(diag: LexerDiag): Report	
 handleReport	front/msgs.html#handleReport,ConfigRef,LexerDiag,InstantiationInfo,TErrorHandling	msgs: handleReport(conf: ConfigRef; diag: LexerDiag; reportFrom: InstantiationInfo;\n             eh: TErrorHandling = doNothing)	
+handleReport	front/msgs.html#handleReport,ConfigRef,PAstDiag,InstantiationInfo,TErrorHandling	msgs: handleReport(conf: ConfigRef; diag: PAstDiag; reportFrom: InstantiationInfo;\n             eh: TErrorHandling = doNothing)	
 semReportCountMismatch	front/msgs.html#semReportCountMismatch,ReportKind,,,PNode	msgs: semReportCountMismatch(kind: ReportKind; expected, got: distinct SomeInteger;\n                       node: PNode = nil): SemReport	
 illformedAstReport	front/msgs.html#illformedAstReport,PNode,string	msgs: illformedAstReport(node: PNode; explain: string): SemReport	
 semReportIllformedAst	front/msgs.html#semReportIllformedAst.t,ConfigRef,PNode,string	msgs: semReportIllformedAst(conf: ConfigRef; node: PNode; explain: string): untyped	
-joinAnyOf	front/msgs.html#joinAnyOf,seq[T],bool	msgs: joinAnyOf[T](values: seq[T]; quote: bool = false): string	
-createSemIllformedAstMsg	front/msgs.html#createSemIllformedAstMsg.t,PNode,set[TNodeKind]	msgs: createSemIllformedAstMsg(node: PNode; expected: set[TNodeKind]): string	
 illformedAstReport	front/msgs.html#illformedAstReport,PNode,set[TNodeKind]	msgs: illformedAstReport(node: PNode; expected: set[TNodeKind]): SemReport	
 semReportIllformedAst	front/msgs.html#semReportIllformedAst.t,ConfigRef,PNode,set[TNodeKind]	msgs: semReportIllformedAst(conf: ConfigRef; node: PNode; expected: set[TNodeKind]): untyped	
-localReport	front/msgs.html#localReport.t,ConfigRef,TLineInfo,ReportTypes_3	msgs: localReport(conf: ConfigRef; info: TLineInfo; report: ReportTypes)	
+localReport	front/msgs.html#localReport.t,ConfigRef,TLineInfo,ReportTypes_2	msgs: localReport(conf: ConfigRef; info: TLineInfo; report: ReportTypes)	
 internalError	front/msgs.html#internalError.t,ConfigRef,InternalReportKind,string	msgs: internalError(conf: ConfigRef; repKind: InternalReportKind; fail: string): untyped	
 internalError	front/msgs.html#internalError.t,ConfigRef,TLineInfo,InternalReportKind,string	msgs: internalError(conf: ConfigRef; info: TLineInfo; repKind: InternalReportKind;\n              fail: string): untyped	
 internalError	front/msgs.html#internalError.t,ConfigRef,TLineInfo,string	msgs: internalError(conf: ConfigRef; info: TLineInfo; fail: string): untyped	

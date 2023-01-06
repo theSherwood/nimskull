@@ -113,7 +113,6 @@ window.addEventListener('DOMContentLoaded', main);
   case kind*: ReportKind
   of rvmStackTrace:
       currentExceptionA*, currentExceptionB*: PNode
-      traceReason*: ReportKind
       stacktrace*: seq[tuple[sym: PSym, location: TLineInfo]]
       skipped*: int
 
@@ -147,7 +146,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_vm.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_vm.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_vm.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -158,7 +157,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="ast_types.html">ast_types</a>, <a class="reference external" href="reports_base_sem.html">reports_base_sem</a>, <a class="reference external" href="../utils/int128.html">../utils/int128</a>
+<a class="reference external" href="ast_types.html">ast_types</a>, <a class="reference external" href="reports_base_sem.html">reports_base_sem</a>, <a class="reference external" href="report_enums.html">report_enums</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="../utils/int128.html">../utils/int128</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -172,12 +171,11 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Keyword">case</span> <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="report_enums.html#ReportKind"><span class="Identifier">ReportKind</span></a>
   <span class="Keyword">of</span> <span class="Identifier">rvmStackTrace</span><span class="Other">:</span>
       <span class="Identifier">currentExceptionA</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">currentExceptionB</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a>
-      <span class="Identifier">traceReason</span><span class="Operator">*</span><span class="Other">:</span> <a href="report_enums.html#ReportKind"><span class="Identifier">ReportKind</span></a>
       <span class="Identifier">stacktrace</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">sym</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">,</span> <span class="Identifier">location</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">]</span><span class="Other">]</span>
       <span class="Identifier">skipped</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
 
   <span class="Keyword">of</span> <span class="Identifier">rvmCannotCast</span><span class="Other">:</span>
-      <span class="Identifier">typeMismatch</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="reports_base_sem.html#SemTypeMismatch"><span class="Identifier">SemTypeMismatch</span></a><span class="Other">]</span>
+      <span class="Identifier">typeMismatch</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_types.html#SemTypeMismatch"><span class="Identifier">SemTypeMismatch</span></a><span class="Other">]</span>
 
   <span class="Keyword">of</span> <span class="Identifier">rvmIndexError</span><span class="Other">:</span>
       <span class="Identifier">indexSpec</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">usedIdx</span><span class="Other">,</span> <span class="Identifier">minIdx</span><span class="Other">,</span> <span class="Identifier">maxIdx</span><span class="Other">:</span> <a href="../utils/int128.html#Int128"><span class="Identifier">Int128</span></a><span class="Other">]</span>
@@ -193,9 +191,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_vm.nim#L14"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_vm.nim#L16"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_vm.nim#L14" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_vm.nim#L16" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -205,14 +203,14 @@ class="link-seesrc" target="_blank">Source</a>
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
 <div id="severity,VMReport">
-<dt><pre><span class="Keyword">func</span> <a href="#severity%2CVMReport"><span class="Identifier">severity</span></a><span class="Other">(</span><span class="Identifier">vm</span><span class="Other">:</span> <a href="reports_vm.html#VMReport"><span class="Identifier">VMReport</span></a><span class="Other">)</span><span class="Other">:</span> <a href="reports_base.html#ReportSeverity"><span class="Identifier">ReportSeverity</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">func</span> <a href="#severity%2CVMReport"><span class="Identifier">severity</span></a><span class="Other">(</span><span class="Identifier">vm</span><span class="Other">:</span> <a href="reports_vm.html#VMReport"><span class="Identifier">VMReport</span></a><span class="Other">)</span><span class="Other">:</span> <a href="report_enums.html#ReportSeverity"><span class="Identifier">ReportSeverity</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5f3ef896e7ca40d3e14848cff120c8dda7c2dfaf/compiler/ast/reports_vm.nim#L39"
+href="https://github.com/nim-works/nimskull/tree/5867759b725d0fddc7c9fef7ffea85df13876f08/compiler/ast/reports_vm.nim#L40"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_vm.nim#L39" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_vm.nim#L40" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -226,7 +224,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-01-03 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-01-06 00:00:00 UTC</small>
       </div>
     </div>
   </div>
