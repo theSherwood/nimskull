@@ -1,31 +1,3 @@
-sexpError	sexp.html#sexpError	SexpEventKind.sexpError	
-sexpEof	sexp.html#sexpEof	SexpEventKind.sexpEof	
-sexpString	sexp.html#sexpString	SexpEventKind.sexpString	
-sexpSymbol	sexp.html#sexpSymbol	SexpEventKind.sexpSymbol	
-sexpKeyword	sexp.html#sexpKeyword	SexpEventKind.sexpKeyword	
-sexpInt	sexp.html#sexpInt	SexpEventKind.sexpInt	
-sexpFloat	sexp.html#sexpFloat	SexpEventKind.sexpFloat	
-sexpNil	sexp.html#sexpNil	SexpEventKind.sexpNil	
-sexpDot	sexp.html#sexpDot	SexpEventKind.sexpDot	
-sexpListStart	sexp.html#sexpListStart	SexpEventKind.sexpListStart	
-sexpListEnd	sexp.html#sexpListEnd	SexpEventKind.sexpListEnd	
-SexpEventKind	sexp.html#SexpEventKind	sexp: SexpEventKind	
-errNone	sexp.html#errNone	SexpError.errNone	
-errInvalidToken	sexp.html#errInvalidToken	SexpError.errInvalidToken	
-errParensRiExpected	sexp.html#errParensRiExpected	SexpError.errParensRiExpected	
-errQuoteExpected	sexp.html#errQuoteExpected	SexpError.errQuoteExpected	
-errEofExpected	sexp.html#errEofExpected	SexpError.errEofExpected	
-SexpError	sexp.html#SexpError_2	sexp: SexpError	
-SexpParser	sexp.html#SexpParser	sexp: SexpParser	
-close	sexp.html#close,SexpParser	sexp: close(parser: var SexpParser)	
-str	sexp.html#str,SexpParser	sexp: str(parser: SexpParser): string	
-getInt	sexp.html#getInt,SexpParser	sexp: getInt(parser: SexpParser): BiggestInt	
-getFloat	sexp.html#getFloat,SexpParser	sexp: getFloat(parser: SexpParser): float	
-kind	sexp.html#kind,SexpParser	sexp: kind(parser: SexpParser): SexpEventKind	
-getColumn	sexp.html#getColumn,SexpParser	sexp: getColumn(parser: SexpParser): int	
-getLine	sexp.html#getLine,SexpParser	sexp: getLine(parser: SexpParser): int	
-errorMsg	sexp.html#errorMsg,SexpParser	sexp: errorMsg(parser: SexpParser): string	
-errorMsgExpected	sexp.html#errorMsgExpected,SexpParser,string	sexp: errorMsgExpected(parser: SexpParser; e: string): string	
 SNil	sexp.html#SNil	SexpNodeKind.SNil	
 SInt	sexp.html#SInt	SexpNodeKind.SInt	
 SFloat	sexp.html#SFloat	SexpNodeKind.SFloat	
@@ -38,6 +10,8 @@ SexpNodeKind	sexp.html#SexpNodeKind	sexp: SexpNodeKind
 SexpNode	sexp.html#SexpNode	sexp: SexpNode	
 SexpNodeObj	sexp.html#SexpNodeObj	sexp: SexpNodeObj	
 SexpParsingError	sexp.html#SexpParsingError	sexp: SexpParsingError	
+errorMsg	sexp.html#errorMsg,SexpParser	sexp: errorMsg(parser: SexpParser): string	
+errorMsgExpected	sexp.html#errorMsgExpected,SexpParser,string	sexp: errorMsgExpected(parser: SexpParser; e: string): string	
 raiseParseErr	sexp.html#raiseParseErr,SexpParser,string	sexp: raiseParseErr(p: SexpParser; msg: string)	
 newSString	sexp.html#newSString,string	sexp: newSString(s: string): SexpNode	
 newSInt	sexp.html#newSInt,BiggestInt	sexp: newSInt(n: BiggestInt): SexpNode	
@@ -45,7 +19,7 @@ newSFloat	sexp.html#newSFloat,float	sexp: newSFloat(n: float): SexpNode
 newSNil	sexp.html#newSNil	sexp: newSNil(): SexpNode	
 newSCons	sexp.html#newSCons,SexpNode,SexpNode	sexp: newSCons(car, cdr: SexpNode): SexpNode	
 newSKeyword	sexp.html#newSKeyword,string,SexpNode	sexp: newSKeyword(key: string; value: SexpNode): SexpNode	
-newSList	sexp.html#newSList	sexp: newSList(): SexpNode	
+newSList	sexp.html#newSList,varargs[SexpNode]	sexp: newSList(items: varargs[SexpNode]): SexpNode	
 newSSymbol	sexp.html#newSSymbol,string	sexp: newSSymbol(s: string): SexpNode	
 getStr	sexp.html#getStr,SexpNode,string	sexp: getStr(n: SexpNode; default: string = &quot;&quot;): string	
 getNum	sexp.html#getNum,SexpNode,BiggestInt	sexp: getNum(n: SexpNode; default: BiggestInt = 0): BiggestInt	
@@ -78,6 +52,5 @@ pairs	sexp.html#pairs.i,SexpNode	sexp: pairs(node: SexpNode): (int, SexpNode)
 mitems	sexp.html#mitems.i,SexpNode	sexp: mitems(node: var SexpNode): var SexpNode	
 mpairs	sexp.html#mpairs.i,SexpNode	sexp: mpairs(node: var SexpNode): (int, var SexpNode)	
 treeRepr	sexp.html#treeRepr,SexpNode	sexp: treeRepr(node: SexpNode): string	
-open	sexp.html#open,SexpParser,Stream	sexp: open(parser: var SexpParser; input: Stream)	
 parseSexp	sexp.html#parseSexp,Stream	sexp: parseSexp(s: Stream): SexpNode	
 parseSexp	sexp.html#parseSexp,string	sexp: parseSexp(buffer: string): SexpNode	

@@ -104,27 +104,7 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#SexpError_2"
-    title="SexpError = enum
-  errNone,                  ## no error
-  errInvalidToken,          ## invalid token
-  errParensRiExpected,      ## ``)`` expected
-  errQuoteExpected,         ## ``&quot;`` expected
-  errEofExpected             ## EOF expected">SexpError</a></li>
-  <li><a class="reference" href="#SexpEventKind"
-    title="SexpEventKind = enum
-  sexpError,                ## an error occurred during parsing
-  sexpEof,                  ## end of file reached
-  sexpString,               ## a string literal
-  sexpSymbol,               ## a symbol
-  sexpKeyword,              ## `:keyword` event
-  sexpInt,                  ## an integer literal
-  sexpFloat,                ## a float literal
-  sexpNil,                  ## the value ``nil``
-  sexpDot,                  ## the dot to separate car/cdr
-  sexpListStart,            ## start of a list: the ``(`` token
-  sexpListEnd                ## end of a list: the ``)`` token">SexpEventKind</a></li>
-  <li><a class="reference" href="#SexpNode"
+      <li><a class="reference" href="#SexpNode"
     title="SexpNode = ref SexpNodeObj">SexpNode</a></li>
   <li><a class="reference" href="#SexpNodeKind"
     title="SexpNodeKind = enum
@@ -157,12 +137,6 @@ window.addEventListener('DOMContentLoaded', main);
 
   of SNil:
       nil">SexpNodeObj</a></li>
-  <li><a class="reference" href="#SexpParser"
-    title="SexpParser = object of BaseLexer
-  str: string
-  tok: TTokKind              ## Current token that lexer has processed
-  kind: SexpEventKind
-  err: SexpError">SexpParser</a></li>
   <li><a class="reference" href="#SexpParsingError"
     title="SexpParsingError = object of ValueError">SexpParsingError</a></li>
 
@@ -196,11 +170,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="addField(node: SexpNode; name: string; value: SexpNode)">addField(node: SexpNode; name: string; value: SexpNode)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">close
-      <li><a class="reference" href="#close%2CSexpParser"
-    title="close(parser: var SexpParser)">close(parser: var SexpParser)</a></li>
-
-  </ul>
   <ul class="simple nested-toc-section">copy
       <li><a class="reference" href="#copy%2CSexpNode"
     title="copy(p: SexpNode): SexpNode">copy(p: SexpNode): SexpNode</a></li>
@@ -221,11 +190,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="escapeJson(s: string): string">escapeJson(s: string): string</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">getColumn
-      <li><a class="reference" href="#getColumn%2CSexpParser"
-    title="getColumn(parser: SexpParser): int">getColumn(parser: SexpParser): int</a></li>
-
-  </ul>
   <ul class="simple nested-toc-section">getCons
       <li><a class="reference" href="#getCons%2CSexpNode%2CCons"
     title="getCons(n: SexpNode; defaults: Cons = (newSNil(), newSNil())): Cons">getCons(n: SexpNode; defaults: Cons = (newSNil(), newSNil())): Cons</a></li>
@@ -241,29 +205,14 @@ window.addEventListener('DOMContentLoaded', main);
     title="getField(node: SexpNode; name: string; default: SexpNode = nil): SexpNode">getField(node: SexpNode; name: string; default: SexpNode = nil): SexpNode</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">getFloat
-      <li><a class="reference" href="#getFloat%2CSexpParser"
-    title="getFloat(parser: SexpParser): float">getFloat(parser: SexpParser): float</a></li>
-
-  </ul>
   <ul class="simple nested-toc-section">getFNum
       <li><a class="reference" href="#getFNum%2CSexpNode%2Cfloat"
     title="getFNum(n: SexpNode; default: float = 0.0): float">getFNum(n: SexpNode; default: float = 0.0): float</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">getInt
-      <li><a class="reference" href="#getInt%2CSexpParser"
-    title="getInt(parser: SexpParser): BiggestInt">getInt(parser: SexpParser): BiggestInt</a></li>
-
-  </ul>
   <ul class="simple nested-toc-section">getKey
       <li><a class="reference" href="#getKey%2CSexpNode%2Cstring"
     title="getKey(n: SexpNode; default: string = &quot;&quot;): string">getKey(n: SexpNode; default: string = &quot;&quot;): string</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">getLine
-      <li><a class="reference" href="#getLine%2CSexpParser"
-    title="getLine(parser: SexpParser): int">getLine(parser: SexpParser): int</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">getNum
@@ -284,11 +233,6 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">hash
       <li><a class="reference" href="#hash%2CSexpNode"
     title="hash(n: SexpNode): Hash">hash(n: SexpNode): Hash</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">kind
-      <li><a class="reference" href="#kind%2CSexpParser"
-    title="kind(parser: SexpParser): SexpEventKind">kind(parser: SexpParser): SexpEventKind</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">len
@@ -317,8 +261,8 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">newSList
-      <li><a class="reference" href="#newSList"
-    title="newSList(): SexpNode">newSList(): SexpNode</a></li>
+      <li><a class="reference" href="#newSList%2Cvarargs%5BSexpNode%5D"
+    title="newSList(items: varargs[SexpNode]): SexpNode">newSList(items: varargs[SexpNode]): SexpNode</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">newSNil
@@ -334,11 +278,6 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">newSSymbol
       <li><a class="reference" href="#newSSymbol%2Cstring"
     title="newSSymbol(s: string): SexpNode">newSSymbol(s: string): SexpNode</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">open
-      <li><a class="reference" href="#open%2CSexpParser%2CStream"
-    title="open(parser: var SexpParser; input: Stream)">open(parser: var SexpParser; input: Stream)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">parseSexp
@@ -373,11 +312,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="sexp(s: SexpNode): SexpNode">sexp(s: SexpNode): SexpNode</a></li>
   <li><a class="reference" href="#sexp%2Cstring"
     title="sexp(s: string): SexpNode">sexp(s: string): SexpNode</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">str
-      <li><a class="reference" href="#str%2CSexpParser"
-    title="str(parser: SexpParser): string">str(parser: SexpParser): string</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">treeRepr
@@ -430,71 +364,41 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><strong>Note:</strong> Import <tt class="docutils literal"><span class="pre">nimsuggest/sexp</span></tt> to use this module</p>
+  <p class="module-desc"><p><strong>Note:</strong> Import <tt class="docutils literal"><span class="pre">experimental/sexp</span></tt> to use this module</p>
+<p>Symbolic Expressions, S-Expressions, s-expresssions, s-exp, sexp, whatever someone might call them are woefully underspecified. There aren't too many places too screw-up, but edge cases matter.</p>
+<p>This modules allows for s-exp handling and is &quot;flavoured&quot; by remaining largely compatible with emacs' EPC specification. As such it's meant for serdes (serializing and deserializing) data and will likely fall short for forgiving/precise parsing that a high quality lisp like language interpreter may require.</p>
+<p>Future Direction:</p>
+<ul class="simple"><li><dl class="docutils"><dt>Keyword support (:someKeyWord) might be removed or reworked to not require</dt>
+<dd>a key/value pair approach</dd>
+</dl>
+</li>
+<li>cons vs list separation and nil handling</li>
+</ul>
+</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="hashes.html">hashes</a>, <a class="reference external" href="strutils.html">strutils</a>, <a class="reference external" href="lexbase.html">lexbase</a>, <a class="reference external" href="streams.html">streams</a>, <a class="reference external" href="unicode.html">unicode</a>, <a class="reference external" href="macros.html">macros</a>, <a class="reference external" href="algorithm.html">algorithm</a>, <a class="reference external" href="decode_helpers.html">decode_helpers</a>
+<a class="reference external" href="sexp_parse.html">sexp_parse</a>, <a class="reference external" href="hashes.html">hashes</a>, <a class="reference external" href="strutils.html">strutils</a>, <a class="reference external" href="lexbase.html">lexbase</a>, <a class="reference external" href="streams.html">streams</a>, <a class="reference external" href="unicode.html">unicode</a>, <a class="reference external" href="macros.html">macros</a>, <a class="reference external" href="algorithm.html">algorithm</a>, <a class="reference external" href="decode_helpers.html">decode_helpers</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<div id="SexpError_2">
-<dt><pre><a href="sexp.html#SexpError"><span class="Identifier">SexpError</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
-  <span class="Identifier">errNone</span><span class="Other">,</span>                  <span class="Comment">## no error</span>
-  <span class="Identifier">errInvalidToken</span><span class="Other">,</span>          <span class="Comment">## invalid token</span>
-  <span class="Identifier">errParensRiExpected</span><span class="Other">,</span>      <span class="Comment">## ``)`` expected</span>
-  <span class="Identifier">errQuoteExpected</span><span class="Other">,</span>         <span class="Comment">## ``&quot;`` expected</span>
-  <span class="Identifier">errEofExpected</span>             <span class="Comment">## EOF expected</span></pre></dt>
-<dd>
-
-enumeration that lists all errors that can occur
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L46"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="SexpEventKind">
-<dt><pre><a href="sexp.html#SexpEventKind"><span class="Identifier">SexpEventKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
-  <span class="Identifier">sexpError</span><span class="Other">,</span>                <span class="Comment">## an error occurred during parsing</span>
-  <span class="Identifier">sexpEof</span><span class="Other">,</span>                  <span class="Comment">## end of file reached</span>
-  <span class="Identifier">sexpString</span><span class="Other">,</span>               <span class="Comment">## a string literal</span>
-  <span class="Identifier">sexpSymbol</span><span class="Other">,</span>               <span class="Comment">## a symbol</span>
-  <span class="Identifier">sexpKeyword</span><span class="Other">,</span>              <span class="Comment">## `:keyword` event</span>
-  <span class="Identifier">sexpInt</span><span class="Other">,</span>                  <span class="Comment">## an integer literal</span>
-  <span class="Identifier">sexpFloat</span><span class="Other">,</span>                <span class="Comment">## a float literal</span>
-  <span class="Identifier">sexpNil</span><span class="Other">,</span>                  <span class="Comment">## the value ``nil``</span>
-  <span class="Identifier">sexpDot</span><span class="Other">,</span>                  <span class="Comment">## the dot to separate car/cdr</span>
-  <span class="Identifier">sexpListStart</span><span class="Other">,</span>            <span class="Comment">## start of a list: the ``(`` token</span>
-  <span class="Identifier">sexpListEnd</span>                <span class="Comment">## end of a list: the ``)`` token</span></pre></dt>
-<dd>
-
-enumeration of all events that may occur when parsing
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L18"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L18" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
 <div id="SexpNode">
 <dt><pre><a href="sexp.html#SexpNode"><span class="Identifier">SexpNode</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <a href="sexp.html#SexpNodeObj"><span class="Identifier">SexpNodeObj</span></a></pre></dt>
 <dd>
 
-SEXP node
+s-exp node
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L290"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L45"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L290" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -503,11 +407,11 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">SNil</span><span class="Other">,</span> <span class="Identifier">SInt</span><span class="Other">,</span> <span class="Identifier">SFloat</span><span class="Other">,</span> <span class="Identifier">SString</span><span class="Other">,</span> <span class="Identifier">SSymbol</span><span class="Other">,</span> <span class="Identifier">SKeyword</span><span class="Other">,</span> <span class="Identifier">SList</span><span class="Other">,</span> <span class="Identifier">SCons</span></pre></dt>
 <dd>
 
-possible SEXP node types
+possible s-exp node types
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L280"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L35"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L280" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L35" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -545,26 +449,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L291"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L46"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L291" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="SexpParser">
-<dt><pre><a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="lexbase.html#BaseLexer"><span class="Identifier">BaseLexer</span></a>
-  <span class="Identifier">str</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a>
-  <span class="Identifier">tok</span><span class="Other">:</span> <span class="Identifier">TTokKind</span>              <span class="Comment">## Current token that lexer has processed</span>
-  <span class="Identifier">kind</span><span class="Other">:</span> <a href="sexp.html#SexpEventKind"><span class="Identifier">SexpEventKind</span></a>
-  <span class="Identifier">err</span><span class="Other">:</span> <a href="sexp.html#SexpError"><span class="Identifier">SexpError</span></a>
-</pre></dt>
-<dd>
-
-the parser object.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L53"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L53" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -572,11 +459,11 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><a href="sexp.html#SexpParsingError"><span class="Identifier">SexpParsingError</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="system.html#ValueError"><span class="Identifier">ValueError</span></a></pre></dt>
 <dd>
 
-is raised for a SEXP error
+is raised for a s-exp error
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L314"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L70"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L314" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L70" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -589,11 +476,11 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><span class="Keyword">proc</span> <a href="#%24%2CSexpNode"><span class="Identifier">`$`</span></a><span class="Other">(</span><span class="Identifier">node</span><span class="Other">:</span> <a href="sexp.html#SexpNode"><span class="Identifier">SexpNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Converts <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt> to its SEXP Representation on one line.
+Converts <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt> to its s-expression representation on one line.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L651"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L444"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L651" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L444" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -603,9 +490,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Check two nodes for equality
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L463"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L258"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L463" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L258" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -615,9 +502,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Gets the node at <tt class="docutils literal"><span class="pre"><span class="Identifier">index</span></span></tt> in a List. Result is undefined if <tt class="docutils literal"><span class="pre"><span class="Identifier">index</span></span></tt> is out of bounds
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L517"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L311"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L517" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L311" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -627,9 +514,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Adds <tt class="docutils literal"><span class="pre"><span class="Identifier">child</span></span></tt> to a SList node <tt class="docutils literal"><span class="pre"><span class="Identifier">father</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L524"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L318"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L524" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L318" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -640,23 +527,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Add <tt class="docutils literal"><span class="pre"><span class="Punctuation">:</span><span class="Identifier">name</span> <span class="Identifier">value</span></span></tt> keyword pair to the <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L529"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L323"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L529" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="close,SexpParser">
-<dt><pre><span class="Keyword">proc</span> <a href="#close%2CSexpParser"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-                                     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span>
-                                     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-closes the parser <tt class="docutils literal"><span class="pre"><span class="Identifier">parser</span></span></tt> and its associated input stream.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L80"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L80" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L323" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -666,34 +539,34 @@ class="link-seesrc" target="_blank">Source</a>
 
 Performs a deep copy of <tt class="docutils literal"><span class="pre"><span class="Identifier">a</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L572"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L366"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L572" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L366" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="errorMsg,SexpParser">
-<dt><pre><span class="Keyword">proc</span> <a href="#errorMsg%2CSexpParser"><span class="Identifier">errorMsg</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#errorMsg%2CSexpParser"><span class="Identifier">errorMsg</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <a href="sexp_parse.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 returns a helpful error message for the event <tt class="docutils literal"><span class="pre">sexpError</span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L112"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L93"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L112" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L93" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="errorMsgExpected,SexpParser,string">
-<dt><pre><span class="Keyword">proc</span> <a href="#errorMsgExpected%2CSexpParser%2Cstring"><span class="Identifier">errorMsgExpected</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">;</span> <span class="Identifier">e</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#errorMsgExpected%2CSexpParser%2Cstring"><span class="Identifier">errorMsgExpected</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <a href="sexp_parse.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">;</span> <span class="Identifier">e</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 returns an error message &quot;<tt class="docutils literal"><span class="pre"><span class="Identifier">e</span></span></tt> expected&quot; in the same format as the other error messages
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L117"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L100"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L117" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L100" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -703,21 +576,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Converts a string <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> to its JSON representation.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L555"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L349"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L555" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="getColumn,SexpParser">
-<dt><pre><span class="Keyword">proc</span> <a href="#getColumn%2CSexpParser"><span class="Identifier">getColumn</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#int"><span class="Identifier">int</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-get the current column the parser has arrived at.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L104"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L104" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L349" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -730,9 +591,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Returns <tt class="docutils literal"><span class="pre">default</span></tt> if <tt class="docutils literal"><span class="pre">n</span></tt> is not a <tt class="docutils literal"><span class="pre">SList</span></tt>.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L401"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L197"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L401" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L197" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -745,9 +606,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Returns <tt class="docutils literal"><span class="pre">default</span></tt> if <tt class="docutils literal"><span class="pre">n</span></tt> is not a <tt class="docutils literal"><span class="pre">SList</span></tt>.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L393"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L189"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L393" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L189" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -758,22 +619,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Iterate over direct subnodes of <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt>, searching for the SKeyword with name set to <tt class="docutils literal"><span class="pre"><span class="Identifier">name</span></span></tt>. If found return it's <tt class="docutils literal"><span class="pre"><span class="Operator">.</span><span class="Identifier">value</span></span></tt>, otherwise return <tt class="docutils literal"><span class="pre"><span class="Identifier">default</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L533"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L327"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L533" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="getFloat,SexpParser">
-<dt><pre><span class="Keyword">proc</span> <a href="#getFloat%2CSexpParser"><span class="Identifier">getFloat</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#float"><span class="Identifier">float</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-returns the number for the event: <tt class="docutils literal"><span class="pre">sexpFloat</span></tt>
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L95"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L95" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L327" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -785,22 +633,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Returns <tt class="docutils literal"><span class="pre">default</span></tt> if <tt class="docutils literal"><span class="pre">n</span></tt> is not a <tt class="docutils literal"><span class="pre">SFloat</span></tt>.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L373"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L169"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L373" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="getInt,SexpParser">
-<dt><pre><span class="Keyword">proc</span> <a href="#getInt%2CSexpParser"><span class="Identifier">getInt</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#BiggestInt"><span class="Identifier">BiggestInt</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-returns the number for the event: <tt class="docutils literal"><span class="pre">sexpInt</span></tt>
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L90"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L169" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -812,21 +647,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Return <tt class="docutils literal"><span class="pre"><span class="Identifier">default</span></span></tt> is <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> is not a <tt class="docutils literal"><span class="pre"><span class="Identifier">SKeyword</span></span></tt></p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L387"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L183"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L387" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="getLine,SexpParser">
-<dt><pre><span class="Keyword">proc</span> <a href="#getLine%2CSexpParser"><span class="Identifier">getLine</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#int"><span class="Identifier">int</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-get the current line the parser has arrived at.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L108"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L108" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L183" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -839,9 +662,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Returns <tt class="docutils literal"><span class="pre">default</span></tt> if <tt class="docutils literal"><span class="pre">n</span></tt> is not a <tt class="docutils literal"><span class="pre">SInt</span></tt>.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L366"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L162"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L366" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L162" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -853,9 +676,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Returns <tt class="docutils literal"><span class="pre">default</span></tt> if <tt class="docutils literal"><span class="pre">n</span></tt> is not a <tt class="docutils literal"><span class="pre">SString</span></tt>.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L359"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L155"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L359" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L155" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -867,9 +690,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Returns <tt class="docutils literal"><span class="pre">default</span></tt> if <tt class="docutils literal"><span class="pre">n</span></tt> is not a <tt class="docutils literal"><span class="pre">SList</span></tt>.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L380"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L176"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L380" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L176" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -879,21 +702,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Compute the hash for a SEXP node
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L489"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L283"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L489" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="kind,SexpParser">
-<dt><pre><span class="Keyword">proc</span> <a href="#kind%2CSexpParser"><span class="Identifier">kind</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="sexp.html#SexpEventKind"><span class="Identifier">SexpEventKind</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-returns the current event type for the SEXP parser
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L100"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L100" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L283" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -903,9 +714,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 If <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> is a <tt class="docutils literal"><span class="pre"><span class="Identifier">SList</span></span></tt>, it returns the number of elements. If <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> is a <tt class="docutils literal"><span class="pre"><span class="Identifier">JObject</span></span></tt>, it returns the number of pairs. Else it returns 0.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L509"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L303"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L509" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L303" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -913,11 +724,11 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><span class="Keyword">proc</span> <a href="#newSCons%2CSexpNode%2CSexpNode"><span class="Identifier">newSCons</span></a><span class="Other">(</span><span class="Identifier">car</span><span class="Other">,</span> <span class="Identifier">cdr</span><span class="Other">:</span> <a href="sexp.html#SexpNode"><span class="Identifier">SexpNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="sexp.html#SexpNode"><span class="Identifier">SexpNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SCons</span> <span class="Identifier">SexpNode</span></span></tt>
+Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SCons</span> <span class="Identifier">SexpNode</span></span></tt> NB: this will not evaluate the arguments, eg: 'nil . nil' -&gt; 'nil'
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L340"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L135"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L340" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L135" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -927,9 +738,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SFloat</span> <span class="Identifier">SexpNode</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L332"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L127"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L332" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L127" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -939,9 +750,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SInt</span> <span class="Identifier">SexpNode</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L328"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L123"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L328" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L123" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -951,21 +762,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create new <tt class="docutils literal"><span class="pre"><span class="Identifier">SKeyword</span></span></tt> node with <tt class="docutils literal"><span class="pre"><span class="Identifier">key</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">value</span></span></tt> specified
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L344"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L140"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L344" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L140" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="newSList">
-<dt><pre><span class="Keyword">proc</span> <a href="#newSList"><span class="Identifier">newSList</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <a href="sexp.html#SexpNode"><span class="Identifier">SexpNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="newSList,varargs[SexpNode]">
+<dt><pre><span class="Keyword">proc</span> <a href="#newSList%2Cvarargs%5BSexpNode%5D"><span class="Identifier">newSList</span></a><span class="Other">(</span><span class="Identifier">items</span><span class="Other">:</span> <a href="system.html#varargs"><span class="Identifier">varargs</span></a><span class="Other">[</span><a href="sexp.html#SexpNode"><span class="Identifier">SexpNode</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="sexp.html#SexpNode"><span class="Identifier">SexpNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SList</span> <span class="Identifier">SexpNode</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L348"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L144"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L348" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L144" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -975,9 +786,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SNil</span> <span class="Identifier">SexpNode</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L336"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L131"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L336" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L131" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -987,9 +798,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SString</span> <span class="Identifier">SexpNode</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L320"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L115"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L320" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L115" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -999,22 +810,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L352"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L148"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L352" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="open,SexpParser,Stream">
-<dt><pre><span class="Keyword">proc</span> <a href="#open%2CSexpParser%2CStream"><span class="Identifier">open</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">;</span> <span class="Identifier">input</span><span class="Other">:</span> <a href="streams.html#Stream"><span class="Identifier">Stream</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-initializes the parser with an input stream.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L788"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L788" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L148" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1024,11 +822,11 @@ class="link-seesrc" target="_blank">Source</a>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Parses Sexp from <tt class="docutils literal"><span class="pre"><span class="Identifier">buffer</span></span></tt>.
+Parses an s-expression from <tt class="docutils literal"><span class="pre"><span class="Identifier">buffer</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L802"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L571"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L802" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L571" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1039,9 +837,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Parses from a buffer <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> into a <tt class="docutils literal"><span class="pre"><span class="Identifier">SexpNode</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L794"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L563"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L794" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L563" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1049,24 +847,24 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><span class="Keyword">proc</span> <a href="#pretty%2CSexpNode%2Cint"><span class="Identifier">pretty</span></a><span class="Other">(</span><span class="Identifier">node</span><span class="Other">:</span> <a href="sexp.html#SexpNode"><span class="Identifier">SexpNode</span></a><span class="Other">;</span> <span class="Identifier">indent</span> <span class="Other">=</span> <span class="DecNumber">2</span><span class="Other">)</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Converts <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt> to its Sexp Representation, with indentation and on multiple lines.
+Converts <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt> to its S-Expression representation, with indentation and on multiple lines.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L645"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L438"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L645" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L438" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="raiseParseErr,SexpParser,string">
-<dt><pre><span class="Keyword">proc</span> <a href="#raiseParseErr%2CSexpParser%2Cstring"><span class="Identifier">raiseParseErr</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">;</span> <span class="Identifier">msg</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a><span class="Other">)</span> {.<span class="Identifier">noinline</span><span class="Other">,</span> <span class="Identifier">noreturn</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#raiseParseErr%2CSexpParser%2Cstring"><span class="Identifier">raiseParseErr</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="sexp_parse.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">;</span> <span class="Identifier">msg</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a><span class="Other">)</span> {.<span class="Identifier">noinline</span><span class="Other">,</span> <span class="Identifier">noreturn</span><span class="Other">,</span>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">SexpParsingError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-raises an <tt class="docutils literal"><span class="pre"><span class="Identifier">ESexpParsingError</span></span></tt> exception.
+raises an <tt class="docutils literal"><span class="pre"><span class="Identifier">SexpParsingError</span></span></tt> exception.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L316"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L111"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L316" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L111" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1074,11 +872,13 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><span class="Keyword">proc</span> <a href="#sexp%2Cbool"><span class="Identifier">sexp</span></a><span class="Other">(</span><span class="Identifier">b</span><span class="Other">:</span> <a href="system.html#bool"><span class="Identifier">bool</span></a><span class="Other">)</span><span class="Other">:</span> <a href="sexp.html#SexpNode"><span class="Identifier">SexpNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Generic constructor for SEXP data. Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SSymbol</span> <span class="Identifier">SexpNode</span></span></tt> with value t or <tt class="docutils literal"><span class="pre"><span class="Identifier">SNil</span> <span class="Identifier">SexpNode</span></span></tt>.
+<p>Generic constructor for SEXP data. Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SSymbol</span> <span class="Identifier">SexpNode</span></span></tt> with value t or <tt class="docutils literal"><span class="pre"><span class="Identifier">SNil</span> <span class="Identifier">SexpNode</span></span></tt>.</p>
+<p>Future Direction: the t/nil behaviour may change unless required by EPC</p>
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L425"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L221"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L425" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L221" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1088,9 +888,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generic constructor for SEXP data. Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SList</span> <span class="Identifier">SexpNode</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L433"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L231"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L433" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L231" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1100,9 +900,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generic constructor for SEXP data. Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SKeyword</span> <span class="Identifier">SexpNode</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L413"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L209"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L413" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L209" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1112,9 +912,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generic constructor for SEXP data. Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SInt</span> <span class="Identifier">SexpNode</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L417"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L213"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L417" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L213" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1124,9 +924,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generic constructor for SEXP data. Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SFloat</span> <span class="Identifier">SexpNode</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L421"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L217"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L421" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L217" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1136,9 +936,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L439"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L237"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L439" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L237" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1148,21 +948,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generic constructor for SEXP data. Creates a new <tt class="docutils literal"><span class="pre"><span class="Identifier">SString</span> <span class="Identifier">SexpNode</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L409"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L205"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L409" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="str,SexpParser">
-<dt><pre><span class="Keyword">proc</span> <a href="#str%2CSexpParser"><span class="Identifier">str</span></a><span class="Other">(</span><span class="Identifier">parser</span><span class="Other">:</span> <a href="sexp.html#SexpParser"><span class="Identifier">SexpParser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-returns the character data for the events: <tt class="docutils literal"><span class="pre">sexpInt</span></tt>, <tt class="docutils literal"><span class="pre">sexpFloat</span></tt>, <tt class="docutils literal"><span class="pre">sexpString</span></tt>
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L84"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L205" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1170,11 +958,11 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><span class="Keyword">proc</span> <a href="#treeRepr%2CSexpNode"><span class="Identifier">treeRepr</span></a><span class="Other">(</span><span class="Identifier">node</span><span class="Other">:</span> <a href="sexp.html#SexpNode"><span class="Identifier">SexpNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Generate uncolored tree repr string for the S-expression AST.
+Generate uncolored tree repr string for the S-Expression AST.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L683"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L475"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L683" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L475" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1189,9 +977,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Iterator for the items of <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt> has to be a SList.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L656"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L449"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L656" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L449" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1201,9 +989,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Iterator for the items of <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt> has to be a SList. Items can be modified.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L669"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L461"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L669" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L461" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1213,9 +1001,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Iterator for the pairs of <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt> has to be a SList. Items can be modified.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L676"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L468"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L676" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L468" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1225,9 +1013,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Iterator for the pairs of <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt> has to be a SList.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L663"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L455"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L663" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L455" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1242,9 +1030,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Convert an expression to a SexpNode directly, without having to specify <tt class="docutils literal"><span class="pre"><span class="Operator">%</span></span></tt> for every element.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8d776cd0c7835dedc044dcfaab001ef8d66a1984/lib/experimental/sexp.nim#L458"
+href="https://github.com/nim-works/nimskull/tree/b76a69201d406740bf00988c6614d724e3e13a19/lib/experimental/sexp.nim#L253"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L458" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/experimental/sexp.nim#L253" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
