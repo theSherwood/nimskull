@@ -95,6 +95,7 @@ window.addEventListener('DOMContentLoaded', main);
   </div>
   
   <ul class="simple simple-toc" id="toc-list">
+<li><a class="reference" id="captured-entities_toc" href="#captured-entities">Captured entities</a></li>
 <li>
   <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
   <ul class="simple simple-toc-section">
@@ -112,6 +113,11 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">checkMethodEffects
       <li><a class="reference" href="#checkMethodEffects%2CModuleGraph%2CPSym%2CPSym"
     title="checkMethodEffects(g: ModuleGraph; disp, branch: PSym)">checkMethodEffects(g: ModuleGraph; disp, branch: PSym)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">isCompileTimeProc2
+      <li><a class="reference" href="#isCompileTimeProc2%2CPSym"
+    title="isCompileTimeProc2(s: PSym): bool">isCompileTimeProc2(s: PSym): bool</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">setEffectsForProcType
@@ -137,15 +143,17 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/f3b3bde4d640eb256c46c78f625e67b7d88ba448/compiler/sem/sempass2.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/f175f5fba623ad665a32d1b5ccdcaa64d961864d/compiler/sem/sempass2.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">Second semantic checking pass over the AST. Necessary because the old way had some inherent problems. Performs:<ul class="simple"><li>effect+exception tracking</li>
+  <p class="module-desc">This module contains the second semantic checking pass over the AST. Necessary because the old way had some inherent problems. Performs:<ul class="simple"><li>effect+exception tracking</li>
 <li>&quot;usage before definition&quot; checking</li>
+<li>checking of captured entities</li>
+<li>detection of whether a procedure captures something and, if necessary, adjusting the calling convention</li>
 <li>also now calls the &quot;lift destructor logic&quot; at strategic positions, this is about to be put into the spec:</li>
 </ul>
 <p>We treat assignment and sinks and destruction as identical.</p>
@@ -153,6 +161,8 @@ class="link-seesrc" target="_blank">Source</a>
 <p>In <tt class="docutils literal"><span class="pre"><span class="Identifier">x</span> <span class="Operator">=</span> <span class="Identifier">y</span></span></tt> the type of <tt class="docutils literal"><span class="pre"><span class="Identifier">x</span></span></tt> is marked.</p>
 <p>For every sink parameter of type <tt class="docutils literal"><span class="pre"><span class="Identifier">T</span> <span class="Identifier">T</span></span></tt> is marked.</p>
 <p>For every call <tt class="docutils literal"><span class="pre"><span class="Identifier">f</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> the return type of <tt class="docutils literal"><span class="pre"><span class="Identifier">f</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> is marked.</p>
+
+<h1><a class="toc-backref" id="captured-entities" href="#captured-entities">Captured entities</a></h1><p>If a local is used inside procedure X but the local does not belong to X, the local needs to be captured. Turning the procedure into a top-level procedure with a hidden environment parameter is later performed by the <tt class="docutils literal"><span class="pre"><span class="Identifier">lambdalifting</span></span></tt> transformation, but semantic analysis already needs to know which procedures require the <tt class="docutils literal"><span class="pre"><span class="Identifier">closure</span></span></tt> calling convention, as this information is part of the procedure's type.</p>
 </p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
@@ -169,7 +179,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/f3b3bde4d640eb256c46c78f625e67b7d88ba448/compiler/sem/sinkparameter_inference.nim#L10"
+href="https://github.com/nim-works/nimskull/tree/f175f5fba623ad665a32d1b5ccdcaa64d961864d/compiler/sem/sinkparameter_inference.nim#L10"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sinkparameter_inference.nim#L10" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -182,9 +192,24 @@ class="link-seesrc" target="_blank">Source</a>
 
 checks for consistent effects for multi methods.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/f3b3bde4d640eb256c46c78f625e67b7d88ba448/compiler/sem/sempass2.nim#L1396"
+href="https://github.com/nim-works/nimskull/tree/f175f5fba623ad665a32d1b5ccdcaa64d961864d/compiler/sem/sempass2.nim#L1422"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1396" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1422" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="isCompileTimeProc2,PSym">
+<dt><pre><span class="Keyword">proc</span> <a href="#isCompileTimeProc2%2CPSym"><span class="Identifier">isCompileTimeProc2</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Tests if <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> is a compile-time procedure, but compared to <tt class="docutils literal"><span class="pre">isCompileTimeProc</span></tt>, also considers where <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> is defined. In the following example:<pre class="listing"><span class="Keyword">proc</span> <span class="Identifier">a</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Punctuation">{</span><span class="Operator">.</span><span class="Identifier">compileTime</span><span class="Operator">.</span><span class="Punctuation">}</span> <span class="Operator">=</span>
+  <span class="Keyword">proc</span> <span class="Identifier">b</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Operator">=</span>
+    <span class="Keyword">discard</span></pre><p><tt class="docutils literal"><span class="pre">b</span></tt> is also a procedure that can only be run at compile-time, but it doesn't have the <tt class="docutils literal"><span class="pre">sfCompileTime</span></tt> flag set</p>
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/f175f5fba623ad665a32d1b5ccdcaa64d961864d/compiler/sem/sempass2.nim#L1602"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1602" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -195,9 +220,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/f3b3bde4d640eb256c46c78f625e67b7d88ba448/compiler/sem/sempass2.nim#L1437"
+href="https://github.com/nim-works/nimskull/tree/f175f5fba623ad665a32d1b5ccdcaa64d961864d/compiler/sem/sempass2.nim#L1463"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1437" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1463" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -209,9 +234,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/f3b3bde4d640eb256c46c78f625e67b7d88ba448/compiler/sem/sempass2.nim#L1489"
+href="https://github.com/nim-works/nimskull/tree/f175f5fba623ad665a32d1b5ccdcaa64d961864d/compiler/sem/sempass2.nim#L1628"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1489" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1628" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -223,9 +248,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/f3b3bde4d640eb256c46c78f625e67b7d88ba448/compiler/sem/sempass2.nim#L1618"
+href="https://github.com/nim-works/nimskull/tree/f175f5fba623ad665a32d1b5ccdcaa64d961864d/compiler/sem/sempass2.nim#L1786"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1618" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1786" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
