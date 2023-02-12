@@ -111,14 +111,17 @@ window.addEventListener('DOMContentLoaded', main);
   opcAsgnComplex, opcCastIntToFloat32, opcCastIntToFloat64, opcCastFloatToInt32,
   opcCastFloatToInt64, opcCastPtrToInt, opcCastIntToPtr, opcFastAsgnComplex,
   opcNodeToReg, opcLdArr, opcLdArrAddr, opcWrArr, opcLdObj, opcLdObjAddr,
-  opcWrObj, opcAddrReg, opcAddrNode, opcLdDeref, opcWrDeref, opcWrStrIdx,
-  opcLdStrIdx, opcLdStrIdxAddr, opcInitDisc, opcSetDisc, opcWrProc,
-  opcWrClosure, opcAddInt, opcAddImmInt, opcSubInt, opcSubImmInt, opcLenSeq,
-  opcLenStr, opcLenCstring, opcIncl, opcInclRange, opcExcl, opcCard, opcMulInt,
-  opcDivInt, opcModInt, opcAddFloat, opcSubFloat, opcMulFloat, opcDivFloat,
-  opcShrInt, opcShlInt, opcAshrInt, opcBitandInt, opcBitorInt, opcBitxorInt,
-  opcAddu, opcSubu, opcMulu, opcDivu, opcModu, opcEqInt, opcLeInt, opcLtInt,
-  opcEqFloat, opcLeFloat, opcLtFloat, opcLeu, opcLtu, opcEqRef, opcEqNimNode,
+  opcWrObj, opcWrLoc, ## ``a = b``; writes the value represented by register `b`
+                       ## (either directly or indirectly) to the location identified
+                       ## by register `a`. A full copy is performed.
+  opcAddrReg, opcAddrNode, opcLdDeref, opcWrDeref, opcWrStrIdx, opcLdStrIdx,
+  opcLdStrIdxAddr, opcInitDisc, opcSetDisc, opcWrProc, opcWrClosure, opcAddInt,
+  opcAddImmInt, opcSubInt, opcSubImmInt, opcLenSeq, opcLenStr, opcLenCstring,
+  opcIncl, opcInclRange, opcExcl, opcCard, opcMulInt, opcDivInt, opcModInt,
+  opcAddFloat, opcSubFloat, opcMulFloat, opcDivFloat, opcShrInt, opcShlInt,
+  opcAshrInt, opcBitandInt, opcBitorInt, opcBitxorInt, opcAddu, opcSubu,
+  opcMulu, opcDivu, opcModu, opcEqInt, opcLeInt, opcLtInt, opcEqFloat,
+  opcLeFloat, opcLtFloat, opcLeu, opcLtu, opcEqRef, opcEqNimNode,
   opcSameNodeType, opcXor, opcNot, opcUnaryMinusInt, opcUnaryMinusFloat,
   opcBitnotInt, opcEqStr, opcLeStr, opcLtStr, opcEqSet, opcLeSet, opcLtSet,
   opcMulSet, opcPlusSet, opcMinusSet, opcConcatStr, opcContainsSet, opcRepr,
@@ -165,7 +168,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/29e0bada1d0da776a47f9ceba772cce6be833234/compiler/vm/vm_enums.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/44288d10e6bc450f57c5d709ccc4f26a692e8c5e/compiler/vm/vm_enums.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -187,9 +190,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/29e0bada1d0da776a47f9ceba772cce6be833234/compiler/vm/vm_enums.nim#L168"
+href="https://github.com/nim-works/nimskull/tree/44288d10e6bc450f57c5d709ccc4f26a692e8c5e/compiler/vm/vm_enums.nim#L171"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L171" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -199,14 +202,17 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">opcAsgnComplex</span><span class="Other">,</span> <span class="Identifier">opcCastIntToFloat32</span><span class="Other">,</span> <span class="Identifier">opcCastIntToFloat64</span><span class="Other">,</span> <span class="Identifier">opcCastFloatToInt32</span><span class="Other">,</span>
   <span class="Identifier">opcCastFloatToInt64</span><span class="Other">,</span> <span class="Identifier">opcCastPtrToInt</span><span class="Other">,</span> <span class="Identifier">opcCastIntToPtr</span><span class="Other">,</span> <span class="Identifier">opcFastAsgnComplex</span><span class="Other">,</span>
   <span class="Identifier">opcNodeToReg</span><span class="Other">,</span> <span class="Identifier">opcLdArr</span><span class="Other">,</span> <span class="Identifier">opcLdArrAddr</span><span class="Other">,</span> <span class="Identifier">opcWrArr</span><span class="Other">,</span> <span class="Identifier">opcLdObj</span><span class="Other">,</span> <span class="Identifier">opcLdObjAddr</span><span class="Other">,</span>
-  <span class="Identifier">opcWrObj</span><span class="Other">,</span> <span class="Identifier">opcAddrReg</span><span class="Other">,</span> <span class="Identifier">opcAddrNode</span><span class="Other">,</span> <span class="Identifier">opcLdDeref</span><span class="Other">,</span> <span class="Identifier">opcWrDeref</span><span class="Other">,</span> <span class="Identifier">opcWrStrIdx</span><span class="Other">,</span>
-  <span class="Identifier">opcLdStrIdx</span><span class="Other">,</span> <span class="Identifier">opcLdStrIdxAddr</span><span class="Other">,</span> <span class="Identifier">opcInitDisc</span><span class="Other">,</span> <span class="Identifier">opcSetDisc</span><span class="Other">,</span> <span class="Identifier">opcWrProc</span><span class="Other">,</span>
-  <span class="Identifier">opcWrClosure</span><span class="Other">,</span> <span class="Identifier">opcAddInt</span><span class="Other">,</span> <span class="Identifier">opcAddImmInt</span><span class="Other">,</span> <span class="Identifier">opcSubInt</span><span class="Other">,</span> <span class="Identifier">opcSubImmInt</span><span class="Other">,</span> <span class="Identifier">opcLenSeq</span><span class="Other">,</span>
-  <span class="Identifier">opcLenStr</span><span class="Other">,</span> <span class="Identifier">opcLenCstring</span><span class="Other">,</span> <span class="Identifier">opcIncl</span><span class="Other">,</span> <span class="Identifier">opcInclRange</span><span class="Other">,</span> <span class="Identifier">opcExcl</span><span class="Other">,</span> <span class="Identifier">opcCard</span><span class="Other">,</span> <span class="Identifier">opcMulInt</span><span class="Other">,</span>
-  <span class="Identifier">opcDivInt</span><span class="Other">,</span> <span class="Identifier">opcModInt</span><span class="Other">,</span> <span class="Identifier">opcAddFloat</span><span class="Other">,</span> <span class="Identifier">opcSubFloat</span><span class="Other">,</span> <span class="Identifier">opcMulFloat</span><span class="Other">,</span> <span class="Identifier">opcDivFloat</span><span class="Other">,</span>
-  <span class="Identifier">opcShrInt</span><span class="Other">,</span> <span class="Identifier">opcShlInt</span><span class="Other">,</span> <span class="Identifier">opcAshrInt</span><span class="Other">,</span> <span class="Identifier">opcBitandInt</span><span class="Other">,</span> <span class="Identifier">opcBitorInt</span><span class="Other">,</span> <span class="Identifier">opcBitxorInt</span><span class="Other">,</span>
-  <span class="Identifier">opcAddu</span><span class="Other">,</span> <span class="Identifier">opcSubu</span><span class="Other">,</span> <span class="Identifier">opcMulu</span><span class="Other">,</span> <span class="Identifier">opcDivu</span><span class="Other">,</span> <span class="Identifier">opcModu</span><span class="Other">,</span> <span class="Identifier">opcEqInt</span><span class="Other">,</span> <span class="Identifier">opcLeInt</span><span class="Other">,</span> <span class="Identifier">opcLtInt</span><span class="Other">,</span>
-  <span class="Identifier">opcEqFloat</span><span class="Other">,</span> <span class="Identifier">opcLeFloat</span><span class="Other">,</span> <span class="Identifier">opcLtFloat</span><span class="Other">,</span> <span class="Identifier">opcLeu</span><span class="Other">,</span> <span class="Identifier">opcLtu</span><span class="Other">,</span> <span class="Identifier">opcEqRef</span><span class="Other">,</span> <span class="Identifier">opcEqNimNode</span><span class="Other">,</span>
+  <span class="Identifier">opcWrObj</span><span class="Other">,</span> <span class="Identifier">opcWrLoc</span><span class="Other">,</span> <span class="Comment">## ``a = b``; writes the value represented by register `b`</span>
+                       <span class="Comment">## (either directly or indirectly) to the location identified</span>
+                       <span class="Comment">## by register `a`. A full copy is performed.</span>
+  <span class="Identifier">opcAddrReg</span><span class="Other">,</span> <span class="Identifier">opcAddrNode</span><span class="Other">,</span> <span class="Identifier">opcLdDeref</span><span class="Other">,</span> <span class="Identifier">opcWrDeref</span><span class="Other">,</span> <span class="Identifier">opcWrStrIdx</span><span class="Other">,</span> <span class="Identifier">opcLdStrIdx</span><span class="Other">,</span>
+  <span class="Identifier">opcLdStrIdxAddr</span><span class="Other">,</span> <span class="Identifier">opcInitDisc</span><span class="Other">,</span> <span class="Identifier">opcSetDisc</span><span class="Other">,</span> <span class="Identifier">opcWrProc</span><span class="Other">,</span> <span class="Identifier">opcWrClosure</span><span class="Other">,</span> <span class="Identifier">opcAddInt</span><span class="Other">,</span>
+  <span class="Identifier">opcAddImmInt</span><span class="Other">,</span> <span class="Identifier">opcSubInt</span><span class="Other">,</span> <span class="Identifier">opcSubImmInt</span><span class="Other">,</span> <span class="Identifier">opcLenSeq</span><span class="Other">,</span> <span class="Identifier">opcLenStr</span><span class="Other">,</span> <span class="Identifier">opcLenCstring</span><span class="Other">,</span>
+  <span class="Identifier">opcIncl</span><span class="Other">,</span> <span class="Identifier">opcInclRange</span><span class="Other">,</span> <span class="Identifier">opcExcl</span><span class="Other">,</span> <span class="Identifier">opcCard</span><span class="Other">,</span> <span class="Identifier">opcMulInt</span><span class="Other">,</span> <span class="Identifier">opcDivInt</span><span class="Other">,</span> <span class="Identifier">opcModInt</span><span class="Other">,</span>
+  <span class="Identifier">opcAddFloat</span><span class="Other">,</span> <span class="Identifier">opcSubFloat</span><span class="Other">,</span> <span class="Identifier">opcMulFloat</span><span class="Other">,</span> <span class="Identifier">opcDivFloat</span><span class="Other">,</span> <span class="Identifier">opcShrInt</span><span class="Other">,</span> <span class="Identifier">opcShlInt</span><span class="Other">,</span>
+  <span class="Identifier">opcAshrInt</span><span class="Other">,</span> <span class="Identifier">opcBitandInt</span><span class="Other">,</span> <span class="Identifier">opcBitorInt</span><span class="Other">,</span> <span class="Identifier">opcBitxorInt</span><span class="Other">,</span> <span class="Identifier">opcAddu</span><span class="Other">,</span> <span class="Identifier">opcSubu</span><span class="Other">,</span>
+  <span class="Identifier">opcMulu</span><span class="Other">,</span> <span class="Identifier">opcDivu</span><span class="Other">,</span> <span class="Identifier">opcModu</span><span class="Other">,</span> <span class="Identifier">opcEqInt</span><span class="Other">,</span> <span class="Identifier">opcLeInt</span><span class="Other">,</span> <span class="Identifier">opcLtInt</span><span class="Other">,</span> <span class="Identifier">opcEqFloat</span><span class="Other">,</span>
+  <span class="Identifier">opcLeFloat</span><span class="Other">,</span> <span class="Identifier">opcLtFloat</span><span class="Other">,</span> <span class="Identifier">opcLeu</span><span class="Other">,</span> <span class="Identifier">opcLtu</span><span class="Other">,</span> <span class="Identifier">opcEqRef</span><span class="Other">,</span> <span class="Identifier">opcEqNimNode</span><span class="Other">,</span>
   <span class="Identifier">opcSameNodeType</span><span class="Other">,</span> <span class="Identifier">opcXor</span><span class="Other">,</span> <span class="Identifier">opcNot</span><span class="Other">,</span> <span class="Identifier">opcUnaryMinusInt</span><span class="Other">,</span> <span class="Identifier">opcUnaryMinusFloat</span><span class="Other">,</span>
   <span class="Identifier">opcBitnotInt</span><span class="Other">,</span> <span class="Identifier">opcEqStr</span><span class="Other">,</span> <span class="Identifier">opcLeStr</span><span class="Other">,</span> <span class="Identifier">opcLtStr</span><span class="Other">,</span> <span class="Identifier">opcEqSet</span><span class="Other">,</span> <span class="Identifier">opcLeSet</span><span class="Other">,</span> <span class="Identifier">opcLtSet</span><span class="Other">,</span>
   <span class="Identifier">opcMulSet</span><span class="Other">,</span> <span class="Identifier">opcPlusSet</span><span class="Other">,</span> <span class="Identifier">opcMinusSet</span><span class="Other">,</span> <span class="Identifier">opcConcatStr</span><span class="Other">,</span> <span class="Identifier">opcContainsSet</span><span class="Other">,</span> <span class="Identifier">opcRepr</span><span class="Other">,</span>
@@ -230,7 +236,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/29e0bada1d0da776a47f9ceba772cce6be833234/compiler/vm/vm_enums.nim#L20"
+href="https://github.com/nim-works/nimskull/tree/44288d10e6bc450f57c5d709ccc4f26a692e8c5e/compiler/vm/vm_enums.nim#L20"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L20" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -247,7 +253,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/29e0bada1d0da776a47f9ceba772cce6be833234/compiler/vm/vm_enums.nim#L2"
+href="https://github.com/nim-works/nimskull/tree/44288d10e6bc450f57c5d709ccc4f26a692e8c5e/compiler/vm/vm_enums.nim#L2"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L2" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -264,9 +270,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/29e0bada1d0da776a47f9ceba772cce6be833234/compiler/vm/vm_enums.nim#L177"
+href="https://github.com/nim-works/nimskull/tree/44288d10e6bc450f57c5d709ccc4f26a692e8c5e/compiler/vm/vm_enums.nim#L180"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L177" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L180" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -276,9 +282,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/29e0bada1d0da776a47f9ceba772cce6be833234/compiler/vm/vm_enums.nim#L178"
+href="https://github.com/nim-works/nimskull/tree/44288d10e6bc450f57c5d709ccc4f26a692e8c5e/compiler/vm/vm_enums.nim#L181"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L178" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L181" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -288,9 +294,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/29e0bada1d0da776a47f9ceba772cce6be833234/compiler/vm/vm_enums.nim#L180"
+href="https://github.com/nim-works/nimskull/tree/44288d10e6bc450f57c5d709ccc4f26a692e8c5e/compiler/vm/vm_enums.nim#L183"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L180" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L183" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
