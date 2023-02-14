@@ -109,6 +109,11 @@ window.addEventListener('DOMContentLoaded', main);
     title="commonOptimizations(g: ModuleGraph; idgen: IdGenerator; c: PSym; n: PNode): PNode">commonOptimizations(g: ModuleGraph; idgen: IdGenerator; c: PSym; n: PNode): PNode</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">extractGlobals
+      <li><a class="reference" href="#extractGlobals%2CPNode%2Cseq%5BPNode%5D%2Cbool"
+    title="extractGlobals(body: PNode; output: var seq[PNode]; isNimVm: bool)">extractGlobals(body: PNode; output: var seq[PNode]; isNimVm: bool)</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">transformBody
       <li><a class="reference" href="#transformBody%2CModuleGraph%2CIdGenerator%2CPSym%2Cbool"
     title="transformBody(g: ModuleGraph; idgen: IdGenerator; prc: PSym; cache: bool): PNode">transformBody(g: ModuleGraph; idgen: IdGenerator; prc: PSym; cache: bool): PNode</a></li>
@@ -132,7 +137,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b93ddd80c85e7d46d4557d3887c0d4542ba338cf/compiler/sem/transf.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/5d1c18564cc69a8d026c07554be126484dce0bf2/compiler/sem/transf.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/transf.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -164,9 +169,25 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b93ddd80c85e7d46d4557d3887c0d4542ba338cf/compiler/sem/transf.nim#L857"
+href="https://github.com/nim-works/nimskull/tree/5d1c18564cc69a8d026c07554be126484dce0bf2/compiler/sem/transf.nim#L857"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/transf.nim#L857" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="extractGlobals,PNode,seq[PNode],bool">
+<dt><pre><span class="Keyword">proc</span> <a href="#extractGlobals%2CPNode%2Cseq%5BPNode%5D%2Cbool"><span class="Identifier">extractGlobals</span></a><span class="Other">(</span><span class="Identifier">body</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span> <span class="Identifier">output</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">isNimVm</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Searches for all <tt class="docutils literal"><span class="pre">nkIdentDefs</span></tt> defining a global, appends them to <tt class="docutils literal"><span class="pre"><span class="Identifier">output</span></span></tt> in the order they appear in the input AST, and removes the nodes from <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">isNimVm</span></span></tt> signals which branch to select for <tt class="docutils literal"><span class="pre">when nimvm</span></tt> statements/expressions.<dl class="docutils"><dt>XXX: this can't happen as part of <tt class="docutils literal"><span class="pre">transformBody</span></tt>, as <tt class="docutils literal"><span class="pre">transformBody</span></tt></dt>
+<dd>is reentrant because of <tt class="docutils literal"><span class="pre">lambdalifting</span></tt> and it's thus not easily possible to collect something from the body of a single procedure only. There's also the problem that extracting the globals is not wanted when transformation happens for a procedure that's invoked during CTFE and used in normal code. Eventually, <tt class="docutils literal"><span class="pre">transformBody</span></tt> will no longer use the current caching mechanism and only produce the transformed version of the input AST, but until then, <tt class="docutils literal"><span class="pre">collectGlobals</span></tt> works good enough</dd>
+</dl>
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/5d1c18564cc69a8d026c07554be126484dce0bf2/compiler/sem/transf.nim#L1158"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/transf.nim#L1158" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -178,7 +199,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b93ddd80c85e7d46d4557d3887c0d4542ba338cf/compiler/sem/transf.nim#L1105"
+href="https://github.com/nim-works/nimskull/tree/5d1c18564cc69a8d026c07554be126484dce0bf2/compiler/sem/transf.nim#L1105"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/transf.nim#L1105" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -192,7 +213,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b93ddd80c85e7d46d4557d3887c0d4542ba338cf/compiler/sem/transf.nim#L1147"
+href="https://github.com/nim-works/nimskull/tree/5d1c18564cc69a8d026c07554be126484dce0bf2/compiler/sem/transf.nim#L1147"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/transf.nim#L1147" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -206,7 +227,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b93ddd80c85e7d46d4557d3887c0d4542ba338cf/compiler/sem/transf.nim#L1137"
+href="https://github.com/nim-works/nimskull/tree/5d1c18564cc69a8d026c07554be126484dce0bf2/compiler/sem/transf.nim#L1137"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/transf.nim#L1137" class="link-seesrc" target="_blank" >Edit</a>
 
