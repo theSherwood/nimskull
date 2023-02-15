@@ -109,6 +109,14 @@ window.addEventListener('DOMContentLoaded', main);
   buckets: array[0 .. 8192 - 1, PIdent]
   wordCounter: int
   idAnon*, idDelegator*, emptyIdent*, identNotFound: PIdent">IdentCache</a></li>
+  <li><a class="reference" href="#PIdent"
+    title="PIdent = ref TIdent">PIdent</a></li>
+  <li><a class="reference" href="#TIdent"
+    title="TIdent {.acyclic.} = object
+  id*: int                   ## unique id; use this for comparisons and not the pointers
+  s*: string
+  next*: PIdent              ## for hash-table chaining
+  h*: Hash                   ## hash value of `s`">TIdent</a></li>
 
   </ul>
 </li>
@@ -167,18 +175,12 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
 </li>
-<li>
-  <a class="reference reference-toplevel" href="#19" id="69">Exports</a>
-  <ul class="simple simple-toc-section">
-    
-  </ul>
-</li>
 
 </ul>
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -191,24 +193,53 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="ast_types.html">ast_types</a>, <a class="reference external" href="wordrecg.html">wordrecg</a>
+<a class="reference external" href="wordrecg.html">wordrecg</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
 <div id="IdentCache">
 <dt><pre><a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span>
-  <span class="Identifier">buckets</span><span class="Other">:</span> <span class="Identifier">array</span><span class="Other">[</span><span class="DecNumber">0</span> <span class="Operator">..</span> <span class="DecNumber">8192</span> <span class="Operator">-</span> <span class="DecNumber">1</span><span class="Other">,</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">]</span>
+  <span class="Identifier">buckets</span><span class="Other">:</span> <span class="Identifier">array</span><span class="Other">[</span><span class="DecNumber">0</span> <span class="Operator">..</span> <span class="DecNumber">8192</span> <span class="Operator">-</span> <span class="DecNumber">1</span><span class="Other">,</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">]</span>
   <span class="Identifier">wordCounter</span><span class="Other">:</span> <span class="Identifier">int</span>
-  <span class="Identifier">idAnon</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">idDelegator</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">emptyIdent</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">identNotFound</span><span class="Other">:</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a>
+  <span class="Identifier">idAnon</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">idDelegator</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">emptyIdent</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">identNotFound</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a>
 </pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L27"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L31"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L27" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L31" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="PIdent">
+<dt><pre><a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <a href="idents.html#TIdent"><span class="Identifier">TIdent</span></a></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L24"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L24" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="TIdent">
+<dt><pre><a href="idents.html#TIdent"><span class="Identifier">TIdent</span></a> {.<span class="Identifier">acyclic</span>.} <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">id</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>                   <span class="Comment">## unique id; use this for comparisons and not the pointers</span>
+  <span class="Identifier">s</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+  <span class="Identifier">next</span><span class="Operator">*</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a>              <span class="Comment">## for hash-table chaining</span>
+  <span class="Identifier">h</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">Hash</span>                   <span class="Comment">## hash value of `s`</span>
+  </pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L25"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -218,14 +249,14 @@ class="link-seesrc" target="_blank">Source</a>
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
 <div id="==,PIdent,PIdent">
-<dt><pre><span class="Keyword">func</span> <a href="#%3D%3D%2CPIdent%2CPIdent"><span class="Identifier">`==`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">func</span> <a href="#%3D%3D%2CPIdent%2CPIdent"><span class="Identifier">`==`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 identity based (<tt class="docutils literal"><span class="pre"><span class="Identifier">PIdent</span><span class="Operator">.</span><span class="Identifier">id</span></span></tt>) based equality, unless either are nil, then resort to reference based equality
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L133"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L137"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L133" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -235,83 +266,83 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L34"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L38"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L38" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getIdent,IdentCache,cstring,int,Hash">
-<dt><pre><span class="Keyword">proc</span> <a href="#getIdent%2CIdentCache%2Ccstring%2Cint%2CHash"><span class="Identifier">getIdent</span></a><span class="Other">(</span><span class="Identifier">ic</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">identifier</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">;</span> <span class="Identifier">length</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">h</span><span class="Other">:</span> <span class="Identifier">Hash</span><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a> {.
+<dt><pre><span class="Keyword">proc</span> <a href="#getIdent%2CIdentCache%2Ccstring%2Cint%2CHash"><span class="Identifier">getIdent</span></a><span class="Other">(</span><span class="Identifier">ic</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">identifier</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">;</span> <span class="Identifier">length</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">h</span><span class="Other">:</span> <span class="Identifier">Hash</span><span class="Other">)</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L68"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L72"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L72" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getIdent,IdentCache,string">
-<dt><pre><span class="Keyword">proc</span> <a href="#getIdent%2CIdentCache%2Cstring"><span class="Identifier">getIdent</span></a><span class="Other">(</span><span class="Identifier">ic</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">identifier</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#getIdent%2CIdentCache%2Cstring"><span class="Identifier">getIdent</span></a><span class="Other">(</span><span class="Identifier">ic</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">identifier</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L98"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L98" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="getIdent,IdentCache,string,Hash">
-<dt><pre><span class="Keyword">proc</span> <a href="#getIdent%2CIdentCache%2Cstring%2CHash"><span class="Identifier">getIdent</span></a><span class="Other">(</span><span class="Identifier">ic</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">identifier</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">h</span><span class="Other">:</span> <span class="Identifier">Hash</span><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L102"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L102"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L102" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
+<div id="getIdent,IdentCache,string,Hash">
+<dt><pre><span class="Keyword">proc</span> <a href="#getIdent%2CIdentCache%2Cstring%2CHash"><span class="Identifier">getIdent</span></a><span class="Other">(</span><span class="Identifier">ic</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">identifier</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">h</span><span class="Other">:</span> <span class="Identifier">Hash</span><span class="Other">)</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L106"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L106" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="getNotFoundIdent,IdentCache">
-<dt><pre><span class="Keyword">proc</span> <a href="#getNotFoundIdent%2CIdentCache"><span class="Identifier">getNotFoundIdent</span></a><span class="Other">(</span><span class="Identifier">ic</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#getNotFoundIdent%2CIdentCache"><span class="Identifier">getNotFoundIdent</span></a><span class="Other">(</span><span class="Identifier">ic</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">)</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 returns the identifier associated with an error, this will create the identifier if it does not already exist in the cache.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L105"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L109"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L105" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L109" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="hash,PIdent">
-<dt><pre><span class="Keyword">func</span> <a href="#hash%2CPIdent"><span class="Identifier">hash</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Hash</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">func</span> <a href="#hash%2CPIdent"><span class="Identifier">hash</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Hash</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 don't actually compute, we just access it
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L130"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L134"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L130" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L134" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="isNotFound,IdentCache,PIdent">
-<dt><pre><span class="Keyword">func</span> <a href="#isNotFound%2CIdentCache%2CPIdent"><span class="Identifier">isNotFound</span></a><span class="Other">(</span><span class="Identifier">ic</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">func</span> <a href="#isNotFound%2CIdentCache%2CPIdent"><span class="Identifier">isNotFound</span></a><span class="Other">(</span><span class="Identifier">ic</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 optimization: check against the cached/canonical not found ident entry
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L143"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L147"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L143" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L147" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -321,9 +352,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L114"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L118"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L114" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L118" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -333,30 +364,25 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L32"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L36"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L32" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L36" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="whichKeyword,PIdent">
-<dt><pre><span class="Keyword">proc</span> <a href="#whichKeyword%2CPIdent"><span class="Identifier">whichKeyword</span></a><span class="Other">(</span><span class="Identifier">id</span><span class="Other">:</span> <a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">)</span><span class="Other">:</span> <a href="wordrecg.html#TSpecialWord"><span class="Identifier">TSpecialWord</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#whichKeyword%2CPIdent"><span class="Identifier">whichKeyword</span></a><span class="Other">(</span><span class="Identifier">id</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">)</span><span class="Other">:</span> <a href="wordrecg.html#TSpecialWord"><span class="Identifier">TSpecialWord</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b530f191b14f034e995549a688129a90582440ae/compiler/ast/idents.nim#L124"
+href="https://github.com/nim-works/nimskull/tree/b4f72b425fadf8bfa9c2640ef8c4a28001e5ccec/compiler/ast/idents.nim#L128"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/idents.nim#L128" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 
-</dl></div>
-<div class="section" id="19">
-<h1><a class="toc-backref" href="#19">Exports</a></h1>
-<dl class="item">
-<a href="ast_types.html#PIdent"><span class="Identifier">PIdent</span></a>
 </dl></div>
 
   </div>
