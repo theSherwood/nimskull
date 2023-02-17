@@ -1,0 +1,16 @@
+Owned	mir/analysis.html#Owned	analysis: Owned	
+Values	mir/analysis.html#Values	analysis: Values	
+ConsumeCtx	mir/analysis.html#ConsumeCtx	analysis: ConsumeCtx	
+UseContext	mir/analysis.html#UseContext	analysis: UseContext	
+getRoot	mir/analysis.html#getRoot.t,Values,OpValue	analysis: getRoot(v: Values; val: OpValue): OpValue	
+owned	mir/analysis.html#owned.t,Values,OpValue	analysis: owned(v: Values; val: OpValue): Owned	
+setOwned	mir/analysis.html#setOwned,Values,OpValue,Owned	analysis: setOwned(v: var Values; val: OpValue; owns: Owned)	
+toLvalue	mir/analysis.html#toLvalue,Values,OpValue	analysis: toLvalue(v: Values; val: OpValue): LvalueExpr	
+computeValuesAndEffects	mir/analysis.html#computeValuesAndEffects,MirTree	analysis: computeValuesAndEffects(body: MirTree): Values	
+isAlive	mir/analysis.html#isAlive,MirTree,ControlFlowGraph,Values,Slice[NodePosition],LvalueExpr,NodePosition	analysis: isAlive(tree: MirTree; cfg: ControlFlowGraph; v: Values;\n        span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool	
+isLastRead	mir/analysis.html#isLastRead,MirTree,ControlFlowGraph,Values,Slice[NodePosition],LvalueExpr,NodePosition	analysis: isLastRead(tree: MirTree; cfg: ControlFlowGraph; values: Values;\n           span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool	
+isLastWrite	mir/analysis.html#isLastWrite,MirTree,ControlFlowGraph,Values,Slice[NodePosition],LvalueExpr,NodePosition	analysis: isLastWrite(tree: MirTree; cfg: ControlFlowGraph; values: Values;\n            span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): tuple[\n    result, exits, escapes: bool]	
+computeAliveOp	mir/analysis.html#computeAliveOp,MirTree,Values,T,MirNode,Operation	analysis: computeAliveOp[T: PSym | TempId](tree: MirTree; values: Values; loc: T;\n                                 n: MirNode; op: Operation): AliveState	
+computeAlive	mir/analysis.html#computeAlive,MirTree,ControlFlowGraph,Values,Slice[NodePosition],T,bool,staticComputeAliveProc[T]	analysis: computeAlive[T](tree: MirTree; cfg: ControlFlowGraph; values: Values;\n                span: Slice[NodePosition]; loc: T; hasInitialValue: bool;\n                op: static ComputeAliveProc[T]): tuple[alive, escapes: bool]	
+doesGlobalEscape	mir/analysis.html#doesGlobalEscape,MirTree,Slice[NodePosition],NodePosition,PSym	analysis: doesGlobalEscape(tree: MirTree; scope: Slice[NodePosition]; start: NodePosition;\n                 s: PSym): bool	
+isConsumed	mir/analysis.html#isConsumed,MirTree,OpValue	analysis: isConsumed(tree: MirTree; val: OpValue): bool	
