@@ -116,7 +116,11 @@ window.addEventListener('DOMContentLoaded', main);
   bufposPrevious*: int
   inPragma*: int             ## Pragma level
   inSemiStmtList*: int
-  emptyNode: ParsedNode">Parser</a></li>
+  emptyNode: ParsedNode
+  diags*: ParseDiags">Parser</a></li>
+  <li><a class="reference" href="#ParserError"
+    title="ParserError = object of CatchableError
+  instLoc*: InstantiationInfo">ParserError</a></li>
 
   </ul>
 </li>
@@ -128,31 +132,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="closeParser(p: var Parser)">closeParser(p: var Parser)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">eat
-      <li><a class="reference" href="#eat%2CParser%2CTokType"
-    title="eat(p: var Parser; tokType: TokType)">eat(p: var Parser; tokType: TokType)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">getTok
-      <li><a class="reference" href="#getTok%2CParser"
-    title="getTok(p: var Parser)">getTok(p: var Parser)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">indAndComment
-      <li><a class="reference" href="#indAndComment%2CParser%2CParsedNode"
-    title="indAndComment(p: var Parser; n: ParsedNode; maybeMissEquals = false)">indAndComment(p: var Parser; n: ParsedNode; maybeMissEquals = false)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">isOperator
-      <li><a class="reference" href="#isOperator%2CToken"
-    title="isOperator(tok: Token): bool">isOperator(tok: Token): bool</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">lineInfo
-      <li><a class="reference" href="#lineInfo%2CParser"
-    title="lineInfo(p: Parser): TLineInfo">lineInfo(p: Parser): TLineInfo</a></li>
-
-  </ul>
   <ul class="simple nested-toc-section">openParser
       <li><a class="reference" href="#openParser%2CParser%2CFileIndex%2CPLLStream%2CIdentCache%2CConfigRef"
     title="openParser(p: var Parser; fileIdx: FileIndex; inputStream: PLLStream;
@@ -162,16 +141,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="openParser(p: var Parser; filename: AbsoluteFile; inputStream: PLLStream;
            cache: IdentCache; config: ConfigRef)">openParser(p: var Parser; filename: AbsoluteFile; inputStream: PLLStream;
            cache: IdentCache; config: ConfigRef)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">optInd
-      <li><a class="reference" href="#optInd%2CParser%2CParsedNode"
-    title="optInd(p: var Parser; n: ParsedNode)">optInd(p: var Parser; n: ParsedNode)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">optPar
-      <li><a class="reference" href="#optPar%2CParser"
-    title="optPar(p: var Parser)">optPar(p: var Parser)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">parseAll
@@ -186,24 +155,9 @@ window.addEventListener('DOMContentLoaded', main);
             filename: string = &quot;&quot;; line: int = 0): ParsedNode</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">parseSymbol
-      <li><a class="reference" href="#parseSymbol%2CParser"
-    title="parseSymbol(p: var Parser; mode = smNormal): ParsedNode">parseSymbol(p: var Parser; mode = smNormal): ParsedNode</a></li>
-
-  </ul>
   <ul class="simple nested-toc-section">parseTopLevelStmt
       <li><a class="reference" href="#parseTopLevelStmt%2CParser"
     title="parseTopLevelStmt(p: var Parser): ParsedNode">parseTopLevelStmt(p: var Parser): ParsedNode</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">skipComment
-      <li><a class="reference" href="#skipComment%2CParser%2CParsedNode"
-    title="skipComment(p: var Parser; node: ParsedNode)">skipComment(p: var Parser; node: ParsedNode)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">skipInd
-      <li><a class="reference" href="#skipInd%2CParser"
-    title="skipInd(p: var Parser)">skipInd(p: var Parser)</a></li>
 
   </ul>
 
@@ -214,7 +168,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/parser.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -225,7 +179,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="llstream.html">llstream</a>, <a class="reference external" href="lexer.html">lexer</a>, <a class="reference external" href="idents.html">idents</a>, <a class="reference external" href="ast.html">ast</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="reports_parser.html">reports_parser</a>, <a class="reference external" href="report_enums.html">report_enums</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>, <a class="reference external" href="../utils/astrepr.html">../utils/astrepr</a>, <a class="reference external" href="reports_internal.html">reports_internal</a>, <a class="reference external" href="reports.html">reports</a>
+<a class="reference external" href="llstream.html">llstream</a>, <a class="reference external" href="lexer.html">lexer</a>, <a class="reference external" href="idents.html">idents</a>, <a class="reference external" href="ast_parsed_types.html">ast_parsed_types</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>, <a class="reference external" href="../utils/astrepr.html">../utils/astrepr</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -243,14 +197,29 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">inPragma</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>             <span class="Comment">## Pragma level</span>
   <span class="Identifier">inSemiStmtList</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
   <span class="Identifier">emptyNode</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a>
+  <span class="Identifier">diags</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">ParseDiags</span>
 </pre></dt>
 <dd>
 
 A Parser object represents a file that is being parsed
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L61"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/parser.nim#L58"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L61" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L58" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="ParserError">
+<dt><pre><a href="parser.html#ParserError"><span class="Identifier">ParserError</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">CatchableError</span>
+  <span class="Identifier">instLoc</span><span class="Operator">*</span><span class="Other">:</span> <a href="lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a>
+</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/parser.nim#L53"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L53" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -265,75 +234,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Close a parser, freeing up its resources.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L141"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/parser.nim#L161"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L141" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="eat,Parser,TokType">
-<dt><pre><span class="Keyword">proc</span> <a href="#eat%2CParser%2CTokType"><span class="Identifier">eat</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">;</span> <span class="Identifier">tokType</span><span class="Other">:</span> <a href="lexer.html#TokType"><span class="Identifier">TokType</span></a><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Move the parser to the next token if the current token is of type <tt class="docutils literal"><span class="pre"><span class="Identifier">tokType</span></span></tt>, otherwise error.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L207"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L207" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="getTok,Parser">
-<dt><pre><span class="Keyword">proc</span> <a href="#getTok%2CParser"><span class="Identifier">getTok</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span>
-                                      <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
-                             <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Get the next token from the parser's lexer, and store it in the parser's <tt class="docutils literal"><span class="pre"><span class="Identifier">tok</span></span></tt> member.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L108"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L108" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="indAndComment,Parser,ParsedNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#indAndComment%2CParser%2CParsedNode"><span class="Identifier">indAndComment</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">;</span> <span class="Identifier">maybeMissEquals</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L221"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L221" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="isOperator,Token">
-<dt><pre><span class="Keyword">proc</span> <a href="#isOperator%2CToken"><span class="Identifier">isOperator</span></a><span class="Other">(</span><span class="Identifier">tok</span><span class="Other">:</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L319"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L319" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="lineInfo,Parser">
-<dt><pre><span class="Keyword">proc</span> <a href="#lineInfo%2CParser"><span class="Identifier">lineInfo</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Retrieve the line information associated with the parser's current state.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L217"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L217" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -344,11 +247,11 @@ class="link-seesrc" target="_blank">Source</a>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Open a parser, using the given arguments to set up its internal state. 
+Open a parser, using the given arguments to set up its internal state.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L127"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/parser.nim#L147"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L127" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L147" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -361,50 +264,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L137"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/parser.nim#L157"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="optInd,Parser,ParsedNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#optInd%2CParser%2CParsedNode"><span class="Identifier">optInd</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L198"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L198" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="optPar,Parser">
-<dt><pre><span class="Keyword">proc</span> <a href="#optPar%2CParser"><span class="Identifier">optPar</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
-                             <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L193"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L193" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L157" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="parseAll,Parser">
 <dt><pre><span class="Keyword">proc</span> <a href="#parseAll%2CParser"><span class="Identifier">parseAll</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Parses the rest of the input stream held by the parser into a ParsedNode.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L2232"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/parser.nim#L2299"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L2232" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L2299" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -417,64 +293,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 Parses a string into an AST, returning the top node. <tt class="docutils literal"><span class="pre"><span class="Identifier">filename</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">line</span></span></tt>, although optional, provide info so that the compiler can generate correct error messages referring to the original source.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L2281"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/parser.nim#L2344"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L2281" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="parseSymbol,Parser">
-<dt><pre><span class="Keyword">proc</span> <a href="#parseSymbol%2CParser"><span class="Identifier">parseSymbol</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">;</span> <span class="Identifier">mode</span> <span class="Other">=</span> <span class="Identifier">smNormal</span><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L333"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L333" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L2344" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="parseTopLevelStmt,Parser">
 <dt><pre><span class="Keyword">proc</span> <a href="#parseTopLevelStmt%2CParser"><span class="Identifier">parseTopLevelStmt</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Implements an iterator which, when called repeatedly, returns the next top-level statement or emptyNode if end of stream.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L2247"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L2247" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="skipComment,Parser,ParsedNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#skipComment%2CParser%2CParsedNode"><span class="Identifier">skipComment</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">;</span> <span class="Identifier">node</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Implements an iterator which, when called repeatedly, returns the next top-level statement or emptyNode if end of stream.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L182"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/parser.nim#L2314"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L182" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="skipInd,Parser">
-<dt><pre><span class="Keyword">proc</span> <a href="#skipInd%2CParser"><span class="Identifier">skipInd</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="parser.html#Parser"><span class="Identifier">Parser</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
-                              <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/parser.nim#L188"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L188" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/parser.nim#L2314" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -488,7 +323,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-02-23 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-02-27 00:00:00 UTC</small>
       </div>
     </div>
   </div>

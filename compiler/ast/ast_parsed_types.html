@@ -104,14 +104,129 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#ParsedNode"
-    title="ParsedNode = ref object
-  info*: TLineInfo
-  token*: Token
-  kind*: TNodeKind
-  sons*: seq[ParsedNode]
+      <li><a class="reference" href="#ParseDiag"
+    title="ParseDiag = object
+  instLoc*: InstantiationInfo
+  location*: TLineInfo
+  case kind*: ParseDiagKind
+  of pdkInvalidIndentationWithForgotEqualSignHint:
+      eqLineInfo*: TLineInfo
+
+  of pdkUnexpectedToken:
+      expected*: TokType
+      actual*: Token
+
+  of pdkMissingToken:
+      missedToks*: seq[TokType]
+
+  of pdkIdentExpected, pdkExprExpected, pdkAsmStmtExpectsStrLit,
+     pdkInconsistentSpacing:
+      found*: Token
+
+  of pdkWithoutExtraData:
+      nil">ParseDiag</a></li>
+  <li><a class="reference" href="#ParseDiagKind"
+    title="ParseDiagKind = enum
+  pdkInvalidIndentation, pdkInvalidIndentationWithForgotEqualSignHint,
+  pdkNestableRequiresIndentation, pdkIdentExpected,
+  pdkIdentExpectedEmptyAccQuote, pdkExprExpected, pdkMissingToken,
+  pdkUnexpectedToken, pdkAsmStmtExpectsStrLit, pdkFuncNotAllowed,
+  pdkTupleTypeWithPar, pdkMisplacedParameterVar, pdkConceptNotInType,
+  pdkMisplacedExport, pdkPragmaBeforeGenericParameters, pdkInconsistentSpacing,
+  pdkPragmaDoesNotFollowTypeName, pdkEnablePreviewDotOps">ParseDiagKind</a></li>
+  <li><a class="reference" href="#ParsedKindBracket"
+    title="ParsedKindBracket = range[pnkPar .. pnkCurly]">ParsedKindBracket</a></li>
+  <li><a class="reference" href="#ParsedKindLiteral"
+    title="ParsedKindLiteral = range[pnkCharLit .. pnkCustomLit]">ParsedKindLiteral</a></li>
+  <li><a class="reference" href="#ParsedKindWithSons"
+    title="ParsedKindWithSons = range[pnkCall .. pnkUsingStmt]">ParsedKindWithSons</a></li>
+  <li><a class="reference" href="#ParsedNode"
+    title="ParsedNode = ref ParsedNodeData">ParsedNode</a></li>
+  <li><a class="reference" href="#ParsedNodeData"
+    title="ParsedNodeData {.final, acyclic.} = object
   comment*: string
-  isBlockArg*: bool">ParsedNode</a></li>
+  fileIndex*: FileIndex
+  case kind*: ParsedNodeKind
+  of pnkError:
+      diag*: ParseDiag
+
+  of pnkEmpty:
+      line*: uint16
+      col*: int16
+
+  of pnkIdent:
+      startToken*: ParsedToken
+
+  of pnkCharLit .. pnkUInt64Lit, pnkFloatLit .. pnkFloat128Lit,
+     pnkStrLit .. pnkTripleStrLit, pnkNilLit, pnkCustomLit:
+      lit*: ParsedToken
+
+  of pnkAccQuoted:
+      quote*: ParsedToken
+      idents*: seq[tuple[ident: PIdent, line: uint16, col: int16]]
+
+  of pnkCall .. pnkUsingStmt:
+      token*: ParsedToken
+      isBlockArg*: bool
+      sons*: seq[ParsedNode]">ParsedNodeData</a></li>
+  <li><a class="reference" href="#ParsedNodeKind"
+    title="ParsedNodeKind = enum
+  pnkError,                 ## currently we don't produce error nodes
+  pnkEmpty, pnkIdent, pnkCharLit, pnkIntLit, pnkInt8Lit, pnkInt16Lit,
+  pnkInt32Lit, pnkInt64Lit, pnkUIntLit, pnkUInt8Lit, pnkUInt16Lit, pnkUInt32Lit,
+  pnkUInt64Lit, pnkFloatLit, pnkFloat32Lit, pnkFloat64Lit, pnkFloat128Lit,
+  pnkStrLit, pnkRStrLit, pnkTripleStrLit, pnkNilLit, pnkCustomLit, pnkAccQuoted,
+  pnkCall, pnkCommand, pnkCallStrLit, pnkInfix, pnkPrefix, pnkPostfix,
+  pnkExprEqExpr, pnkExprColonExpr, pnkIdentDefs, pnkConstDef, pnkVarTuple,
+  pnkPar, pnkSqrBracket, pnkCurly, pnkTupleConstr, pnkObjConstr, pnkTableConstr,
+  pnkSqrBracketExpr, pnkCurlyExpr, pnkPragmaExpr, pnkPragma, pnkPragmaBlock,
+  pnkDotExpr, pnkIfExpr, pnkIfStmt, pnkElifBranch, pnkElifExpr, pnkElse,
+  pnkElseExpr, pnkCaseStmt, pnkOfBranch, pnkWhenExpr, pnkWhenStmt, pnkForStmt,
+  pnkWhileStmt, pnkBlockExpr, pnkBlockStmt, pnkDiscardStmt, pnkContinueStmt,
+  pnkBreakStmt, pnkReturnStmt, pnkRaiseStmt, pnkYieldStmt, pnkTryStmt,
+  pnkExceptBranch, pnkFinally, pnkDefer, pnkLambda, pnkDo, pnkBind, pnkBindStmt,
+  pnkMixinStmt, pnkCast, pnkStaticStmt, pnkAsgn, pnkGenericParams,
+  pnkFormalParams, pnkStmtList, pnkStmtListExpr, pnkImportStmt,
+  pnkImportExceptStmt, pnkImportAs, pnkFromStmt, pnkIncludeStmt, pnkExportStmt,
+  pnkExportExceptStmt, pnkConstSection, pnkLetSection, pnkVarSection,
+  pnkProcDef, pnkFuncDef, pnkMethodDef, pnkConverterDef, pnkIteratorDef,
+  pnkMacroDef, pnkTemplateDef, pnkTypeSection, pnkTypeDef, pnkEnumTy,
+  pnkEnumFieldDef, pnkObjectTy, pnkTupleTy, pnkProcTy, pnkIteratorTy,
+  pnkRecList, pnkRecCase, pnkRecWhen, pnkTypeOfExpr, pnkRefTy, pnkVarTy,
+  pnkPtrTy, pnkStaticTy, pnkDistinctTy, pnkMutableTy, pnkTupleClassTy,
+  pnkTypeClassTy, pnkOfInherit, pnkArgList, pnkWith, pnkWithout, pnkAsmStmt,
+  pnkCommentStmt, pnkUsingStmt">ParsedNodeKind</a></li>
+  <li><a class="reference" href="#ParsedToken"
+    title="ParsedToken = object
+  line*: uint16
+  col*: int16
+  tokType*: TokType
+  ident*: PIdent
+  iNumber*: BiggestInt
+  fNumber*: BiggestFloat
+  base*: NumericalBase
+  literal*: string">ParsedToken</a></li>
+
+  </ul>
+</li>
+<li>
+  <a class="reference reference-toplevel" href="#10" id="60">Consts</a>
+  <ul class="simple simple-toc-section">
+      <li><a class="reference" href="#pdkWithExtraData"
+    title="pdkWithExtraData = {pdkInvalidIndentationWithForgotEqualSignHint,
+                    pdkUnexpectedToken, pdkMissingToken, pdkIdentExpected,
+                    pdkExprExpected, pdkAsmStmtExpectsStrLit,
+                    pdkInconsistentSpacing}">pdkWithExtraData</a></li>
+  <li><a class="reference" href="#pdkWithoutExtraData"
+    title="pdkWithoutExtraData = {pdkInvalidIndentation, pdkNestableRequiresIndentation,
+                       pdkIdentExpectedEmptyAccQuote,
+                       pdkFuncNotAllowed..pdkPragmaBeforeGenericParameters,
+                       pdkPragmaDoesNotFollowTypeName..pdkEnablePreviewDotOps}">pdkWithoutExtraData</a></li>
+  <li><a class="reference" href="#pnkCallKinds"
+    title="pnkCallKinds = {pnkCall, pnkInfix, pnkPrefix, pnkPostfix, pnkCommand,
+                pnkCallStrLit}">pnkCallKinds</a></li>
+  <li><a class="reference" href="#pnkParsedKindsWithSons"
+    title="pnkParsedKindsWithSons = {pnkCall..pnkUsingStmt}">pnkParsedKindsWithSons</a></li>
 
   </ul>
 </li>
@@ -133,25 +248,52 @@ window.addEventListener('DOMContentLoaded', main);
     title="add(node: ParsedNode; other: ParsedNode)">add(node: ParsedNode; other: ParsedNode)</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">getToken
+      <li><a class="reference" href="#getToken%2CParsedNode"
+    title="getToken(n: ParsedNode): ParsedToken">getToken(n: ParsedNode): ParsedToken</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">info
+      <li><a class="reference" href="#info%2CParsedNode"
+    title="info(p: ParsedNode): TLineInfo">info(p: ParsedNode): TLineInfo</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">len
       <li><a class="reference" href="#len%2CParsedNode"
     title="len(node: ParsedNode): int">len(node: ParsedNode): int</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">newEmptyParsedNode
+      <li><a class="reference" href="#newEmptyParsedNode%2CFileIndex%2Cuint16%2Cint16"
+    title="newEmptyParsedNode(fileIndex: FileIndex; line = unknownLineInfo.line;
+                   col = unknownLineInfo.col): ParsedNode">newEmptyParsedNode(fileIndex: FileIndex; line = unknownLineInfo.line;
+                   col = unknownLineInfo.col): ParsedNode</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">newParsedLitNode
+      <li><a class="reference" href="#newParsedLitNode%2CParsedKindLiteral%2CFileIndex%2CParsedToken"
+    title="newParsedLitNode(kind: ParsedKindLiteral; fileIndex: FileIndex;
+                 token: ParsedToken): ParsedNode">newParsedLitNode(kind: ParsedKindLiteral; fileIndex: FileIndex;
+                 token: ParsedToken): ParsedNode</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">newParsedNode
-      <li><a class="reference" href="#newParsedNode%2CTNodeKind"
-    title="newParsedNode(kind: TNodeKind): ParsedNode">newParsedNode(kind: TNodeKind): ParsedNode</a></li>
-  <li><a class="reference" href="#newParsedNode%2CTNodeKind%2CTLineInfo%2Cseq%5BParsedNode%5D"
-    title="newParsedNode(kind: TNodeKind; info: TLineInfo; sons: seq[ParsedNode] = @[]): ParsedNode">newParsedNode(kind: TNodeKind; info: TLineInfo; sons: seq[ParsedNode] = @[]): ParsedNode</a></li>
-  <li><a class="reference" href="#newParsedNode%2CTNodeKind%2CTLineInfo%2CToken"
-    title="newParsedNode(kind: TNodeKind; info: TLineInfo; token: Token): ParsedNode">newParsedNode(kind: TNodeKind; info: TLineInfo; token: Token): ParsedNode</a></li>
+      <li><a class="reference" href="#newParsedNode%2CParsedKindWithSons%2CFileIndex%2CParsedToken%2Cseq%5BParsedNode%5D"
+    title="newParsedNode(kind: ParsedKindWithSons; fileIndex: FileIndex;
+              token: ParsedToken; sons: seq[ParsedNode] = @[]): ParsedNode">newParsedNode(kind: ParsedKindWithSons; fileIndex: FileIndex;
+              token: ParsedToken; sons: seq[ParsedNode] = @[]): ParsedNode</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">newParsedNodeIdent
+      <li><a class="reference" href="#newParsedNodeIdent%2CFileIndex%2CParsedToken"
+    title="newParsedNodeIdent(fileIndex: FileIndex; token: ParsedToken): ParsedNode">newParsedNodeIdent(fileIndex: FileIndex; token: ParsedToken): ParsedNode</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">newProcNode
-      <li><a class="reference" href="#newProcNode%2CTNodeKind%2CTLineInfo%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode"
-    title="newProcNode(kind: TNodeKind; info: TLineInfo; body, params, name, pattern,
-    genericParams, pragmas, exceptions: ParsedNode): ParsedNode">newProcNode(kind: TNodeKind; info: TLineInfo; body, params, name, pattern,
-    genericParams, pragmas, exceptions: ParsedNode): ParsedNode</a></li>
+      <li><a class="reference" href="#newProcNode%2CParsedNodeKind%2CFileIndex%2CParsedToken%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode"
+    title="newProcNode(kind: ParsedNodeKind; fileIndex: FileIndex; token: ParsedToken;
+    body, params, name, pattern, genericParams, pragmas, exceptions: ParsedNode): ParsedNode">newProcNode(kind: ParsedNodeKind; fileIndex: FileIndex; token: ParsedToken;
+    body, params, name, pattern, genericParams, pragmas, exceptions: ParsedNode): ParsedNode</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">safeLen
@@ -159,19 +301,14 @@ window.addEventListener('DOMContentLoaded', main);
     title="safeLen(node: ParsedNode): int">safeLen(node: ParsedNode): int</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">transitionIntKind
-      <li><a class="reference" href="#transitionIntKind%2CParsedNode%2CTNodeKind"
-    title="transitionIntKind(n: ParsedNode; kind: TNodeKind)">transitionIntKind(n: ParsedNode; kind: TNodeKind)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">transitionNoneToSym
-      <li><a class="reference" href="#transitionNoneToSym%2CParsedNode"
-    title="transitionNoneToSym(n: ParsedNode)">transitionNoneToSym(n: ParsedNode)</a></li>
+  <ul class="simple nested-toc-section">toParsedToken
+      <li><a class="reference" href="#toParsedToken%2CToken"
+    title="toParsedToken(t: Token): ParsedToken">toParsedToken(t: Token): ParsedToken</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">transitionSonsKind
-      <li><a class="reference" href="#transitionSonsKind%2CParsedNode%2CTNodeKind"
-    title="transitionSonsKind(n: ParsedNode; kind: TNodeKind)">transitionSonsKind(n: ParsedNode; kind: TNodeKind)</a></li>
+      <li><a class="reference" href="#transitionSonsKind%2CParsedNode%2CParsedNodeKind"
+    title="transitionSonsKind(n: ParsedNode; kind: ParsedNodeKind)">transitionSonsKind(n: ParsedNode; kind: ParsedNodeKind)</a></li>
 
   </ul>
 
@@ -198,7 +335,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -209,27 +346,265 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="ast_types.html">ast_types</a>, <a class="reference external" href="lexer.html">lexer</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>
+<a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="idents.html">idents</a>, <a class="reference external" href="numericbase.html">numericbase</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="lexer.html">lexer</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<div id="ParsedNode">
-<dt><pre><a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span>
-  <span class="Identifier">info</span><span class="Operator">*</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a>
-  <span class="Identifier">token</span><span class="Operator">*</span><span class="Other">:</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a>
-  <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#TNodeKind"><span class="Identifier">TNodeKind</span></a>
-  <span class="Identifier">sons</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">]</span>
-  <span class="Identifier">comment</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">isBlockArg</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
-</pre></dt>
+<div id="ParseDiag">
+<dt><pre><a href="ast_parsed_types.html#ParseDiag"><span class="Identifier">ParseDiag</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">instLoc</span><span class="Operator">*</span><span class="Other">:</span> <a href="lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a>
+  <span class="Identifier">location</span><span class="Operator">*</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a>
+  <span class="Keyword">case</span> <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParseDiagKind"><span class="Identifier">ParseDiagKind</span></a>
+  <span class="Keyword">of</span> <span class="Identifier">pdkInvalidIndentationWithForgotEqualSignHint</span><span class="Other">:</span>
+      <span class="Identifier">eqLineInfo</span><span class="Operator">*</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a>
+
+  <span class="Keyword">of</span> <span class="Identifier">pdkUnexpectedToken</span><span class="Other">:</span>
+      <span class="Identifier">expected</span><span class="Operator">*</span><span class="Other">:</span> <a href="lexer.html#TokType"><span class="Identifier">TokType</span></a>
+      <span class="Identifier">actual</span><span class="Operator">*</span><span class="Other">:</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a>
+
+  <span class="Keyword">of</span> <span class="Identifier">pdkMissingToken</span><span class="Other">:</span>
+      <span class="Identifier">missedToks</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="lexer.html#TokType"><span class="Identifier">TokType</span></a><span class="Other">]</span>
+
+  <span class="Keyword">of</span> <span class="Identifier">pdkIdentExpected</span><span class="Other">,</span> <span class="Identifier">pdkExprExpected</span><span class="Other">,</span> <span class="Identifier">pdkAsmStmtExpectsStrLit</span><span class="Other">,</span>
+     <span class="Identifier">pdkInconsistentSpacing</span><span class="Other">:</span>
+      <span class="Identifier">found</span><span class="Operator">*</span><span class="Other">:</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a>
+
+  <span class="Keyword">of</span> <span class="Identifier">pdkWithoutExtraData</span><span class="Other">:</span>
+      <span class="Keyword">nil</span>
+
+  </pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L20"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L68"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L20" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="ParseDiagKind">
+<dt><pre><a href="ast_parsed_types.html#ParseDiagKind"><span class="Identifier">ParseDiagKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">pdkInvalidIndentation</span><span class="Other">,</span> <span class="Identifier">pdkInvalidIndentationWithForgotEqualSignHint</span><span class="Other">,</span>
+  <span class="Identifier">pdkNestableRequiresIndentation</span><span class="Other">,</span> <span class="Identifier">pdkIdentExpected</span><span class="Other">,</span>
+  <span class="Identifier">pdkIdentExpectedEmptyAccQuote</span><span class="Other">,</span> <span class="Identifier">pdkExprExpected</span><span class="Other">,</span> <span class="Identifier">pdkMissingToken</span><span class="Other">,</span>
+  <span class="Identifier">pdkUnexpectedToken</span><span class="Other">,</span> <span class="Identifier">pdkAsmStmtExpectsStrLit</span><span class="Other">,</span> <span class="Identifier">pdkFuncNotAllowed</span><span class="Other">,</span>
+  <span class="Identifier">pdkTupleTypeWithPar</span><span class="Other">,</span> <span class="Identifier">pdkMisplacedParameterVar</span><span class="Other">,</span> <span class="Identifier">pdkConceptNotInType</span><span class="Other">,</span>
+  <span class="Identifier">pdkMisplacedExport</span><span class="Other">,</span> <span class="Identifier">pdkPragmaBeforeGenericParameters</span><span class="Other">,</span> <span class="Identifier">pdkInconsistentSpacing</span><span class="Other">,</span>
+  <span class="Identifier">pdkPragmaDoesNotFollowTypeName</span><span class="Other">,</span> <span class="Identifier">pdkEnablePreviewDotOps</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L25"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="ParsedKindBracket">
+<dt><pre><a href="ast_parsed_types.html#ParsedKindBracket"><span class="Identifier">ParsedKindBracket</span></a> <span class="Other">=</span> <span class="Identifier">range</span><span class="Other">[</span><span class="Identifier">pnkPar</span> <span class="Operator">..</span> <span class="Identifier">pnkCurly</span><span class="Other">]</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L218"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L218" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="ParsedKindLiteral">
+<dt><pre><a href="ast_parsed_types.html#ParsedKindLiteral"><span class="Identifier">ParsedKindLiteral</span></a> <span class="Other">=</span> <span class="Identifier">range</span><span class="Other">[</span><span class="Identifier">pnkCharLit</span> <span class="Operator">..</span> <span class="Identifier">pnkCustomLit</span><span class="Other">]</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L217"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L217" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="ParsedKindWithSons">
+<dt><pre><a href="ast_parsed_types.html#ParsedKindWithSons"><span class="Identifier">ParsedKindWithSons</span></a> <span class="Other">=</span> <span class="Identifier">range</span><span class="Other">[</span><span class="Identifier">pnkCall</span> <span class="Operator">..</span> <span class="Identifier">pnkUsingStmt</span><span class="Other">]</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L216"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L216" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="ParsedNode">
+<dt><pre><a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <a href="ast_parsed_types.html#ParsedNodeData"><span class="Identifier">ParsedNodeData</span></a></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L261"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L261" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="ParsedNodeData">
+<dt><pre><a href="ast_parsed_types.html#ParsedNodeData"><span class="Identifier">ParsedNodeData</span></a> {.<span class="Identifier">final</span><span class="Other">,</span> <span class="Identifier">acyclic</span>.} <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">comment</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+  <span class="Identifier">fileIndex</span><span class="Operator">*</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a>
+  <span class="Keyword">case</span> <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNodeKind"><span class="Identifier">ParsedNodeKind</span></a>
+  <span class="Keyword">of</span> <span class="Identifier">pnkError</span><span class="Other">:</span>
+      <span class="Identifier">diag</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParseDiag"><span class="Identifier">ParseDiag</span></a>
+
+  <span class="Keyword">of</span> <span class="Identifier">pnkEmpty</span><span class="Other">:</span>
+      <span class="Identifier">line</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">uint16</span>
+      <span class="Identifier">col</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int16</span>
+
+  <span class="Keyword">of</span> <span class="Identifier">pnkIdent</span><span class="Other">:</span>
+      <span class="Identifier">startToken</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a>
+
+  <span class="Keyword">of</span> <span class="Identifier">pnkCharLit</span> <span class="Operator">..</span> <span class="Identifier">pnkUInt64Lit</span><span class="Other">,</span> <span class="Identifier">pnkFloatLit</span> <span class="Operator">..</span> <span class="Identifier">pnkFloat128Lit</span><span class="Other">,</span>
+     <span class="Identifier">pnkStrLit</span> <span class="Operator">..</span> <span class="Identifier">pnkTripleStrLit</span><span class="Other">,</span> <span class="Identifier">pnkNilLit</span><span class="Other">,</span> <span class="Identifier">pnkCustomLit</span><span class="Other">:</span>
+      <span class="Identifier">lit</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a>
+
+  <span class="Keyword">of</span> <span class="Identifier">pnkAccQuoted</span><span class="Other">:</span>
+      <span class="Identifier">quote</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a>
+      <span class="Identifier">idents</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">ident</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">,</span> <span class="Identifier">line</span><span class="Other">:</span> <span class="Identifier">uint16</span><span class="Other">,</span> <span class="Identifier">col</span><span class="Other">:</span> <span class="Identifier">int16</span><span class="Other">]</span><span class="Other">]</span>
+
+  <span class="Keyword">of</span> <span class="Identifier">pnkCall</span> <span class="Operator">..</span> <span class="Identifier">pnkUsingStmt</span><span class="Other">:</span>
+      <span class="Identifier">token</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a>
+      <span class="Identifier">isBlockArg</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
+      <span class="Identifier">sons</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">]</span>
+
+  </pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L231"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L231" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="ParsedNodeKind">
+<dt><pre><a href="ast_parsed_types.html#ParsedNodeKind"><span class="Identifier">ParsedNodeKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">pnkError</span><span class="Other">,</span>                 <span class="Comment">## currently we don't produce error nodes</span>
+  <span class="Identifier">pnkEmpty</span><span class="Other">,</span> <span class="Identifier">pnkIdent</span><span class="Other">,</span> <span class="Identifier">pnkCharLit</span><span class="Other">,</span> <span class="Identifier">pnkIntLit</span><span class="Other">,</span> <span class="Identifier">pnkInt8Lit</span><span class="Other">,</span> <span class="Identifier">pnkInt16Lit</span><span class="Other">,</span>
+  <span class="Identifier">pnkInt32Lit</span><span class="Other">,</span> <span class="Identifier">pnkInt64Lit</span><span class="Other">,</span> <span class="Identifier">pnkUIntLit</span><span class="Other">,</span> <span class="Identifier">pnkUInt8Lit</span><span class="Other">,</span> <span class="Identifier">pnkUInt16Lit</span><span class="Other">,</span> <span class="Identifier">pnkUInt32Lit</span><span class="Other">,</span>
+  <span class="Identifier">pnkUInt64Lit</span><span class="Other">,</span> <span class="Identifier">pnkFloatLit</span><span class="Other">,</span> <span class="Identifier">pnkFloat32Lit</span><span class="Other">,</span> <span class="Identifier">pnkFloat64Lit</span><span class="Other">,</span> <span class="Identifier">pnkFloat128Lit</span><span class="Other">,</span>
+  <span class="Identifier">pnkStrLit</span><span class="Other">,</span> <span class="Identifier">pnkRStrLit</span><span class="Other">,</span> <span class="Identifier">pnkTripleStrLit</span><span class="Other">,</span> <span class="Identifier">pnkNilLit</span><span class="Other">,</span> <span class="Identifier">pnkCustomLit</span><span class="Other">,</span> <span class="Identifier">pnkAccQuoted</span><span class="Other">,</span>
+  <span class="Identifier">pnkCall</span><span class="Other">,</span> <span class="Identifier">pnkCommand</span><span class="Other">,</span> <span class="Identifier">pnkCallStrLit</span><span class="Other">,</span> <span class="Identifier">pnkInfix</span><span class="Other">,</span> <span class="Identifier">pnkPrefix</span><span class="Other">,</span> <span class="Identifier">pnkPostfix</span><span class="Other">,</span>
+  <span class="Identifier">pnkExprEqExpr</span><span class="Other">,</span> <span class="Identifier">pnkExprColonExpr</span><span class="Other">,</span> <span class="Identifier">pnkIdentDefs</span><span class="Other">,</span> <span class="Identifier">pnkConstDef</span><span class="Other">,</span> <span class="Identifier">pnkVarTuple</span><span class="Other">,</span>
+  <span class="Identifier">pnkPar</span><span class="Other">,</span> <span class="Identifier">pnkSqrBracket</span><span class="Other">,</span> <span class="Identifier">pnkCurly</span><span class="Other">,</span> <span class="Identifier">pnkTupleConstr</span><span class="Other">,</span> <span class="Identifier">pnkObjConstr</span><span class="Other">,</span> <span class="Identifier">pnkTableConstr</span><span class="Other">,</span>
+  <span class="Identifier">pnkSqrBracketExpr</span><span class="Other">,</span> <span class="Identifier">pnkCurlyExpr</span><span class="Other">,</span> <span class="Identifier">pnkPragmaExpr</span><span class="Other">,</span> <span class="Identifier">pnkPragma</span><span class="Other">,</span> <span class="Identifier">pnkPragmaBlock</span><span class="Other">,</span>
+  <span class="Identifier">pnkDotExpr</span><span class="Other">,</span> <span class="Identifier">pnkIfExpr</span><span class="Other">,</span> <span class="Identifier">pnkIfStmt</span><span class="Other">,</span> <span class="Identifier">pnkElifBranch</span><span class="Other">,</span> <span class="Identifier">pnkElifExpr</span><span class="Other">,</span> <span class="Identifier">pnkElse</span><span class="Other">,</span>
+  <span class="Identifier">pnkElseExpr</span><span class="Other">,</span> <span class="Identifier">pnkCaseStmt</span><span class="Other">,</span> <span class="Identifier">pnkOfBranch</span><span class="Other">,</span> <span class="Identifier">pnkWhenExpr</span><span class="Other">,</span> <span class="Identifier">pnkWhenStmt</span><span class="Other">,</span> <span class="Identifier">pnkForStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkWhileStmt</span><span class="Other">,</span> <span class="Identifier">pnkBlockExpr</span><span class="Other">,</span> <span class="Identifier">pnkBlockStmt</span><span class="Other">,</span> <span class="Identifier">pnkDiscardStmt</span><span class="Other">,</span> <span class="Identifier">pnkContinueStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkBreakStmt</span><span class="Other">,</span> <span class="Identifier">pnkReturnStmt</span><span class="Other">,</span> <span class="Identifier">pnkRaiseStmt</span><span class="Other">,</span> <span class="Identifier">pnkYieldStmt</span><span class="Other">,</span> <span class="Identifier">pnkTryStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkExceptBranch</span><span class="Other">,</span> <span class="Identifier">pnkFinally</span><span class="Other">,</span> <span class="Identifier">pnkDefer</span><span class="Other">,</span> <span class="Identifier">pnkLambda</span><span class="Other">,</span> <span class="Identifier">pnkDo</span><span class="Other">,</span> <span class="Identifier">pnkBind</span><span class="Other">,</span> <span class="Identifier">pnkBindStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkMixinStmt</span><span class="Other">,</span> <span class="Identifier">pnkCast</span><span class="Other">,</span> <span class="Identifier">pnkStaticStmt</span><span class="Other">,</span> <span class="Identifier">pnkAsgn</span><span class="Other">,</span> <span class="Identifier">pnkGenericParams</span><span class="Other">,</span>
+  <span class="Identifier">pnkFormalParams</span><span class="Other">,</span> <span class="Identifier">pnkStmtList</span><span class="Other">,</span> <span class="Identifier">pnkStmtListExpr</span><span class="Other">,</span> <span class="Identifier">pnkImportStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkImportExceptStmt</span><span class="Other">,</span> <span class="Identifier">pnkImportAs</span><span class="Other">,</span> <span class="Identifier">pnkFromStmt</span><span class="Other">,</span> <span class="Identifier">pnkIncludeStmt</span><span class="Other">,</span> <span class="Identifier">pnkExportStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkExportExceptStmt</span><span class="Other">,</span> <span class="Identifier">pnkConstSection</span><span class="Other">,</span> <span class="Identifier">pnkLetSection</span><span class="Other">,</span> <span class="Identifier">pnkVarSection</span><span class="Other">,</span>
+  <span class="Identifier">pnkProcDef</span><span class="Other">,</span> <span class="Identifier">pnkFuncDef</span><span class="Other">,</span> <span class="Identifier">pnkMethodDef</span><span class="Other">,</span> <span class="Identifier">pnkConverterDef</span><span class="Other">,</span> <span class="Identifier">pnkIteratorDef</span><span class="Other">,</span>
+  <span class="Identifier">pnkMacroDef</span><span class="Other">,</span> <span class="Identifier">pnkTemplateDef</span><span class="Other">,</span> <span class="Identifier">pnkTypeSection</span><span class="Other">,</span> <span class="Identifier">pnkTypeDef</span><span class="Other">,</span> <span class="Identifier">pnkEnumTy</span><span class="Other">,</span>
+  <span class="Identifier">pnkEnumFieldDef</span><span class="Other">,</span> <span class="Identifier">pnkObjectTy</span><span class="Other">,</span> <span class="Identifier">pnkTupleTy</span><span class="Other">,</span> <span class="Identifier">pnkProcTy</span><span class="Other">,</span> <span class="Identifier">pnkIteratorTy</span><span class="Other">,</span>
+  <span class="Identifier">pnkRecList</span><span class="Other">,</span> <span class="Identifier">pnkRecCase</span><span class="Other">,</span> <span class="Identifier">pnkRecWhen</span><span class="Other">,</span> <span class="Identifier">pnkTypeOfExpr</span><span class="Other">,</span> <span class="Identifier">pnkRefTy</span><span class="Other">,</span> <span class="Identifier">pnkVarTy</span><span class="Other">,</span>
+  <span class="Identifier">pnkPtrTy</span><span class="Other">,</span> <span class="Identifier">pnkStaticTy</span><span class="Other">,</span> <span class="Identifier">pnkDistinctTy</span><span class="Other">,</span> <span class="Identifier">pnkMutableTy</span><span class="Other">,</span> <span class="Identifier">pnkTupleClassTy</span><span class="Other">,</span>
+  <span class="Identifier">pnkTypeClassTy</span><span class="Other">,</span> <span class="Identifier">pnkOfInherit</span><span class="Other">,</span> <span class="Identifier">pnkArgList</span><span class="Other">,</span> <span class="Identifier">pnkWith</span><span class="Other">,</span> <span class="Identifier">pnkWithout</span><span class="Other">,</span> <span class="Identifier">pnkAsmStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkCommentStmt</span><span class="Other">,</span> <span class="Identifier">pnkUsingStmt</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L87"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L87" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="ParsedToken">
+<dt><pre><a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">line</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">uint16</span>
+  <span class="Identifier">col</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int16</span>
+  <span class="Identifier">tokType</span><span class="Operator">*</span><span class="Other">:</span> <a href="lexer.html#TokType"><span class="Identifier">TokType</span></a>
+  <span class="Identifier">ident</span><span class="Operator">*</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a>
+  <span class="Identifier">iNumber</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">BiggestInt</span>
+  <span class="Identifier">fNumber</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">BiggestFloat</span>
+  <span class="Identifier">base</span><span class="Operator">*</span><span class="Other">:</span> <a href="numericbase.html#NumericalBase"><span class="Identifier">NumericalBase</span></a>
+  <span class="Identifier">literal</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+</pre></dt>
+<dd>
+
+Used instead of <tt class="docutils literal"><span class="pre"><span class="Identifier">Token</span></span></tt> to save memory
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L220"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L220" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+
+</dl></div>
+<div class="section" id="10">
+<h1><a class="toc-backref" href="#10">Consts</a></h1>
+<dl class="item">
+<div id="pdkWithExtraData">
+<dt><pre><a href="ast_parsed_types.html#pdkWithExtraData"><span class="Identifier">pdkWithExtraData</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">pdkInvalidIndentationWithForgotEqualSignHint</span><span class="Other">,</span>
+                    <span class="DecNumber">pdkUnexpectedToken</span><span class="Other">,</span> <span class="DecNumber">pdkMissingToken</span><span class="Other">,</span> <span class="DecNumber">pdkIdentExpected</span><span class="Other">,</span>
+                    <span class="DecNumber">pdkExprExpected</span><span class="Other">,</span> <span class="DecNumber">pdkAsmStmtExpectsStrLit</span><span class="Other">,</span>
+                    <span class="DecNumber">pdkInconsistentSpacing</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L57"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="pdkWithoutExtraData">
+<dt><pre><a href="ast_parsed_types.html#pdkWithoutExtraData"><span class="Identifier">pdkWithoutExtraData</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">pdkInvalidIndentation</span><span class="Other">,</span> <span class="DecNumber">pdkNestableRequiresIndentation</span><span class="Other">,</span>
+                       <span class="DecNumber">pdkIdentExpectedEmptyAccQuote</span><span class="Other">,</span>
+                       <span class="DecNumber">pdkFuncNotAllowed</span><span class="Other">..</span><span class="DecNumber">pdkPragmaBeforeGenericParameters</span><span class="Other">,</span>
+                       <span class="DecNumber">pdkPragmaDoesNotFollowTypeName</span><span class="Other">..</span><span class="DecNumber">pdkEnablePreviewDotOps</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L64"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L64" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="pnkCallKinds">
+<dt><pre><a href="ast_parsed_types.html#pnkCallKinds"><span class="Identifier">pnkCallKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">pnkCall</span><span class="Other">,</span> <span class="DecNumber">pnkInfix</span><span class="Other">,</span> <span class="DecNumber">pnkPrefix</span><span class="Other">,</span> <span class="DecNumber">pnkPostfix</span><span class="Other">,</span> <span class="DecNumber">pnkCommand</span><span class="Other">,</span>
+                <span class="DecNumber">pnkCallStrLit</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L266"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L266" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="pnkParsedKindsWithSons">
+<dt><pre><a href="ast_parsed_types.html#pnkParsedKindsWithSons"><span class="Identifier">pnkParsedKindsWithSons</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">pnkCall</span><span class="Other">..</span><span class="DecNumber">pnkUsingStmt</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L265"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L265" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -244,9 +619,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L62"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L283"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L62" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L283" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -256,9 +631,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L59"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L280"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L59" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L280" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -268,9 +643,33 @@ class="link-seesrc" target="_blank">Source</a>
 
 append <tt class="docutils literal"><span class="pre"><span class="Identifier">other</span></span></tt> to <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt>'s <tt class="docutils literal"><span class="pre"><span class="Identifier">sons</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L73"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L294"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L73" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L294" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="getToken,ParsedNode">
+<dt><pre><span class="Keyword">proc</span> <a href="#getToken%2CParsedNode"><span class="Identifier">getToken</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L336"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L336" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="info,ParsedNode">
+<dt><pre><span class="Keyword">func</span> <a href="#info%2CParsedNode"><span class="Identifier">info</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L366"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L366" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -280,110 +679,114 @@ class="link-seesrc" target="_blank">Source</a>
 
 Number of sons of the parsed node
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L52"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L269"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L52" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L269" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="newParsedNode,TNodeKind">
-<dt><pre><span class="Keyword">func</span> <a href="#newParsedNode%2CTNodeKind"><span class="Identifier">newParsedNode</span></a><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">:</span> <a href="ast_types.html#TNodeKind"><span class="Identifier">TNodeKind</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="newEmptyParsedNode,FileIndex,uint16,int16">
+<dt><pre><span class="Keyword">func</span> <a href="#newEmptyParsedNode%2CFileIndex%2Cuint16%2Cint16"><span class="Identifier">newEmptyParsedNode</span></a><span class="Other">(</span><span class="Identifier">fileIndex</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">line</span> <span class="Other">=</span> <a href="lineinfos.html#unknownLineInfo"><span class="Identifier">unknownLineInfo</span></a><span class="Other">.</span><span class="Identifier">line</span><span class="Other">;</span>
+                        <span class="Identifier">col</span> <span class="Other">=</span> <a href="lineinfos.html#unknownLineInfo"><span class="Identifier">unknownLineInfo</span></a><span class="Other">.</span><span class="Identifier">col</span><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Create a new parsed node without any location or token information
+Create an empty ParsedNode
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L86"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L310"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L86" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L310" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="newParsedNode,TNodeKind,TLineInfo,seq[ParsedNode]">
-<dt><pre><span class="Keyword">func</span> <a href="#newParsedNode%2CTNodeKind%2CTLineInfo%2Cseq%5BParsedNode%5D"><span class="Identifier">newParsedNode</span></a><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">:</span> <a href="ast_types.html#TNodeKind"><span class="Identifier">TNodeKind</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span>
-                   <span class="Identifier">sons</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="newParsedLitNode,ParsedKindLiteral,FileIndex,ParsedToken">
+<dt><pre><span class="Keyword">func</span> <a href="#newParsedLitNode%2CParsedKindLiteral%2CFileIndex%2CParsedToken"><span class="Identifier">newParsedLitNode</span></a><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedKindLiteral"><span class="Identifier">ParsedKindLiteral</span></a><span class="Other">;</span> <span class="Identifier">fileIndex</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span>
+                      <span class="Identifier">token</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Create a new leaf literal parsed node.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L325"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L325" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="newParsedNode,ParsedKindWithSons,FileIndex,ParsedToken,seq[ParsedNode]">
+<dt><pre><span class="Keyword">func</span> <a href="#newParsedNode%2CParsedKindWithSons%2CFileIndex%2CParsedToken%2Cseq%5BParsedNode%5D"><span class="Identifier">newParsedNode</span></a><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedKindWithSons"><span class="Identifier">ParsedKindWithSons</span></a><span class="Other">;</span> <span class="Identifier">fileIndex</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span>
+                   <span class="Identifier">token</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a><span class="Other">;</span> <span class="Identifier">sons</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Create a new non-leaf parsed node with a specified location information and sons.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L90"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L316"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L316" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="newParsedNode,TNodeKind,TLineInfo,Token">
-<dt><pre><span class="Keyword">func</span> <a href="#newParsedNode%2CTNodeKind%2CTLineInfo%2CToken"><span class="Identifier">newParsedNode</span></a><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">:</span> <a href="ast_types.html#TNodeKind"><span class="Identifier">TNodeKind</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">token</span><span class="Other">:</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.
+<div id="newParsedNodeIdent,FileIndex,ParsedToken">
+<dt><pre><span class="Keyword">func</span> <a href="#newParsedNodeIdent%2CFileIndex%2CParsedToken"><span class="Identifier">newParsedNodeIdent</span></a><span class="Other">(</span><span class="Identifier">fileIndex</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">token</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Create a new leaf parsed node with the specified location information and token kind.
+Create a <tt class="docutils literal"><span class="pre"><span class="Identifier">pnkIdent</span></span></tt> node
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L96"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L332"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L96" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L332" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="newProcNode,TNodeKind,TLineInfo,ParsedNode,ParsedNode,ParsedNode,ParsedNode,ParsedNode,ParsedNode,ParsedNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#newProcNode%2CTNodeKind%2CTLineInfo%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode"><span class="Identifier">newProcNode</span></a><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">:</span> <a href="ast_types.html#TNodeKind"><span class="Identifier">TNodeKind</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">,</span> <span class="Identifier">params</span><span class="Other">,</span> <span class="Identifier">name</span><span class="Other">,</span> <span class="Identifier">pattern</span><span class="Other">,</span>
-    <span class="Identifier">genericParams</span><span class="Other">,</span> <span class="Identifier">pragmas</span><span class="Other">,</span> <span class="Identifier">exceptions</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<div id="newProcNode,ParsedNodeKind,FileIndex,ParsedToken,ParsedNode,ParsedNode,ParsedNode,ParsedNode,ParsedNode,ParsedNode,ParsedNode">
+<dt><pre><span class="Keyword">proc</span> <a href="#newProcNode%2CParsedNodeKind%2CFileIndex%2CParsedToken%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode%2CParsedNode"><span class="Identifier">newProcNode</span></a><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNodeKind"><span class="Identifier">ParsedNodeKind</span></a><span class="Other">;</span> <span class="Identifier">fileIndex</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">token</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a><span class="Other">;</span>
+    <span class="Identifier">body</span><span class="Other">,</span> <span class="Identifier">params</span><span class="Other">,</span> <span class="Identifier">name</span><span class="Other">,</span> <span class="Identifier">pattern</span><span class="Other">,</span> <span class="Identifier">genericParams</span><span class="Other">,</span> <span class="Identifier">pragmas</span><span class="Other">,</span> <span class="Identifier">exceptions</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L353"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L353" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="safeLen,ParsedNode">
+<dt><pre><span class="Keyword">func</span> <a href="#safeLen%2CParsedNode"><span class="Identifier">safeLen</span></a><span class="Other">(</span><span class="Identifier">node</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L274"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L274" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="toParsedToken,Token">
+<dt><pre><span class="Keyword">proc</span> <a href="#toParsedToken%2CToken"><span class="Identifier">toParsedToken</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedToken"><span class="Identifier">ParsedToken</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L393"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L393" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="transitionSonsKind,ParsedNode,ParsedNodeKind">
+<dt><pre><span class="Keyword">proc</span> <a href="#transitionSonsKind%2CParsedNode%2CParsedNodeKind"><span class="Identifier">transitionSonsKind</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">;</span> <span class="Identifier">kind</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNodeKind"><span class="Identifier">ParsedNodeKind</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L102"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L298"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L102" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="safeLen,ParsedNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#safeLen%2CParsedNode"><span class="Identifier">safeLen</span></a><span class="Other">(</span><span class="Identifier">node</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L57"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="transitionIntKind,ParsedNode,TNodeKind">
-<dt><pre><span class="Keyword">proc</span> <a href="#transitionIntKind%2CParsedNode%2CTNodeKind"><span class="Identifier">transitionIntKind</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">;</span> <span class="Identifier">kind</span><span class="Other">:</span> <a href="ast_types.html#TNodeKind"><span class="Identifier">TNodeKind</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L80"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L80" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="transitionNoneToSym,ParsedNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#transitionNoneToSym%2CParsedNode"><span class="Identifier">transitionNoneToSym</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L83"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L83" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="transitionSonsKind,ParsedNode,TNodeKind">
-<dt><pre><span class="Keyword">proc</span> <a href="#transitionSonsKind%2CParsedNode%2CTNodeKind"><span class="Identifier">transitionSonsKind</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <a href="ast_parsed_types.html#ParsedNode"><span class="Identifier">ParsedNode</span></a><span class="Other">;</span> <span class="Identifier">kind</span><span class="Other">:</span> <a href="ast_types.html#TNodeKind"><span class="Identifier">TNodeKind</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L77"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L77" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L298" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -398,9 +801,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L65"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L286"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L286" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -410,9 +813,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/87d9ff8d943169aa723160ec59f17195ffe42c56/compiler/ast/ast_parsed_types.nim#L69"
+href="https://github.com/nim-works/nimskull/tree/b8da50f51eeab6312d3356dc3634ebf7d9deca1f/compiler/ast/ast_parsed_types.nim#L290"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L69" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L290" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -426,7 +829,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-02-23 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-02-27 00:00:00 UTC</small>
       </div>
     </div>
   </div>
