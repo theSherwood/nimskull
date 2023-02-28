@@ -134,10 +134,14 @@ window.addEventListener('DOMContentLoaded', main);
     title="LexerDiagKind = enum
   lexDiagInternalError,     ## lexer programming error
   lexDiagMalformedUnderscores, lexDiagMalformedTrailingUnderscre,
-  lexDiagInvalidToken, lexDiagNoTabs, lexDiagInvalidIntegerPrefix,
+  lexDiagInvalidToken, lexDiagInvalidTokenSpaceBetweenNumAndIdent,
+  lexDiagNoTabs, lexDiagInvalidIntegerLiteralOctalPrefix,
   lexDiagInvalidIntegerSuffix, lexDiagNumberNotInRange, lexDiagExpectedHex,
   lexDiagInvalidIntegerLiteral, lexDiagInvalidCharLiteral,
-  lexDiagMissingClosingApostrophe, lexDiagInvalidUnicodeCodepoint,
+  lexDiagInvalidCharLiteralConstant, lexDiagInvalidCharLiteralPlatformNewline,
+  lexDiagInvalidCharLiteralUnicodeCodepoint, lexDiagMissingClosingApostrophe,
+  lexDiagInvalidUnicodeCodepointEmpty,
+  lexDiagInvalidUnicodeCodepointGreaterThan0x10FFFF,
   lexDiagUnclosedTripleString, lexDiagUnclosedSingleString,
   lexDiagUnclosedComment, lexDiagDeprecatedOctalPrefix = &quot;OctalEscape&quot;,
   lexDiagLineTooLong = &quot;LineTooLong&quot;, lexDiagNameXShouldBeY = &quot;Name&quot;">LexerDiagKind</a></li>
@@ -335,7 +339,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -370,9 +374,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L195"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L200"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L195" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L200" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -394,9 +398,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 <tt class="docutils literal"><span class="pre"><span class="Identifier">Diag</span></span></tt>nostic data from the Lexer, mostly errors
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L143"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L148"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L143" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L148" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -404,10 +408,14 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><a href="lexer.html#LexerDiagKind"><span class="Identifier">LexerDiagKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
   <span class="Identifier">lexDiagInternalError</span><span class="Other">,</span>     <span class="Comment">## lexer programming error</span>
   <span class="Identifier">lexDiagMalformedUnderscores</span><span class="Other">,</span> <span class="Identifier">lexDiagMalformedTrailingUnderscre</span><span class="Other">,</span>
-  <span class="Identifier">lexDiagInvalidToken</span><span class="Other">,</span> <span class="Identifier">lexDiagNoTabs</span><span class="Other">,</span> <span class="Identifier">lexDiagInvalidIntegerPrefix</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagInvalidToken</span><span class="Other">,</span> <span class="Identifier">lexDiagInvalidTokenSpaceBetweenNumAndIdent</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagNoTabs</span><span class="Other">,</span> <span class="Identifier">lexDiagInvalidIntegerLiteralOctalPrefix</span><span class="Other">,</span>
   <span class="Identifier">lexDiagInvalidIntegerSuffix</span><span class="Other">,</span> <span class="Identifier">lexDiagNumberNotInRange</span><span class="Other">,</span> <span class="Identifier">lexDiagExpectedHex</span><span class="Other">,</span>
   <span class="Identifier">lexDiagInvalidIntegerLiteral</span><span class="Other">,</span> <span class="Identifier">lexDiagInvalidCharLiteral</span><span class="Other">,</span>
-  <span class="Identifier">lexDiagMissingClosingApostrophe</span><span class="Other">,</span> <span class="Identifier">lexDiagInvalidUnicodeCodepoint</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagInvalidCharLiteralConstant</span><span class="Other">,</span> <span class="Identifier">lexDiagInvalidCharLiteralPlatformNewline</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagInvalidCharLiteralUnicodeCodepoint</span><span class="Other">,</span> <span class="Identifier">lexDiagMissingClosingApostrophe</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagInvalidUnicodeCodepointEmpty</span><span class="Other">,</span>
+  <span class="Identifier">lexDiagInvalidUnicodeCodepointGreaterThan0x10FFFF</span><span class="Other">,</span>
   <span class="Identifier">lexDiagUnclosedTripleString</span><span class="Other">,</span> <span class="Identifier">lexDiagUnclosedSingleString</span><span class="Other">,</span>
   <span class="Identifier">lexDiagUnclosedComment</span><span class="Other">,</span> <span class="Identifier">lexDiagDeprecatedOctalPrefix</span> <span class="Other">=</span> <span class="StringLit">&quot;OctalEscape&quot;</span><span class="Other">,</span>
   <span class="Identifier">lexDiagLineTooLong</span> <span class="Other">=</span> <span class="StringLit">&quot;LineTooLong&quot;</span><span class="Other">,</span> <span class="Identifier">lexDiagNameXShouldBeY</span> <span class="Other">=</span> <span class="StringLit">&quot;Name&quot;</span></pre></dt>
@@ -415,7 +423,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L98"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L98"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L98" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -442,9 +450,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 a Nim token
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L173"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L178"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L173" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L178" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -490,7 +498,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L53"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L53"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L53" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -502,7 +510,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L96"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L96"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L96" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -519,9 +527,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L157"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L162"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L157" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L162" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -531,9 +539,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L156"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L161"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L156" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -543,9 +551,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L159"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L164"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L159" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L164" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -555,9 +563,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L158"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L163"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L158" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L163" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -567,7 +575,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L42"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L42"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L42" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -579,7 +587,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L43"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L43"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L43" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -592,7 +600,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L46"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L46"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -604,7 +612,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L44"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L44"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L44" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -616,7 +624,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L45"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L45"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -628,9 +636,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L169"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L174"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L169" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L174" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -640,9 +648,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L168"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L173"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L173" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -657,9 +665,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L248"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L253"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L248" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L253" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -669,9 +677,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L305"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L310"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L305" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L310" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -681,23 +689,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 return value represents a point in time where all existing diagnostics are considered in the past, used in conjunction with <tt class="docutils literal"><span class="pre"><span class="Identifier">errorsHintsAndWarnings</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L208"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L213"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L208" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L213" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getIndentWidth,FileIndex,PLLStream,IdentCache,ConfigRef">
 <dt><pre><span class="Keyword">proc</span> <a href="#getIndentWidth%2CFileIndex%2CPLLStream%2CIdentCache%2CConfigRef"><span class="Identifier">getIndentWidth</span></a><span class="Other">(</span><span class="Identifier">fileIdx</span><span class="Other">:</span> <a href="lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">;</span> <span class="Identifier">inputstream</span><span class="Other">:</span> <a href="llstream.html#PLLStream"><span class="Identifier">PLLStream</span></a><span class="Other">;</span>
                     <span class="Identifier">cache</span><span class="Other">:</span> <a href="idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">config</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L1504"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L1496"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1504" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1496" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -707,9 +715,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L315"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L320"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L315" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L320" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -719,9 +727,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L223"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L228"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L228" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -731,9 +739,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 assumes ident is binary operator already
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L1519"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L1511"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1519" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1511" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -743,7 +751,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Calculates the precedence of the given token.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L1095"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L1095"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1095" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -755,9 +763,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L269"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L274"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L269" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L274" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -767,9 +775,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 is this the <tt class="docutils literal"><span class="pre"><span class="Identifier">i</span></span></tt>dentifier a keyword?
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L229"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L234"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L229" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L234" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -779,9 +787,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L226"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L231"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L226" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L231" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -791,9 +799,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L238"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L243"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L238" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L243" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -803,7 +811,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L1137"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L1137"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1137" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -817,9 +825,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L289"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L294"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L289" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L294" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -832,9 +840,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L301"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L306"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L301" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L306" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -844,9 +852,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L261"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L266"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L261" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L266" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -857,22 +865,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L265"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L270"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L265" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L270" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="rawGetTok,Lexer,Token">
-<dt><pre><span class="Keyword">proc</span> <a href="#rawGetTok%2CLexer%2CToken"><span class="Identifier">rawGetTok</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">tok</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#rawGetTok%2CLexer%2CToken"><span class="Identifier">rawGetTok</span></a><span class="Other">(</span><span class="Identifier">L</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="lexer.html#Lexer"><span class="Identifier">Lexer</span></a><span class="Other">;</span> <span class="Identifier">tok</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="lexer.html#Token"><span class="Identifier">Token</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L1498"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L1490"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1498" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L1490" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -888,9 +896,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 iterate over all diagnostics (excluding fatal) from the beginning, or from the point in time specificed via <tt class="docutils literal"><span class="pre"><span class="Identifier">diagOffset</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9034c2e462968fc0022ec5b352380ee729753582/compiler/ast/lexer.nim#L213"
+href="https://github.com/nim-works/nimskull/tree/73411faec19d276bb86182933643440e245449de/compiler/ast/lexer.nim#L218"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L213" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/lexer.nim#L218" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
