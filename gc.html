@@ -71,7 +71,7 @@ window.addEventListener('DOMContentLoaded', main);
   <div class="container">
     <h1 class="title">Nim's Memory Management</h1>
     <table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Author:</th><td>Andreas Rumpf</td></tr>
-<tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20583</td></tr>
+<tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20585</td></tr>
 </tbody></table><blockquote><p>&quot;The road to hell is paved with good intentions.&quot;</p></blockquote>
 
 <h1 id="introduction">Introduction</h1><p>A memory-management algorithm optimal for every use-case cannot exist. Nim provides multiple paradigms for needs ranging from large multi-threaded applications, to games, hard-realtime systems and small microcontrollers.</p>
@@ -96,6 +96,77 @@ the default GC is incremental, thread-local and not &quot;stop-the-world&quot;</
 <tr><td>Go</td><td>Shared</td><td>Cycle Collector</td><td>Yes</td><td><tt class="docutils literal"><span class="pre option">--gc:go</span></tt></td></tr>
 <tr><td>None</td><td>Manual</td><td>Manual</td><td>Manual</td><td><tt class="docutils literal"><span class="pre option">--gc:none</span></tt></td></tr>
 </table><p>JavaScript's garbage collector is used for the <a class="reference external" href="backends.html#backends-the-javascript-target">JavaScript and NodeJS</a> compilation targets. The <a class="reference external" href="nims.html">NimScript</a> target uses the memory management strategy built into the Nim compiler.</p>
+
+<h1 id="arc">ARC</h1><p>ARC, which is short for automatic reference counting, is a memory-management strategy based on plain reference counting. Each managed heap cell (that is, a location allocated via either <tt class="docutils literal"><span class="pre"><span class="Identifier">new</span></span></tt> or by using the object construction syntax where the type is a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span> <span class="Identifier">T</span></span></tt>) also stores a reference counter.</p>
+<p>When a managed cell is allocated, its counter starts at <tt class="docutils literal"><span class="pre"><span class="DecNumber">1</span></span></tt> (because the allocation created a single <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> handle). Creating a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> to the cell increments the counter, and destroying one decrements it.</p>
+<p>Once the counter reaches zero, the cell is immediately destroyed (via calling the attached destructor, if available) and the underlying memory returned to the allocator.</p>
+<p>In  NimSkull, the counting is implemented via the lifetime-tracking-hook mechanism. When copying a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> (i.e. its <tt class="docutils literal"><span class="pre"><span class="Operator">=</span><span class="Identifier">copy</span></span></tt> hook is invoked), the <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> value itself (which is a pointer) is copied and the referenced cell's refcounter is incremented by one. Moving a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> only copies the pointer value, and destroying a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> (i.e. its <tt class="docutils literal"><span class="pre"><span class="Operator">=</span><span class="Identifier">destroy</span></span></tt> is invoked) decrements the refcounter of the referenced cell by one.</p>
+<p>The <tt class="docutils literal"><span class="pre"><span class="Operator">=</span><span class="Identifier">destroy</span></span></tt> hook for a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> checks the refcounter of the cell, and if it just reached zero, the static or virtual destructor of the cell is invoked and the underlying memory freed.</p>
+<p>As <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt>s use the lifetime-tracking hooks, they're subject to the same optimizations (i.e. cursor inference, turning copies into moves) as all other types with lifetime-tracking hooks.</p>
+
+<h1 id="orc">ORC</h1><p>The problem with plain reference counting is that it is not able to handle reference cycles. A reference cycle exists when a cell either directly or indirectly stores a reference (i.e. <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt>) to itself. Example:</p>
+<pre class="listing"><span class="Keyword">type</span> <span class="Identifier">A</span> <span class="Operator">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">x</span><span class="Punctuation">:</span> <span class="Keyword">ref</span> <span class="Identifier">A</span>
+
+<span class="Keyword">var</span> <span class="Identifier">a</span> <span class="Operator">=</span> <span class="Identifier">A</span><span class="Punctuation">(</span><span class="Identifier">x</span><span class="Punctuation">:</span> <span class="Keyword">nil</span><span class="Punctuation">)</span> <span class="Comment"># okay; no cycle exists and the refcounter is 1</span>
+<span class="Identifier">a</span><span class="Operator">.</span><span class="Identifier">x</span> <span class="Operator">=</span> <span class="Identifier">a</span> <span class="Comment"># a cycle is introduced! the refcounter is 2</span>
+
+<span class="Comment"># once `a` gets destroyed, the refcounter becomes 1, but it's not possible</span>
+<span class="Comment"># for it to reach 0 from there</span>
+<span class="Identifier">a</span><span class="Operator">.</span><span class="Identifier">x</span> <span class="Operator">=</span> <span class="Keyword">nil</span> <span class="Comment"># explicitly breaking the cycle would work</span>
+
+<span class="Keyword">type</span>
+  <span class="Identifier">B</span> <span class="Operator">=</span> <span class="Keyword">object</span>
+    <span class="Identifier">c</span><span class="Punctuation">:</span> <span class="Keyword">ref</span> <span class="Identifier">C</span>
+  <span class="Identifier">C</span> <span class="Operator">=</span> <span class="Keyword">object</span>
+    <span class="Identifier">b</span><span class="Punctuation">:</span> <span class="Keyword">ref</span> <span class="Identifier">B</span>
+
+<span class="Keyword">var</span> <span class="Identifier">b</span> <span class="Operator">=</span> <span class="Identifier">B</span><span class="Punctuation">(</span><span class="Punctuation">)</span>
+<span class="Identifier">b</span><span class="Operator">.</span><span class="Identifier">c</span> <span class="Operator">=</span> <span class="Identifier">C</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Comment"># okay; no cycle exists</span>
+<span class="Identifier">b</span><span class="Operator">.</span><span class="Identifier">c</span><span class="Operator">.</span><span class="Identifier">b</span> <span class="Operator">=</span> <span class="Identifier">b</span> <span class="Comment"># an indirect cycle is introduced!</span></pre><p>This is where ORC becomes relevant. ORC is automatic reference-counting with a run-time cycle collector (the letter 'O' in ORC is meant to represent a cycle).</p>
+<p>For easier visualization, it makes sense to view a managed heap cell as a <em>node</em>, and a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> as an <em>edge</em> in a directed cyclic graph. The cycle collector is responsible for freeing cells only referenced as part of references cycles.</p>
+
+<h2 id="the-algorithm">The Algorithm</h2><p>The cycle collector used for ORC is based on &quot;trial deletion&quot;. As the first step, all edges reachable from potential <em>cycle roots</em> are temporarily deleted. The second step restores the outgoing edges for nodes (and nodes reachable from them) that still have incoming edges after the temporary deletion. Once done, all nodes that have no incoming edges are known to only be alive because of a reference cycle, and can now be freed.</p>
+
+<h2 id="the-implementation">The Implementation</h2><p>Collection is implemented with a 2-pass colouring algorithm for detection, and a 2-step memory collection process. In the following text, the terms &quot;Cell&quot; and &quot;Node&quot; are used interchangeably and refer to the same thing.</p>
+<p>Each cell is assigned a <em>color</em>:</p>
+<ul class="simple"><li><em>black</em>: the cell is alive (new cells start with this color)</li>
+<li><em>gray</em>: the cell was visited by the collector already</li>
+<li><em>white</em>: the cell is dead and can be cleaned up</li>
+</ul>
+<div class="admonition admonition-info"><span class="admonition-info-text"><b>Note:</b></span>
+The cycle collector only considers <em>edges</em> and <em>nodes</em> through which a cycle is possible, all others are ignored and never touched.</div>
+<p>The first pass traverses all <em>black</em> nodes reachable from <em>black</em> nodes in the input set, assigns the color <em>gray</em> to them, and temporarily decrements the refcounter of each cell connected to a now <em>gray</em> cell by one (i.e. removing the outgoing edges). <em>Gray</em> nodes are not traversed further -- they've already been visited.</p>
+<p>The second pass traverses the sub-graph of each cell in the input set and forward-propagates the color <em>black</em> from all nodes with the color <em>gray</em> and a refcount &gt; 0 -- they are being kept alive by something not part of a cycle. The others are marked as <em>white</em>.</p>
+<p>When coloring a node <em>black</em> again, the refcounter of each connected cell is incremented by one -- this undoes the decrement that happened during the first pass.</p>
+<div class="admonition admonition-info"><span class="admonition-info-text"><b>Note:</b></span>
+the second pass is skipped if all cells marked as <em>gray</em> have no incoming edges left</div>
+<p>The collector then traverses the input sub-graphs one last time, gathering all cells with either <em>white</em> or <em>gray</em> as the color into a list. On adding a cell to the &quot;to-be-freed&quot; list, its outgoing edges relevant to the cycle collector are physically removed (by setting the <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> values to <tt class="docutils literal"><span class="pre"><span class="Keyword">nil</span></span></tt>) -- this is necessary so that the following normal cleanup doesn't attempt to touch the referenced cells.</p>
+<p>Finally, all cells in the &quot;to-be-freed&quot; list are disposed by first invoking their destructor and then freeing the underlying memory location.</p>
+
+<h3 id="input-set">Input Set</h3><p>Which cells the input set contains depends on the what type of collection is run. If it's a full collection, the input set contains all potential <em>cycle roots</em>, but for a partial collection (i.e. started by calling <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_partialCollect</span></span></tt>), only the roots with an index greater than or equal to the specified <tt class="docutils literal"><span class="pre"><span class="Identifier">limit</span></span></tt> are considered.</p>
+<div class="admonition admonition-info"><span class="admonition-info-text"><b>Note:</b></span>
+how the <tt class="docutils literal"><span class="pre"><span class="Identifier">limit</span></span></tt> parameter works is somewhat confusing, and likely going to change in the future.</div>
+
+<h3 id="potential-cycle-roots">Potential Cycle Roots</h3><p>A central part of ORC is registering potential <em>cycle roots</em>. If static analysis of a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt>'s type yields that no cycles are possible through it, it is never treated as an edge by the collector.</p>
+<p>When an edge through which a reference cycle can happen is removed (i.e. a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> is destroyed), the cell is remembered as a potential <em>cycle root</em>. Doing this on edge removal instead of creation has the benefit that sub-graphs that are definitely kept alive from outside a cycle are not already scanned during the first two passes.</p>
+<p>Once the list of potential <em>cycle roots</em> reaches a certain threshold, a full cycle collection is immediately run (if cycle collection is not disabled at program run-time, that is). Since roots are only registered when a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> value (that can form a reference cycle) is destroyed, automatic cycle collection can only happen when copying, sinking, or destroying a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt>.</p>
+<p>The threshold is dynamic (but can be made static via the <tt class="docutils literal"><span class="pre"><span class="Identifier">nimFixedOrc</span></span></tt> define). If more than 50% of the visited cells were freed during a <em>full</em> collection, the threshold is reset to the default value -- otherwise it's increased until an implementation defined upper bound is reached.</p>
+<p>After a full or partial cycle collection, all processed potential <em>cycle roots</em> are removed from the list -- they were either freed, not really part of a cycle, or part of a cycle but kept alive from a root that wasn't processed.</p>
+
+<h3 id="gathering-edges">Gathering Edges</h3><p>To know about the outgoing edges of a cell, the cell's attached <tt class="docutils literal"><span class="pre"><span class="Operator">=</span><span class="Identifier">trace</span></span></tt> hook is invoked. The hook is responsible for collecting all directly reachable relevant <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt>s of the cell to a list provided by the collector.</p>
+<p>For more information, see the <tt class="docutils literal"><span class="pre"><span class="Operator">=</span><span class="Identifier">trace</span></span></tt> hook <a class="reference external" href="destructors.html#lifetimeminustracking-hooks-nimeqtrace-hook">documentation</a></p>
+
+<h3 id="thread-safety">Thread Safety</h3><p>Neither the cycle collector nor its API are thread-safe. Only a single thread may ever perform cycle collection, or, in other words, use <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt>s that can be potentially part of a reference cycle.</p>
+<p>Reading or modifying a managed heap cell that can be part of a reference cycle through a <tt class="docutils literal"><span class="pre"><span class="Keyword">ptr</span></span></tt> from a different thread than the one that registered it as a potential <em>cycle root</em> is unsafe and can lead to memory corruption issues.</p>
+
+<h2 id="tweaking-orc">Tweaking ORC</h2><p>The operation of ORC can be configured at both compile- and run-time.</p>
+<p>Compile-time configuration:</p>
+<p>1) <tt class="docutils literal"><span class="pre option">--define:nimFixedOrc</span></tt> : use an implementation-defined static</p>
+<blockquote><p><em>cycle root</em> threshold</p></blockquote>
+<p>Run-time configuration:</p>
+<p>To disable the cycle collector, <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_disableOrc</span></span></tt> is used. When the collector is disabled, potential <em>cycle roots</em> will accumulate. To enable it again, call <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_enableOrc</span></span></tt>.</p>
+<p>Cycle collection can be manually triggered via calling either <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_runOrc</span></span></tt> (full collection) or <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_partialCollect</span><span class="Punctuation">(</span><span class="Identifier">limit</span><span class="Punctuation">)</span></span></tt> (partial collect). Manually triggering a cycle collection while the cycle collector is disabled is possible, but note that doing so (currently) enables the collector again.</p>
 
 <h1 id="tweaking-the-refc-gc">Tweaking the refc GC</h1>
 <h2 id="cycle-collector">Cycle collector</h2><p>The cycle collector can be en-/disabled independently from the other parts of the garbage collector with <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_enableMarkAndSweep</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_disableMarkAndSweep</span></span></tt>.</p>
