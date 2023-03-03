@@ -125,19 +125,14 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">allocAtomLocation
-      <li><a class="reference" href="#allocAtomLocation%2CVmAllocator%2CPVmType"
-    title="allocAtomLocation(a: var VmAllocator; typ: PVmType): LocHandle">allocAtomLocation(a: var VmAllocator; typ: PVmType): LocHandle</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">allocConstantLocation
+      <ul class="simple nested-toc-section">allocConstantLocation
       <li><a class="reference" href="#allocConstantLocation%2CVmAllocator%2CPVmType"
     title="allocConstantLocation(a: var VmAllocator; typ: PVmType): LocHandle">allocConstantLocation(a: var VmAllocator; typ: PVmType): LocHandle</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">allocLocationMemory
       <li><a class="reference" href="#allocLocationMemory%2CVmAllocator%2CNatural"
-    title="allocLocationMemory(a: var VmAllocator; len: Natural): MemRegionPtr">allocLocationMemory(a: var VmAllocator; len: Natural): MemRegionPtr</a></li>
+    title="allocLocationMemory(a: var VmAllocator; len: Natural): CellId">allocLocationMemory(a: var VmAllocator; len: Natural): CellId</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">allocSingleLocation
@@ -147,14 +142,16 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
   <ul class="simple nested-toc-section">allocTypedLocations
       <li><a class="reference" href="#allocTypedLocations%2CVmAllocator%2CPVmType%2CNatural%2CNatural"
-    title="allocTypedLocations(a: var VmAllocator; typ: PVmType; count, lenInBytes: Natural): MemRegionPtr">allocTypedLocations(a: var VmAllocator; typ: PVmType; count, lenInBytes: Natural): MemRegionPtr</a></li>
+    title="allocTypedLocations(a: var VmAllocator; typ: PVmType; count, lenInBytes: Natural): CellPtr">allocTypedLocations(a: var VmAllocator; typ: PVmType; count, lenInBytes: Natural): CellPtr</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">dealloc
-      <li><a class="reference" href="#dealloc%2CVmAllocator%2CLocHandle"
+      <li><a class="reference" href="#dealloc%2CVmAllocator%2CCellId"
+    title="dealloc(a: var VmAllocator; c: CellId)">dealloc(a: var VmAllocator; c: CellId)</a></li>
+  <li><a class="reference" href="#dealloc%2CVmAllocator%2CLocHandle"
     title="dealloc(a: var VmAllocator; handle: LocHandle)">dealloc(a: var VmAllocator; handle: LocHandle)</a></li>
-  <li><a class="reference" href="#dealloc%2CVmAllocator%2CMemRegionPtr"
-    title="dealloc(a: var VmAllocator; p: MemRegionPtr)">dealloc(a: var VmAllocator; p: MemRegionPtr)</a></li>
+  <li><a class="reference" href="#dealloc%2CVmAllocator%2CCellPtr"
+    title="dealloc(a: var VmAllocator; p: CellPtr)">dealloc(a: var VmAllocator; p: CellPtr)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">deref
@@ -166,14 +163,7 @@ window.addEventListener('DOMContentLoaded', main);
       <li><a class="reference" href="#getFieldHandle%2CLocHandle%2CFieldIndex"
     title="getFieldHandle(h: LocHandle; idx: FieldIndex): LocHandle">getFieldHandle(h: LocHandle; idx: FieldIndex): LocHandle</a></li>
   <li><a class="reference" href="#getFieldHandle%2CLocHandle%2CFieldPosition"
-    title="getFieldHandle(h: LocHandle; pos: FieldPosition): LocHandle">getFieldHandle(h: LocHandle; pos: FieldPosition): LocHandle</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">getSubHandle
-      <li><a class="reference" href="#getSubHandle%2CLocHandle%2CNatural%2CPVmType"
-    title="getSubHandle(h: LocHandle; offset: Natural; typ: PVmType): LocHandle">getSubHandle(h: LocHandle; offset: Natural; typ: PVmType): LocHandle</a></li>
-  <li><a class="reference" href="#getSubHandle%2CMemRegionPtr%2CNatural"
-    title="getSubHandle(h: MemRegionPtr; offset: Natural): MemRegionPtr">getSubHandle(h: MemRegionPtr; offset: Natural): MemRegionPtr</a></li>
+    title="getFieldHandle(loc: LocHandle; pos: FieldPosition): LocHandle">getFieldHandle(loc: LocHandle; pos: FieldPosition): LocHandle</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">getUsedMem
@@ -201,6 +191,33 @@ window.addEventListener('DOMContentLoaded', main);
     title="isValid(heap: VmHeap; slot: HeapSlotHandle): bool">isValid(heap: VmHeap; slot: HeapSlotHandle): bool</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">loadFullSlice
+      <li><a class="reference" href="#loadFullSlice%2CVmAllocator%2CCellPtr%2CPVmType"
+    title="loadFullSlice(a: VmAllocator; cp: CellPtr; typ: PVmType): VmSlice">loadFullSlice(a: VmAllocator; cp: CellPtr; typ: PVmType): VmSlice</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">makeLocHandle
+      <li><a class="reference" href="#makeLocHandle%2CVmAllocator%2CCellPtr%2CNatural%2CPVmType"
+    title="makeLocHandle(a: VmAllocator; cp: CellPtr; offset: Natural; typ: PVmType): LocHandle">makeLocHandle(a: VmAllocator; cp: CellPtr; offset: Natural; typ: PVmType): LocHandle</a></li>
+  <li><a class="reference" href="#makeLocHandle%2CVmAllocator%2Cpointer%2CPVmType"
+    title="makeLocHandle(a: VmAllocator; p: pointer; typ: PVmType): LocHandle">makeLocHandle(a: VmAllocator; p: pointer; typ: PVmType): LocHandle</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">mapPointerToCell
+      <li><a class="reference" href="#mapPointerToCell%2CVmAllocator%2CCellPtr"
+    title="mapPointerToCell(a: VmAllocator; p: CellPtr): CellId">mapPointerToCell(a: VmAllocator; p: CellPtr): CellId</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">mapToCell
+      <li><a class="reference" href="#mapToCell%2CVmAllocator%2CCellPtr"
+    title="mapToCell(a: VmAllocator; p: CellPtr): lent VmCell">mapToCell(a: VmAllocator; p: CellPtr): lent VmCell</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">subLocation
+      <li><a class="reference" href="#subLocation%2CLocHandle%2CNatural%2CPVmType"
+    title="subLocation(h: LocHandle; offset: Natural; typ: PVmType): LocHandle">subLocation(h: LocHandle; offset: Natural; typ: PVmType): LocHandle</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">tryDeref
       <li><a class="reference" href="#tryDeref%2CVmHeap%2CHeapSlotHandle"
     title="tryDeref(heap: VmHeap; slot: HeapSlotHandle): Option[LocHandle]">tryDeref(heap: VmHeap; slot: HeapSlotHandle): Option[LocHandle]</a></li>
@@ -221,16 +238,25 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">byteView
-      <li><a class="reference" href="#byteView.t%2CLocHandle"
-    title="byteView(handle: LocHandle): untyped">byteView(handle: LocHandle): untyped</a></li>
+      <ul class="simple nested-toc-section">[]
+      <li><a class="reference" href="#%5B%5D.t%2C%2CSlice%5BT%5D"
+    title="`[]`[T](p: VmMemPointer | CellPtr; s: Slice[T]): untyped">`[]`[T](p: VmMemPointer | CellPtr; s: Slice[T]): untyped</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">subView
-      <li><a class="reference" href="#subView.t%2CMemRegionPtr%2CNatural"
-    title="subView(p: MemRegionPtr; len: Natural): VmMemoryRegion">subView(p: MemRegionPtr; len: Natural): VmMemoryRegion</a></li>
-  <li><a class="reference" href="#subView.t%2CMemRegionPtr%2CNatural%2CNatural"
-    title="subView(p: MemRegionPtr; offset, len: Natural): VmMemoryRegion">subView(p: MemRegionPtr; offset, len: Natural): VmMemoryRegion</a></li>
+  <ul class="simple nested-toc-section">byteView
+      <li><a class="reference" href="#byteView.t%2CVmCell"
+    title="byteView(c: VmCell): untyped">byteView(c: VmCell): untyped</a></li>
+  <li><a class="reference" href="#byteView.t%2CLocHandle"
+    title="byteView(handle: LocHandle): untyped">byteView(handle: LocHandle): untyped</a></li>
+  <li><a class="reference" href="#byteView.t%2CVmSlice"
+    title="byteView(slice: VmSlice): untyped">byteView(slice: VmSlice): untyped</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">slice
+      <li><a class="reference" href="#slice.t%2C%2CNatural"
+    title="slice(p: VmMemPointer | CellPtr; len: Natural): untyped">slice(p: VmMemPointer | CellPtr; len: Natural): untyped</a></li>
+  <li><a class="reference" href="#slice.t%2C%2CNatural%2CNatural"
+    title="slice(p: VmMemPointer | CellPtr; offset, len: Natural): untyped">slice(p: VmMemPointer | CellPtr; offset, len: Natural): untyped</a></li>
 
   </ul>
 
@@ -241,18 +267,18 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">This module implements the allocator and also contains functions for working with handles.</p>
+  <p class="module-desc">This module implements the allocator and also contains routines for working with handles.</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmtypes.html">vmtypes</a>
+<a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmtypes.html">vmtypes</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -267,9 +293,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L22"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L19"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L22" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L19" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -285,9 +311,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L28"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L25"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L28" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -296,19 +322,6 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="allocAtomLocation,VmAllocator,PVmType">
-<dt><pre><span class="Keyword">func</span> <a href="#allocAtomLocation%2CVmAllocator%2CPVmType"><span class="Identifier">allocAtomLocation</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="vmdef.html#PVmType"><span class="Identifier">PVmType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L57"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
 <div id="allocConstantLocation,VmAllocator,PVmType">
 <dt><pre><span class="Keyword">func</span> <a href="#allocConstantLocation%2CVmAllocator%2CPVmType"><span class="Identifier">allocConstantLocation</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="vmdef.html#PVmType"><span class="Identifier">PVmType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
@@ -316,22 +329,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L64"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L89"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L64" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L89" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="allocLocationMemory,VmAllocator,Natural">
-<dt><pre><span class="Keyword">func</span> <a href="#allocLocationMemory%2CVmAllocator%2CNatural"><span class="Identifier">allocLocationMemory</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">len</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#MemRegionPtr"><span class="Identifier">MemRegionPtr</span></a> {.
+<dt><pre><span class="Keyword">func</span> <a href="#allocLocationMemory%2CVmAllocator%2CNatural"><span class="Identifier">allocLocationMemory</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">len</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#CellId"><span class="Identifier">CellId</span></a> {.<span class="Identifier">used</span><span class="Other">,</span>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L36"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L70"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L36" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L70" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -342,23 +355,35 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L50"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L81"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L50" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L81" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="allocTypedLocations,VmAllocator,PVmType,Natural,Natural">
 <dt><pre><span class="Keyword">func</span> <a href="#allocTypedLocations%2CVmAllocator%2CPVmType%2CNatural%2CNatural"><span class="Identifier">allocTypedLocations</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="vmdef.html#PVmType"><span class="Identifier">PVmType</span></a><span class="Other">;</span>
-                         <span class="Identifier">count</span><span class="Other">,</span> <span class="Identifier">lenInBytes</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#MemRegionPtr"><span class="Identifier">MemRegionPtr</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+                         <span class="Identifier">count</span><span class="Other">,</span> <span class="Identifier">lenInBytes</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#CellPtr"><span class="Identifier">CellPtr</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L43"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L75"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L43" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L75" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="dealloc,VmAllocator,CellId">
+<dt><pre><span class="Keyword">func</span> <a href="#dealloc%2CVmAllocator%2CCellId"><span class="Identifier">dealloc</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">c</span><span class="Other">:</span> <a href="vmdef.html#CellId"><span class="Identifier">CellId</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Frees the cell's memory and marks the cell slot as empty. <tt class="docutils literal"><span class="pre"><span class="Identifier">c</span></span></tt> is required to name a valid non-empty cell
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L120"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L120" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -367,23 +392,23 @@ class="link-seesrc" target="_blank">Source</a>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Deallocates the valid cell <tt class="docutils literal"><span class="pre"><span class="Identifier">handle</span></span></tt> references.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L89"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L147"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L89" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L147" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="dealloc,VmAllocator,MemRegionPtr">
-<dt><pre><span class="Keyword">func</span> <a href="#dealloc%2CVmAllocator%2CMemRegionPtr"><span class="Identifier">dealloc</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">p</span><span class="Other">:</span> <a href="vmdef.html#MemRegionPtr"><span class="Identifier">MemRegionPtr</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="dealloc,VmAllocator,CellPtr">
+<dt><pre><span class="Keyword">func</span> <a href="#dealloc%2CVmAllocator%2CCellPtr"><span class="Identifier">dealloc</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">p</span><span class="Other">:</span> <a href="vmdef.html#CellPtr"><span class="Identifier">CellPtr</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Deallocates the cell indicated by the valid cell pointer <tt class="docutils literal"><span class="pre"><span class="Identifier">p</span></span></tt>. A <tt class="docutils literal"><span class="pre">nil</span></tt> pointer is ignored.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L71"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L138"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L71" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L138" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -393,9 +418,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L136"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L218"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L136" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L218" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -406,48 +431,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L119"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L201"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L201" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="getFieldHandle,LocHandle,FieldPosition">
-<dt><pre><span class="Keyword">func</span> <a href="#getFieldHandle%2CLocHandle%2CFieldPosition"><span class="Identifier">getFieldHandle</span></a><span class="Other">(</span><span class="Identifier">h</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a><span class="Other">;</span> <span class="Identifier">pos</span><span class="Other">:</span> <a href="vmdef.html#FieldPosition"><span class="Identifier">FieldPosition</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">func</span> <a href="#getFieldHandle%2CLocHandle%2CFieldPosition"><span class="Identifier">getFieldHandle</span></a><span class="Other">(</span><span class="Identifier">loc</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a><span class="Other">;</span> <span class="Identifier">pos</span><span class="Other">:</span> <a href="vmdef.html#FieldPosition"><span class="Identifier">FieldPosition</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Creates a handle to the field with position <tt class="docutils literal"><span class="pre"><span class="Identifier">pos</span></span></tt> of the object at location <tt class="docutils literal"><span class="pre"><span class="Identifier">h</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L124"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L206"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="getSubHandle,LocHandle,Natural,PVmType">
-<dt><pre><span class="Keyword">func</span> <a href="#getSubHandle%2CLocHandle%2CNatural%2CPVmType"><span class="Identifier">getSubHandle</span></a><span class="Other">(</span><span class="Identifier">h</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a><span class="Other">;</span> <span class="Identifier">offset</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="vmdef.html#PVmType"><span class="Identifier">PVmType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a> {.
-    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L114"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L114" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="getSubHandle,MemRegionPtr,Natural">
-<dt><pre><span class="Keyword">func</span> <a href="#getSubHandle%2CMemRegionPtr%2CNatural"><span class="Identifier">getSubHandle</span></a><span class="Other">(</span><span class="Identifier">h</span><span class="Other">:</span> <a href="vmdef.html#MemRegionPtr"><span class="Identifier">MemRegionPtr</span></a><span class="Other">;</span> <span class="Identifier">offset</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#MemRegionPtr"><span class="Identifier">MemRegionPtr</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L109"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L109" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L206" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -457,9 +456,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Calculates and returns the combined size-in-bytes of all current allocations
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L219"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L311"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L219" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L311" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -470,9 +469,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Decrements the ref-counter for the given slot (expected to be valid). If the counter reaches zero, the slot is added to the list of slots pending clean-up
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L158"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L250"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L158" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L250" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -482,9 +481,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Increments the ref-counter for the given slot (expected to be valid)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L151"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L243"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L151" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L243" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -495,9 +494,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates a new managed slot of type <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt> and sets the ref-count to 1
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L144"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L236"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L144" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L236" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -507,9 +506,85 @@ class="link-seesrc" target="_blank">Source</a>
 
 Tests if <tt class="docutils literal"><span class="pre"><span class="Identifier">slot</span></span></tt> is valid. A <tt class="docutils literal"><span class="pre"><span class="Identifier">HeapSlotHandle</span></span></tt> is valid if it references an existing slot that is not empty or awaiting clean-up
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L172"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L264"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L172" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L264" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="loadFullSlice,VmAllocator,CellPtr,PVmType">
+<dt><pre><span class="Keyword">func</span> <a href="#loadFullSlice%2CVmAllocator%2CCellPtr%2CPVmType"><span class="Identifier">loadFullSlice</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">cp</span><span class="Other">:</span> <a href="vmdef.html#CellPtr"><span class="Identifier">CellPtr</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="vmdef.html#PVmType"><span class="Identifier">PVmType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#VmSlice"><span class="Identifier">VmSlice</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Attempts to create and returns a slice with item type <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt> covering all locations of the sequence cell corresponding to <tt class="docutils literal"><span class="pre"><span class="Identifier">cp</span></span></tt>. Returns a slice signaling invalid if that's not possible.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L169"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L169" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="makeLocHandle,VmAllocator,CellPtr,Natural,PVmType">
+<dt><pre><span class="Keyword">func</span> <a href="#makeLocHandle%2CVmAllocator%2CCellPtr%2CNatural%2CPVmType"><span class="Identifier">makeLocHandle</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">cp</span><span class="Other">:</span> <a href="vmdef.html#CellPtr"><span class="Identifier">CellPtr</span></a><span class="Other">;</span> <span class="Identifier">offset</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="vmdef.html#PVmType"><span class="Identifier">PVmType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Attempts to create a handle to an interior location of the cell coressponding to <tt class="docutils literal"><span class="pre"><span class="Identifier">cp</span></span></tt>. If <tt class="docutils literal"><span class="pre"><span class="Identifier">cp</span></span></tt> is not a valid cell pointer, a handle that signals &quot;invalid&quot; is returned.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L161"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="makeLocHandle,VmAllocator,pointer,PVmType">
+<dt><pre><span class="Keyword">func</span> <a href="#makeLocHandle%2CVmAllocator%2Cpointer%2CPVmType"><span class="Identifier">makeLocHandle</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">p</span><span class="Other">:</span> <span class="Identifier">pointer</span><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="vmdef.html#PVmType"><span class="Identifier">PVmType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Attempts to create a handle to the guest memory location that to host address <tt class="docutils literal"><span class="pre"><span class="Identifier">p</span></span></tt> maps to. A handle signaling &quot;invalid&quot; is returned if no mapping exists.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L151"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L151" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="mapPointerToCell,VmAllocator,CellPtr">
+<dt><pre><span class="Keyword">func</span> <a href="#mapPointerToCell%2CVmAllocator%2CCellPtr"><span class="Identifier">mapPointerToCell</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">p</span><span class="Other">:</span> <a href="vmdef.html#CellPtr"><span class="Identifier">CellPtr</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#CellId"><span class="Identifier">CellId</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Maps a cell pointer to the corresponding cell id, or -1 if the pointer is not a valid cell pointer
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L95"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L95" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="mapToCell,VmAllocator,CellPtr">
+<dt><pre><span class="Keyword">func</span> <a href="#mapToCell%2CVmAllocator%2CCellPtr"><span class="Identifier">mapToCell</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="vmdef.html#VmAllocator"><span class="Identifier">VmAllocator</span></a><span class="Other">;</span> <span class="Identifier">p</span><span class="Other">:</span> <a href="vmdef.html#CellPtr"><span class="Identifier">CellPtr</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">lent</span> <a href="vmdef.html#VmCell"><span class="Identifier">VmCell</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L115"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L115" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="subLocation,LocHandle,Natural,PVmType">
+<dt><pre><span class="Keyword">func</span> <a href="#subLocation%2CLocHandle%2CNatural%2CPVmType"><span class="Identifier">subLocation</span></a><span class="Other">(</span><span class="Identifier">h</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a><span class="Other">;</span> <span class="Identifier">offset</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="vmdef.html#PVmType"><span class="Identifier">PVmType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a> {.
+    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Creates a handle to the interior location located at the relative <tt class="docutils literal"><span class="pre"><span class="Identifier">offset</span></span></tt>, using <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt> for the handle's type.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L194"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L194" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -520,9 +595,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Tries to retrieve the managed location's handle. Returns the handle on success, or <tt class="docutils literal"><span class="pre"><span class="Identifier">none</span></span></tt> if <tt class="docutils literal"><span class="pre"><span class="Identifier">slot</span></span></tt> doesn't reference a valid slot
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L185"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L277"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L185" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L277" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -533,9 +608,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Tries to load the managed location's handle. If <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt> is not nil, the location's type must be either the same or a sub-type of <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt>. If the type check fails or if <tt class="docutils literal"><span class="pre"><span class="Identifier">slot</span></span></tt> doesn't reference a valid slot, the failure code is returned. Otherwise, a handle to the location is returned
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L194"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L286"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L194" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L286" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -546,9 +621,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Retrieves the managed location's handle without safety checks. Only use this if you're sure that <tt class="docutils literal"><span class="pre"><span class="Identifier">slot</span></span></tt> is valid
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L179"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L271"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L179" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L271" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -557,39 +632,75 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="18">
 <h1><a class="toc-backref" href="#18">Templates</a></h1>
 <dl class="item">
+<div id="[].t,,Slice[T]">
+<dt><pre><span class="Keyword">template</span> <a href="#%5B%5D.t%2C%2CSlice%5BT%5D"><span class="Identifier">`[]`</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="vmdef.html#VmMemPointer"><span class="Identifier">VmMemPointer</span></a> <span class="Operator">|</span> <a href="vmdef.html#CellPtr"><span class="Identifier">CellPtr</span></a><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L184"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L184" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="byteView.t,VmCell">
+<dt><pre><span class="Keyword">template</span> <a href="#byteView.t%2CVmCell"><span class="Identifier">byteView</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="vmdef.html#VmCell"><span class="Identifier">VmCell</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L222"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L222" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="byteView.t,LocHandle">
 <dt><pre><span class="Keyword">template</span> <a href="#byteView.t%2CLocHandle"><span class="Identifier">byteView</span></a><span class="Other">(</span><span class="Identifier">handle</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L141"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L226"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L141" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L226" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="subView.t,MemRegionPtr,Natural">
-<dt><pre><span class="Keyword">template</span> <a href="#subView.t%2CMemRegionPtr%2CNatural"><span class="Identifier">subView</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="vmdef.html#MemRegionPtr"><span class="Identifier">MemRegionPtr</span></a><span class="Other">;</span> <span class="Identifier">len</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#VmMemoryRegion"><span class="Identifier">VmMemoryRegion</span></a></pre></dt>
+<div id="byteView.t,VmSlice">
+<dt><pre><span class="Keyword">template</span> <a href="#byteView.t%2CVmSlice"><span class="Identifier">byteView</span></a><span class="Other">(</span><span class="Identifier">slice</span><span class="Other">:</span> <a href="vmdef.html#VmSlice"><span class="Identifier">VmSlice</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
 <dd>
 
-Shortcut for <tt class="docutils literal"><span class="pre"><span class="Identifier">p</span><span class="Operator">.</span><span class="Identifier">byteView</span><span class="Operator">.</span><span class="Identifier">subView</span><span class="Punctuation">(</span><span class="DecNumber">0</span><span class="Punctuation">,</span> <span class="Identifier">len</span><span class="Operator">-</span><span class="DecNumber">1</span><span class="Punctuation">)</span></span></tt>
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L93"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L230"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L93" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L230" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="subView.t,MemRegionPtr,Natural,Natural">
-<dt><pre><span class="Keyword">template</span> <a href="#subView.t%2CMemRegionPtr%2CNatural%2CNatural"><span class="Identifier">subView</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="vmdef.html#MemRegionPtr"><span class="Identifier">MemRegionPtr</span></a><span class="Other">;</span> <span class="Identifier">offset</span><span class="Other">,</span> <span class="Identifier">len</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#VmMemoryRegion"><span class="Identifier">VmMemoryRegion</span></a></pre></dt>
+<div id="slice.t,,Natural">
+<dt><pre><span class="Keyword">template</span> <a href="#slice.t%2C%2CNatural"><span class="Identifier">slice</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="vmdef.html#VmMemPointer"><span class="Identifier">VmMemPointer</span></a> <span class="Operator">|</span> <a href="vmdef.html#CellPtr"><span class="Identifier">CellPtr</span></a><span class="Other">;</span> <span class="Identifier">len</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
 <dd>
 
-Shortcut for <tt class="docutils literal"><span class="pre"><span class="Identifier">p</span><span class="Operator">.</span><span class="Identifier">byteView</span><span class="Operator">.</span><span class="Identifier">subView</span><span class="Punctuation">(</span><span class="Identifier">offset</span><span class="Punctuation">,</span> <span class="Identifier">len</span><span class="Operator">-</span><span class="DecNumber">1</span><span class="Punctuation">)</span></span></tt>
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bd039064a62e0bea842a6fd941508e18c2bf50a1/compiler/vm/vmmemory.nim#L102"
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L187"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L102" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L187" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="slice.t,,Natural,Natural">
+<dt><pre><span class="Keyword">template</span> <a href="#slice.t%2C%2CNatural%2CNatural"><span class="Identifier">slice</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="vmdef.html#VmMemPointer"><span class="Identifier">VmMemPointer</span></a> <span class="Operator">|</span> <a href="vmdef.html#CellPtr"><span class="Identifier">CellPtr</span></a><span class="Other">;</span> <span class="Identifier">offset</span><span class="Other">,</span> <span class="Identifier">len</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/vm/vmmemory.nim#L190"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmmemory.nim#L190" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -603,7 +714,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-03-02 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-03-03 00:00:00 UTC</small>
       </div>
     </div>
   </div>

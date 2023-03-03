@@ -72,9 +72,12 @@ CallableKind	vm/vmdef.html#CallableKind	vmdef: CallableKind
 VmFunctionPtr	vm/vmdef.html#VmFunctionPtr	vmdef: VmFunctionPtr	
 FuncTableEntry	vm/vmdef.html#FuncTableEntry	vmdef: FuncTableEntry	
 VmClosure	vm/vmdef.html#VmClosure	vmdef: VmClosure	
-MemRegionPtr	vm/vmdef.html#MemRegionPtr	vmdef: MemRegionPtr	
+VmMemPointer	vm/vmdef.html#VmMemPointer	vmdef: VmMemPointer	
 VmMemoryRegion	vm/vmdef.html#VmMemoryRegion	vmdef: VmMemoryRegion	
+CellId	vm/vmdef.html#CellId	vmdef: CellId	
+CellPtr	vm/vmdef.html#CellPtr	vmdef: CellPtr	
 LocHandle	vm/vmdef.html#LocHandle	vmdef: LocHandle	
+VmSlice	vm/vmdef.html#VmSlice	vmdef: VmSlice	
 VmSeq	vm/vmdef.html#VmSeq	vmdef: VmSeq	
 VmString	vm/vmdef.html#VmString	vmdef: VmString	
 Atom	vm/vmdef.html#Atom	vmdef: Atom	
@@ -97,6 +100,7 @@ PProc	vm/vmdef.html#PProc	vmdef: PProc
 VmArgs	vm/vmdef.html#VmArgs	vmdef: VmArgs	
 IdentPattern	vm/vmdef.html#IdentPattern	vmdef: IdentPattern	
 VmCallback	vm/vmdef.html#VmCallback	vmdef: VmCallback	
+VmCell	vm/vmdef.html#VmCell	vmdef: VmCell	
 VmAllocator	vm/vmdef.html#VmAllocator	vmdef: VmAllocator	
 VmMemoryManager	vm/vmdef.html#VmMemoryManager	vmdef: VmMemoryManager	
 RoutineSigId	vm/vmdef.html#RoutineSigId	vmdef: RoutineSigId	
@@ -208,26 +212,25 @@ regB	vm/vmdef.html#regB.t,TInstr	vmdef: regB(x: TInstr): TRegister
 regC	vm/vmdef.html#regC.t,TInstr	vmdef: regC(x: TInstr): TRegister	
 regBx	vm/vmdef.html#regBx.t,TInstr	vmdef: regBx(x: TInstr): int	
 jmpDiff	vm/vmdef.html#jmpDiff.t,TInstr	vmdef: jmpDiff(x: TInstr): int	
-makeMemPtr	vm/vmdef.html#makeMemPtr,pointer,uint	vmdef: makeMemPtr(p: pointer; sizeInBytes: uint): MemRegionPtr	
-makeLocHandle	vm/vmdef.html#makeLocHandle,MemRegionPtr,PVmType	vmdef: makeLocHandle(p: MemRegionPtr; typ: PVmType): LocHandle	
-makeLocHandle	vm/vmdef.html#makeLocHandle,pointer,PVmType	vmdef: makeLocHandle(h: pointer; typ: PVmType): LocHandle	
-isNil	vm/vmdef.html#isNil.t,MemRegionPtr	vmdef: isNil(h: MemRegionPtr): bool	
+isNil	vm/vmdef.html#isNil.t	vmdef: isNil(p: VmMemPointer | CellPtr): bool	
 isNil	vm/vmdef.html#isNil.t,HeapSlotHandle	vmdef: isNil(h: HeapSlotHandle): bool	
 noneType	vm/vmdef.html#noneType	vmdef: noneType	
-nilMemPtr	vm/vmdef.html#nilMemPtr.t	vmdef: nilMemPtr(): untyped	
-invalidLocHandle	vm/vmdef.html#invalidLocHandle.t	vmdef: invalidLocHandle(): untyped	
 isValid	vm/vmdef.html#isValid.t,PVmType	vmdef: isValid(t: PVmType): bool	
-rawPointer	vm/vmdef.html#rawPointer.t,MemRegionPtr	vmdef: rawPointer(h: MemRegionPtr): untyped	
-len	vm/vmdef.html#len.t,MemRegionPtr	vmdef: len(h: MemRegionPtr): untyped	
-byteView	vm/vmdef.html#byteView.t,MemRegionPtr	vmdef: byteView(h: MemRegionPtr): untyped	
+rawPointer	vm/vmdef.html#rawPointer.t	vmdef: rawPointer(p: VmMemPointer | CellPtr): untyped	
+rawPointer	vm/vmdef.html#rawPointer.t,LocHandle	vmdef: rawPointer(h: LocHandle): untyped	
 subView	vm/vmdef.html#subView.t,openArray[T],,	vmdef: subView[T](x: openArray[T]; off, len): untyped	
-newVmString	vm/vmdef.html#newVmString,MemRegionPtr,Natural	vmdef: newVmString(data: MemRegionPtr; len: Natural): VmString	
+subView	vm/vmdef.html#subView.t,openArray[T],	vmdef: subView[T](x: openArray[T]; off): untyped	
+byteView	vm/vmdef.html#byteView.t,ptr.UncheckedArray[byte],PVmType,int	vmdef: byteView(x: ptr UncheckedArray[byte]; t: PVmType; num: int): untyped	
+byteView	vm/vmdef.html#byteView.t,,PVmType,int	vmdef: byteView(x: VmMemPointer | CellPtr; t: PVmType; num: int): untyped	
+applyOffset	vm/vmdef.html#applyOffset,,uint	vmdef: applyOffset(p: VmMemPointer | CellPtr; offset: uint): VmMemPointer	
+newVmString	vm/vmdef.html#newVmString,CellPtr,Natural	vmdef: newVmString(data: CellPtr; len: Natural): VmString	
 len	vm/vmdef.html#len,VmString	vmdef: len(s: VmString): int	
-data	vm/vmdef.html#data,VmString	vmdef: data(s: VmString): MemRegionPtr	
-isValid	vm/vmdef.html#isValid.t,MemRegionPtr,uint	vmdef: isValid(h: MemRegionPtr; len: uint): bool	
+data	vm/vmdef.html#data,VmString	vmdef: data(s: VmString): CellPtr	
 isValid	vm/vmdef.html#isValid.t,LocHandle	vmdef: isValid(handle: LocHandle): bool	
 overlap	vm/vmdef.html#overlap,int,int,Natural,Natural	vmdef: overlap(a, b: int; aLen, bLen: Natural): bool	
 overlap	vm/vmdef.html#overlap,pointer,pointer,Natural,Natural	vmdef: overlap(a, b: pointer; aLen, bLen: Natural): bool	
+`$`	vm/vmdef.html#$,ptr.UncheckedArray[byte]	vmdef: `$`(x: ptr UncheckedArray[byte]): string	
+`$`	vm/vmdef.html#$,PVmType	vmdef: `$`(x: PVmType): string	
 safeCopyMem	vm/vmdef.html#safeCopyMem,openArray[],openArray[],Natural	vmdef: safeCopyMem(dest: var openArray[byte | char]; src: openArray[byte | char];\n            numBytes: Natural)	
 safeCopyMemSrc	vm/vmdef.html#safeCopyMemSrc,openArray[byte],openArray[byte]	vmdef: safeCopyMemSrc(dest: var openArray[byte]; src: openArray[byte])	
 safeZeroMem	vm/vmdef.html#safeZeroMem,openArray[byte],Natural	vmdef: safeZeroMem(dest: var openArray[byte]; numBytes: Natural)	

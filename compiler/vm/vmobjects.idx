@@ -6,9 +6,9 @@ readIntBits	vm/vmobjects.html#readIntBits,VmMemoryRegion	vmobjects: readIntBits(
 readFloat32	vm/vmobjects.html#readFloat32,VmMemoryRegion	vmobjects: readFloat32(m: VmMemoryRegion): BiggestFloat	
 readFloat64	vm/vmobjects.html#readFloat64,VmMemoryRegion	vmobjects: readFloat64(m: VmMemoryRegion): BiggestFloat	
 readFloat	vm/vmobjects.html#readFloat,VmMemoryRegion	vmobjects: readFloat(m: VmMemoryRegion): BiggestFloat	
-writeFloat64	vm/vmobjects.html#writeFloat64,MemRegionPtr,float64	vmobjects: writeFloat64(h: MemRegionPtr; f: float64)	
+writeFloat64	vm/vmobjects.html#writeFloat64,VmMemPointer,float64	vmobjects: writeFloat64(h: VmMemPointer; f: float64)	
 writeFloat64	vm/vmobjects.html#writeFloat64,LocHandle,float64	vmobjects: writeFloat64(h: LocHandle; f: float64)	
-writeFloat32	vm/vmobjects.html#writeFloat32,MemRegionPtr,float32	vmobjects: writeFloat32(h: MemRegionPtr; f: float32)	
+writeFloat32	vm/vmobjects.html#writeFloat32,VmMemPointer,float32	vmobjects: writeFloat32(h: VmMemPointer; f: float32)	
 writeFloat32	vm/vmobjects.html#writeFloat32,LocHandle,float32	vmobjects: writeFloat32(h: LocHandle; f: float32)	
 writeFloat	vm/vmobjects.html#writeFloat,LocHandle,BiggestFloat	vmobjects: writeFloat(h: LocHandle; f: BiggestFloat)	
 unpackDiscr	vm/vmobjects.html#unpackDiscr,BiggestInt,Natural	vmobjects: unpackDiscr(v: BiggestInt; numBits: Natural): tuple[value: int, index: int]	
@@ -23,8 +23,8 @@ VariantFieldIterCtx	vm/vmobjects.html#VariantFieldIterCtx	vmobjects: VariantFiel
 setup	vm/vmobjects.html#setup,VariantFieldIterCtx,PVmType,uint32	vmobjects: setup(ctx: var VariantFieldIterCtx; typ: PVmType; branch: uint32)	
 get	vm/vmobjects.html#get,VariantFieldIterCtx	vmobjects: get(ctx: VariantFieldIterCtx): tuple[valid: bool, idx: FieldIndex]	
 next	vm/vmobjects.html#next,VariantFieldIterCtx,VmMemoryRegion,PVmType	vmobjects: next(ctx: var VariantFieldIterCtx; src: VmMemoryRegion; typ: PVmType)	
-variantFieldIndices	vm/vmobjects.html#variantFieldIndices.i,MemRegionPtr,PVmType,uint32	vmobjects: variantFieldIndices(src: MemRegionPtr; typ: PVmType; branch: uint32 = 0&apos;u32): FieldIndex	
-variantFields	vm/vmobjects.html#variantFields.i,MemRegionPtr,PVmType,uint32	vmobjects: variantFields(src: MemRegionPtr; typ: PVmType; branch: uint32 = 0&apos;u32): (int,\n    PVmType)	
+variantFieldIndices	vm/vmobjects.html#variantFieldIndices.i,VmMemoryRegion,PVmType,uint32	vmobjects: variantFieldIndices(src: VmMemoryRegion; typ: PVmType; branch: uint32 = 0&apos;u32): FieldIndex	
+variantFields	vm/vmobjects.html#variantFields.i,VmMemoryRegion,PVmType,uint32	vmobjects: variantFields(src: VmMemoryRegion; typ: PVmType; branch: uint32 = 0&apos;u32): (int,\n    PVmType)	
 arrayLen	vm/vmobjects.html#arrayLen,LocHandle	vmobjects: arrayLen(loc: LocHandle): int	
 `==`	vm/vmobjects.html#==,VmString,VmString	vmobjects: `==`(a, b: VmString): bool	
 `==`	vm/vmobjects.html#==.t,VmFunctionPtr,VmFunctionPtr	vmobjects: `==`(a, b: VmFunctionPtr): bool	
@@ -45,11 +45,14 @@ add	vm/vmobjects.html#add,VmString,char,VmAllocator	vmobjects: add(s: var VmStri
 add	vm/vmobjects.html#add,VmString,openArray[char],VmAllocator	vmobjects: add(s: var VmString; chars: openArray[char]; mm: var VmAllocator)	
 add	vm/vmobjects.html#add,VmString,VmString,VmAllocator	vmobjects: add(s: var VmString; str: VmString; mm: var VmAllocator)	
 add	vm/vmobjects.html#add,string,VmString	vmobjects: add(s: var string; str: VmString)	
-getItemHandle	vm/vmobjects.html#getItemHandle,LocHandle,Natural	vmobjects: getItemHandle(loc: LocHandle; index: Natural): LocHandle	
-arrayCopy	vm/vmobjects.html#arrayCopy,VmMemoryManager,MemRegionPtr,MemRegionPtr,Natural,PVmType,static[bool]	vmobjects: arrayCopy(mm: var VmMemoryManager; dest, src: MemRegionPtr; count: Natural;\n          elemTyp: PVmType; reset: static[bool])	
+getItemHandle	vm/vmobjects.html#getItemHandle,LocHandle,Natural,VmAllocator	vmobjects: getItemHandle(loc: LocHandle; index: Natural; a: VmAllocator): LocHandle	
+`[]`	vm/vmobjects.html#[],VmSlice,Natural	vmobjects: `[]`(s: VmSlice; i: Natural): LocHandle	
+toSlice	vm/vmobjects.html#toSlice,LocHandle	vmobjects: toSlice(loc: LocHandle): VmSlice	
+toSlice	vm/vmobjects.html#toSlice,VmSeq,PVmType,VmAllocator	vmobjects: toSlice(s: VmSeq; elemTyp: PVmType; a: VmAllocator): VmSlice	
+arrayCopy	vm/vmobjects.html#arrayCopy,VmMemoryManager,VmMemoryRegion,VmMemoryRegion,Natural,PVmType,static[bool]	vmobjects: arrayCopy(mm: var VmMemoryManager; dest: var VmMemoryRegion;\n          src: VmMemoryRegion; count: Natural; elemTyp: PVmType;\n          reset: static[bool])	
 setLenSeq	vm/vmobjects.html#setLenSeq,VmSeq,PVmType,int,VmMemoryManager	vmobjects: setLenSeq(s: var VmSeq; typ: PVmType; len: int; mm: var VmMemoryManager)	
 growBy	vm/vmobjects.html#growBy,VmSeq,PVmType,Natural,VmMemoryManager	vmobjects: growBy(s: var VmSeq; typ: PVmType; num: Natural; mm: var VmMemoryManager)	
-getItemHandle	vm/vmobjects.html#getItemHandle,VmSeq,PVmType,Natural	vmobjects: getItemHandle(s: VmSeq; typ: PVmType; index: Natural): LocHandle	
+getItemHandle	vm/vmobjects.html#getItemHandle,VmSeq,PVmType,Natural,VmAllocator	vmobjects: getItemHandle(s: VmSeq; typ: PVmType; index: Natural; a: VmAllocator): LocHandle	
 newVmSeq	vm/vmobjects.html#newVmSeq,VmSeq,PVmType,Natural,VmMemoryManager	vmobjects: newVmSeq(s: var VmSeq; typ: PVmType; numItems: Natural; mm: var VmMemoryManager)	
 copyVmSeq	vm/vmobjects.html#copyVmSeq,VmSeq,VmSeq,PVmType,VmMemoryManager	vmobjects: copyVmSeq(dest: var VmSeq; src: VmSeq; typ: PVmType; mm: var VmMemoryManager)	
 newVmString	vm/vmobjects.html#newVmString,VmString,Natural,VmAllocator	vmobjects: newVmString(s: var VmString; numElements: Natural; a: var VmAllocator)	
@@ -57,5 +60,5 @@ newVmString	vm/vmobjects.html#newVmString,VmString,openArray[char],VmAllocator	v
 resetLocation	vm/vmobjects.html#resetLocation,VmMemoryManager,VmMemoryRegion,PVmType	vmobjects: resetLocation(mm: var VmMemoryManager; loc: var VmMemoryRegion; typ: PVmType)	
 asgnRef	vm/vmobjects.html#asgnRef,HeapSlotHandle,HeapSlotHandle,VmMemoryManager,static[bool]	vmobjects: asgnRef(dst: var HeapSlotHandle; src: HeapSlotHandle; mm: var VmMemoryManager;\n        reset: static[bool])	
 asgnClosure	vm/vmobjects.html#asgnClosure,VmClosure,VmClosure,VmMemoryManager,static[bool]	vmobjects: asgnClosure(dst: var VmClosure; src: VmClosure; mm: var VmMemoryManager;\n            reset: static[bool])	
-copyToLocation	vm/vmobjects.html#copyToLocation,VmMemoryManager,VmMemoryRegion,MemRegionPtr,PVmType,static[bool]	vmobjects: copyToLocation(mm: var VmMemoryManager; dest: var VmMemoryRegion;\n               src: MemRegionPtr; typ: PVmType; reset: static[bool] = true)	
+copyToLocation	vm/vmobjects.html#copyToLocation,VmMemoryManager,VmMemoryRegion,VmMemoryRegion,PVmType,static[bool]	vmobjects: copyToLocation(mm: var VmMemoryManager; dest: var VmMemoryRegion;\n               src: VmMemoryRegion; typ: PVmType; reset: static[bool] = true)	
 resetBranch	vm/vmobjects.html#resetBranch,VmMemoryManager,LocHandle,FieldIndex,int	vmobjects: resetBranch(mm: var VmMemoryManager; h: LocHandle; idx: FieldIndex; branch: int)	
