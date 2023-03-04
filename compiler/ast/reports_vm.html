@@ -116,8 +116,8 @@ window.addEventListener('DOMContentLoaded', main);
       stacktrace*: seq[tuple[sym: PSym, location: TLineInfo]]
       skipped*: int
 
-  of rvmCannotCast:
-      typeMismatch*: seq[SemTypeMismatch]
+  of rvmCannotCast, rvmIllegalConvFromXToY:
+      actualType*, formalType*: PType
 
   of rvmIndexError:
       indexSpec*: tuple[usedIdx, minIdx, maxIdx: Int128]
@@ -146,7 +146,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/ast/reports_vm.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/6d7c36b87a1c79a3da49f75c8d0a6e13b2512e6f/compiler/ast/reports_vm.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_vm.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -174,8 +174,8 @@ class="link-seesrc" target="_blank">Source</a>
       <span class="Identifier">stacktrace</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">sym</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">,</span> <span class="Identifier">location</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">]</span><span class="Other">]</span>
       <span class="Identifier">skipped</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
 
-  <span class="Keyword">of</span> <span class="Identifier">rvmCannotCast</span><span class="Other">:</span>
-      <span class="Identifier">typeMismatch</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_types.html#SemTypeMismatch"><span class="Identifier">SemTypeMismatch</span></a><span class="Other">]</span>
+  <span class="Keyword">of</span> <span class="Identifier">rvmCannotCast</span><span class="Other">,</span> <span class="Identifier">rvmIllegalConvFromXToY</span><span class="Other">:</span>
+      <span class="Identifier">actualType</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">formalType</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PType"><span class="Identifier">PType</span></a>
 
   <span class="Keyword">of</span> <span class="Identifier">rvmIndexError</span><span class="Other">:</span>
       <span class="Identifier">indexSpec</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">usedIdx</span><span class="Other">,</span> <span class="Identifier">minIdx</span><span class="Other">,</span> <span class="Identifier">maxIdx</span><span class="Other">:</span> <a href="../utils/int128.html#Int128"><span class="Identifier">Int128</span></a><span class="Other">]</span>
@@ -191,7 +191,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/ast/reports_vm.nim#L16"
+href="https://github.com/nim-works/nimskull/tree/6d7c36b87a1c79a3da49f75c8d0a6e13b2512e6f/compiler/ast/reports_vm.nim#L16"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_vm.nim#L16" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -208,7 +208,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bb2173feb0fedcde40594bcff68d0ac12551806b/compiler/ast/reports_vm.nim#L40"
+href="https://github.com/nim-works/nimskull/tree/6d7c36b87a1c79a3da49f75c8d0a6e13b2512e6f/compiler/ast/reports_vm.nim#L40"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_vm.nim#L40" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -224,7 +224,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-03-03 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-03-04 00:00:00 UTC</small>
       </div>
     </div>
   </div>
