@@ -120,12 +120,12 @@ window.addEventListener('DOMContentLoaded', main);
   adSemRaisesPragmaExpectsObject, adSemLocksPragmaExpectsList,
   adSemLocksPragmaBadLevelRange, adSemLocksPragmaBadLevelString,
   adSemBorrowPragmaNonDot, adSemInvalidExtern, adSemBadDeprecatedArg,
-  adSemBadDeprecatedArgs, adSemMisplacedEffectsOf, adSemMissingPragmaArg,
-  adSemCannotPushCast, adSemCastRequiresStatement,
-  adSemPragmaRecursiveDependency, adSemImportjsRequiresJs,
-  adSemBitsizeRequires1248, adSemAlignRequiresPowerOfTwo,
-  adSemNoReturnHasReturn, adSemMisplacedDeprecation, adSemCustomUserError,
-  adSemFatalError, adSemNoUnionForJs, adSemBitsizeRequiresPositive,
+  adSemMisplacedEffectsOf, adSemMissingPragmaArg, adSemCannotPushCast,
+  adSemCastRequiresStatement, adSemPragmaRecursiveDependency,
+  adSemImportjsRequiresJs, adSemBitsizeRequires1248,
+  adSemAlignRequiresPowerOfTwo, adSemNoReturnHasReturn,
+  adSemMisplacedDeprecation, adSemCustomUserError, adSemFatalError,
+  adSemNoUnionForJs, adSemBitsizeRequiresPositive,
   adSemExperimentalRequiresToplevel, adSemImplicitPragmaError,
   adSemPragmaDynlibRequiresExportc, adSemIncompatibleDefaultExpr,
   adSemWrongNumberOfArguments, adVmUnsupportedNonNil, adVmDerefNilAccess,
@@ -361,18 +361,17 @@ window.addEventListener('DOMContentLoaded', main);
      adSemExcessiveCompilePragmaArgs, adSemEmptyAsm,
      adSemLinePragmaExpectsTuple, adSemLocksPragmaExpectsList,
      adSemLocksPragmaBadLevelRange, adSemLocksPragmaBadLevelString,
-     adSemBorrowPragmaNonDot, adSemBadDeprecatedArg, adSemBadDeprecatedArgs,
-     adSemMisplacedEffectsOf, adSemMissingPragmaArg, adSemCannotPushCast,
-     adSemCastRequiresStatement, adSemImportjsRequiresJs,
-     adSemBitsizeRequires1248, adSemAlignRequiresPowerOfTwo,
-     adSemNoReturnHasReturn, adSemMisplacedDeprecation, adSemFatalError,
-     adSemNoUnionForJs, adSemBitsizeRequiresPositive,
-     adSemExperimentalRequiresToplevel, adSemPragmaDynlibRequiresExportc,
-     adSemWrongNumberOfArguments, adVmDerefNilAccess,
-     adVmDerefAccessOutOfBounds, adVmDerefAccessTypeMismatch,
-     adSemRawTypeMismatch, adSemExpressionCannotBeCalled,
-     adSemCallInCompilesContextNotAProcOrField, adSemExpressionHasNoType,
-     adSemTypeExpected, adSemIllformedAst,
+     adSemBorrowPragmaNonDot, adSemBadDeprecatedArg, adSemMisplacedEffectsOf,
+     adSemMissingPragmaArg, adSemCannotPushCast, adSemCastRequiresStatement,
+     adSemImportjsRequiresJs, adSemBitsizeRequires1248,
+     adSemAlignRequiresPowerOfTwo, adSemNoReturnHasReturn,
+     adSemMisplacedDeprecation, adSemFatalError, adSemNoUnionForJs,
+     adSemBitsizeRequiresPositive, adSemExperimentalRequiresToplevel,
+     adSemPragmaDynlibRequiresExportc, adSemWrongNumberOfArguments,
+     adVmDerefNilAccess, adVmDerefAccessOutOfBounds,
+     adVmDerefAccessTypeMismatch, adSemRawTypeMismatch,
+     adSemExpressionCannotBeCalled, adSemCallInCompilesContextNotAProcOrField,
+     adSemExpressionHasNoType, adSemTypeExpected, adSemIllformedAst,
      adSemIllformedAstExpectedPragmaOrIdent, adSemInvalidExpression,
      adSemExpectedNonemptyPattern, adSemPragmaDisallowedForTupleUnpacking,
      adSemThreadvarCannotInit, adSemLetNeedsInit, adSemConstExpressionExpected,
@@ -1162,8 +1161,7 @@ window.addEventListener('DOMContentLoaded', main);
   skStub,                   ## symbol is a stub and not yet loaded from the ROD
                              ## file (it is loaded on demand, which may
                              ## mean: never)
-  skPackage,                ## symbol is a package (used for canonicalization)
-  skAlias                    ## an alias (needs to be resolved immediately)">TSymKind</a></li>
+  skPackage                  ## symbol is a package (used for canonicalization)">TSymKind</a></li>
   <li><a class="reference" href="#TSymKinds"
     title="TSymKinds = set[TSymKind]">TSymKinds</a></li>
   <li><a class="reference" href="#TType"
@@ -1376,8 +1374,7 @@ window.addEventListener('DOMContentLoaded', main);
   <li><a class="reference" href="#exceptionEffects"
     title="exceptionEffects = 0">exceptionEffects</a></li>
   <li><a class="reference" href="#ExportableSymKinds"
-    title="ExportableSymKinds = {skType..skConst, skProc..skTemplate, skEnumField, skStub,
-                      skAlias}">ExportableSymKinds</a></li>
+    title="ExportableSymKinds = {skType..skConst, skProc..skTemplate, skEnumField, skStub}">ExportableSymKinds</a></li>
   <li><a class="reference" href="#GcTypeKinds"
     title="GcTypeKinds = {tyRef, tySequence, tyString}">GcTypeKinds</a></li>
   <li><a class="reference" href="#invalidNodeId"
@@ -1579,7 +1576,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -1611,12 +1608,12 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">adSemRaisesPragmaExpectsObject</span><span class="Other">,</span> <span class="Identifier">adSemLocksPragmaExpectsList</span><span class="Other">,</span>
   <span class="Identifier">adSemLocksPragmaBadLevelRange</span><span class="Other">,</span> <span class="Identifier">adSemLocksPragmaBadLevelString</span><span class="Other">,</span>
   <span class="Identifier">adSemBorrowPragmaNonDot</span><span class="Other">,</span> <span class="Identifier">adSemInvalidExtern</span><span class="Other">,</span> <span class="Identifier">adSemBadDeprecatedArg</span><span class="Other">,</span>
-  <span class="Identifier">adSemBadDeprecatedArgs</span><span class="Other">,</span> <span class="Identifier">adSemMisplacedEffectsOf</span><span class="Other">,</span> <span class="Identifier">adSemMissingPragmaArg</span><span class="Other">,</span>
-  <span class="Identifier">adSemCannotPushCast</span><span class="Other">,</span> <span class="Identifier">adSemCastRequiresStatement</span><span class="Other">,</span>
-  <span class="Identifier">adSemPragmaRecursiveDependency</span><span class="Other">,</span> <span class="Identifier">adSemImportjsRequiresJs</span><span class="Other">,</span>
-  <span class="Identifier">adSemBitsizeRequires1248</span><span class="Other">,</span> <span class="Identifier">adSemAlignRequiresPowerOfTwo</span><span class="Other">,</span>
-  <span class="Identifier">adSemNoReturnHasReturn</span><span class="Other">,</span> <span class="Identifier">adSemMisplacedDeprecation</span><span class="Other">,</span> <span class="Identifier">adSemCustomUserError</span><span class="Other">,</span>
-  <span class="Identifier">adSemFatalError</span><span class="Other">,</span> <span class="Identifier">adSemNoUnionForJs</span><span class="Other">,</span> <span class="Identifier">adSemBitsizeRequiresPositive</span><span class="Other">,</span>
+  <span class="Identifier">adSemMisplacedEffectsOf</span><span class="Other">,</span> <span class="Identifier">adSemMissingPragmaArg</span><span class="Other">,</span> <span class="Identifier">adSemCannotPushCast</span><span class="Other">,</span>
+  <span class="Identifier">adSemCastRequiresStatement</span><span class="Other">,</span> <span class="Identifier">adSemPragmaRecursiveDependency</span><span class="Other">,</span>
+  <span class="Identifier">adSemImportjsRequiresJs</span><span class="Other">,</span> <span class="Identifier">adSemBitsizeRequires1248</span><span class="Other">,</span>
+  <span class="Identifier">adSemAlignRequiresPowerOfTwo</span><span class="Other">,</span> <span class="Identifier">adSemNoReturnHasReturn</span><span class="Other">,</span>
+  <span class="Identifier">adSemMisplacedDeprecation</span><span class="Other">,</span> <span class="Identifier">adSemCustomUserError</span><span class="Other">,</span> <span class="Identifier">adSemFatalError</span><span class="Other">,</span>
+  <span class="Identifier">adSemNoUnionForJs</span><span class="Other">,</span> <span class="Identifier">adSemBitsizeRequiresPositive</span><span class="Other">,</span>
   <span class="Identifier">adSemExperimentalRequiresToplevel</span><span class="Other">,</span> <span class="Identifier">adSemImplicitPragmaError</span><span class="Other">,</span>
   <span class="Identifier">adSemPragmaDynlibRequiresExportc</span><span class="Other">,</span> <span class="Identifier">adSemIncompatibleDefaultExpr</span><span class="Other">,</span>
   <span class="Identifier">adSemWrongNumberOfArguments</span><span class="Other">,</span> <span class="Identifier">adVmUnsupportedNonNil</span><span class="Other">,</span> <span class="Identifier">adVmDerefNilAccess</span><span class="Other">,</span>
@@ -1661,9 +1658,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1040"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1039"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1040" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1039" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1708,9 +1705,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L956"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L955"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L956" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L955" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1742,9 +1739,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1013"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1012"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1013" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1012" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1762,9 +1759,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Kinds for errors produced by <tt class="docutils literal"><span class="pre"><span class="Identifier">vmgen</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L992"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L991"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L992" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L991" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1783,9 +1780,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L924"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L923"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L924" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L923" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1804,9 +1801,9 @@ Nearly identical to <tt class="docutils literal"><span class="pre"><span class="
 </dl>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L914"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L913"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L914" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L913" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1816,9 +1813,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 id that is used for the caching logic within <tt class="docutils literal"><span class="pre">system.compiles</span></tt>. See the seminst module.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1536"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1533"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1536" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1533" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1830,9 +1827,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1706"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1703"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1706" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1703" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1842,9 +1839,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1763"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1760"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1763" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1760" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1857,9 +1854,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L840"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L839"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L840" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L839" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1878,9 +1875,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L886"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L885"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L886" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L885" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1898,7 +1895,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Procedure call argument mismatch reason
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L31"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L31"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L31" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -1910,7 +1907,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L44"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L44"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L44" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -1922,9 +1919,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1202"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1200"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1202" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1200" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1934,9 +1931,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L869"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L868"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L869" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L868" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1946,9 +1943,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1543"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1540"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1543" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1540" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1958,9 +1955,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1553"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1550"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1553" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1550" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1970,9 +1967,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L871"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L870"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L871" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L870" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1984,9 +1981,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1732"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1729"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1732" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1729" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1996,9 +1993,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1551"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1548"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1551" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1548" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2008,9 +2005,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L874"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L873"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L874" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L873" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2020,9 +2017,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L873"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L872"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L873" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L872" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2038,9 +2035,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Description of the single candidate mismatch. This type is later used to construct meaningful type mismatch message, and must contain all the necessary information to provide meaningful sorting, collapse and other operations.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L903"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L902"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L903" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L902" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2056,9 +2053,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L896"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L895"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L896" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L895" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2073,9 +2070,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L880"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L879"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L880" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L879" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2088,9 +2085,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L876"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L875"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L876" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L875" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2126,18 +2123,17 @@ class="link-seesrc" target="_blank">Source</a>
      <span class="Identifier">adSemExcessiveCompilePragmaArgs</span><span class="Other">,</span> <span class="Identifier">adSemEmptyAsm</span><span class="Other">,</span>
      <span class="Identifier">adSemLinePragmaExpectsTuple</span><span class="Other">,</span> <span class="Identifier">adSemLocksPragmaExpectsList</span><span class="Other">,</span>
      <span class="Identifier">adSemLocksPragmaBadLevelRange</span><span class="Other">,</span> <span class="Identifier">adSemLocksPragmaBadLevelString</span><span class="Other">,</span>
-     <span class="Identifier">adSemBorrowPragmaNonDot</span><span class="Other">,</span> <span class="Identifier">adSemBadDeprecatedArg</span><span class="Other">,</span> <span class="Identifier">adSemBadDeprecatedArgs</span><span class="Other">,</span>
-     <span class="Identifier">adSemMisplacedEffectsOf</span><span class="Other">,</span> <span class="Identifier">adSemMissingPragmaArg</span><span class="Other">,</span> <span class="Identifier">adSemCannotPushCast</span><span class="Other">,</span>
-     <span class="Identifier">adSemCastRequiresStatement</span><span class="Other">,</span> <span class="Identifier">adSemImportjsRequiresJs</span><span class="Other">,</span>
-     <span class="Identifier">adSemBitsizeRequires1248</span><span class="Other">,</span> <span class="Identifier">adSemAlignRequiresPowerOfTwo</span><span class="Other">,</span>
-     <span class="Identifier">adSemNoReturnHasReturn</span><span class="Other">,</span> <span class="Identifier">adSemMisplacedDeprecation</span><span class="Other">,</span> <span class="Identifier">adSemFatalError</span><span class="Other">,</span>
-     <span class="Identifier">adSemNoUnionForJs</span><span class="Other">,</span> <span class="Identifier">adSemBitsizeRequiresPositive</span><span class="Other">,</span>
-     <span class="Identifier">adSemExperimentalRequiresToplevel</span><span class="Other">,</span> <span class="Identifier">adSemPragmaDynlibRequiresExportc</span><span class="Other">,</span>
-     <span class="Identifier">adSemWrongNumberOfArguments</span><span class="Other">,</span> <span class="Identifier">adVmDerefNilAccess</span><span class="Other">,</span>
-     <span class="Identifier">adVmDerefAccessOutOfBounds</span><span class="Other">,</span> <span class="Identifier">adVmDerefAccessTypeMismatch</span><span class="Other">,</span>
-     <span class="Identifier">adSemRawTypeMismatch</span><span class="Other">,</span> <span class="Identifier">adSemExpressionCannotBeCalled</span><span class="Other">,</span>
-     <span class="Identifier">adSemCallInCompilesContextNotAProcOrField</span><span class="Other">,</span> <span class="Identifier">adSemExpressionHasNoType</span><span class="Other">,</span>
-     <span class="Identifier">adSemTypeExpected</span><span class="Other">,</span> <span class="Identifier">adSemIllformedAst</span><span class="Other">,</span>
+     <span class="Identifier">adSemBorrowPragmaNonDot</span><span class="Other">,</span> <span class="Identifier">adSemBadDeprecatedArg</span><span class="Other">,</span> <span class="Identifier">adSemMisplacedEffectsOf</span><span class="Other">,</span>
+     <span class="Identifier">adSemMissingPragmaArg</span><span class="Other">,</span> <span class="Identifier">adSemCannotPushCast</span><span class="Other">,</span> <span class="Identifier">adSemCastRequiresStatement</span><span class="Other">,</span>
+     <span class="Identifier">adSemImportjsRequiresJs</span><span class="Other">,</span> <span class="Identifier">adSemBitsizeRequires1248</span><span class="Other">,</span>
+     <span class="Identifier">adSemAlignRequiresPowerOfTwo</span><span class="Other">,</span> <span class="Identifier">adSemNoReturnHasReturn</span><span class="Other">,</span>
+     <span class="Identifier">adSemMisplacedDeprecation</span><span class="Other">,</span> <span class="Identifier">adSemFatalError</span><span class="Other">,</span> <span class="Identifier">adSemNoUnionForJs</span><span class="Other">,</span>
+     <span class="Identifier">adSemBitsizeRequiresPositive</span><span class="Other">,</span> <span class="Identifier">adSemExperimentalRequiresToplevel</span><span class="Other">,</span>
+     <span class="Identifier">adSemPragmaDynlibRequiresExportc</span><span class="Other">,</span> <span class="Identifier">adSemWrongNumberOfArguments</span><span class="Other">,</span>
+     <span class="Identifier">adVmDerefNilAccess</span><span class="Other">,</span> <span class="Identifier">adVmDerefAccessOutOfBounds</span><span class="Other">,</span>
+     <span class="Identifier">adVmDerefAccessTypeMismatch</span><span class="Other">,</span> <span class="Identifier">adSemRawTypeMismatch</span><span class="Other">,</span>
+     <span class="Identifier">adSemExpressionCannotBeCalled</span><span class="Other">,</span> <span class="Identifier">adSemCallInCompilesContextNotAProcOrField</span><span class="Other">,</span>
+     <span class="Identifier">adSemExpressionHasNoType</span><span class="Other">,</span> <span class="Identifier">adSemTypeExpected</span><span class="Other">,</span> <span class="Identifier">adSemIllformedAst</span><span class="Other">,</span>
      <span class="Identifier">adSemIllformedAstExpectedPragmaOrIdent</span><span class="Other">,</span> <span class="Identifier">adSemInvalidExpression</span><span class="Other">,</span>
      <span class="Identifier">adSemExpectedNonemptyPattern</span><span class="Other">,</span> <span class="Identifier">adSemPragmaDisallowedForTupleUnpacking</span><span class="Other">,</span>
      <span class="Identifier">adSemThreadvarCannotInit</span><span class="Other">,</span> <span class="Identifier">adSemLetNeedsInit</span><span class="Other">,</span> <span class="Identifier">adSemConstExpressionExpected</span><span class="Other">,</span>
@@ -2360,9 +2356,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1203"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1201"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1203" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1201" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2382,7 +2378,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L18"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L18"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L18" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -2398,9 +2394,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1741"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1738"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1741" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1738" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2410,9 +2406,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1761"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1758"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1761" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1758" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2425,9 +2421,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1665"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1662"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1665" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1662" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2437,9 +2433,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1669"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1666"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1669" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1666" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2452,9 +2448,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1670"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1667"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1670" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1667" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2466,9 +2462,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L867"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L866"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L867" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L866" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2481,9 +2477,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1656"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1653"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1656" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1653" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2493,9 +2489,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1660"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1657"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1660" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1657" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2508,9 +2504,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1661"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1658"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1661" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1658" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2521,9 +2517,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1690"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1687"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1690" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1687" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2537,9 +2533,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1538"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1535"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1538" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1535" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2555,9 +2551,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 also misused for headers! keep in sync with PackedLib
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1527"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1524"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1527" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1524" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2568,9 +2564,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1524"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1521"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1524" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1521" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2586,9 +2582,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1515"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1512"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1515" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1512" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2614,9 +2610,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1492"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1489"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1492" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1489" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2626,9 +2622,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1514"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1511"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1514" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1511" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2649,9 +2645,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1480"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1477"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1480" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1477" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2661,9 +2657,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1611"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1608"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1611" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1608" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2709,9 +2705,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 symbols that require compiler magic:
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L731"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L730"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L731" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L730" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2751,9 +2747,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1452"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1449"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1452" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1449" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -2791,7 +2787,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L569"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L569"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L569" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -2803,7 +2799,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L601"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L601"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L601" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -2991,7 +2987,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 order is important, because ranges are used to check whether a node belongs to a certain class
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L51"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L51"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L51" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3003,7 +2999,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L247"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L247"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L247" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3019,9 +3015,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1674"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1671"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1674" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1671" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3031,9 +3027,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1679"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1676"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1679" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1676" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3043,9 +3039,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L872"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L871"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L872" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L871" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3058,9 +3054,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1680"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1677"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1680" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1677" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3070,9 +3066,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1685"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1682"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1685" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1682" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3085,9 +3081,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1686"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1683"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1686" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1683" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3099,9 +3095,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1651"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1648"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1651" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1648" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3111,9 +3107,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1654"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1651"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1654" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1651" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3128,9 +3124,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1545"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1542"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1545" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1542" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3145,9 +3141,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1508"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1505"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1508" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1505" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3160,9 +3156,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 a table[PIdent] of PSym
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1475"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1472"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1475" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1472" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3224,9 +3220,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 proc and type instantiations are cached in the generic symbol
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1554"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1551"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1554" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1551" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3297,7 +3293,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L340"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L340"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L340" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3309,7 +3305,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L402"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L402"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L402" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3347,13 +3343,12 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">skStub</span><span class="Other">,</span>                   <span class="Comment">## symbol is a stub and not yet loaded from the ROD</span>
                              <span class="Comment">## file (it is loaded on demand, which may</span>
                              <span class="Comment">## mean: never)</span>
-  <span class="Identifier">skPackage</span><span class="Other">,</span>                <span class="Comment">## symbol is a package (used for canonicalization)</span>
-  <span class="Identifier">skAlias</span>                    <span class="Comment">## an alias (needs to be resolved immediately)</span></pre></dt>
+  <span class="Identifier">skPackage</span>                  <span class="Comment">## symbol is a package (used for canonicalization)</span></pre></dt>
 <dd>
 
 the different symbols (start with the prefix sk); order is important for the documentation generator!
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L670"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L670"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L670" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3365,9 +3360,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L705"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L704"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L705" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L704" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3405,9 +3400,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 types are identical only if they have the same id; there may be multiple copies of a type in memory! Keep in sync with PackedType
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1620"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1617"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1620" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1617" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3419,9 +3414,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L854"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L853"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L854" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L853" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3431,9 +3426,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L863"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L862"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L863" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L862" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3445,9 +3440,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 as usual, order is important here
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1613"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1610"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1613" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1610" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3513,7 +3508,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 keep below 32 for efficiency reasons (now: 43)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L602"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L602"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L602" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3525,7 +3520,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L668"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L668"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L668" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3580,7 +3575,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L444"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L444"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L444" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3592,7 +3587,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L567"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L567"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L567" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3614,9 +3609,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 order is important!
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1715"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1712"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1715" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1712" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3626,9 +3621,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1610"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1607"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1610" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1607" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3643,9 +3638,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 type flags that are essential for type equality. This is now a variable because for emulation of version:1.0 we might exclude {tfGcSafe, tfNoSideEffect}.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L720"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L719"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L720" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L719" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3661,7 +3656,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L552"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L552"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L552" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3674,7 +3669,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L554"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L554"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L554" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3687,7 +3682,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L556"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L556"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L556" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3700,7 +3695,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L555"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L555"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L555" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3713,7 +3708,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L558"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L558"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L558" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3739,9 +3734,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L810"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L809"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L810" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L809" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3751,7 +3746,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 list of effects list
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L436"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L436"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L436" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3763,22 +3758,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 exceptions at position 0
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L433"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L433"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L433" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="ExportableSymKinds">
-<dt><pre><a href="ast_types.html#ExportableSymKinds"><span class="Identifier">ExportableSymKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">skType</span><span class="Other">..</span><span class="DecNumber">skConst</span><span class="Other">,</span> <span class="DecNumber">skProc</span><span class="Other">..</span><span class="DecNumber">skTemplate</span><span class="Other">,</span> <span class="DecNumber">skEnumField</span><span class="Other">,</span> <span class="DecNumber">skStub</span><span class="Other">,</span>
-                      <span class="DecNumber">skAlias</span><span class="Other">}</span></pre></dt>
+<dt><pre><a href="ast_types.html#ExportableSymKinds"><span class="Identifier">ExportableSymKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">skType</span><span class="Other">..</span><span class="DecNumber">skConst</span><span class="Other">,</span> <span class="DecNumber">skProc</span><span class="Other">..</span><span class="DecNumber">skTemplate</span><span class="Other">,</span> <span class="DecNumber">skEnumField</span><span class="Other">,</span> <span class="DecNumber">skStub</span><span class="Other">}</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L711"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L710"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L711" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L710" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3788,7 +3782,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L537"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L537"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L537" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3800,9 +3794,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1785"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1782"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1785" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1782" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3812,7 +3806,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 maximum number of nested generic instantiations or macro pragma expansions
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L14"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L14"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L14" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3824,7 +3818,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L431"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L431"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L431" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3836,7 +3830,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 these must be last statements in a block
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L437"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L437"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L437" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3848,7 +3842,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L439"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L439"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L439" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3860,7 +3854,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L429"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L429"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L429" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3872,7 +3866,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L430"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L430"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L430" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3884,9 +3878,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1694"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1691"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1694" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1691" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3896,9 +3890,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1703"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1700"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1703" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1700" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3939,7 +3933,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L250"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L250"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L250" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3951,7 +3945,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 not an effect, but a slot for pragmas in proc type
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L435"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L435"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L435" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3964,9 +3958,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L709"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L708"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L709" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L708" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -3977,7 +3971,7 @@ class="link-seesrc" target="_blank">Source</a>
 macro or template is immediately expanded 
 in a generic context
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L407"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L407"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L407" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -3989,7 +3983,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 symbol name that was generated by the compiler the compiler will avoid printing such names in user messages.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L414"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L414"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L414" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4001,7 +3995,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L424"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L424"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L424" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4013,7 +4007,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 symbol is custom pragma template
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L425"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L425"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L425" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4025,7 +4019,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 template is not hygienic (old styled template) module, compiled from a dirty-buffer
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L410"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L410"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L410" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4037,7 +4031,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 param escapes
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L423"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L423"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L423" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4049,7 +4043,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 module uses the .experimental switch
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L420"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L420"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L420" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4061,7 +4055,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 var is used for 'goto' code generation
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L421"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L421"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L421" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4073,7 +4067,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 forward declarations are not required (per module)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L419"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L419"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L419" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4085,7 +4079,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 don't generate code to init the variable
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L405"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L405"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L405" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4097,7 +4091,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 param is assigned to
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L422"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L422"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L422" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4109,9 +4103,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L717"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L716"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L717" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L716" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4122,7 +4116,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L559"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L559"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L559" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4134,7 +4128,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 user defined tag ('gc', 'time' etc.)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L434"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L434"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L434" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4146,9 +4140,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L714"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L713"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L714" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L713" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4158,9 +4152,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L715"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L714"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L715" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L714" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4170,9 +4164,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L716"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L715"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L716" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L715" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4182,9 +4176,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L713"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L712"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L713" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L712" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4194,7 +4188,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 as an errornous node should match everything
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L538"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L538"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L538" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4207,7 +4201,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L547"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L547"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L547" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4220,7 +4214,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L563"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L563"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L563" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4233,7 +4227,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L562"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L562"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L562" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4245,7 +4239,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L536"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L536"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L536" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4258,7 +4252,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L543"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L543"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L543" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4270,7 +4264,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L539"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L539"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L539" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4282,7 +4276,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L541"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L541"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L541" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4294,7 +4288,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L548"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L548"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L548" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4311,7 +4305,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L48"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L48"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L48" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4323,9 +4317,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L844"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L843"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L844" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L843" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4335,7 +4329,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L46"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L46"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4347,9 +4341,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1768"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1765"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1768" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1765" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4359,9 +4353,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1796"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1793"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1796" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1793" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4371,9 +4365,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1801"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1798"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1801" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1798" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4383,7 +4377,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L47"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L47"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L47" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -4395,9 +4389,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L847"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L846"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L847" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L846" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4407,9 +4401,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1765"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1762"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1765" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1762" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4419,9 +4413,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1815"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1812"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1815" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1812" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4436,9 +4430,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1777"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1774"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1777" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1774" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4448,9 +4442,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1773"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1770"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1773" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1770" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4460,9 +4454,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1775"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1772"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1775" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1772" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -4472,9 +4466,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dd5e34ba71075ccb9ca8e5340548a189ab036aaa/compiler/ast/ast_types.nim#L1772"
+href="https://github.com/nim-works/nimskull/tree/58a939eb1fc6d8a9b7cdaea07b8a4618440e577f/compiler/ast/ast_types.nim#L1769"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1772" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_types.nim#L1769" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
