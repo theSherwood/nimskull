@@ -113,21 +113,14 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c461335f8c7d6f26c7e17bee02c0743bc3729110/lib/std/private/since.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/d1235a0ba29cbd5e58eff0a5db35ac71ebf3b43a/lib/std/private/since.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/std/private/since.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><p><tt class="docutils literal"><span class="pre"><span class="Identifier">since</span></span></tt> is used to emulate older versions of nim stdlib with <tt class="docutils literal"><span class="pre"><span class="Operator">--</span><span class="Identifier">useVersion</span></span></tt>, see <tt class="docutils literal"><span class="pre"><span class="Identifier">tuse_version</span><span class="Operator">.</span><span class="Identifier">nim</span></span></tt>.</p>
-<p>If a symbol <tt class="docutils literal"><span class="pre"><span class="Identifier">foo</span></span></tt> is added in version <tt class="docutils literal"><span class="pre"><span class="Punctuation">(</span><span class="DecNumber">1</span><span class="Punctuation">,</span><span class="DecNumber">3</span><span class="Punctuation">,</span><span class="DecNumber">5</span><span class="Punctuation">)</span></span></tt>, use <tt class="docutils literal"><span class="pre"><span class="Punctuation">{</span><span class="Operator">.</span><span class="Identifier">since</span><span class="Punctuation">:</span> <span class="Punctuation">(</span><span class="FloatNumber">1.3</span><span class="Operator">.</span><span class="DecNumber">5</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Punctuation">}</span></span></tt>, not <tt class="docutils literal"><span class="pre"><span class="Punctuation">{</span><span class="Operator">.</span><span class="Identifier">since</span><span class="Punctuation">:</span> <span class="Punctuation">(</span><span class="FloatNumber">1.4</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Punctuation">}</span></span></tt>, so that it works in devel in between releases.</p>
-<p>The emulation cannot be 100% faithful and to avoid adding too much complexity, <tt class="docutils literal"><span class="pre"><span class="Identifier">since</span></span></tt> is not needed in these cases:</p>
-<ul class="simple"><li>if a new module is added</li>
-<li>if an overload is added</li>
-<li>if an extra parameter to an existing routine is added</li>
-</ul>
-</p>
+  <p class="module-desc"><tt class="docutils literal"><span class="pre"><span class="Identifier">since</span></span></tt> is used to track when things were added to the standard library. </p>
   <div class="section" id="18">
 <h1><a class="toc-backref" href="#18">Templates</a></h1>
 <dl class="item">
@@ -138,9 +131,9 @@ class="link-seesrc" target="_blank">Source</a>
 Evaluates <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> if the <tt class="docutils literal"><span class="pre">(NimMajor, NimMinor)</span></tt> is greater than or equal to <tt class="docutils literal"><span class="pre"><span class="Identifier">version</span></span></tt>. Usage:<pre class="listing"><span class="Keyword">proc</span> <span class="Identifier">fun</span><span class="Operator">*</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Punctuation">{</span><span class="Operator">.</span><span class="Identifier">since</span><span class="Punctuation">:</span> <span class="Punctuation">(</span><span class="DecNumber">1</span><span class="Punctuation">,</span> <span class="DecNumber">3</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Punctuation">}</span>
 <span class="Identifier">since</span> <span class="Punctuation">(</span><span class="DecNumber">1</span><span class="Punctuation">,</span> <span class="DecNumber">3</span><span class="Punctuation">)</span><span class="Punctuation">:</span> <span class="Identifier">fun</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c461335f8c7d6f26c7e17bee02c0743bc3729110/lib/std/private/since.nim#L15"
+href="https://github.com/nim-works/nimskull/tree/d1235a0ba29cbd5e58eff0a5db35ac71ebf3b43a/lib/std/private/since.nim#L5"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/std/private/since.nim#L15" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/std/private/since.nim#L5" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -151,9 +144,9 @@ class="link-seesrc" target="_blank">Source</a>
 Evaluates <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> if <tt class="docutils literal"><span class="pre">(NimMajor, NimMinor, NimPatch)</span></tt> is greater than or equal to <tt class="docutils literal"><span class="pre"><span class="Identifier">version</span></span></tt>. Usage:<pre class="listing"><span class="Keyword">proc</span> <span class="Identifier">fun</span><span class="Operator">*</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Punctuation">{</span><span class="Operator">.</span><span class="Identifier">since</span><span class="Punctuation">:</span> <span class="Punctuation">(</span><span class="DecNumber">1</span><span class="Punctuation">,</span> <span class="DecNumber">3</span><span class="Punctuation">,</span> <span class="DecNumber">1</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Punctuation">}</span>
 <span class="Identifier">since</span> <span class="Punctuation">(</span><span class="DecNumber">1</span><span class="Punctuation">,</span> <span class="DecNumber">3</span><span class="Punctuation">,</span> <span class="DecNumber">1</span><span class="Punctuation">)</span><span class="Punctuation">:</span> <span class="Identifier">fun</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c461335f8c7d6f26c7e17bee02c0743bc3729110/lib/std/private/since.nim#L25"
+href="https://github.com/nim-works/nimskull/tree/d1235a0ba29cbd5e58eff0a5db35ac71ebf3b43a/lib/std/private/since.nim#L15"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/std/private/since.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/std/private/since.nim#L15" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
