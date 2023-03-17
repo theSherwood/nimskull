@@ -105,7 +105,12 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">checkForSink
+      <ul class="simple nested-toc-section">canCaptureFrom
+      <li><a class="reference" href="#canCaptureFrom%2CPSym%2CPSym"
+    title="canCaptureFrom(captor, target: PSym): bool">canCaptureFrom(captor, target: PSym): bool</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">checkForSink
       <li><a class="reference" href="#checkForSink%2CConfigRef%2CIdGenerator%2CPSym%2CPNode"
     title="checkForSink(config: ConfigRef; idgen: IdGenerator; owner: PSym; arg: PNode)">checkForSink(config: ConfigRef; idgen: IdGenerator; owner: PSym; arg: PNode)</a></li>
 
@@ -113,11 +118,6 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">checkMethodEffects
       <li><a class="reference" href="#checkMethodEffects%2CModuleGraph%2CPSym%2CPSym"
     title="checkMethodEffects(g: ModuleGraph; disp, branch: PSym)">checkMethodEffects(g: ModuleGraph; disp, branch: PSym)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">isCompileTimeProc2
-      <li><a class="reference" href="#isCompileTimeProc2%2CPSym"
-    title="isCompileTimeProc2(s: PSym): bool">isCompileTimeProc2(s: PSym): bool</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">setEffectsForProcType
@@ -143,7 +143,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c12ce3cad22a9c7ff8eef19f65c8e99dfcf3775e/compiler/sem/sempass2.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/5bd2d5cd66beeb931b7c8f9682162afd05c2cbb2/compiler/sem/sempass2.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -172,6 +172,25 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
+<div id="canCaptureFrom,PSym,PSym">
+<dt><pre><span class="Keyword">proc</span> <a href="#canCaptureFrom%2CPSym%2CPSym"><span class="Identifier">canCaptureFrom</span></a><span class="Other">(</span><span class="Identifier">captor</span><span class="Other">,</span> <span class="Identifier">target</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+<p>Tests if the <tt class="docutils literal"><span class="pre"><span class="Identifier">captor</span></span></tt> routine is allowed to capture a local from <tt class="docutils literal"><span class="pre"><span class="Identifier">target</span></span></tt>, taking the compile-time/run-time boundary into account:</p>
+<p>1) attempting to capture a local defined outside an inner macro from</p>
+<blockquote><p>inside the macro is illegal</p></blockquote>
+<p>2) closing over a local defined inside a compile-time-only routine from a</p>
+<blockquote><p>routine than can also be used at run-time is only valid if the chain of enclosing routines leading up to <tt class="docutils literal"><span class="pre"><span class="Identifier">target</span></span></tt> are all compile-time-only</p></blockquote>
+<ol class="simple" start="3"><li>a compile-time-only routine closing over a run-time location is illegal</li>
+</ol>
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/5bd2d5cd66beeb931b7c8f9682162afd05c2cbb2/compiler/sem/sempass2.nim#L1624"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1624" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="checkForSink,ConfigRef,IdGenerator,PSym,PNode">
 <dt><pre><span class="Keyword">proc</span> <a href="#checkForSink%2CConfigRef%2CIdGenerator%2CPSym%2CPNode"><span class="Identifier">checkForSink</span></a><span class="Other">(</span><span class="Identifier">config</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">;</span> <span class="Identifier">owner</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">arg</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
@@ -179,7 +198,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c12ce3cad22a9c7ff8eef19f65c8e99dfcf3775e/compiler/sem/sinkparameter_inference.nim#L10"
+href="https://github.com/nim-works/nimskull/tree/5bd2d5cd66beeb931b7c8f9682162afd05c2cbb2/compiler/sem/sinkparameter_inference.nim#L10"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sinkparameter_inference.nim#L10" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -192,24 +211,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 checks for consistent effects for multi methods.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c12ce3cad22a9c7ff8eef19f65c8e99dfcf3775e/compiler/sem/sempass2.nim#L1444"
+href="https://github.com/nim-works/nimskull/tree/5bd2d5cd66beeb931b7c8f9682162afd05c2cbb2/compiler/sem/sempass2.nim#L1444"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1444" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="isCompileTimeProc2,PSym">
-<dt><pre><span class="Keyword">proc</span> <a href="#isCompileTimeProc2%2CPSym"><span class="Identifier">isCompileTimeProc2</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Tests if <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> is a compile-time procedure, but compared to <tt class="docutils literal"><span class="pre">isCompileTimeProc</span></tt>, also considers where <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> is defined. In the following example:<pre class="listing"><span class="Keyword">proc</span> <span class="Identifier">a</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Punctuation">{</span><span class="Operator">.</span><span class="Identifier">compileTime</span><span class="Operator">.</span><span class="Punctuation">}</span> <span class="Operator">=</span>
-  <span class="Keyword">proc</span> <span class="Identifier">b</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Operator">=</span>
-    <span class="Keyword">discard</span></pre><p><tt class="docutils literal"><span class="pre">b</span></tt> is also a procedure that can only be run at compile-time, but it doesn't have the <tt class="docutils literal"><span class="pre">sfCompileTime</span></tt> flag set</p>
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c12ce3cad22a9c7ff8eef19f65c8e99dfcf3775e/compiler/sem/sempass2.nim#L1624"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1624" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -220,7 +224,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c12ce3cad22a9c7ff8eef19f65c8e99dfcf3775e/compiler/sem/sempass2.nim#L1485"
+href="https://github.com/nim-works/nimskull/tree/5bd2d5cd66beeb931b7c8f9682162afd05c2cbb2/compiler/sem/sempass2.nim#L1485"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1485" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -234,9 +238,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c12ce3cad22a9c7ff8eef19f65c8e99dfcf3775e/compiler/sem/sempass2.nim#L1650"
+href="https://github.com/nim-works/nimskull/tree/5bd2d5cd66beeb931b7c8f9682162afd05c2cbb2/compiler/sem/sempass2.nim#L1648"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1650" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1648" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -248,9 +252,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c12ce3cad22a9c7ff8eef19f65c8e99dfcf3775e/compiler/sem/sempass2.nim#L1808"
+href="https://github.com/nim-works/nimskull/tree/5bd2d5cd66beeb931b7c8f9682162afd05c2cbb2/compiler/sem/sempass2.nim#L1805"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1808" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sempass2.nim#L1805" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
