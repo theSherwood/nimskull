@@ -114,21 +114,11 @@ window.addEventListener('DOMContentLoaded', main);
   opcWrObj, opcWrLoc, ## ``a = b``; writes the value represented by register `b`
                        ## (either directly or indirectly) to the location identified
                        ## by register `a`. A full copy is performed.
-  opcAddrReg, opcAddrNode, opcLdDeref, opcWrDeref, opcWrStrIdx, opcLdStrIdx,
-  opcLdStrIdxAddr, opcInitDisc, opcSetDisc, opcWrProc, opcWrClosure, opcAccessEnv, ## 
-                                                                                    ## a 
-                                                                                    ## = 
-                                                                                    ## b.env[]; 
-                                                                                    ## loads 
-                                                                                    ## a 
-                                                                                    ## handle 
-                                                                                    ## to 
-                                                                                    ## the 
-                                                                                    ## cell 
-                                                                                    ## holding 
-                                                                                    ## the
-                                                                                    ## 
-                                                                                    ## environment
+  opcAddr,                  ## a = addr b
+  opcLdDeref, opcWrDeref, opcWrStrIdx, opcLdStrIdx, opcLdStrIdxAddr,
+  opcInitDisc, opcSetDisc, opcWrProc, opcWrClosure, opcAccessEnv, ## a = b.env[]; loads a handle to the cell holding the
+                                                                   ## 
+                                                                   ## environment
   opcAddInt, opcAddImmInt, opcSubInt, opcSubImmInt, opcLenSeq, opcLenStr,
   opcLenCstring, opcIncl, opcInclRange, opcExcl, opcCard, opcMulInt, opcDivInt,
   opcModInt, opcAddFloat, opcSubFloat, opcMulFloat, opcDivFloat, opcShrInt,
@@ -153,15 +143,17 @@ window.addEventListener('DOMContentLoaded', main);
   opcNSetChild, opcCallSite, opcNewStr, opcTJmp, opcFJmp, opcJmp, opcJmpBack,
   opcBranch, opcTry, opcExcept, opcFinally, opcFinallyEnd, opcNew, opcNewSeq,
   opcLdNull, opcLdNullReg, opcLdConst, opcAsgnConst, opcLdGlobal,
-  opcLdGlobalAddr, opcLdCmplxConst, opcLdImmInt, opcSetType, opcNSetType,
-  opcTypeTrait, opcSymOwner, opcSymIsInstantiationOf">TOpcode</a></li>
+  opcLdCmplxConst, opcLdImmInt, opcSetType, opcNSetType, opcTypeTrait,
+  opcSymOwner, opcSymIsInstantiationOf">TOpcode</a></li>
   <li><a class="reference" href="#TRegisterKind"
     title="TRegisterKind = enum
   rkNone, rkInt, rkFloat, rkAddress, ## Register stores an address and optional type. The address is
                                       ## not required to point to a valid location
-  rkLocation,               ## Register stores a location
+  rkLocation, ## Register stores an owning handle to a location. Once the
+               ## register transitions to a different kind, the location is
+               ## cleaned up and the memory freed
   rkHandle,                 ## Register stores a handle to a location
-  rkNimNode, rkRegAddr">TRegisterKind</a></li>
+  rkNimNode">TRegisterKind</a></li>
 
   </ul>
 </li>
@@ -182,7 +174,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/aea1301c4435920985e87f176ed799efa7c76924/compiler/vm/vm_enums.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/ece6f45ac93cfa13dd4e2f1411e60a1b6f499532/compiler/vm/vm_enums.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -204,9 +196,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/aea1301c4435920985e87f176ed799efa7c76924/compiler/vm/vm_enums.nim#L174"
+href="https://github.com/nim-works/nimskull/tree/ece6f45ac93cfa13dd4e2f1411e60a1b6f499532/compiler/vm/vm_enums.nim#L169"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L174" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L169" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -219,21 +211,11 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">opcWrObj</span><span class="Other">,</span> <span class="Identifier">opcWrLoc</span><span class="Other">,</span> <span class="Comment">## ``a = b``; writes the value represented by register `b`</span>
                        <span class="Comment">## (either directly or indirectly) to the location identified</span>
                        <span class="Comment">## by register `a`. A full copy is performed.</span>
-  <span class="Identifier">opcAddrReg</span><span class="Other">,</span> <span class="Identifier">opcAddrNode</span><span class="Other">,</span> <span class="Identifier">opcLdDeref</span><span class="Other">,</span> <span class="Identifier">opcWrDeref</span><span class="Other">,</span> <span class="Identifier">opcWrStrIdx</span><span class="Other">,</span> <span class="Identifier">opcLdStrIdx</span><span class="Other">,</span>
-  <span class="Identifier">opcLdStrIdxAddr</span><span class="Other">,</span> <span class="Identifier">opcInitDisc</span><span class="Other">,</span> <span class="Identifier">opcSetDisc</span><span class="Other">,</span> <span class="Identifier">opcWrProc</span><span class="Other">,</span> <span class="Identifier">opcWrClosure</span><span class="Other">,</span> <span class="Identifier">opcAccessEnv</span><span class="Other">,</span> <span class="Comment">## </span>
-                                                                                    <span class="Comment">## a </span>
-                                                                                    <span class="Comment">## = </span>
-                                                                                    <span class="Comment">## b.env[]; </span>
-                                                                                    <span class="Comment">## loads </span>
-                                                                                    <span class="Comment">## a </span>
-                                                                                    <span class="Comment">## handle </span>
-                                                                                    <span class="Comment">## to </span>
-                                                                                    <span class="Comment">## the </span>
-                                                                                    <span class="Comment">## cell </span>
-                                                                                    <span class="Comment">## holding </span>
-                                                                                    <span class="Comment">## the</span>
-                                                                                    <span class="Comment">## </span>
-                                                                                    <span class="Comment">## environment</span>
+  <span class="Identifier">opcAddr</span><span class="Other">,</span>                  <span class="Comment">## a = addr b</span>
+  <span class="Identifier">opcLdDeref</span><span class="Other">,</span> <span class="Identifier">opcWrDeref</span><span class="Other">,</span> <span class="Identifier">opcWrStrIdx</span><span class="Other">,</span> <span class="Identifier">opcLdStrIdx</span><span class="Other">,</span> <span class="Identifier">opcLdStrIdxAddr</span><span class="Other">,</span>
+  <span class="Identifier">opcInitDisc</span><span class="Other">,</span> <span class="Identifier">opcSetDisc</span><span class="Other">,</span> <span class="Identifier">opcWrProc</span><span class="Other">,</span> <span class="Identifier">opcWrClosure</span><span class="Other">,</span> <span class="Identifier">opcAccessEnv</span><span class="Other">,</span> <span class="Comment">## a = b.env[]; loads a handle to the cell holding the</span>
+                                                                   <span class="Comment">## </span>
+                                                                   <span class="Comment">## environment</span>
   <span class="Identifier">opcAddInt</span><span class="Other">,</span> <span class="Identifier">opcAddImmInt</span><span class="Other">,</span> <span class="Identifier">opcSubInt</span><span class="Other">,</span> <span class="Identifier">opcSubImmInt</span><span class="Other">,</span> <span class="Identifier">opcLenSeq</span><span class="Other">,</span> <span class="Identifier">opcLenStr</span><span class="Other">,</span>
   <span class="Identifier">opcLenCstring</span><span class="Other">,</span> <span class="Identifier">opcIncl</span><span class="Other">,</span> <span class="Identifier">opcInclRange</span><span class="Other">,</span> <span class="Identifier">opcExcl</span><span class="Other">,</span> <span class="Identifier">opcCard</span><span class="Other">,</span> <span class="Identifier">opcMulInt</span><span class="Other">,</span> <span class="Identifier">opcDivInt</span><span class="Other">,</span>
   <span class="Identifier">opcModInt</span><span class="Other">,</span> <span class="Identifier">opcAddFloat</span><span class="Other">,</span> <span class="Identifier">opcSubFloat</span><span class="Other">,</span> <span class="Identifier">opcMulFloat</span><span class="Other">,</span> <span class="Identifier">opcDivFloat</span><span class="Other">,</span> <span class="Identifier">opcShrInt</span><span class="Other">,</span>
@@ -258,15 +240,15 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">opcNSetChild</span><span class="Other">,</span> <span class="Identifier">opcCallSite</span><span class="Other">,</span> <span class="Identifier">opcNewStr</span><span class="Other">,</span> <span class="Identifier">opcTJmp</span><span class="Other">,</span> <span class="Identifier">opcFJmp</span><span class="Other">,</span> <span class="Identifier">opcJmp</span><span class="Other">,</span> <span class="Identifier">opcJmpBack</span><span class="Other">,</span>
   <span class="Identifier">opcBranch</span><span class="Other">,</span> <span class="Identifier">opcTry</span><span class="Other">,</span> <span class="Identifier">opcExcept</span><span class="Other">,</span> <span class="Identifier">opcFinally</span><span class="Other">,</span> <span class="Identifier">opcFinallyEnd</span><span class="Other">,</span> <span class="Identifier">opcNew</span><span class="Other">,</span> <span class="Identifier">opcNewSeq</span><span class="Other">,</span>
   <span class="Identifier">opcLdNull</span><span class="Other">,</span> <span class="Identifier">opcLdNullReg</span><span class="Other">,</span> <span class="Identifier">opcLdConst</span><span class="Other">,</span> <span class="Identifier">opcAsgnConst</span><span class="Other">,</span> <span class="Identifier">opcLdGlobal</span><span class="Other">,</span>
-  <span class="Identifier">opcLdGlobalAddr</span><span class="Other">,</span> <span class="Identifier">opcLdCmplxConst</span><span class="Other">,</span> <span class="Identifier">opcLdImmInt</span><span class="Other">,</span> <span class="Identifier">opcSetType</span><span class="Other">,</span> <span class="Identifier">opcNSetType</span><span class="Other">,</span>
-  <span class="Identifier">opcTypeTrait</span><span class="Other">,</span> <span class="Identifier">opcSymOwner</span><span class="Other">,</span> <span class="Identifier">opcSymIsInstantiationOf</span></pre></dt>
+  <span class="Identifier">opcLdCmplxConst</span><span class="Other">,</span> <span class="Identifier">opcLdImmInt</span><span class="Other">,</span> <span class="Identifier">opcSetType</span><span class="Other">,</span> <span class="Identifier">opcNSetType</span><span class="Other">,</span> <span class="Identifier">opcTypeTrait</span><span class="Other">,</span>
+  <span class="Identifier">opcSymOwner</span><span class="Other">,</span> <span class="Identifier">opcSymIsInstantiationOf</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/aea1301c4435920985e87f176ed799efa7c76924/compiler/vm/vm_enums.nim#L20"
+href="https://github.com/nim-works/nimskull/tree/ece6f45ac93cfa13dd4e2f1411e60a1b6f499532/compiler/vm/vm_enums.nim#L17"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L20" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L17" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -274,14 +256,16 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><a href="vm_enums.html#TRegisterKind"><span class="Identifier">TRegisterKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
   <span class="Identifier">rkNone</span><span class="Other">,</span> <span class="Identifier">rkInt</span><span class="Other">,</span> <span class="Identifier">rkFloat</span><span class="Other">,</span> <span class="Identifier">rkAddress</span><span class="Other">,</span> <span class="Comment">## Register stores an address and optional type. The address is</span>
                                       <span class="Comment">## not required to point to a valid location</span>
-  <span class="Identifier">rkLocation</span><span class="Other">,</span>               <span class="Comment">## Register stores a location</span>
+  <span class="Identifier">rkLocation</span><span class="Other">,</span> <span class="Comment">## Register stores an owning handle to a location. Once the</span>
+               <span class="Comment">## register transitions to a different kind, the location is</span>
+               <span class="Comment">## cleaned up and the memory freed</span>
   <span class="Identifier">rkHandle</span><span class="Other">,</span>                 <span class="Comment">## Register stores a handle to a location</span>
-  <span class="Identifier">rkNimNode</span><span class="Other">,</span> <span class="Identifier">rkRegAddr</span></pre></dt>
+  <span class="Identifier">rkNimNode</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/aea1301c4435920985e87f176ed799efa7c76924/compiler/vm/vm_enums.nim#L2"
+href="https://github.com/nim-works/nimskull/tree/ece6f45ac93cfa13dd4e2f1411e60a1b6f499532/compiler/vm/vm_enums.nim#L2"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L2" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -298,9 +282,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/aea1301c4435920985e87f176ed799efa7c76924/compiler/vm/vm_enums.nim#L183"
+href="https://github.com/nim-works/nimskull/tree/ece6f45ac93cfa13dd4e2f1411e60a1b6f499532/compiler/vm/vm_enums.nim#L178"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L183" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L178" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -310,9 +294,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/aea1301c4435920985e87f176ed799efa7c76924/compiler/vm/vm_enums.nim#L184"
+href="https://github.com/nim-works/nimskull/tree/ece6f45ac93cfa13dd4e2f1411e60a1b6f499532/compiler/vm/vm_enums.nim#L179"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L184" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L179" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -322,9 +306,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/aea1301c4435920985e87f176ed799efa7c76924/compiler/vm/vm_enums.nim#L186"
+href="https://github.com/nim-works/nimskull/tree/ece6f45ac93cfa13dd4e2f1411e60a1b6f499532/compiler/vm/vm_enums.nim#L181"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L186" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L181" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
