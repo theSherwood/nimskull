@@ -106,9 +106,20 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#CheckedAst"
     title="CheckedAst = object
-  n: PNode                   ## stores the AST. Never nil
+  n: PNode                   ## stores the AST. Never nil nor an error
   hasError: bool             ## tracks whether `n` contains an ``nkError`` node
                              ## somewhere">CheckedAst</a></li>
+  <li><a class="reference" href="#ElaborateAst"
+    title="ElaborateAst = object
+  orig: PNode                ## the source node
+  diag*: PAstDiag            ## the error diagnostic, or nil. If the production
+                             ## finishes and the diagnostic is non-nil, an error
+                             ## is produced instead
+  hasError: bool             ## whether one of the produced children contains an
+                             ## error somewhere
+  children: seq[PNode]       ## the produced child nodes; has the number of
+                             ## elements as `n` has children
+  typ*: PType                ## the type of the produced expression">ElaborateAst</a></li>
 
   </ul>
 </li>
@@ -125,6 +136,10 @@ window.addEventListener('DOMContentLoaded', main);
     title="`[]=`(x: var CheckedAst; i: int | BackwardsIndex; n: sink CheckedAst)">`[]=`(x: var CheckedAst; i: int | BackwardsIndex; n: sink CheckedAst)</a></li>
   <li><a class="reference" href="#%5B%5D%3D%2CCheckedAst%2C%2CsinkPNode"
     title="`[]=`(x: var CheckedAst; i: int | BackwardsIndex; n: sink PNode)">`[]=`(x: var CheckedAst; i: int | BackwardsIndex; n: sink PNode)</a></li>
+  <li><a class="reference" href="#%5B%5D%3D%2CElaborateAst%2C%2CPNode"
+    title="`[]=`(x: var ElaborateAst; i: int | BackwardsIndex; n: PNode)">`[]=`(x: var ElaborateAst; i: int | BackwardsIndex; n: PNode)</a></li>
+  <li><a class="reference" href="#%5B%5D%3D%2CElaborateAst%2C%2CsinkCheckedAst"
+    title="`[]=`(x: var ElaborateAst; i: int | BackwardsIndex; n: sink CheckedAst)">`[]=`(x: var ElaborateAst; i: int | BackwardsIndex; n: sink CheckedAst)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">add
@@ -137,6 +152,8 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">extract
       <li><a class="reference" href="#extract%2CConfigRef%2CsinkCheckedAst"
     title="extract(c: ConfigRef; n: sink CheckedAst): PNode">extract(c: ConfigRef; n: sink CheckedAst): PNode</a></li>
+  <li><a class="reference" href="#extract%2CConfigRef%2CsinkElaborateAst"
+    title="extract(c: ConfigRef; n: sink ElaborateAst): PNode">extract(c: ConfigRef; n: sink ElaborateAst): PNode</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">flattenIf
@@ -157,6 +174,8 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">initWith
       <li><a class="reference" href="#initWith%2CCheckedAst%2CsinkPNode"
     title="initWith(x: var CheckedAst; n: sink PNode)">initWith(x: var CheckedAst; n: sink PNode)</a></li>
+  <li><a class="reference" href="#initWith%2CElaborateAst%2CPNode"
+    title="initWith(x: var ElaborateAst; n: PNode)">initWith(x: var ElaborateAst; n: PNode)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">kind
@@ -169,9 +188,14 @@ window.addEventListener('DOMContentLoaded', main);
     title="len(x: CheckedAst): int">len(x: CheckedAst): int</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">newError
-      <li><a class="reference" href="#newError%2CConfigRef%2CsinkCheckedAst%2CPAstDiag"
-    title="newError(c: ConfigRef; n: sink CheckedAst; diag: PAstDiag): CheckedAst">newError(c: ConfigRef; n: sink CheckedAst; diag: PAstDiag): CheckedAst</a></li>
+  <ul class="simple nested-toc-section">typ
+      <li><a class="reference" href="#typ%2CCheckedAst"
+    title="typ(x: CheckedAst): PType">typ(x: CheckedAst): PType</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">typ=
+      <li><a class="reference" href="#typ%3D%2CCheckedAst%2CPType"
+    title="typ=(x: var CheckedAst; typ: PType)">typ=(x: var CheckedAst; typ: PType)</a></li>
 
   </ul>
 
@@ -180,7 +204,12 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">get
+      <ul class="simple nested-toc-section">[]
+      <li><a class="reference" href="#%5B%5D.t%2CElaborateAst%2C"
+    title="`[]`(x: var ElaborateAst; i: int | BackwardsIndex): PNode">`[]`(x: var ElaborateAst; i: int | BackwardsIndex): PNode</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">get
       <li><a class="reference" href="#get.t%2CCheckedAst"
     title="get(n: CheckedAst): PNode">get(n: CheckedAst): PNode</a></li>
 
@@ -193,7 +222,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -203,6 +232,7 @@ class="link-seesrc" target="_blank">Source</a>
   <p class="module-desc"><p>The <tt class="docutils literal"><span class="pre">CheckedAst</span></tt> type is implemented here, along with its accessor routines and routines for creating and manipulating <tt class="docutils literal"><span class="pre">CheckedAst</span></tt> instances.</p>
 <p><tt class="docutils literal"><span class="pre">CheckedAst</span></tt> is a wrapper around <tt class="docutils literal"><span class="pre">PNode</span></tt>, and is intended to make propagation less manual, by keeping track of whether there is an error <em>somewhere</em> in the managed AST.</p>
 <p>The idea is to use <tt class="docutils literal"><span class="pre">CheckedAst</span></tt> as the return type of all semantic analysis procedures, eventually removing the need for wrapper errors (<tt class="docutils literal"><span class="pre">adWrappedError</span></tt>).</p>
+<p>A second experiment, <tt class="docutils literal"><span class="pre">ElaborateAst</span></tt>, is also implemented here. Rather than being a wrapper around <tt class="docutils literal"><span class="pre">PNode</span></tt>, it acts as sort of &quot;builder&quot; during piece-by-piece production of an AST node.</p>
 </p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
@@ -214,7 +244,7 @@ class="link-seesrc" target="_blank">Source</a>
 <dl class="item">
 <div id="CheckedAst">
 <dt><pre><a href="checked_ast.html#CheckedAst"><span class="Identifier">CheckedAst</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">n</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a>                   <span class="Comment">## stores the AST. Never nil</span>
+  <span class="Identifier">n</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a>                   <span class="Comment">## stores the AST. Never nil nor an error</span>
   <span class="Identifier">hasError</span><span class="Other">:</span> <span class="Identifier">bool</span>             <span class="Comment">## tracks whether `n` contains an ``nkError`` node</span>
                              <span class="Comment">## somewhere</span>
   </pre></dt>
@@ -222,9 +252,31 @@ class="link-seesrc" target="_blank">Source</a>
 
 Represents either in-progress or fully semanticized AST. It is meant as a wrapper for semantically <em>checked</em> AST, hence the name.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L25"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L29"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L29" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="ElaborateAst">
+<dt><pre><a href="checked_ast.html#ElaborateAst"><span class="Identifier">ElaborateAst</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">orig</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a>                <span class="Comment">## the source node</span>
+  <span class="Identifier">diag</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PAstDiag"><span class="Identifier">PAstDiag</span></a>            <span class="Comment">## the error diagnostic, or nil. If the production</span>
+                             <span class="Comment">## finishes and the diagnostic is non-nil, an error</span>
+                             <span class="Comment">## is produced instead</span>
+  <span class="Identifier">hasError</span><span class="Other">:</span> <span class="Identifier">bool</span>             <span class="Comment">## whether one of the produced children contains an</span>
+                             <span class="Comment">## error somewhere</span>
+  <span class="Identifier">children</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">]</span>       <span class="Comment">## the produced child nodes; has the number of</span>
+                             <span class="Comment">## elements as `n` has children</span>
+  <span class="Identifier">typ</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PType"><span class="Identifier">PType</span></a>                <span class="Comment">## the type of the produced expression</span>
+  </pre></dt>
+<dd>
+
+<em>Note</em>: the name is not final and going to change. Represents an in-progress or finished production of either an AST of the same kind and number of children as the source, or an error.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L36"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L36" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -239,9 +291,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L89"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L162"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L89" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L162" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -251,9 +303,34 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L85"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L158"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L85" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L158" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="[]=,ElaborateAst,,PNode">
+<dt><pre><span class="Keyword">func</span> <a href="#%5B%5D%3D%2CElaborateAst%2C%2CPNode"><span class="Identifier">`[]=`</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="checked_ast.html#ElaborateAst"><span class="Identifier">ElaborateAst</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Operator">|</span> <span class="Identifier">BackwardsIndex</span><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span>.}</pre></dt>
+<dd>
+
+Sets the child node at <tt class="docutils literal"><span class="pre"><span class="Identifier">i</span></span></tt>
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L66"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L66" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="[]=,ElaborateAst,,sinkCheckedAst">
+<dt><pre><span class="Keyword">func</span> <a href="#%5B%5D%3D%2CElaborateAst%2C%2CsinkCheckedAst"><span class="Identifier">`[]=`</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="checked_ast.html#ElaborateAst"><span class="Identifier">ElaborateAst</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Operator">|</span> <span class="Identifier">BackwardsIndex</span><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="checked_ast.html#CheckedAst"><span class="Identifier">CheckedAst</span></a><span class="Other">)</span> {.
+    <span class="Identifier">inline</span>.}</pre></dt>
+<dd>
+
+Sets the child node at <tt class="docutils literal"><span class="pre"><span class="Identifier">i</span></span></tt>
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L71"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L71" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -263,9 +340,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L82"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L155"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L82" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L155" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -275,9 +352,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L70"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L143"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L70" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L143" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -287,9 +364,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L66"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L139"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L66" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L139" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -301,9 +378,21 @@ class="link-seesrc" target="_blank">Source</a>
 <p>This procedure is only meant to be used at the edge to <tt class="docutils literal"><span class="pre">CheckedAst</span></tt>- unaware code.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L93"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L166"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L93" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L166" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="extract,ConfigRef,sinkElaborateAst">
+<dt><pre><span class="Keyword">proc</span> <a href="#extract%2CConfigRef%2CsinkElaborateAst"><span class="Identifier">extract</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="checked_ast.html#ElaborateAst"><span class="Identifier">ElaborateAst</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Finishes the production and returns the result as a <tt class="docutils literal"><span class="pre">PNode</span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L77"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L77" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -313,9 +402,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Replace <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> with its first child node, but only if <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> has a single child node and is of kind <tt class="docutils literal"><span class="pre"><span class="Identifier">kind</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L104"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L177"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L104" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L177" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -325,9 +414,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L63"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L130"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L63" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L130" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -338,9 +427,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Initialize <tt class="docutils literal"><span class="pre"><span class="Identifier">x</span></span></tt> as a node of kind <tt class="docutils literal"><span class="pre">n.kind</span></tt>. Space for all children of <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> is allocated, but the child nodes are not copied. For the flags, only the persistent ones are copied.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L32"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L97"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L32" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L97" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -350,9 +439,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 Initializes <tt class="docutils literal"><span class="pre"><span class="Identifier">x</span></span></tt>, using <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> as the tree. This is only meant to be used with the direct result of a <tt class="docutils literal"><span class="pre">newNodeX</span></tt> or <tt class="docutils literal"><span class="pre">newTreeX</span></tt> call.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L41"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L106"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L41" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L106" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="initWith,ElaborateAst,PNode">
+<dt><pre><span class="Keyword">proc</span> <a href="#initWith%2CElaborateAst%2CPNode"><span class="Identifier">initWith</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="checked_ast.html#ElaborateAst"><span class="Identifier">ElaborateAst</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Setup the production of a new AST of the kind and with the number of children that <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> has.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L54"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L54" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -362,9 +463,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L57"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L124"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -374,22 +475,33 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L60"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L127"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L127" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="newError,ConfigRef,sinkCheckedAst,PAstDiag">
-<dt><pre><span class="Keyword">proc</span> <a href="#newError%2CConfigRef%2CsinkCheckedAst%2CPAstDiag"><span class="Identifier">newError</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="checked_ast.html#CheckedAst"><span class="Identifier">CheckedAst</span></a><span class="Other">;</span> <span class="Identifier">diag</span><span class="Other">:</span> <a href="ast_types.html#PAstDiag"><span class="Identifier">PAstDiag</span></a><span class="Other">)</span><span class="Other">:</span> <a href="checked_ast.html#CheckedAst"><span class="Identifier">CheckedAst</span></a> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="typ,CheckedAst">
+<dt><pre><span class="Keyword">func</span> <a href="#typ%2CCheckedAst"><span class="Identifier">typ</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <a href="checked_ast.html#CheckedAst"><span class="Identifier">CheckedAst</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#PType"><span class="Identifier">PType</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Creates an <tt class="docutils literal"><span class="pre">CheckedAst</span></tt> error node.
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L48"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L133"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L48" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L133" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="typ=,CheckedAst,PType">
+<dt><pre><span class="Keyword">func</span> <a href="#typ%3D%2CCheckedAst%2CPType"><span class="Identifier">typ=</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="checked_ast.html#CheckedAst"><span class="Identifier">CheckedAst</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L136"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L136" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -398,15 +510,27 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="18">
 <h1><a class="toc-backref" href="#18">Templates</a></h1>
 <dl class="item">
+<div id="[].t,ElaborateAst,">
+<dt><pre><span class="Keyword">template</span> <a href="#%5B%5D.t%2CElaborateAst%2C"><span class="Identifier">`[]`</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="checked_ast.html#ElaborateAst"><span class="Identifier">ElaborateAst</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Operator">|</span> <span class="Identifier">BackwardsIndex</span><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L63"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L63" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="get.t,CheckedAst">
 <dt><pre><span class="Keyword">template</span> <a href="#get.t%2CCheckedAst"><span class="Identifier">get</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <a href="checked_ast.html#CheckedAst"><span class="Identifier">CheckedAst</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a></pre></dt>
 <dd>
 
 Direct access to the internal node. Should only be used by code meant for debugging.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/56001caf3b192206c5902b3cf5c3a83d94f972ad/compiler/ast/checked_ast.nim#L111"
+href="https://github.com/nim-works/nimskull/tree/0e01a4b714475ef893565fbe89b6e91d936d5383/compiler/ast/checked_ast.nim#L184"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L111" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/checked_ast.nim#L184" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -420,7 +544,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-04-20 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-04-24 00:00:00 UTC</small>
       </div>
     </div>
   </div>
