@@ -146,7 +146,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/93f704e5850d72251268c0d8fa276bb179637dc4/doc/nimc.rst#L1"
+href="https://github.com/nim-works/nimskull/tree/ad4167bbb2c8d3853280e8af4bbe171be4d0a362/doc/nimc.rst#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/doc/nimc.rst#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -154,7 +154,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div id="tocRoot"></div>
   
   <p class="module-desc"><table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Author:</th><td>Andreas Rumpf</td></tr>
-<tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20744</td></tr>
+<tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20746</td></tr>
 </tbody></table><blockquote><p>&quot;Look at you, hacker. A pathetic creature of meat and bone, panting and sweating as you run through my corridors. How can you challenge a perfect, immortal machine?&quot;</p></blockquote>
 
 <h1><a class="toc-backref" id="introduction" href="#introduction">Introduction</a></h1><p>This document describes the usage of the <em>Nim compiler</em> on the different supported platforms. It is not a definition of the Nim programming language (which is covered in the <a class="reference external" href="manual.html">manual</a>).</p>
@@ -277,7 +277,7 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="option-list-item odd"><div class="option-list-label"><tt><span class="option">--skipParentCfg:on|off</span></tt></div><div class="option-list-description">do not read the parent dirs' configuration files</div></div>
 <div class="option-list-item"><div class="option-list-label"><tt><span class="option">--skipProjCfg:on|off</span></tt></div><div class="option-list-description">do not read the project's configuration file</div></div>
 <div class="option-list-item odd"><div class="option-list-label"><tt><span class="option">--gc:refc|arc|orc|markAndSweep|boehm|go|none|regions</span></tt></div><div class="option-list-description">select the GC to use; default is 'refc'</div></div>
-<div class="option-list-item"><div class="option-list-label"><tt><span class="option">--exceptions:setjmp|native|goto|quirky</span></tt></div><div class="option-list-description">select the exception handling implementation</div></div>
+<div class="option-list-item"><div class="option-list-label"><tt><span class="option">--exceptions:native|goto</span></tt></div><div class="option-list-description">select the exception handling implementation</div></div>
 <div class="option-list-item odd"><div class="option-list-label"><tt><span class="option">--index:on|off</span></tt></div><div class="option-list-description">turn index file generation on|off</div></div>
 <div class="option-list-item"><div class="option-list-label"><tt><span class="option">--putenv:key=value</span></tt></div><div class="option-list-description">set an environment variable</div></div>
 <div class="option-list-item odd"><div class="option-list-label"><tt><span class="option">--NimblePath:PATH</span></tt></div><div class="option-list-description">add a path for Nimble support</div></div>
@@ -363,10 +363,8 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Compile-time symbols are completely <strong>case insensitive</strong> and underscores are ignored too. <tt class="docutils literal"><span class="pre option">--define:FOO</span></tt> and <tt class="docutils literal"><span class="pre option">--define:foo</span></tt> are identical.</p>
 <p>Compile-time symbols starting with the <tt class="docutils literal"><span class="pre"><span class="Identifier">nim</span></span></tt> prefix are reserved for the implementation and should not be used elsewhere.</p>
 <table border="1" class="docutils"><tr><th>Name</th><th>Description</th></tr>
-<tr><td>nimStdSetjmp</td><td>Use the standard <tt class="docutils literal"><span class="pre"><span class="Identifier">setjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Operator">/</span><span class="Identifier">longjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> library functions for setjmp-based exceptions. This is the default on most platforms.</td></tr>
-<tr><td>nimSigSetjmp</td><td>Use <tt class="docutils literal"><span class="pre"><span class="Identifier">sigsetjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Operator">/</span><span class="Identifier">siglongjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> for setjmp-based exceptions.</td></tr>
-<tr><td>nimRawSetjmp</td><td>Use <tt class="docutils literal"><span class="pre"><span class="Identifier">_setjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Operator">/</span><span class="Identifier">_longjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> on POSIX and <tt class="docutils literal"><span class="pre"><span class="Identifier">_setjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Operator">/</span><span class="Identifier">longjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> on Windows, for setjmp-based exceptions. It's the default on BSDs and BSD-like platforms, where it's significantly faster than the standard functions.</td></tr>
-<tr><td>nimBuiltinSetjmp</td><td>Use <tt class="docutils literal"><span class="pre"><span class="Identifier">__builtin_setjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Operator">/</span><span class="Identifier">__builtin_longjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> for setjmp-based exceptions. This will not work if an exception is being thrown and caught inside the same procedure. Useful for benchmarking.</td></tr>
+<tr><td>nimStdSetjmp</td><td>Use the standard <tt class="docutils literal"><span class="pre"><span class="Identifier">setjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> library function for saving the register state during stack scanning. Only relevant for stack-scanning GCs</td></tr>
+<tr><td>nimRawSetjmp</td><td>Use <tt class="docutils literal"><span class="pre"><span class="Identifier">_setjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> on POSIX and <tt class="docutils literal"><span class="pre"><span class="Identifier">_setjmp</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> on Windows, for saving the register state. It's the default on BSDs and BSD-like platforms, where it's significantly faster than the standard functions.</td></tr>
 </table>
 <h2><a class="toc-backref" id="compiler-usage-configuration-files" href="#compiler-usage-configuration-files">Configuration files</a></h2><p><strong>Note:</strong> The <em>project file name</em> is the name of the <tt class="docutils literal"><span class="pre">.nim</span></tt> file that is passed as a command-line argument to the compiler.</p>
 <p>The <tt class="docutils literal"><span class="pre"><span class="program">nim</span></span></tt> executable processes configuration files in the following directories (in this order; later files overwrite previous settings):</p>
@@ -604,7 +602,7 @@ custom_target(
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-04-25 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-04-26 00:00:00 UTC</small>
       </div>
     </div>
   </div>
