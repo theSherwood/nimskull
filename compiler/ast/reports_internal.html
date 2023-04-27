@@ -119,9 +119,6 @@ window.addEventListener('DOMContentLoaded', main);
   of rintStackTrace:
       trace*: seq[StackTraceEntry] ## Generated stack trace entries
     
-  of rintDumpState:
-      stateDump*: InternalStateDump
-
   of rintAssert:
       expression*: string
 
@@ -139,21 +136,6 @@ window.addEventListener('DOMContentLoaded', main);
 
   else:
       nil">InternalReport</a></li>
-  <li><a class="reference" href="#InternalStateDump"
-    title="InternalStateDump = ref object
-  version*: string
-  nimExe*: string
-  prefixdir*: string
-  libpath*: string
-  projectPath*: string
-  definedSymbols*: seq[string]
-  libPaths*: seq[string]
-  lazyPaths*: seq[string]
-  nimbleDir*: string
-  outdir*: string
-  `out`*: string
-  nimcache*: string
-  hints*, warnings*: seq[tuple[name: string, enabled: bool]]">InternalStateDump</a></li>
   <li><a class="reference" href="#UsedBuildParams"
     title="UsedBuildParams = object
   project*: string
@@ -191,7 +173,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/614d7c8b80c62c92d8218f53dfa7737be920e446/compiler/ast/reports_internal.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/05469fea380fe4e2ff69b03a1804dac8fc0e066b/compiler/ast/reports_internal.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_internal.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -230,9 +212,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Information used to construct messages for CLI reports - <tt class="docutils literal"><span class="pre"><span class="Operator">--</span><span class="Identifier">help</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Operator">--</span><span class="Identifier">fullhelp</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/614d7c8b80c62c92d8218f53dfa7737be920e446/compiler/ast/reports_internal.nim#L56"
+href="https://github.com/nim-works/nimskull/tree/05469fea380fe4e2ff69b03a1804dac8fc0e066b/compiler/ast/reports_internal.nim#L40"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_internal.nim#L56" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_internal.nim#L40" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -243,9 +225,6 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Keyword">of</span> <span class="Identifier">rintStackTrace</span><span class="Other">:</span>
       <span class="Identifier">trace</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">StackTraceEntry</span><span class="Other">]</span> <span class="Comment">## Generated stack trace entries</span>
     
-  <span class="Keyword">of</span> <span class="Identifier">rintDumpState</span><span class="Other">:</span>
-      <span class="Identifier">stateDump</span><span class="Operator">*</span><span class="Other">:</span> <a href="reports_internal.html#InternalStateDump"><span class="Identifier">InternalStateDump</span></a>
-
   <span class="Keyword">of</span> <span class="Identifier">rintAssert</span><span class="Other">:</span>
       <span class="Identifier">expression</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
 
@@ -269,35 +248,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Report generated for the internal compiler workings
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/614d7c8b80c62c92d8218f53dfa7737be920e446/compiler/ast/reports_internal.nim#L66"
+href="https://github.com/nim-works/nimskull/tree/05469fea380fe4e2ff69b03a1804dac8fc0e066b/compiler/ast/reports_internal.nim#L50"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_internal.nim#L66" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="InternalStateDump">
-<dt><pre><a href="reports_internal.html#InternalStateDump"><span class="Identifier">InternalStateDump</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span>
-  <span class="Identifier">version</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">nimExe</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">prefixdir</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">libpath</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">projectPath</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">definedSymbols</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span>
-  <span class="Identifier">libPaths</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span>
-  <span class="Identifier">lazyPaths</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span>
-  <span class="Identifier">nimbleDir</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">outdir</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Other">`</span><span class="Keyword">out</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">nimcache</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">hints</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">warnings</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">,</span> <span class="Identifier">enabled</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">]</span><span class="Other">]</span>
-</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/614d7c8b80c62c92d8218f53dfa7737be920e446/compiler/ast/reports_internal.nim#L41"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_internal.nim#L41" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_internal.nim#L50" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -325,7 +278,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/614d7c8b80c62c92d8218f53dfa7737be920e446/compiler/ast/reports_internal.nim#L23"
+href="https://github.com/nim-works/nimskull/tree/05469fea380fe4e2ff69b03a1804dac8fc0e066b/compiler/ast/reports_internal.nim#L23"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_internal.nim#L23" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -342,9 +295,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/614d7c8b80c62c92d8218f53dfa7737be920e446/compiler/ast/reports_internal.nim#L94"
+href="https://github.com/nim-works/nimskull/tree/05469fea380fe4e2ff69b03a1804dac8fc0e066b/compiler/ast/reports_internal.nim#L75"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_internal.nim#L94" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_internal.nim#L75" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
