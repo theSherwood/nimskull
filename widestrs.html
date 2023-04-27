@@ -101,9 +101,12 @@ window.addEventListener('DOMContentLoaded', main);
       <li><a class="reference" href="#Utf16Char"
     title="Utf16Char = distinct int16">Utf16Char</a></li>
   <li><a class="reference" href="#WideCString"
-    title="WideCString = ref UncheckedArray[Utf16Char]">WideCString</a></li>
+    title="WideCString = ptr UncheckedArray[Utf16Char]">WideCString</a></li>
   <li><a class="reference" href="#WideCStringObj"
-    title="WideCStringObj = WideCString">WideCStringObj</a></li>
+    title="WideCStringObj = object
+  data: seq[Utf16Char]       ## the raw character buffer. The number of elements
+                             ## doesn't necessarily correspond to the length of
+                             ## the string">WideCStringObj</a></li>
 
   </ul>
 </li>
@@ -113,6 +116,10 @@ window.addEventListener('DOMContentLoaded', main);
       <ul class="simple nested-toc-section">$
       <li><a class="reference" href="#%24%2CWideCString"
     title="`$`(s: WideCString): string">`$`(s: WideCString): string</a></li>
+  <li><a class="reference" href="#%24%2CWideCStringObj"
+    title="`$`(s: WideCStringObj): string">`$`(s: WideCStringObj): string</a></li>
+  <li><a class="reference" href="#%24%2CWideCStringObj%2Cint%2Cint"
+    title="`$`(s: WideCStringObj; estimate: int; replacement: int = 0x0000FFFD): string">`$`(s: WideCStringObj; estimate: int; replacement: int = 0x0000FFFD): string</a></li>
   <li><a class="reference" href="#%24%2CWideCString%2Cint%2Cint"
     title="`$`(w: WideCString; estimate: int; replacement: int = 0x0000FFFD): string">`$`(w: WideCString; estimate: int; replacement: int = 0x0000FFFD): string</a></li>
 
@@ -136,12 +143,39 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
 </li>
+<li>
+  <a class="reference reference-toplevel" href="#16" id="66">Converters</a>
+  <ul class="simple simple-toc-section">
+      <ul class="simple nested-toc-section">toWideCString
+      <li><a class="reference" href="#toWideCString.c%2CWideCStringObj"
+    title="toWideCString(x: WideCStringObj): WideCString">toWideCString(x: WideCStringObj): WideCString</a></li>
+
+  </ul>
+
+  </ul>
+</li>
+<li>
+  <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
+  <ul class="simple simple-toc-section">
+      <ul class="simple nested-toc-section">[]
+      <li><a class="reference" href="#%5B%5D.t%2CWideCStringObj%2Cint"
+    title="`[]`(a: WideCStringObj; idx: int): Utf16Char">`[]`(a: WideCStringObj; idx: int): Utf16Char</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">[]=
+      <li><a class="reference" href="#%5B%5D%3D.t%2CWideCStringObj%2Cint%2CUtf16Char"
+    title="`[]=`(a: WideCStringObj; idx: int; val: Utf16Char)">`[]=`(a: WideCStringObj; idx: int; val: Utf16Char)</a></li>
+
+  </ul>
+
+  </ul>
+</li>
 
 </ul>
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -158,33 +192,37 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L17"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L17"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L17" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="WideCString">
-<dt><pre><a href="widestrs.html#WideCString"><span class="Identifier">WideCString</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <a href="system.html#UncheckedArray"><span class="Identifier">UncheckedArray</span></a><span class="Other">[</span><a href="widestrs.html#Utf16Char"><span class="Identifier">Utf16Char</span></a><span class="Other">]</span></pre></dt>
+<dt><pre><a href="widestrs.html#WideCString"><span class="Identifier">WideCString</span></a> <span class="Other">=</span> <span class="Keyword">ptr</span> <a href="system.html#UncheckedArray"><span class="Identifier">UncheckedArray</span></a><span class="Other">[</span><a href="widestrs.html#Utf16Char"><span class="Identifier">Utf16Char</span></a><span class="Other">]</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L60"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L21"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L21" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="WideCStringObj">
-<dt><pre><a href="widestrs.html#WideCStringObj"><span class="Identifier">WideCStringObj</span></a> <span class="Other">=</span> <a href="widestrs.html#WideCString"><span class="Identifier">WideCString</span></a></pre></dt>
+<dt><pre><a href="widestrs.html#WideCStringObj"><span class="Identifier">WideCStringObj</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">data</span><span class="Other">:</span> <a href="system.html#seq"><span class="Identifier">seq</span></a><span class="Other">[</span><a href="widestrs.html#Utf16Char"><span class="Identifier">Utf16Char</span></a><span class="Other">]</span>       <span class="Comment">## the raw character buffer. The number of elements</span>
+                             <span class="Comment">## doesn't necessarily correspond to the length of</span>
+                             <span class="Comment">## the string</span>
+  </pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L61"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L23"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L61" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L23" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -199,9 +237,34 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L218"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L196"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L218" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L196" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="$,WideCStringObj">
+<dt><pre><span class="Keyword">proc</span> <a href="#%24%2CWideCStringObj"><span class="Identifier">`$`</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <a href="widestrs.html#WideCStringObj"><span class="Identifier">WideCStringObj</span></a><span class="Other">)</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L203"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L203" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="$,WideCStringObj,int,int">
+<dt><pre><span class="Keyword">proc</span> <a href="#%24%2CWideCStringObj%2Cint%2Cint"><span class="Identifier">`$`</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <a href="widestrs.html#WideCStringObj"><span class="Identifier">WideCStringObj</span></a><span class="Other">;</span> <span class="Identifier">estimate</span><span class="Other">:</span> <a href="system.html#int"><span class="Identifier">int</span></a><span class="Other">;</span> <span class="Identifier">replacement</span><span class="Other">:</span> <a href="system.html#int"><span class="Identifier">int</span></a> <span class="Other">=</span> <span class="DecNumber">0x0000FFFD</span><span class="Other">)</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L200"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L200" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -212,9 +275,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L176"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L154"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L176" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L154" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -224,9 +287,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 returns the length of a widestring. This traverses the whole string to find the binary zero end marker!
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L68"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L46"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -236,9 +299,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L168"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L146"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L146" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -248,9 +311,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L173"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L151"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L173" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L151" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -260,9 +323,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L145"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L123"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L145" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L123" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -273,9 +336,56 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a4565c42116016b47a536f56245c1c6c16a2980/lib/system/widestrs.nim#L148"
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L126"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L148" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L126" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+
+</dl></div>
+<div class="section" id="16">
+<h1><a class="toc-backref" href="#16">Converters</a></h1>
+<dl class="item">
+<div id="toWideCString.c,WideCStringObj">
+<dt><pre><span class="Keyword">converter</span> <a href="#toWideCString.c%2CWideCStringObj"><span class="Identifier">toWideCString</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <a href="widestrs.html#WideCStringObj"><span class="Identifier">WideCStringObj</span></a><span class="Other">)</span><span class="Other">:</span> <a href="widestrs.html#WideCString"><span class="Identifier">WideCString</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L38"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L38" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+
+</dl></div>
+<div class="section" id="18">
+<h1><a class="toc-backref" href="#18">Templates</a></h1>
+<dl class="item">
+<div id="[]=.t,WideCStringObj,int,Utf16Char">
+<dt><pre><span class="Keyword">template</span> <a href="#%5B%5D%3D.t%2CWideCStringObj%2Cint%2CUtf16Char"><span class="Identifier">`[]=`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="widestrs.html#WideCStringObj"><span class="Identifier">WideCStringObj</span></a><span class="Other">;</span> <span class="Identifier">idx</span><span class="Other">:</span> <a href="system.html#int"><span class="Identifier">int</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <a href="widestrs.html#Utf16Char"><span class="Identifier">Utf16Char</span></a><span class="Other">)</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L34"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="[].t,WideCStringObj,int">
+<dt><pre><span class="Keyword">template</span> <a href="#%5B%5D.t%2CWideCStringObj%2Cint"><span class="Identifier">`[]`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="widestrs.html#WideCStringObj"><span class="Identifier">WideCStringObj</span></a><span class="Other">;</span> <span class="Identifier">idx</span><span class="Other">:</span> <a href="system.html#int"><span class="Identifier">int</span></a><span class="Other">)</span><span class="Other">:</span> <a href="widestrs.html#Utf16Char"><span class="Identifier">Utf16Char</span></a></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/3b5c883914c600297d925e61023207ef53b268e8/lib/system/widestrs.nim#L33"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/lib/system/widestrs.nim#L33" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
