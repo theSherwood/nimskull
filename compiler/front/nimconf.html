@@ -113,21 +113,18 @@ window.addEventListener('DOMContentLoaded', main);
   cekInvalidDirective, cekLexerWarningDiag, ## warning from the lexer
   cekLexerHintDiag,         ## hint from the lexer
   cekWriteConfig,           ## write out the config
-  cekDebugTrace,            ## config debug trace
-  cekDebugReadStart,        ## start config file read
-  cekDebugReadStop,         ## stop config file read
   cekProgressConfStart">ConfigEventKind</a></li>
   <li><a class="reference" href="#ConfigFileEvent"
     title="ConfigFileEvent = object
   case kind*: ConfigEventKind
   of cekParseExpectedX, cekParseExpectedCloseX, cekParseExpectedIdent,
-     cekInvalidDirective, cekWriteConfig, cekDebugTrace:
+     cekInvalidDirective, cekWriteConfig:
       location*: TLineInfo   ## diagnostic location
     
   of cekInternalError, cekLexerErrorDiag, cekLexerWarningDiag, cekLexerHintDiag:
       lexerDiag*: LexerDiag
 
-  of cekDebugReadStart, cekDebugReadStop, cekProgressConfStart:
+  of cekProgressConfStart:
       nil
 
   instLoc*: InstantiationInfo ## instantiation in lexer's source
@@ -174,7 +171,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/630f8077af54752de849381116c0fb57e131274d/compiler/front/nimconf.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/f500e85571f355dfe9ea4c19be12c35c59199d6e/compiler/front/nimconf.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -199,15 +196,12 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">cekInvalidDirective</span><span class="Other">,</span> <span class="Identifier">cekLexerWarningDiag</span><span class="Other">,</span> <span class="Comment">## warning from the lexer</span>
   <span class="Identifier">cekLexerHintDiag</span><span class="Other">,</span>         <span class="Comment">## hint from the lexer</span>
   <span class="Identifier">cekWriteConfig</span><span class="Other">,</span>           <span class="Comment">## write out the config</span>
-  <span class="Identifier">cekDebugTrace</span><span class="Other">,</span>            <span class="Comment">## config debug trace</span>
-  <span class="Identifier">cekDebugReadStart</span><span class="Other">,</span>        <span class="Comment">## start config file read</span>
-  <span class="Identifier">cekDebugReadStop</span><span class="Other">,</span>         <span class="Comment">## stop config file read</span>
   <span class="Identifier">cekProgressConfStart</span></pre></dt>
 <dd>
 
 events/errors arising from parsing and processing a compiler config file
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/630f8077af54752de849381116c0fb57e131274d/compiler/front/nimconf.nim#L34"
+href="https://github.com/nim-works/nimskull/tree/f500e85571f355dfe9ea4c19be12c35c59199d6e/compiler/front/nimconf.nim#L34"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -217,13 +211,13 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><a href="nimconf.html#ConfigFileEvent"><span class="Identifier">ConfigFileEvent</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Keyword">case</span> <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimconf.html#ConfigEventKind"><span class="Identifier">ConfigEventKind</span></a>
   <span class="Keyword">of</span> <span class="Identifier">cekParseExpectedX</span><span class="Other">,</span> <span class="Identifier">cekParseExpectedCloseX</span><span class="Other">,</span> <span class="Identifier">cekParseExpectedIdent</span><span class="Other">,</span>
-     <span class="Identifier">cekInvalidDirective</span><span class="Other">,</span> <span class="Identifier">cekWriteConfig</span><span class="Other">,</span> <span class="Identifier">cekDebugTrace</span><span class="Other">:</span>
+     <span class="Identifier">cekInvalidDirective</span><span class="Other">,</span> <span class="Identifier">cekWriteConfig</span><span class="Other">:</span>
       <span class="Identifier">location</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a>   <span class="Comment">## diagnostic location</span>
     
   <span class="Keyword">of</span> <span class="Identifier">cekInternalError</span><span class="Other">,</span> <span class="Identifier">cekLexerErrorDiag</span><span class="Other">,</span> <span class="Identifier">cekLexerWarningDiag</span><span class="Other">,</span> <span class="Identifier">cekLexerHintDiag</span><span class="Other">:</span>
       <span class="Identifier">lexerDiag</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/lexer.html#LexerDiag"><span class="Identifier">LexerDiag</span></a>
 
-  <span class="Keyword">of</span> <span class="Identifier">cekDebugReadStart</span><span class="Other">,</span> <span class="Identifier">cekDebugReadStop</span><span class="Other">,</span> <span class="Identifier">cekProgressConfStart</span><span class="Other">:</span>
+  <span class="Keyword">of</span> <span class="Identifier">cekProgressConfStart</span><span class="Other">:</span>
       <span class="Keyword">nil</span>
 
   <span class="Identifier">instLoc</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a> <span class="Comment">## instantiation in lexer's source</span>
@@ -233,9 +227,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/630f8077af54752de849381116c0fb57e131274d/compiler/front/nimconf.nim#L77"
+href="https://github.com/nim-works/nimskull/tree/f500e85571f355dfe9ea4c19be12c35c59199d6e/compiler/front/nimconf.nim#L71"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L77" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L71" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -247,9 +241,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/630f8077af54752de849381116c0fb57e131274d/compiler/front/nimconf.nim#L90"
+href="https://github.com/nim-works/nimskull/tree/f500e85571f355dfe9ea4c19be12c35c59199d6e/compiler/front/nimconf.nim#L84"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -265,9 +259,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/630f8077af54752de849381116c0fb57e131274d/compiler/front/nimconf.nim#L416"
+href="https://github.com/nim-works/nimskull/tree/f500e85571f355dfe9ea4c19be12c35c59199d6e/compiler/front/nimconf.nim#L390"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L416" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L390" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -278,42 +272,42 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/630f8077af54752de849381116c0fb57e131274d/compiler/front/nimconf.nim#L413"
+href="https://github.com/nim-works/nimskull/tree/f500e85571f355dfe9ea4c19be12c35c59199d6e/compiler/front/nimconf.nim#L387"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L413" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L387" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="loadConfigs,RelativeFile,IdentCache,ConfigRef,NimConfEvtHandler">
 <dt><pre><span class="Keyword">proc</span> <a href="#loadConfigs%2CRelativeFile%2CIdentCache%2CConfigRef%2CNimConfEvtHandler"><span class="Identifier">loadConfigs</span></a><span class="Other">(</span><span class="Identifier">cfg</span><span class="Other">:</span> <a href="../utils/pathutils.html#RelativeFile"><span class="Identifier">RelativeFile</span></a><span class="Other">;</span> <span class="Identifier">cache</span><span class="Other">:</span> <a href="../ast/idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span>
                  <span class="Identifier">evtHandler</span><span class="Other">:</span> <a href="nimconf.html#NimConfEvtHandler"><span class="Identifier">NimConfEvtHandler</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">OSError</span><span class="Other">,</span>
-    <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
+    <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
     <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span>
     <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/630f8077af54752de849381116c0fb57e131274d/compiler/front/nimconf.nim#L460"
+href="https://github.com/nim-works/nimskull/tree/f500e85571f355dfe9ea4c19be12c35c59199d6e/compiler/front/nimconf.nim#L434"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L460" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L434" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="readConfigFile,AbsoluteFile,IdentCache,ConfigRef,NimConfEvtHandler">
 <dt><pre><span class="Keyword">proc</span> <a href="#readConfigFile%2CAbsoluteFile%2CIdentCache%2CConfigRef%2CNimConfEvtHandler"><span class="Identifier">readConfigFile</span></a><span class="Other">(</span><span class="Identifier">filename</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a><span class="Other">;</span> <span class="Identifier">cache</span><span class="Other">:</span> <a href="../ast/idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span>
                     <span class="Identifier">config</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">evtHandler</span><span class="Other">:</span> <a href="nimconf.html#NimConfEvtHandler"><span class="Identifier">NimConfEvtHandler</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.
-    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span>
-                     <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span>
-    <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span>
+    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span>
+                     <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span>
+    <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span>
     <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/630f8077af54752de849381116c0fb57e131274d/compiler/front/nimconf.nim#L406"
+href="https://github.com/nim-works/nimskull/tree/f500e85571f355dfe9ea4c19be12c35c59199d6e/compiler/front/nimconf.nim#L380"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L406" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L380" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
