@@ -104,35 +104,38 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#ConfigEventKind"
-    title="ConfigEventKind = enum
-  cekInternalError, cekLexerErrorDiag, ## lexer error being forwarded
-  cekParseExpectedX,        ## expected some token
-  cekParseExpectedCloseX,   ## expected closing ')', ']', etc
-  cekParseExpectedIdent,    ## expected an identifier
-  cekInvalidDirective, cekLexerWarningDiag, ## warning from the lexer
-  cekLexerHintDiag,         ## hint from the lexer
-  cekWriteConfig,           ## write out the config
-  cekProgressConfStart">ConfigEventKind</a></li>
-  <li><a class="reference" href="#ConfigFileEvent"
+      <li><a class="reference" href="#ConfigFileEvent"
     title="ConfigFileEvent = object
-  case kind*: ConfigEventKind
+  case kind*: ConfigFileEventKind
   of cekParseExpectedX, cekParseExpectedCloseX, cekParseExpectedIdent,
-     cekInvalidDirective, cekWriteConfig:
+     cekInvalidDirective, cekWriteConfig, cekProgressPathAdded:
       location*: TLineInfo   ## diagnostic location
     
-  of cekInternalError, cekLexerErrorDiag, cekLexerWarningDiag, cekLexerHintDiag:
+  of cekInternalError, cekLexerErrorDiag, cekLexerWarningDiag:
       lexerDiag*: LexerDiag
+
+  of cekFlagError:
+      flagResult*: ProcSwitchResult
+      flagInfo*: TLineInfo
 
   of cekProgressConfStart:
       nil
 
-  instLoc*: InstantiationInfo ## instantiation in lexer's source
+  instLoc*: InstantiationInfo ## instantiation in this module's source
   msg*: string">ConfigFileEvent</a></li>
-  <li><a class="reference" href="#NimConfEvtHandler"
-    title="NimConfEvtHandler = proc (config: ConfigRef; evt: ConfigFileEvent;
-                          reportFrom: InstantiationInfo;
-                          eh: TErrorHandling = doNothing): void">NimConfEvtHandler</a></li>
+  <li><a class="reference" href="#ConfigFileEventKind"
+    title="ConfigFileEventKind = enum
+  cekInternalError, cekLexerErrorDiag, ## lexer error being forwarded
+  cekParseExpectedX,        ## expected some token
+  cekParseExpectedCloseX,   ## expected closing ')', ']', etc
+  cekParseExpectedIdent,    ## expected an identifier
+  cekInvalidDirective, cekFlagError, ## error from flag processing
+  cekLexerWarningDiag,      ## warning from the lexer
+  cekWriteConfig,           ## write out the config
+  cekProgressConfStart = &quot;Conf&quot;, cekProgressPathAdded = &quot;Path&quot;">ConfigFileEventKind</a></li>
+  <li><a class="reference" href="#NimConfEvtWriter"
+    title="NimConfEvtWriter = proc (config: ConfigRef; evt: ConfigFileEvent;
+                         writeFrom: InstantiationInfo): void">NimConfEvtWriter</a></li>
 
   </ul>
 </li>
@@ -150,17 +153,10 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">loadConfigs
-      <li><a class="reference" href="#loadConfigs%2CRelativeFile%2CIdentCache%2CConfigRef%2CNimConfEvtHandler"
+      <li><a class="reference" href="#loadConfigs%2CRelativeFile%2CIdentCache%2CConfigRef%2CNimConfEvtWriter%2Cbool"
     title="loadConfigs(cfg: RelativeFile; cache: IdentCache; conf: ConfigRef;
-            evtHandler: NimConfEvtHandler)">loadConfigs(cfg: RelativeFile; cache: IdentCache; conf: ConfigRef;
-            evtHandler: NimConfEvtHandler)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">readConfigFile
-      <li><a class="reference" href="#readConfigFile%2CAbsoluteFile%2CIdentCache%2CConfigRef%2CNimConfEvtHandler"
-    title="readConfigFile(filename: AbsoluteFile; cache: IdentCache; config: ConfigRef;
-               evtHandler: NimConfEvtHandler): bool">readConfigFile(filename: AbsoluteFile; cache: IdentCache; config: ConfigRef;
-               evtHandler: NimConfEvtHandler): bool</a></li>
+            evtHandler: NimConfEvtWriter; stopOnError: bool = true): bool">loadConfigs(cfg: RelativeFile; cache: IdentCache; conf: ConfigRef;
+            evtHandler: NimConfEvtWriter; stopOnError: bool = true): bool</a></li>
 
   </ul>
 
@@ -171,79 +167,85 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/nimconf.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/nimconf.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"></p>
+  <p class="module-desc">This module handles the reading of config file(s).<dl class="docutils"><dt>..note:: Even though this module is very effectful in its processing of a</dt>
+<dd>config file and updating a <tt class="docutils literal"><span class="pre"><span class="Identifier">ConfigRef</span></span></tt>, it must not assume that it's handling a 'canonical' <tt class="docutils literal"><span class="pre"><span class="Identifier">ConfigRef</span></span></tt> for the current program and is not at liberty to output error messages and the like. That must be handled by the caller.</dd>
+</dl>
+</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="commands.html">commands</a>, <a class="reference external" href="options.html">options</a>, <a class="reference external" href="../ast/lexer.html">../ast/lexer</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/wordrecg.html">../ast/wordrecg</a>, <a class="reference external" href="../ast/llstream.html">../ast/llstream</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>
+<a class="reference external" href="options.html">options</a>, <a class="reference external" href="optionsprocessor.html">optionsprocessor</a>, <a class="reference external" href="../ast/lexer.html">../ast/lexer</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/wordrecg.html">../ast/wordrecg</a>, <a class="reference external" href="../ast/llstream.html">../ast/llstream</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<div id="ConfigEventKind">
-<dt><pre><a href="nimconf.html#ConfigEventKind"><span class="Identifier">ConfigEventKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
-  <span class="Identifier">cekInternalError</span><span class="Other">,</span> <span class="Identifier">cekLexerErrorDiag</span><span class="Other">,</span> <span class="Comment">## lexer error being forwarded</span>
-  <span class="Identifier">cekParseExpectedX</span><span class="Other">,</span>        <span class="Comment">## expected some token</span>
-  <span class="Identifier">cekParseExpectedCloseX</span><span class="Other">,</span>   <span class="Comment">## expected closing ')', ']', etc</span>
-  <span class="Identifier">cekParseExpectedIdent</span><span class="Other">,</span>    <span class="Comment">## expected an identifier</span>
-  <span class="Identifier">cekInvalidDirective</span><span class="Other">,</span> <span class="Identifier">cekLexerWarningDiag</span><span class="Other">,</span> <span class="Comment">## warning from the lexer</span>
-  <span class="Identifier">cekLexerHintDiag</span><span class="Other">,</span>         <span class="Comment">## hint from the lexer</span>
-  <span class="Identifier">cekWriteConfig</span><span class="Other">,</span>           <span class="Comment">## write out the config</span>
-  <span class="Identifier">cekProgressConfStart</span></pre></dt>
-<dd>
-
-events/errors arising from parsing and processing a compiler config file
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/nimconf.nim#L34"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
 <div id="ConfigFileEvent">
 <dt><pre><a href="nimconf.html#ConfigFileEvent"><span class="Identifier">ConfigFileEvent</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Keyword">case</span> <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimconf.html#ConfigEventKind"><span class="Identifier">ConfigEventKind</span></a>
+  <span class="Keyword">case</span> <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="nimconf.html#ConfigFileEventKind"><span class="Identifier">ConfigFileEventKind</span></a>
   <span class="Keyword">of</span> <span class="Identifier">cekParseExpectedX</span><span class="Other">,</span> <span class="Identifier">cekParseExpectedCloseX</span><span class="Other">,</span> <span class="Identifier">cekParseExpectedIdent</span><span class="Other">,</span>
-     <span class="Identifier">cekInvalidDirective</span><span class="Other">,</span> <span class="Identifier">cekWriteConfig</span><span class="Other">:</span>
+     <span class="Identifier">cekInvalidDirective</span><span class="Other">,</span> <span class="Identifier">cekWriteConfig</span><span class="Other">,</span> <span class="Identifier">cekProgressPathAdded</span><span class="Other">:</span>
       <span class="Identifier">location</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a>   <span class="Comment">## diagnostic location</span>
     
-  <span class="Keyword">of</span> <span class="Identifier">cekInternalError</span><span class="Other">,</span> <span class="Identifier">cekLexerErrorDiag</span><span class="Other">,</span> <span class="Identifier">cekLexerWarningDiag</span><span class="Other">,</span> <span class="Identifier">cekLexerHintDiag</span><span class="Other">:</span>
+  <span class="Keyword">of</span> <span class="Identifier">cekInternalError</span><span class="Other">,</span> <span class="Identifier">cekLexerErrorDiag</span><span class="Other">,</span> <span class="Identifier">cekLexerWarningDiag</span><span class="Other">:</span>
       <span class="Identifier">lexerDiag</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/lexer.html#LexerDiag"><span class="Identifier">LexerDiag</span></a>
+
+  <span class="Keyword">of</span> <span class="Identifier">cekFlagError</span><span class="Other">:</span>
+      <span class="Identifier">flagResult</span><span class="Operator">*</span><span class="Other">:</span> <a href="optionsprocessor.html#ProcSwitchResult"><span class="Identifier">ProcSwitchResult</span></a>
+      <span class="Identifier">flagInfo</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a>
 
   <span class="Keyword">of</span> <span class="Identifier">cekProgressConfStart</span><span class="Other">:</span>
       <span class="Keyword">nil</span>
 
-  <span class="Identifier">instLoc</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a> <span class="Comment">## instantiation in lexer's source</span>
+  <span class="Identifier">instLoc</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a> <span class="Comment">## instantiation in this module's source</span>
   <span class="Identifier">msg</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
 </pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/nimconf.nim#L71"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/nimconf.nim#L79"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L71" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L79" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="NimConfEvtHandler">
-<dt><pre><a href="nimconf.html#NimConfEvtHandler"><span class="Identifier">NimConfEvtHandler</span></a> <span class="Other">=</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">config</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">evt</span><span class="Other">:</span> <a href="nimconf.html#ConfigFileEvent"><span class="Identifier">ConfigFileEvent</span></a><span class="Other">;</span>
-                          <span class="Identifier">reportFrom</span><span class="Other">:</span> <a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a><span class="Other">;</span>
-                          <span class="Identifier">eh</span><span class="Other">:</span> <a href="options.html#TErrorHandling"><span class="Identifier">TErrorHandling</span></a> <span class="Other">=</span> <span class="Identifier">doNothing</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">void</span></pre></dt>
+<div id="ConfigFileEventKind">
+<dt><pre><a href="nimconf.html#ConfigFileEventKind"><span class="Identifier">ConfigFileEventKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">cekInternalError</span><span class="Other">,</span> <span class="Identifier">cekLexerErrorDiag</span><span class="Other">,</span> <span class="Comment">## lexer error being forwarded</span>
+  <span class="Identifier">cekParseExpectedX</span><span class="Other">,</span>        <span class="Comment">## expected some token</span>
+  <span class="Identifier">cekParseExpectedCloseX</span><span class="Other">,</span>   <span class="Comment">## expected closing ')', ']', etc</span>
+  <span class="Identifier">cekParseExpectedIdent</span><span class="Other">,</span>    <span class="Comment">## expected an identifier</span>
+  <span class="Identifier">cekInvalidDirective</span><span class="Other">,</span> <span class="Identifier">cekFlagError</span><span class="Other">,</span> <span class="Comment">## error from flag processing</span>
+  <span class="Identifier">cekLexerWarningDiag</span><span class="Other">,</span>      <span class="Comment">## warning from the lexer</span>
+  <span class="Identifier">cekWriteConfig</span><span class="Other">,</span>           <span class="Comment">## write out the config</span>
+  <span class="Identifier">cekProgressConfStart</span> <span class="Other">=</span> <span class="StringLit">&quot;Conf&quot;</span><span class="Other">,</span> <span class="Identifier">cekProgressPathAdded</span> <span class="Other">=</span> <span class="StringLit">&quot;Path&quot;</span></pre></dt>
+<dd>
+
+events/errors arising from parsing and processing a compiler config file
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/nimconf.nim#L40"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L40" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="NimConfEvtWriter">
+<dt><pre><a href="nimconf.html#NimConfEvtWriter"><span class="Identifier">NimConfEvtWriter</span></a> <span class="Other">=</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">config</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">evt</span><span class="Other">:</span> <a href="nimconf.html#ConfigFileEvent"><span class="Identifier">ConfigFileEvent</span></a><span class="Other">;</span>
+                         <span class="Identifier">writeFrom</span><span class="Other">:</span> <a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">void</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/nimconf.nim#L84"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/nimconf.nim#L94"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L94" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -259,9 +261,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/nimconf.nim#L390"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/nimconf.nim#L450"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L390" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L450" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -272,42 +274,26 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/nimconf.nim#L387"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/nimconf.nim#L447"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L387" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L447" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="loadConfigs,RelativeFile,IdentCache,ConfigRef,NimConfEvtHandler">
-<dt><pre><span class="Keyword">proc</span> <a href="#loadConfigs%2CRelativeFile%2CIdentCache%2CConfigRef%2CNimConfEvtHandler"><span class="Identifier">loadConfigs</span></a><span class="Other">(</span><span class="Identifier">cfg</span><span class="Other">:</span> <a href="../utils/pathutils.html#RelativeFile"><span class="Identifier">RelativeFile</span></a><span class="Other">;</span> <span class="Identifier">cache</span><span class="Other">:</span> <a href="../ast/idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span>
-                 <span class="Identifier">evtHandler</span><span class="Other">:</span> <a href="nimconf.html#NimConfEvtHandler"><span class="Identifier">NimConfEvtHandler</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">OSError</span><span class="Other">,</span>
-    <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
+<div id="loadConfigs,RelativeFile,IdentCache,ConfigRef,NimConfEvtWriter,bool">
+<dt><pre><span class="Keyword">proc</span> <a href="#loadConfigs%2CRelativeFile%2CIdentCache%2CConfigRef%2CNimConfEvtWriter%2Cbool"><span class="Identifier">loadConfigs</span></a><span class="Other">(</span><span class="Identifier">cfg</span><span class="Other">:</span> <a href="../utils/pathutils.html#RelativeFile"><span class="Identifier">RelativeFile</span></a><span class="Other">;</span> <span class="Identifier">cache</span><span class="Other">:</span> <a href="../ast/idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span>
+                 <span class="Identifier">evtHandler</span><span class="Other">:</span> <a href="nimconf.html#NimConfEvtWriter"><span class="Identifier">NimConfEvtWriter</span></a><span class="Other">;</span> <span class="Identifier">stopOnError</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.
+    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">,</span>
+                     <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">CancelConfigProcessing</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
     <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span>
     <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/nimconf.nim#L434"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/nimconf.nim#L496"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L434" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="readConfigFile,AbsoluteFile,IdentCache,ConfigRef,NimConfEvtHandler">
-<dt><pre><span class="Keyword">proc</span> <a href="#readConfigFile%2CAbsoluteFile%2CIdentCache%2CConfigRef%2CNimConfEvtHandler"><span class="Identifier">readConfigFile</span></a><span class="Other">(</span><span class="Identifier">filename</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a><span class="Other">;</span> <span class="Identifier">cache</span><span class="Other">:</span> <a href="../ast/idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span>
-                    <span class="Identifier">config</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">evtHandler</span><span class="Other">:</span> <a href="nimconf.html#NimConfEvtHandler"><span class="Identifier">NimConfEvtHandler</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.
-    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span>
-                     <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span>
-    <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span>
-    <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/nimconf.nim#L380"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L380" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/nimconf.nim#L496" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -321,7 +307,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-02 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-03 00:00:00 UTC</small>
       </div>
     </div>
   </div>

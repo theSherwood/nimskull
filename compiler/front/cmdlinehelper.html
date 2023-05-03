@@ -122,7 +122,9 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
   <ul class="simple nested-toc-section">loadConfigs
       <li><a class="reference" href="#loadConfigs%2CRelativeFile%2CIdentCache%2CConfigRef"
-    title="loadConfigs(cfg: RelativeFile; cache: IdentCache; conf: ConfigRef)">loadConfigs(cfg: RelativeFile; cache: IdentCache; conf: ConfigRef)</a></li>
+    title="loadConfigs(cfg: RelativeFile; cache: IdentCache; conf: ConfigRef;
+            stopOnError = true): bool">loadConfigs(cfg: RelativeFile; cache: IdentCache; conf: ConfigRef;
+            stopOnError = true): bool</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">loadConfigsAndProcessCmdLine
@@ -162,7 +164,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/cmdlinehelper.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/cmdlinehelper.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -173,7 +175,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="nimconf.html">nimconf</a>, <a class="reference external" href="commands.html">commands</a>, <a class="reference external" href="msgs.html">msgs</a>, <a class="reference external" href="options.html">options</a>, <a class="reference external" href="condsyms.html">condsyms</a>, <a class="reference external" href="cli_reporter.html">cli_reporter</a>, <a class="reference external" href="sexp_reporter.html">sexp_reporter</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../backend/extccomp.html">../backend/extccomp</a>, <a class="reference external" href="../ast/reports_lexer.html">../ast/reports_lexer</a>, <a class="reference external" href="../ast/reports_parser.html">../ast/reports_parser</a>, <a class="reference external" href="../ast/reports_internal.html">../ast/reports_internal</a>, <a class="reference external" href="../ast/reports_external.html">../ast/reports_external</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>, <a class="reference external" href="../ast/reports.html">../ast/reports</a>
+<a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/lexer.html">../ast/lexer</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="nimconf.html">nimconf</a>, <a class="reference external" href="commands.html">commands</a>, <a class="reference external" href="msgs.html">msgs</a>, <a class="reference external" href="options.html">options</a>, <a class="reference external" href="optionsprocessor.html">optionsprocessor</a>, <a class="reference external" href="condsyms.html">condsyms</a>, <a class="reference external" href="cli_reporter.html">cli_reporter</a>, <a class="reference external" href="sexp_reporter.html">sexp_reporter</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>, <a class="reference external" href="../backend/extccomp.html">../backend/extccomp</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -182,15 +184,15 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><a href="cmdlinehelper.html#NimProg"><span class="Identifier">NimProg</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span>
   <span class="Identifier">suggestMode</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
   <span class="Identifier">supportsStdinFile</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
-  <span class="Identifier">processCmdLine</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">pass</span><span class="Other">:</span> <a href="commands.html#TCmdLinePass"><span class="Identifier">TCmdLinePass</span></a><span class="Other">;</span> <span class="Identifier">cmd</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">config</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">)</span>
+  <span class="Identifier">processCmdLine</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">pass</span><span class="Other">:</span> <a href="options.html#TCmdLinePass"><span class="Identifier">TCmdLinePass</span></a><span class="Other">;</span> <span class="Identifier">cmd</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">config</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">)</span>
 </pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/cmdlinehelper.nim#L61"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/cmdlinehelper.nim#L57"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L61" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -206,57 +208,60 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/cmdlinehelper.nim#L158"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/cmdlinehelper.nim#L202"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L158" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L202" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="loadConfigs,RelativeFile,IdentCache,ConfigRef">
-<dt><pre><span class="Keyword">proc</span> <a href="#loadConfigs%2CRelativeFile%2CIdentCache%2CConfigRef"><span class="Identifier">loadConfigs</span></a><span class="Other">(</span><span class="Identifier">cfg</span><span class="Other">:</span> <a href="../utils/pathutils.html#RelativeFile"><span class="Identifier">RelativeFile</span></a><span class="Other">;</span> <span class="Identifier">cache</span><span class="Other">:</span> <a href="../ast/idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">)</span> {.
-    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span>
-                     <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span>
-    <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span>
-    <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#loadConfigs%2CRelativeFile%2CIdentCache%2CConfigRef"><span class="Identifier">loadConfigs</span></a><span class="Other">(</span><span class="Identifier">cfg</span><span class="Other">:</span> <a href="../utils/pathutils.html#RelativeFile"><span class="Identifier">RelativeFile</span></a><span class="Other">;</span> <span class="Identifier">cache</span><span class="Other">:</span> <a href="../ast/idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span> <span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span>
+                 <span class="Identifier">stopOnError</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span>
+    <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span>
+    <span class="Identifier">CancelConfigProcessing</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span>
+                                    <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span>
+                                    <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 wrapper around <tt class="docutils literal"><span class="pre"><span class="Identifier">nimconf</span><span class="Operator">.</span><span class="Identifier">loadConfigs</span></span></tt> to connect to legacy reporting
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/cmdlinehelper.nim#L182"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/cmdlinehelper.nim#L226"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L182" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L226" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="loadConfigsAndProcessCmdLine,NimProg,IdentCache,ConfigRef,ModuleGraph">
 <dt><pre><span class="Keyword">proc</span> <a href="#loadConfigsAndProcessCmdLine%2CNimProg%2CIdentCache%2CConfigRef%2CModuleGraph"><span class="Identifier">loadConfigsAndProcessCmdLine</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="cmdlinehelper.html#NimProg"><span class="Identifier">NimProg</span></a><span class="Other">;</span> <span class="Identifier">cache</span><span class="Other">:</span> <a href="../ast/idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span>
                                   <span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
-    <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span>
-    <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span>
-                      <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
+    <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span>
+    <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">CancelConfigProcessing</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span>
+    <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span>
+    <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Load all the necessary configuration files and command-line options. Main entry point for configuration processing.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/cmdlinehelper.nim#L188"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/cmdlinehelper.nim#L232"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L188" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L232" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="loadConfigsAndRunMainCommand,NimProg,IdentCache,ConfigRef,ModuleGraph">
 <dt><pre><span class="Keyword">proc</span> <a href="#loadConfigsAndRunMainCommand%2CNimProg%2CIdentCache%2CConfigRef%2CModuleGraph"><span class="Identifier">loadConfigsAndRunMainCommand</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="cmdlinehelper.html#NimProg"><span class="Identifier">NimProg</span></a><span class="Other">;</span> <span class="Identifier">cache</span><span class="Other">:</span> <a href="../ast/idents.html#IdentCache"><span class="Identifier">IdentCache</span></a><span class="Other">;</span>
                                   <span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
-    <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span>
-    <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span>
-                      <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
+    <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span>
+    <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">CancelConfigProcessing</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span>
+    <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span>
+    <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Alias for loadConfigsAndProcessCmdLine, here for backwards compatibility
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/cmdlinehelper.nim#L215"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/cmdlinehelper.nim#L263"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L215" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L263" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -266,9 +271,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/cmdlinehelper.nim#L53"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/cmdlinehelper.nim#L49"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L53" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L49" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -281,24 +286,24 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/cmdlinehelper.nim#L166"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/cmdlinehelper.nim#L210"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L166" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L210" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="selectDefaultGC,ConfigRef">
-<dt><pre><span class="Keyword">proc</span> <a href="#selectDefaultGC%2CConfigRef"><span class="Identifier">selectDefaultGC</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span>
-    <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span>
-    <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#selectDefaultGC%2CConfigRef"><span class="Identifier">selectDefaultGC</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span>
+    <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadEnvEffect</span><span class="Other">,</span>
+    <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">,</span>
     <span class="Identifier">WriteEnvEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 If the <tt class="docutils literal"><span class="pre"><span class="Identifier">config</span></span></tt> has no GC selected yet, selects the default one for the enabled backend.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d88390814b456e396d5d707e5057b5662d923b2b/compiler/front/cmdlinehelper.nim#L221"
+href="https://github.com/nim-works/nimskull/tree/66764396ba86871f7e006906ecb50702e1ec52c0/compiler/front/cmdlinehelper.nim#L269"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L221" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/cmdlinehelper.nim#L269" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -312,7 +317,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-02 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-03 00:00:00 UTC</small>
       </div>
     </div>
   </div>
