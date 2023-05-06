@@ -107,7 +107,7 @@ window.addEventListener('DOMContentLoaded', main);
   <li><a class="reference" href="#DebugReportKind"
     title="DebugReportKind = range[rdbgVmExecTraceFull .. rdbgOptionsPop]">DebugReportKind</a></li>
   <li><a class="reference" href="#ExternalReportKind"
-    title="ExternalReportKind = range[rextUnknownCCompiler .. rextPath]">ExternalReportKind</a></li>
+    title="ExternalReportKind = range[rextCmdRequiresFile .. rextPath]">ExternalReportKind</a></li>
   <li><a class="reference" href="#InternalReportKind"
     title="InternalReportKind = range[rintUnknown .. rintEchoMessage]">InternalReportKind</a></li>
   <li><a class="reference" href="#LexerReportKind"
@@ -151,32 +151,9 @@ window.addEventListener('DOMContentLoaded', main);
   rintSuccessX = &quot;SuccessX&quot;, ## Successful compilation, only used as a &quot;note&quot;,
                               ## it's not a hint either
   rintStackTrace = &quot;StackTrace&quot;, ## Stack trace during internal
-  rintNimconfWrite, rintListWarnings, rintListHints, rintEchoMessage,
-  rextUnknownCCompiler, rextCmdRequiresFile, ## fatal error, user failed to provide a file
-  rextInvalidHint, rextInvalidWarning, rextInvalidCommandLineOption, ## Invalid command-line option passed to
-                                                                      ## the compiler
-  rextOnlyAllOffSupported, ## Only `all:off` is supported for mass
-                            ## hint/warning modification. Separate diagnostics must be enabled on
-                            ## one-by-one basis.
-  rextExpectedOnOrOff,      ## Command-line option expected 'on' or 'off' value
-  rextExpectedOnOrOffOrList, ## Command-line option expected 'on', 'off'
-                              ## or 'list' value.
-  rextExpectedCmdArgument,  ## Command-line option expected argument
-  rextExpectedNoCmdArgument, ## Command-line option expected no arguments
-  rextCmdDisallowsAdditionalArguments, ## command disallows additional args
-  rextInvalidNumber,        ## Command-line switch expected a number
-  rextInvalidValue, rextUnexpectedValue, ## Command-line argument had value, but it did not
-                                          ## match with any expected.
-  rextExpectedCbackendForRun, rextExpectedTinyCForRun, rextInvalidCommand,
-  rextCommandMissing, rextExpectedRunOptForArgs, rextUnexpectedRunOpt, rextInvalidPath, ## Invalid path for a command-line argument
-  rextInvalidPackageName, ## When adding packages from the `--nimbleDir`
-                           ## (or it's default value), names are validated. This error is
-                           ## generated if package name is not correct.
-  rextDeprecated, ## Report about use of the deprecated feature that is
-                   ## not in the semantic pass. Things like deprecated flags, compiler
-                   ## commands and so on.
-  rextConf = &quot;Conf&quot;,        ## Processing user configutation file
-  rextPath = &quot;Path&quot;,        ## Add nimble path
+  rintListWarnings, rintListHints, rintEchoMessage, rextCmdRequiresFile, ## fatal error, user failed to provide a file
+  rextConf = &quot;Conf&quot;,        ## Processed user configutation file; not a &quot;report&quot;
+  rextPath = &quot;Path&quot;,        ## Add nimble path; xxx: this isn't a &quot;report&quot;
   rlexMalformedUnderscores, rlexMalformedTrailingUnderscre, rlexInvalidToken,
   rlexInvalidTokenSpaceBetweenNumAndIdent, rlexNoTabs,
   rlexInvalidIntegerLiteralOctalPrefix, rlexInvalidIntegerSuffix,
@@ -186,9 +163,9 @@ window.addEventListener('DOMContentLoaded', main);
   rlexInvalidCharLiteralUnicodeCodepoint, rlexMissingClosingApostrophe,
   rlexInvalidUnicodeCodepointEmpty,
   rlexInvalidUnicodeCodepointGreaterThan0x10FFFF, rlexUnclosedTripleString,
-  rlexUnclosedSingleString, rlexExpectedToken, rlexCfgInvalidDirective,
-  rlexUnclosedComment, rlexDeprecatedOctalPrefix = &quot;OctalEscape&quot;,
-  rlexLineTooLong = &quot;LineTooLong&quot;, rlexLinterReport = &quot;Name&quot;,
+  rlexUnclosedSingleString, rlexUnclosedComment,
+  rlexDeprecatedOctalPrefix = &quot;OctalEscape&quot;, rlexLineTooLong = &quot;LineTooLong&quot;,
+  rlexLinterReport = &quot;Name&quot;,
   rlexSourceCodeFilterOutput = &quot;SourceCodeFilterOutput&quot;, rparInvalidIndentation,
   rparInvalidIndentationWithForgotEqualSignHint,
   rparNestableRequiresIndentation, rparIdentExpected,
@@ -513,12 +490,12 @@ window.addEventListener('DOMContentLoaded', main);
     title="repDebugKinds = {rdbgVmExecTraceFull..rdbgOptionsPop}">repDebugKinds</a></li>
   <li><a class="reference" href="#repErrorKinds"
     title="repErrorKinds: ReportKinds = {rintCannotOpenFile..rintNotImplemented,
-                              rextUnknownCCompiler..rextInvalidPackageName,
+                              rextCmdRequiresFile,
                               rlexMalformedUnderscores..rlexUnclosedComment,
                               rparInvalidIndentation..rparInvalidFilter, rvmOpcParseExpectedExpression..rvmTooManyIterations,
                               rsemUserError..rsemEmptyAsm, rcmdFailedExecution, rbackCannotWriteScript..rbackCannotProduceAssembly}">repErrorKinds</a></li>
   <li><a class="reference" href="#repExternalKinds"
-    title="repExternalKinds = {rextUnknownCCompiler..rextPath}">repExternalKinds</a></li>
+    title="repExternalKinds = {rextCmdRequiresFile..rextPath}">repExternalKinds</a></li>
   <li><a class="reference" href="#repFatalKinds"
     title="repFatalKinds: ReportKinds = {rintUnknown..rintIce, rsemFatalError}">repFatalKinds</a></li>
   <li><a class="reference" href="#repHintGroups"
@@ -561,22 +538,20 @@ window.addEventListener('DOMContentLoaded', main);
     title="repVMKinds = {rvmOpcParseExpectedExpression..rvmStackTrace}">repVMKinds</a></li>
   <li><a class="reference" href="#repWarningGroups"
     title="repWarningGroups = [(&quot;all&quot;, {rintWarnCannotOpenFile..rintWarnFileChanged,
-                             rextDeprecated, rlexDeprecatedOctalPrefix,
+                             rlexDeprecatedOctalPrefix,
                              rparInconsistentSpacing..rparEnablePreviewDotOps,
                              rsemUserWarning..rsemUseOfGc,
                              rbackRstTestUnsupported..rbackRstRstStyle}), (
     &quot;StrictNotNil&quot;, {rsemStrictNotNilExpr, rsemStrictNotNilResult})]">repWarningGroups</a></li>
   <li><a class="reference" href="#repWarningKinds"
     title="repWarningKinds: ReportKinds = {rintWarnCannotOpenFile..rintWarnFileChanged,
-                                rextDeprecated, rlexDeprecatedOctalPrefix, rparInconsistentSpacing..rparEnablePreviewDotOps,
+                                rlexDeprecatedOctalPrefix, rparInconsistentSpacing..rparEnablePreviewDotOps,
                                 rsemUserWarning..rsemUseOfGc,
                                 rbackRstTestUnsupported..rbackRstRstStyle}">repWarningKinds</a></li>
   <li><a class="reference" href="#rextErrorKinds"
-    title="rextErrorKinds = {rextUnknownCCompiler..rextInvalidPackageName}">rextErrorKinds</a></li>
+    title="rextErrorKinds = {rextCmdRequiresFile..rextCmdRequiresFile}">rextErrorKinds</a></li>
   <li><a class="reference" href="#rextHintKinds"
     title="rextHintKinds = {rextConf..rextPath}">rextHintKinds</a></li>
-  <li><a class="reference" href="#rextWarningKinds"
-    title="rextWarningKinds = {rextDeprecated}">rextWarningKinds</a></li>
   <li><a class="reference" href="#rintDataPassKinds"
     title="rintDataPassKinds = {rintStackTrace..rintEchoMessage}">rintDataPassKinds</a></li>
   <li><a class="reference" href="#rintErrorKinds"
@@ -646,7 +621,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -663,9 +638,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L978"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L933"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L978" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L933" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -675,9 +650,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L972"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L927"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L972" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L927" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -687,9 +662,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L974"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L929"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L974" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L929" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -699,21 +674,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L976"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L931"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L976" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L931" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="ExternalReportKind">
-<dt><pre><a href="report_enums.html#ExternalReportKind"><span class="Identifier">ExternalReportKind</span></a> <span class="Other">=</span> <span class="Identifier">range</span><span class="Other">[</span><span class="Identifier">rextUnknownCCompiler</span> <span class="Operator">..</span> <span class="Identifier">rextPath</span><span class="Other">]</span></pre></dt>
+<dt><pre><a href="report_enums.html#ExternalReportKind"><span class="Identifier">ExternalReportKind</span></a> <span class="Other">=</span> <span class="Identifier">range</span><span class="Other">[</span><span class="Identifier">rextCmdRequiresFile</span> <span class="Operator">..</span> <span class="Identifier">rextPath</span><span class="Other">]</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L980"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L935"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L980" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L935" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -723,9 +698,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L982"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L937"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L982" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L937" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -735,9 +710,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L962"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L917"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L962" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L917" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -747,9 +722,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L965"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L920"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L965" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L920" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -776,7 +751,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Kinds of the toplevel reports. Only dispatches on report topics, such as sem, parse, macro (for <tt class="docutils literal"><span class="pre"><span class="Identifier">echo</span></span></tt> in compile-time code) and so on. Subdivision is based on different phases of the compiler operation, and not on report's state itself, as those are completely orthogonal to each other (lexer might provide errors and hints, parser can provide errors, hints and warnings)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L4"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L4"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L4" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -800,32 +775,9 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">rintSuccessX</span> <span class="Other">=</span> <span class="StringLit">&quot;SuccessX&quot;</span><span class="Other">,</span> <span class="Comment">## Successful compilation, only used as a &quot;note&quot;,</span>
                               <span class="Comment">## it's not a hint either</span>
   <span class="Identifier">rintStackTrace</span> <span class="Other">=</span> <span class="StringLit">&quot;StackTrace&quot;</span><span class="Other">,</span> <span class="Comment">## Stack trace during internal</span>
-  <span class="Identifier">rintNimconfWrite</span><span class="Other">,</span> <span class="Identifier">rintListWarnings</span><span class="Other">,</span> <span class="Identifier">rintListHints</span><span class="Other">,</span> <span class="Identifier">rintEchoMessage</span><span class="Other">,</span>
-  <span class="Identifier">rextUnknownCCompiler</span><span class="Other">,</span> <span class="Identifier">rextCmdRequiresFile</span><span class="Other">,</span> <span class="Comment">## fatal error, user failed to provide a file</span>
-  <span class="Identifier">rextInvalidHint</span><span class="Other">,</span> <span class="Identifier">rextInvalidWarning</span><span class="Other">,</span> <span class="Identifier">rextInvalidCommandLineOption</span><span class="Other">,</span> <span class="Comment">## Invalid command-line option passed to</span>
-                                                                      <span class="Comment">## the compiler</span>
-  <span class="Identifier">rextOnlyAllOffSupported</span><span class="Other">,</span> <span class="Comment">## Only `all:off` is supported for mass</span>
-                            <span class="Comment">## hint/warning modification. Separate diagnostics must be enabled on</span>
-                            <span class="Comment">## one-by-one basis.</span>
-  <span class="Identifier">rextExpectedOnOrOff</span><span class="Other">,</span>      <span class="Comment">## Command-line option expected 'on' or 'off' value</span>
-  <span class="Identifier">rextExpectedOnOrOffOrList</span><span class="Other">,</span> <span class="Comment">## Command-line option expected 'on', 'off'</span>
-                              <span class="Comment">## or 'list' value.</span>
-  <span class="Identifier">rextExpectedCmdArgument</span><span class="Other">,</span>  <span class="Comment">## Command-line option expected argument</span>
-  <span class="Identifier">rextExpectedNoCmdArgument</span><span class="Other">,</span> <span class="Comment">## Command-line option expected no arguments</span>
-  <span class="Identifier">rextCmdDisallowsAdditionalArguments</span><span class="Other">,</span> <span class="Comment">## command disallows additional args</span>
-  <span class="Identifier">rextInvalidNumber</span><span class="Other">,</span>        <span class="Comment">## Command-line switch expected a number</span>
-  <span class="Identifier">rextInvalidValue</span><span class="Other">,</span> <span class="Identifier">rextUnexpectedValue</span><span class="Other">,</span> <span class="Comment">## Command-line argument had value, but it did not</span>
-                                          <span class="Comment">## match with any expected.</span>
-  <span class="Identifier">rextExpectedCbackendForRun</span><span class="Other">,</span> <span class="Identifier">rextExpectedTinyCForRun</span><span class="Other">,</span> <span class="Identifier">rextInvalidCommand</span><span class="Other">,</span>
-  <span class="Identifier">rextCommandMissing</span><span class="Other">,</span> <span class="Identifier">rextExpectedRunOptForArgs</span><span class="Other">,</span> <span class="Identifier">rextUnexpectedRunOpt</span><span class="Other">,</span> <span class="Identifier">rextInvalidPath</span><span class="Other">,</span> <span class="Comment">## Invalid path for a command-line argument</span>
-  <span class="Identifier">rextInvalidPackageName</span><span class="Other">,</span> <span class="Comment">## When adding packages from the `--nimbleDir`</span>
-                           <span class="Comment">## (or it's default value), names are validated. This error is</span>
-                           <span class="Comment">## generated if package name is not correct.</span>
-  <span class="Identifier">rextDeprecated</span><span class="Other">,</span> <span class="Comment">## Report about use of the deprecated feature that is</span>
-                   <span class="Comment">## not in the semantic pass. Things like deprecated flags, compiler</span>
-                   <span class="Comment">## commands and so on.</span>
-  <span class="Identifier">rextConf</span> <span class="Other">=</span> <span class="StringLit">&quot;Conf&quot;</span><span class="Other">,</span>        <span class="Comment">## Processing user configutation file</span>
-  <span class="Identifier">rextPath</span> <span class="Other">=</span> <span class="StringLit">&quot;Path&quot;</span><span class="Other">,</span>        <span class="Comment">## Add nimble path</span>
+  <span class="Identifier">rintListWarnings</span><span class="Other">,</span> <span class="Identifier">rintListHints</span><span class="Other">,</span> <span class="Identifier">rintEchoMessage</span><span class="Other">,</span> <span class="Identifier">rextCmdRequiresFile</span><span class="Other">,</span> <span class="Comment">## fatal error, user failed to provide a file</span>
+  <span class="Identifier">rextConf</span> <span class="Other">=</span> <span class="StringLit">&quot;Conf&quot;</span><span class="Other">,</span>        <span class="Comment">## Processed user configutation file; not a &quot;report&quot;</span>
+  <span class="Identifier">rextPath</span> <span class="Other">=</span> <span class="StringLit">&quot;Path&quot;</span><span class="Other">,</span>        <span class="Comment">## Add nimble path; xxx: this isn't a &quot;report&quot;</span>
   <span class="Identifier">rlexMalformedUnderscores</span><span class="Other">,</span> <span class="Identifier">rlexMalformedTrailingUnderscre</span><span class="Other">,</span> <span class="Identifier">rlexInvalidToken</span><span class="Other">,</span>
   <span class="Identifier">rlexInvalidTokenSpaceBetweenNumAndIdent</span><span class="Other">,</span> <span class="Identifier">rlexNoTabs</span><span class="Other">,</span>
   <span class="Identifier">rlexInvalidIntegerLiteralOctalPrefix</span><span class="Other">,</span> <span class="Identifier">rlexInvalidIntegerSuffix</span><span class="Other">,</span>
@@ -835,9 +787,9 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">rlexInvalidCharLiteralUnicodeCodepoint</span><span class="Other">,</span> <span class="Identifier">rlexMissingClosingApostrophe</span><span class="Other">,</span>
   <span class="Identifier">rlexInvalidUnicodeCodepointEmpty</span><span class="Other">,</span>
   <span class="Identifier">rlexInvalidUnicodeCodepointGreaterThan0x10FFFF</span><span class="Other">,</span> <span class="Identifier">rlexUnclosedTripleString</span><span class="Other">,</span>
-  <span class="Identifier">rlexUnclosedSingleString</span><span class="Other">,</span> <span class="Identifier">rlexExpectedToken</span><span class="Other">,</span> <span class="Identifier">rlexCfgInvalidDirective</span><span class="Other">,</span>
-  <span class="Identifier">rlexUnclosedComment</span><span class="Other">,</span> <span class="Identifier">rlexDeprecatedOctalPrefix</span> <span class="Other">=</span> <span class="StringLit">&quot;OctalEscape&quot;</span><span class="Other">,</span>
-  <span class="Identifier">rlexLineTooLong</span> <span class="Other">=</span> <span class="StringLit">&quot;LineTooLong&quot;</span><span class="Other">,</span> <span class="Identifier">rlexLinterReport</span> <span class="Other">=</span> <span class="StringLit">&quot;Name&quot;</span><span class="Other">,</span>
+  <span class="Identifier">rlexUnclosedSingleString</span><span class="Other">,</span> <span class="Identifier">rlexUnclosedComment</span><span class="Other">,</span>
+  <span class="Identifier">rlexDeprecatedOctalPrefix</span> <span class="Other">=</span> <span class="StringLit">&quot;OctalEscape&quot;</span><span class="Other">,</span> <span class="Identifier">rlexLineTooLong</span> <span class="Other">=</span> <span class="StringLit">&quot;LineTooLong&quot;</span><span class="Other">,</span>
+  <span class="Identifier">rlexLinterReport</span> <span class="Other">=</span> <span class="StringLit">&quot;Name&quot;</span><span class="Other">,</span>
   <span class="Identifier">rlexSourceCodeFilterOutput</span> <span class="Other">=</span> <span class="StringLit">&quot;SourceCodeFilterOutput&quot;</span><span class="Other">,</span> <span class="Identifier">rparInvalidIndentation</span><span class="Other">,</span>
   <span class="Identifier">rparInvalidIndentationWithForgotEqualSignHint</span><span class="Other">,</span>
   <span class="Identifier">rparNestableRequiresIndentation</span><span class="Other">,</span> <span class="Identifier">rparIdentExpected</span><span class="Other">,</span>
@@ -1118,7 +1070,7 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Different naming scheme is used for a reports with different categories - this enum exists only to make it easier to work with different report kinds, without having to manage seven different enum types.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L63"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L63"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L63" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -1130,9 +1082,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L956"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L911"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L956" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L911" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1148,7 +1100,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L49"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L49"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L49" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -1160,9 +1112,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L968"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L923"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L968" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L923" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1172,9 +1124,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L970"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L925"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L970" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L925" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1184,9 +1136,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L967"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L922"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L967" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L922" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1196,9 +1148,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L966"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L921"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L966" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L921" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1213,9 +1165,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1034"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L989"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1034" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L989" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1225,9 +1177,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1036"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L991"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1036" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L991" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1237,9 +1189,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1035"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L990"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1035" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L990" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1249,9 +1201,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1022"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L977"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1022" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L977" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1261,9 +1213,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1024"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L979"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1024" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L979" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1273,9 +1225,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1023"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L978"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1023" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L978" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1285,9 +1237,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1097"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1050"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1097" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1050" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1297,9 +1249,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1033"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L988"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1033" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L988" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1309,9 +1261,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1021"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L976"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1021" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L976" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1321,9 +1273,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1093"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1046"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1093" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1046" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1333,9 +1285,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1027"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L982"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1027" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L982" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1345,15 +1297,15 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1030"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L985"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1030" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L985" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="repErrorKinds">
 <dt><pre><a href="report_enums.html#repErrorKinds"><span class="Identifier">repErrorKinds</span></a><span class="Other">:</span> <a href="report_enums.html#ReportKinds"><span class="Identifier">ReportKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rintCannotOpenFile</span><span class="Other">..</span><span class="DecNumber">rintNotImplemented</span><span class="Other">,</span>
-                              <span class="DecNumber">rextUnknownCCompiler</span><span class="Other">..</span><span class="DecNumber">rextInvalidPackageName</span><span class="Other">,</span>
+                              <span class="DecNumber">rextCmdRequiresFile</span><span class="Other">,</span>
                               <span class="DecNumber">rlexMalformedUnderscores</span><span class="Other">..</span><span class="DecNumber">rlexUnclosedComment</span><span class="Other">,</span>
                               <span class="DecNumber">rparInvalidIndentation</span><span class="Other">..</span><span class="DecNumber">rparInvalidFilter</span><span class="Other">,</span> <span class="DecNumber">rvmOpcParseExpectedExpression</span><span class="Other">..</span><span class="DecNumber">rvmTooManyIterations</span><span class="Other">,</span>
                               <span class="DecNumber">rsemUserError</span><span class="Other">..</span><span class="DecNumber">rsemEmptyAsm</span><span class="Other">,</span> <span class="DecNumber">rcmdFailedExecution</span><span class="Other">,</span> <span class="DecNumber">rbackCannotWriteScript</span><span class="Other">..</span><span class="DecNumber">rbackCannotProduceAssembly</span><span class="Other">}</span></pre></dt>
@@ -1361,21 +1313,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1083"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1036"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1083" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1036" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="repExternalKinds">
-<dt><pre><a href="report_enums.html#repExternalKinds"><span class="Identifier">repExternalKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rextUnknownCCompiler</span><span class="Other">..</span><span class="DecNumber">rextPath</span><span class="Other">}</span></pre></dt>
+<dt><pre><a href="report_enums.html#repExternalKinds"><span class="Identifier">repExternalKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rextCmdRequiresFile</span><span class="Other">..</span><span class="DecNumber">rextPath</span><span class="Other">}</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1039"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L994"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1039" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L994" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1385,9 +1337,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1096"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1049"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1096" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1049" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1404,9 +1356,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1199"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1152"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1199" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1152" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1420,9 +1372,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1073"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1026"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1073" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1026" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1432,9 +1384,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1046"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1000"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1046" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1000" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1444,9 +1396,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L987"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L942"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L987" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L942" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1456,9 +1408,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1186"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1139"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1186" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1139" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1468,9 +1420,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1015"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L970"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1015" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L970" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1480,9 +1432,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1018"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L973"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1018" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L973" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1492,9 +1444,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L994"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L949"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L994" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L949" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1504,9 +1456,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1181"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1134"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1181" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1134" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1516,9 +1468,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1008"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L963"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1008" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L963" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1528,9 +1480,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1191"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1144"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1191" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1144" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1541,9 +1493,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1068"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1021"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1068" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1021" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1553,15 +1505,15 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1001"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L956"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1001" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L956" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="repWarningGroups">
 <dt><pre><a href="report_enums.html#repWarningGroups"><span class="Identifier">repWarningGroups</span></a> <span class="Other">=</span> <span class="Other">[</span><span class="Other">(</span><span class="StringLit">&quot;all&quot;</span><span class="Other">,</span> <span class="Other">{</span><span class="DecNumber">rintWarnCannotOpenFile</span><span class="Other">..</span><span class="DecNumber">rintWarnFileChanged</span><span class="Other">,</span>
-                             <span class="DecNumber">rextDeprecated</span><span class="Other">,</span> <span class="DecNumber">rlexDeprecatedOctalPrefix</span><span class="Other">,</span>
+                             <span class="DecNumber">rlexDeprecatedOctalPrefix</span><span class="Other">,</span>
                              <span class="DecNumber">rparInconsistentSpacing</span><span class="Other">..</span><span class="DecNumber">rparEnablePreviewDotOps</span><span class="Other">,</span>
                              <span class="DecNumber">rsemUserWarning</span><span class="Other">..</span><span class="DecNumber">rsemUseOfGc</span><span class="Other">,</span>
                              <span class="DecNumber">rbackRstTestUnsupported</span><span class="Other">..</span><span class="DecNumber">rbackRstRstStyle</span><span class="Other">}</span><span class="Other">)</span><span class="Other">,</span> <span class="Other">(</span>
@@ -1570,36 +1522,36 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1206"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1159"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1206" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1159" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="repWarningKinds">
 <dt><pre><a href="report_enums.html#repWarningKinds"><span class="Identifier">repWarningKinds</span></a><span class="Other">:</span> <a href="report_enums.html#ReportKinds"><span class="Identifier">ReportKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rintWarnCannotOpenFile</span><span class="Other">..</span><span class="DecNumber">rintWarnFileChanged</span><span class="Other">,</span>
-                                <span class="DecNumber">rextDeprecated</span><span class="Other">,</span> <span class="DecNumber">rlexDeprecatedOctalPrefix</span><span class="Other">,</span> <span class="DecNumber">rparInconsistentSpacing</span><span class="Other">..</span><span class="DecNumber">rparEnablePreviewDotOps</span><span class="Other">,</span>
+                                <span class="DecNumber">rlexDeprecatedOctalPrefix</span><span class="Other">,</span> <span class="DecNumber">rparInconsistentSpacing</span><span class="Other">..</span><span class="DecNumber">rparEnablePreviewDotOps</span><span class="Other">,</span>
                                 <span class="DecNumber">rsemUserWarning</span><span class="Other">..</span><span class="DecNumber">rsemUseOfGc</span><span class="Other">,</span>
                                 <span class="DecNumber">rbackRstTestUnsupported</span><span class="Other">..</span><span class="DecNumber">rbackRstRstStyle</span><span class="Other">}</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1058"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1012"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1058" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1012" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="rextErrorKinds">
-<dt><pre><a href="report_enums.html#rextErrorKinds"><span class="Identifier">rextErrorKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rextUnknownCCompiler</span><span class="Other">..</span><span class="DecNumber">rextInvalidPackageName</span><span class="Other">}</span></pre></dt>
+<dt><pre><a href="report_enums.html#rextErrorKinds"><span class="Identifier">rextErrorKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rextCmdRequiresFile</span><span class="Other">..</span><span class="DecNumber">rextCmdRequiresFile</span><span class="Other">}</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1040"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L995"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1040" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L995" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1609,21 +1561,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1042"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L996"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1042" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="rextWarningKinds">
-<dt><pre><a href="report_enums.html#rextWarningKinds"><span class="Identifier">rextWarningKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">rextDeprecated</span><span class="Other">}</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1041"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1041" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L996" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1633,9 +1573,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1054"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1008"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1054" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1008" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1645,9 +1585,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1051"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1005"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1051" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1005" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1657,9 +1597,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Fatal internal compilation reports
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1049"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1003"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1049" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1003" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1669,9 +1609,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1053"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1007"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1053" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1007" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1681,9 +1621,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1052"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1006"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1052" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1006" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1693,9 +1633,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L990"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L945"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L990" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L945" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1705,9 +1645,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L988"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L943"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L988" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L943" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1717,9 +1657,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L989"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L944"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L989" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L944" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1729,9 +1669,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L996"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L951"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L996" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L951" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1741,9 +1681,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L995"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L950"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L995" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L950" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1753,9 +1693,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L997"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L952"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L997" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L952" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1765,9 +1705,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1009"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L964"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1009" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L964" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1777,9 +1717,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1011"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L966"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1011" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L966" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1790,9 +1730,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1175"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1128"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1175" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1128" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1808,9 +1748,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1162"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1115"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1162" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1115" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1822,9 +1762,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1155"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1108"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1155" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1108" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1835,9 +1775,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1147"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1100"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1147" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1100" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1850,9 +1790,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1137"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L1090"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1137" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1090" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1862,9 +1802,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1010"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L965"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1010" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L965" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1874,9 +1814,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L959"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L914"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L959" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L914" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1886,9 +1826,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1005"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L960"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1005" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L960" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1898,9 +1838,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1002"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L957"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1002" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L957" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1910,9 +1850,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1003"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L958"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1003" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L958" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1922,9 +1862,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/5b497a964d668259527df8f9bfa3df5a0f455e36/compiler/ast/report_enums.nim#L1004"
+href="https://github.com/nim-works/nimskull/tree/a3506301172e67ee67f7d6be06f727db6e963a6f/compiler/ast/report_enums.nim#L959"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L1004" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/report_enums.nim#L959" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
