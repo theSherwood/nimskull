@@ -129,7 +129,12 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">execExternalProgramFailedMsg
+      <ul class="simple nested-toc-section">customizeForBackend
+      <li><a class="reference" href="#customizeForBackend%2CModuleGraph%2CConfigRef%2CTBackend"
+    title="customizeForBackend(graph: ModuleGraph; conf: ConfigRef; backend: TBackend)">customizeForBackend(graph: ModuleGraph; conf: ConfigRef; backend: TBackend)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">execExternalProgramFailedMsg
       <li><a class="reference" href="#execExternalProgramFailedMsg%2Cstring%2Cint"
     title="execExternalProgramFailedMsg(cmd: string; exitCode: int): string">execExternalProgramFailedMsg(cmd: string; exitCode: int): string</a></li>
 
@@ -152,7 +157,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/981ce9705d33ea8a714aadba3f7a12b6429e47f3/compiler/front/main.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/51c049f9c3998610e7d5e1f06f538c60504d8b4e/compiler/front/main.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/main.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -163,7 +168,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/llstream.html">../ast/llstream</a>, <a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/lexer.html">../ast/lexer</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/syntaxes.html">../ast/syntaxes</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="options.html">options</a>, <a class="reference external" href="condsyms.html">condsyms</a>, <a class="reference external" href="msgs.html">msgs</a>, <a class="reference external" href="cmdlinehelper.html">cmdlinehelper</a>, <a class="reference external" href="nimconf.html">nimconf</a>, <a class="reference external" href="depfiles.html">depfiles</a>, <a class="reference external" href="commands.html">commands</a>, <a class="reference external" href="../sem/sem.html">../sem/sem</a>, <a class="reference external" href="../sem/passes.html">../sem/passes</a>, <a class="reference external" href="../sem/passaux.html">../sem/passaux</a>, <a class="reference external" href="../modules/depends.html">../modules/depends</a>, <a class="reference external" href="../modules/modules.html">../modules/modules</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../backend/extccomp.html">../backend/extccomp</a>, <a class="reference external" href="../backend/cgen.html">../backend/cgen</a>, <a class="reference external" href="../utils/platform.html">../utils/platform</a>, <a class="reference external" href="../utils/nversion.html">../utils/nversion</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>, <a class="reference external" href="../utils/astrepr.html">../utils/astrepr</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../vm/compilerbridge.html">../vm/compilerbridge</a>, <a class="reference external" href="../vm/vmbackend.html">../vm/vmbackend</a>, <a class="reference external" href="../vm/vmprofiler.html">../vm/vmprofiler</a>, <a class="reference external" href="../ic/cbackend.html">../ic/cbackend</a>, <a class="reference external" href="../ic/integrity.html">../ic/integrity</a>, <a class="reference external" href="../ic/ic.html">../ic/ic</a>, <a class="reference external" href="../ast/reports_internal.html">../ast/reports_internal</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>, <a class="reference external" href="scripting.html">scripting</a>, <a class="reference external" href="../backend/jsgen.html">../backend/jsgen</a>, <a class="reference external" href="../tools/docgen.html">../tools/docgen</a>, <a class="reference external" href="../tools/docgen2.html">../tools/docgen2</a>
+<a class="reference external" href="../ast/llstream.html">../ast/llstream</a>, <a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/lexer.html">../ast/lexer</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/syntaxes.html">../ast/syntaxes</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="options.html">options</a>, <a class="reference external" href="condsyms.html">condsyms</a>, <a class="reference external" href="msgs.html">msgs</a>, <a class="reference external" href="cmdlinehelper.html">cmdlinehelper</a>, <a class="reference external" href="nimconf.html">nimconf</a>, <a class="reference external" href="depfiles.html">depfiles</a>, <a class="reference external" href="commands.html">commands</a>, <a class="reference external" href="../sem/sem.html">../sem/sem</a>, <a class="reference external" href="../sem/passes.html">../sem/passes</a>, <a class="reference external" href="../sem/passaux.html">../sem/passaux</a>, <a class="reference external" href="../modules/depends.html">../modules/depends</a>, <a class="reference external" href="../modules/modules.html">../modules/modules</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../backend/extccomp.html">../backend/extccomp</a>, <a class="reference external" href="../backend/cgen.html">../backend/cgen</a>, <a class="reference external" href="../utils/platform.html">../utils/platform</a>, <a class="reference external" href="../utils/nversion.html">../utils/nversion</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>, <a class="reference external" href="../utils/astrepr.html">../utils/astrepr</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../vm/compilerbridge.html">../vm/compilerbridge</a>, <a class="reference external" href="../vm/vmbackend.html">../vm/vmbackend</a>, <a class="reference external" href="../vm/vmprofiler.html">../vm/vmprofiler</a>, <a class="reference external" href="../ic/cbackend.html">../ic/cbackend</a>, <a class="reference external" href="../ic/integrity.html">../ic/integrity</a>, <a class="reference external" href="../ic/ic.html">../ic/ic</a>, <a class="reference external" href="../ast/reports_internal.html">../ast/reports_internal</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>, <a class="reference external" href="optionsprocessor.html">optionsprocessor</a>, <a class="reference external" href="scripting.html">scripting</a>, <a class="reference external" href="../backend/jsgen.html">../backend/jsgen</a>, <a class="reference external" href="../tools/docgen.html">../tools/docgen</a>, <a class="reference external" href="../tools/docgen2.html">../tools/docgen2</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -193,9 +198,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/981ce9705d33ea8a714aadba3f7a12b6429e47f3/compiler/front/main.nim#L112"
+href="https://github.com/nim-works/nimskull/tree/51c049f9c3998610e7d5e1f06f538c60504d8b4e/compiler/front/main.nim#L114"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/main.nim#L112" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/main.nim#L114" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -204,6 +209,21 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
+<div id="customizeForBackend,ModuleGraph,ConfigRef,TBackend">
+<dt><pre><span class="Keyword">proc</span> <a href="#customizeForBackend%2CModuleGraph%2CConfigRef%2CTBackend"><span class="Identifier">customizeForBackend</span></a><span class="Other">(</span><span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">backend</span><span class="Other">:</span> <a href="in_options.html#TBackend"><span class="Identifier">TBackend</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
+    <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span>
+    <span class="Identifier">EOFError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span>
+                      <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Sets backend specific options. This must be called by all commands. <tt class="docutils literal"><span class="pre"><span class="Identifier">backend</span></span></tt> is the backend to choose when no backend has been selected so far.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/51c049f9c3998610e7d5e1f06f538c60504d8b4e/compiler/front/main.nim#L428"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/main.nim#L428" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="execExternalProgramFailedMsg,string,int">
 <dt><pre><span class="Keyword">func</span> <a href="#execExternalProgramFailedMsg%2Cstring%2Cint"><span class="Identifier">execExternalProgramFailedMsg</span></a><span class="Other">(</span><span class="Identifier">cmd</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">exitCode</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
@@ -211,9 +231,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/981ce9705d33ea8a714aadba3f7a12b6429e47f3/compiler/front/main.nim#L144"
+href="https://github.com/nim-works/nimskull/tree/51c049f9c3998610e7d5e1f06f538c60504d8b4e/compiler/front/main.nim#L146"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/main.nim#L144" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/main.nim#L146" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -224,25 +244,25 @@ class="link-seesrc" target="_blank">Source</a>
 
 doesn't have to be complete; worst case is a cache hit and recompilation.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/981ce9705d33ea8a714aadba3f7a12b6429e47f3/compiler/front/main.nim#L305"
+href="https://github.com/nim-works/nimskull/tree/51c049f9c3998610e7d5e1f06f538c60504d8b4e/compiler/front/main.nim#L303"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/main.nim#L305" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/main.nim#L303" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="mainCommand,ModuleGraph">
-<dt><pre><span class="Keyword">proc</span> <a href="#mainCommand%2CModuleGraph"><span class="Identifier">mainCommand</span></a><span class="Other">(</span><span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span>
-    <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">,</span> <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span>
-    <span class="Identifier">CancelConfigProcessing</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">TimeEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span>
-                                    <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">,</span>
-                                    <span class="Identifier">ExecIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#mainCommand%2CModuleGraph"><span class="Identifier">mainCommand</span></a><span class="Other">(</span><span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span>
+    <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">EOFError</span><span class="Other">,</span>
+    <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span> <span class="Identifier">CancelConfigProcessing</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">TimeEffect</span><span class="Other">,</span>
+    <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">WriteDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span>
+    <span class="Identifier">WriteIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteEnvEffect</span><span class="Other">,</span> <span class="Identifier">ExecIOEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Execute main compiler command
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/981ce9705d33ea8a714aadba3f7a12b6429e47f3/compiler/front/main.nim#L430"
+href="https://github.com/nim-works/nimskull/tree/51c049f9c3998610e7d5e1f06f538c60504d8b4e/compiler/front/main.nim#L459"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/main.nim#L430" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/front/main.nim#L459" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -256,7 +276,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-06 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-07 00:00:00 UTC</small>
       </div>
     </div>
   </div>

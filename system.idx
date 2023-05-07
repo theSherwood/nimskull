@@ -496,11 +496,9 @@ QuitSuccess	system.html#QuitSuccess	system: QuitSuccess
 QuitFailure	system.html#QuitFailure	system: QuitFailure	
 programResult	system.html#programResult	system: programResult	
 quit	system.html#quit,int	system: quit(errorcode: int = QuitSuccess)	
-add	system.html#add,seq[T],sinkT	system: add[T](x: var seq[T]; y: sink T)	
 add	system.html#add,seq[T],openArray[T]	system: add[T](x: var seq[T]; y: openArray[T])	
 del	system.html#del,seq[T],Natural	system: del[T](x: var seq[T]; i: Natural)	
 insert	system.html#insert,seq[T],sinkT	system: insert[T](x: var seq[T]; item: sink T; i = 0.Natural)	
-repr	system.html#repr,T	system: repr[T](x: T): string	
 ByteAddress	system.html#ByteAddress	system: ByteAddress	
 BiggestFloat	system.html#BiggestFloat	system: BiggestFloat	
 BiggestUInt	system.html#BiggestUInt	system: BiggestUInt	
@@ -586,12 +584,17 @@ isNil	system.html#isNil,pointer	system: isNil(x: pointer): bool
 isNil	system.html#isNil,cstring	system: isNil(x: cstring): bool	
 isNil	system.html#isNil,T	system: isNil[T: proc](x: T): bool	
 `@`	system.html#@,openArray[T]	system: `@`[T](a: openArray[T]): seq[T]	
-`&amp;`	system.html#&,seq[T],seq[T]	system: `&amp;`[T](x, y: seq[T]): seq[T]	
-`&amp;`	system.html#&,seq[T],T	system: `&amp;`[T](x: seq[T]; y: T): seq[T]	
-`&amp;`	system.html#&,T,seq[T]	system: `&amp;`[T](x: T; y: seq[T]): seq[T]	
+`&amp;`	system.html#&,sinkseq[T],sinkseq[T]	system: `&amp;`[T](x, y: sink seq[T]): seq[T]	
+`&amp;`	system.html#&,sinkseq[T],sinkT	system: `&amp;`[T](x: sink seq[T]; y: sink T): seq[T]	
+`&amp;`	system.html#&,sinkT,sinkseq[T]	system: `&amp;`[T](x: sink T; y: sink seq[T]): seq[T]	
 astToStr	system.html#astToStr,T	system: astToStr[T](x: T): string	
 instantiationInfo	system.html#instantiationInfo,int	system: instantiationInfo(index = -1; fullPaths = false): tuple[filename: string,\n    line: int, column: int]	
 compiles	system.html#compiles,untyped	system: compiles(x: untyped): bool	
+prepareMutation	system.html#prepareMutation,string	system: prepareMutation(s: var string)	
+NimSeqV2	system.html#NimSeqV2	system: NimSeqV2	
+shrink	system.html#shrink,seq[T],Natural	system: shrink[T](x: var seq[T]; newLen: Natural)	
+grow	system.html#grow,seq[T],Natural,T	system: grow[T](x: var seq[T]; newLen: Natural; value: T)	
+add	system.html#add,seq[T],sinkT	system: add[T](x: var seq[T]; value: sink T)	
 AtomType	system.html#AtomType	system: AtomType	
 AtomMemModel	system.html#AtomMemModel	system: AtomMemModel	
 ATOMIC_RELAXED	system.html#ATOMIC_RELAXED	system: ATOMIC_RELAXED	
@@ -605,6 +608,20 @@ atomicInc	system.html#atomicInc,int,int	system: atomicInc(memLoc: var int; x: in
 atomicDec	system.html#atomicDec,int,int	system: atomicDec(memLoc: var int; x: int = 1; order = ATOMIC_RELAXED): int	
 cas	system.html#cas,ptr.T,T,T	system: cas[T: bool | int | ptr](p: ptr T; oldValue, newValue: T): bool	
 cpuRelax	system.html#cpuRelax	system: cpuRelax()	
+`=dispose`	system.html#=dispose.t	system: `=dispose`[T](x: owned(ref T))	
+getThreadId	system.html#getThreadId	system: getThreadId(): int	
+GC_runOrc	system.html#GC_runOrc	system: GC_runOrc()	
+GC_enableOrc	system.html#GC_enableOrc	system: GC_enableOrc()	
+GC_disableOrc	system.html#GC_disableOrc	system: GC_disableOrc()	
+GC_prepareOrc	system.html#GC_prepareOrc	system: GC_prepareOrc(): int	
+GC_partialCollect	system.html#GC_partialCollect,int	system: GC_partialCollect(limit: int)	
+GC_fullCollect	system.html#GC_fullCollect	system: GC_fullCollect()	
+GC_enableMarkAndSweep	system.html#GC_enableMarkAndSweep	system: GC_enableMarkAndSweep()	
+GC_disableMarkAndSweep	system.html#GC_disableMarkAndSweep	system: GC_disableMarkAndSweep()	
+GC_unref	system.html#GC_unref,ref.T	system: GC_unref[T](x: ref T)	
+GC_ref	system.html#GC_ref,ref.T	system: GC_ref[T](x: ref T)	
+setupForeignThreadGc	system.html#setupForeignThreadGc.t	system: setupForeignThreadGc()	
+tearDownForeignThreadGc	system.html#tearDownForeignThreadGc.t	system: tearDownForeignThreadGc()	
 find	system.html#find,T,S	system: find[T, S](a: T; item: S): int	
 contains	system.html#contains,openArray[T],T	system: contains[T](a: openArray[T]; item: T): bool	
 pop	system.html#pop,seq[T]	system: pop[T](s: var seq[T]): T	
@@ -616,12 +633,6 @@ gcResponsiveness	system.html#gcResponsiveness	GC_Strategy.gcResponsiveness
 gcOptimizeTime	system.html#gcOptimizeTime	GC_Strategy.gcOptimizeTime	
 gcOptimizeSpace	system.html#gcOptimizeSpace	GC_Strategy.gcOptimizeSpace	
 GC_Strategy	system.html#GC_Strategy	system: GC_Strategy	
-GC_ref	system.html#GC_ref,ref.T	system: GC_ref[T](x: ref T)	
-GC_ref	system.html#GC_ref,seq[T]	system: GC_ref[T](x: seq[T])	
-GC_ref	system.html#GC_ref,string	system: GC_ref(x: string)	
-GC_unref	system.html#GC_unref,ref.T	system: GC_unref[T](x: ref T)	
-GC_unref	system.html#GC_unref,seq[T]	system: GC_unref[T](x: seq[T])	
-GC_unref	system.html#GC_unref,string	system: GC_unref(x: string)	
 globalRaiseHook	system.html#globalRaiseHook	system: globalRaiseHook	
 localRaiseHook	system.html#localRaiseHook	system: localRaiseHook	
 outOfMemHook	system.html#outOfMemHook	system: outOfMemHook	
@@ -707,19 +718,7 @@ ForeignCell	system.html#ForeignCell	system: ForeignCell
 protect	system.html#protect,pointer	system: protect(x: pointer): ForeignCell	
 dispose	system.html#dispose,ForeignCell	system: dispose(x: ForeignCell)	
 isNotForeign	system.html#isNotForeign,ForeignCell	system: isNotForeign(x: ForeignCell): bool	
-setupForeignThreadGc	system.html#setupForeignThreadGc	system: setupForeignThreadGc()	
-tearDownForeignThreadGc	system.html#tearDownForeignThreadGc	system: tearDownForeignThreadGc()	
-nimGC_setStackBottom	system.html#nimGC_setStackBottom,pointer	system: nimGC_setStackBottom(theStackBottom: pointer)	
-deallocHeap	system.html#deallocHeap	system: deallocHeap(runFinalizers = true; allowGcAfterwards = true)	
-gcInvariant	system.html#gcInvariant	system: gcInvariant()	
-GC_collectZct	system.html#GC_collectZct	system: GC_collectZct()	
-GC_disable	system.html#GC_disable	system: GC_disable()	
-GC_enable	system.html#GC_enable	system: GC_enable()	
-GC_enableMarkAndSweep	system.html#GC_enableMarkAndSweep	system: GC_enableMarkAndSweep()	
-GC_disableMarkAndSweep	system.html#GC_disableMarkAndSweep	system: GC_disableMarkAndSweep()	
-GC_fullCollect	system.html#GC_fullCollect	system: GC_fullCollect()	
 GC_getStatistics	system.html#GC_getStatistics	system: GC_getStatistics(): string	
-reprDiscriminant	system.html#reprDiscriminant,int,PNimType	system: reprDiscriminant(e: int; typ: PNimType): string	
 getCurrentException	system.html#getCurrentException	system: getCurrentException(): ref Exception	
 getCurrentExceptionMsg	system.html#getCurrentExceptionMsg	system: getCurrentExceptionMsg(): string	
 setCurrentException	system.html#setCurrentException,ref.Exception	system: setCurrentException(exc: ref Exception)	
@@ -788,7 +787,6 @@ toOpenArray	system.html#toOpenArray,string,int,int	system: toOpenArray(x: string
 toOpenArrayByte	system.html#toOpenArrayByte,string,int,int	system: toOpenArrayByte(x: string; first, last: int): openArray[byte]	
 toOpenArrayByte	system.html#toOpenArrayByte,openArray[char],int,int	system: toOpenArrayByte(x: openArray[char]; first, last: int): openArray[byte]	
 toOpenArrayByte	system.html#toOpenArrayByte,seq[char],int,int	system: toOpenArrayByte(x: seq[char]; first, last: int): openArray[byte]	
-prepareMutation	system.html#prepareMutation,string	system: prepareMutation(s: var string)	
 out of memory	system.html#out-of-memory_1	Module system	
 slice	system.html#slice_1	Module system	
 slice	system.html#slice_2	Module system	
