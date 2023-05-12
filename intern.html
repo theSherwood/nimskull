@@ -131,7 +131,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/64647e6b4ea818811682fe8ab4803eca88108a7b/doc/intern.rst#L1"
+href="https://github.com/nim-works/nimskull/tree/d6441e866c701a81f5f99faef4c903a947d69eba/doc/intern.rst#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/doc/intern.rst#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -264,7 +264,8 @@ class="link-seesrc" target="_blank">Source</a>
 <pre class="listing"><span class="program">git</span> <span class="option">bisect</span> <span class="option">start</span> <span class="option">bad-commit</span> <span class="option">good-commit</span>
 <span class="program">git</span> <span class="option">bisect</span> <span class="option">run</span> <span class="Identifier">./koch.py</span> <span class="option">temp</span> <span class="option">-r</span> <span class="option">c</span> <span class="Identifier">test-source.nim</span></pre><p>You can also bisect using custom options to build the compiler, for example if you don't need a debug version of the compiler (which runs slower), you can replace <tt class="docutils literal"><span class="pre"><span class="program">./koch.py</span> <span class="option">temp</span></span></tt> by explicit compilation command, see <a class="reference internal" href="#bootstrapping-the-compiler">Bootstrapping the compiler</a>.</p>
 
-<h2><a class="toc-backref" id="runtimes" href="#runtimes">Runtimes</a></h2><p> NimSkull has two different runtimes, the &quot;old runtime&quot; and the &quot;new runtime&quot;. The old runtime supports the old GCs (markAndSweep, refc, Boehm), the new runtime supports ARC/ORC. The new runtime is active <tt class="docutils literal"><span class="pre">when defined(nimV2)</span></tt>.</p>
+<h2><a class="toc-backref" id="runtimes" href="#runtimes">Runtimes</a></h2><p> NimSkull had two different runtimes at one point, but support for the old one was removed from the compiler. Some documentation might still use the terms &quot;old runtime&quot; and &quot;new runtime&quot;.</p>
+<p>In order to continue bootstrapping, the code for the implementation of the &quot;old runtime&quot; still exists. The new runtime is active <tt class="docutils literal"><span class="pre">when defined(nimV2)</span></tt>.</p>
 
 <h2><a class="toc-backref" id="coding-guidelines" href="#coding-guidelines">Coding Guidelines</a></h2><ul class="simple"><li>We follow  NimSkull's official style guide, see <a class="reference external" href="nep1.html">nep1.html</a>.</li>
 <li>Max line length is 100 characters.</li>
@@ -275,14 +276,11 @@ class="link-seesrc" target="_blank">Source</a>
 
 <h2><a class="toc-backref" id="porting-to-new-platforms" href="#porting-to-new-platforms">Porting to new platforms</a></h2><p>Porting  NimSkull to a new architecture is pretty easy, since C is the most portable programming language (within certain limits) and  NimSkull generates C code, porting the code generator is not necessary.</p>
 <p>POSIX-compliant systems on conventional hardware are usually pretty easy to port: Add the platform to <tt class="docutils literal"><span class="pre">platform</span></tt> (if it is not already listed there), check that the OS, System modules work and recompile  NimSkull.</p>
-<p>The only case where things aren't as easy is when old runtime's garbage collectors need some assembler tweaking to work. The default implementation uses C's <tt class="docutils literal"><span class="pre"><span class="Identifier">setjmp</span></span></tt> function to store all registers on the hardware stack. It may be necessary that the new platform needs to replace this generic code by some assembler code.</p>
 
 <h2><a class="toc-backref" id="runtime-type-information" href="#runtime-type-information">Runtime type information</a></h2><p><strong>Note</strong>: This section describes the &quot;old runtime&quot;.</p>
 <p><em>Runtime type information</em> (RTTI) is needed for several aspects of the  NimSkull programming language:</p>
-<dl class="docutils"><dt>Garbage collection</dt>
-<dd>The old GCs use the RTTI for traversing abitrary  NimSkull types, but usually only the <tt class="docutils literal"><span class="pre">marker</span></tt> field which contains a proc that does the traversal.</dd>
-<dt>Complex assignments</dt>
-<dd>Sequences and strings are implemented as pointers to resizeable buffers, but  NimSkull requires copying for assignments. Apart from RTTI the compiler also generates copy procedures as a specialization.</dd>
+<dl class="docutils"><dt>Deep copying</dt>
+<dd>Compared to a normal copy, a <em>deep</em> copy also creates copies of cells referenced by <tt class="docutils literal"><span class="pre">ref</span></tt>s, instead of just copying the pointers. The type of the <tt class="docutils literal"><span class="pre">ref</span></tt> can be different from the type of the cell, so an approach only taking static types into account wouldn't work.</dd>
 </dl>
 <p>We already know the type information as a graph in the compiler. Thus we need to serialize this graph as RTTI for C code generation. Look at the file <tt class="docutils literal"><span class="pre">lib/system/hti.nim</span></tt> for more information.</p>
 
@@ -416,7 +414,7 @@ n.typ.n == n</pre>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-11 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-12 00:00:00 UTC</small>
       </div>
     </div>
   </div>

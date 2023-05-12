@@ -71,30 +71,19 @@ window.addEventListener('DOMContentLoaded', main);
   <div class="container">
     <h1 class="title">Nim's Memory Management</h1>
     <table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Author:</th><td>Andreas Rumpf</td></tr>
-<tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20798</td></tr>
+<tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20799</td></tr>
 </tbody></table><blockquote><p>&quot;The road to hell is paved with good intentions.&quot;</p></blockquote>
 
-<h1 id="introduction">Introduction</h1><p>A memory-management algorithm optimal for every use-case cannot exist. Nim provides multiple paradigms for needs ranging from large multi-threaded applications, to games, hard-realtime systems and small microcontrollers.</p>
-<p>This document describes how the management strategies work; How to tune the garbage collectors for your needs, like (soft) <span id="realtime-systems_1">realtime systems</span>, and how the memory management strategies other than garbage collectors work.</p>
+<h1 id="introduction">Introduction</h1><p>A memory-management algorithm optimal for every use-case cannot exist.  NimSkull currently focuses on automatic reference counting, but this might change or shift in the future. This document describes how the management strategies work.</p>
 <div class="admonition admonition-info"><span class="admonition-info-text"><b>Note:</b></span>
 the default GC is incremental, thread-local and not &quot;stop-the-world&quot;</div>
 
-<h1 id="multiminusparadigm-memory-management-strategies">Multi-paradigm Memory Management Strategies</h1><p>To choose the memory management strategy use the <tt class="docutils literal"><span class="pre option">--gc:</span></tt> switch.</p>
-<div class="option-list"><div class="option-list-item odd"><div class="option-list-label"><tt><span class="option">--gc:refc</span></tt></div><div class="option-list-description">This is the default GC. It's a deferred reference counting based garbage collector with a simple Mark&amp;Sweep backup GC in order to collect cycles. Heaps are thread-local.</div></div>
-<div class="option-list-item"><div class="option-list-label"><tt><span class="option">--gc:markAndSweep</span></tt></div><div class="option-list-description">Simple Mark-And-Sweep based garbage collector. Heaps are thread-local.</div></div>
-<div class="option-list-item odd"><div class="option-list-label"><tt><span class="option">--gc:boehm</span></tt></div><div class="option-list-description">Boehm based garbage collector, it offers a shared heap.</div></div>
-<div class="option-list-item"><div class="option-list-label"><tt><span class="option">--gc:go</span></tt></div><div class="option-list-description">Go's garbage collector, useful for interoperability with Go. Offers a shared heap.</div></div>
-<div class="option-list-item odd"><div class="option-list-label"><tt><span class="option">--gc:arc</span></tt></div><div class="option-list-description">Plain reference counting with <a class="reference external" href="destructors.html#move-semantics">move semantic optimizations</a>, offers a shared heap. It offers deterministic performance for <span id="hard-realtime_1">hard realtime</span> systems. Reference cycles cause memory leaks, beware.</div></div>
+<h1 id="multiminusparadigm-memory-management-strategies">Multi-paradigm Memory Management Strategies</h1><p>To choose the memory management strategy use the <tt class="docutils literal"><span class="pre option">--gc:</span></tt> switch. Note that the switch is currently ignored when using the JavaScript or VM backends.</p>
+<div class="option-list"><div class="option-list-item odd"><div class="option-list-label"><tt><span class="option">--gc:arc</span></tt></div><div class="option-list-description">Plain reference counting with <a class="reference external" href="destructors.html#move-semantics">move semantic optimizations</a>, offers a shared heap. It offers deterministic performance for <span id="hard-realtime_1">hard realtime</span> systems. Reference cycles cause memory leaks, beware.</div></div>
 <div class="option-list-item"><div class="option-list-label"><tt><span class="option">--gc:orc</span></tt></div><div class="option-list-description">Same as <tt class="docutils literal"><span class="pre option">--gc:arc</span></tt> but adds a cycle collector based on &quot;trial deletion&quot;. Unfortunately, that makes its performance profile hard to reason about so it is less useful for hard real-time systems.</div></div>
-<div class="option-list-item odd"><div class="option-list-label"><tt><span class="option">--gc:none</span></tt></div><div class="option-list-description">No memory management strategy nor a garbage collector. Allocated memory is simply never freed. You should use <tt class="docutils literal"><span class="pre option">--gc:arc</span></tt> instead.</div></div>
 </div><table border="1" class="docutils"><tr><th>Memory Management</th><th>Heap</th><th>Reference Cycles</th><th>Stop-The-World</th><th>Command line switch</th></tr>
-<tr><td>RefC</td><td>Local</td><td>Cycle Collector</td><td>No</td><td><tt class="docutils literal"><span class="pre option">--gc:refc</span></tt></td></tr>
-<tr><td>Mark &amp; Sweep</td><td>Local</td><td>Cycle Collector</td><td>No</td><td><tt class="docutils literal"><span class="pre option">--gc:markAndSweep</span></tt></td></tr>
 <tr><td>ARC</td><td>Shared</td><td>Leak</td><td>No</td><td><tt class="docutils literal"><span class="pre option">--gc:arc</span></tt></td></tr>
 <tr><td>ORC</td><td>Shared</td><td>Cycle Collector</td><td>No</td><td><tt class="docutils literal"><span class="pre option">--gc:orc</span></tt></td></tr>
-<tr><td>Boehm</td><td>Shared</td><td>Cycle Collector</td><td>Yes</td><td><tt class="docutils literal"><span class="pre option">--gc:boehm</span></tt></td></tr>
-<tr><td>Go</td><td>Shared</td><td>Cycle Collector</td><td>Yes</td><td><tt class="docutils literal"><span class="pre option">--gc:go</span></tt></td></tr>
-<tr><td>None</td><td>Manual</td><td>Manual</td><td>Manual</td><td><tt class="docutils literal"><span class="pre option">--gc:none</span></tt></td></tr>
 </table><p>JavaScript's garbage collector is used for the <a class="reference external" href="backends.html#backends-the-javascript-target">JavaScript and NodeJS</a> compilation targets. The <a class="reference external" href="nims.html">NimScript</a> and VM targets use their own custom garbage collector, which, as of now, leaks reference cycles.</p>
 
 <h1 id="arc">ARC</h1><p>ARC, which is short for automatic reference counting, is a memory-management strategy based on plain reference counting. Each managed heap cell (that is, a location allocated via either <tt class="docutils literal"><span class="pre"><span class="Identifier">new</span></span></tt> or by using the object construction syntax where the type is a <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span> <span class="Identifier">T</span></span></tt>) also stores a reference counter.</p>
@@ -162,38 +151,13 @@ how the <tt class="docutils literal"><span class="pre"><span class="Identifier">
 
 <h2 id="tweaking-orc">Tweaking ORC</h2><p>The operation of ORC can be configured at both compile- and run-time.</p>
 <p>Compile-time configuration:</p>
-<p>1) <tt class="docutils literal"><span class="pre option">--define:nimFixedOrc</span></tt> : use an implementation-defined static</p>
-<blockquote><p><em>cycle root</em> threshold</p></blockquote>
+<ol class="simple"><li><p><tt class="docutils literal"><span class="pre option">--define:nimFixedOrc</span></tt></p>
+<p>Use an implementation-defined static <em>cycle root</em> threshold.</p>
+</li>
+</ol>
 <p>Run-time configuration:</p>
 <p>To disable the cycle collector, <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_disableOrc</span></span></tt> is used. When the collector is disabled, potential <em>cycle roots</em> will accumulate. To enable it again, call <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_enableOrc</span></span></tt>.</p>
 <p>Cycle collection can be manually triggered via calling either <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_runOrc</span></span></tt> (full collection) or <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_partialCollect</span><span class="Punctuation">(</span><span class="Identifier">limit</span><span class="Punctuation">)</span></span></tt> (partial collect). Manually triggering a cycle collection while the cycle collector is disabled is possible, but note that doing so (currently) enables the collector again.</p>
-
-<h1 id="tweaking-the-refc-gc">Tweaking the refc GC</h1>
-<h2 id="cycle-collector">Cycle collector</h2><p>The cycle collector can be en-/disabled independently from the other parts of the garbage collector with <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_enableMarkAndSweep</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_disableMarkAndSweep</span></span></tt>.</p>
-
-<h2 id="soft-realminustime-support">Soft real-time support</h2><p>To enable real-time support, the symbol <span id="userealtimegc_1">useRealtimeGC</span> needs to be defined via <tt class="docutils literal"><span class="pre option">--define:useRealtimeGC</span></tt> (you can put this into your config file as well). With this switch the garbage collector supports the following operations:</p>
-<pre class="listing"><span class="Keyword">proc</span> <span class="Identifier">GC_setMaxPause</span><span class="Operator">*</span><span class="Punctuation">(</span><span class="Identifier">maxPauseInUs</span><span class="Punctuation">:</span> <span class="Identifier">int</span><span class="Punctuation">)</span>
-<span class="Keyword">proc</span> <span class="Identifier">GC_step</span><span class="Operator">*</span><span class="Punctuation">(</span><span class="Identifier">us</span><span class="Punctuation">:</span> <span class="Identifier">int</span><span class="Punctuation">,</span> <span class="Identifier">strongAdvice</span> <span class="Operator">=</span> <span class="Identifier">false</span><span class="Punctuation">,</span> <span class="Identifier">stackSize</span> <span class="Operator">=</span> <span class="Operator">-</span><span class="DecNumber">1</span><span class="Punctuation">)</span></pre><p>The unit of the parameters <tt class="docutils literal"><span class="pre"><span class="Identifier">maxPauseInUs</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">us</span></span></tt> is microseconds.</p>
-<p>These two procs are the two modus operandi of the real-time garbage collector:</p>
-<ol class="simple"><li><p>GC_SetMaxPause Mode</p>
-<p>You can call <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_SetMaxPause</span></span></tt> at program startup and then each triggered garbage collector run tries to not take longer than <tt class="docutils literal"><span class="pre"><span class="Identifier">maxPause</span></span></tt> time. However, it is possible (and common) that the work is nevertheless not evenly distributed as each call to <tt class="docutils literal"><span class="pre"><span class="Identifier">new</span></span></tt> can trigger the garbage collector and thus take  <tt class="docutils literal"><span class="pre"><span class="Identifier">maxPause</span></span></tt> time.</p>
-</li>
-<li><p>GC_step Mode</p>
-<p>This allows the garbage collector to perform some work for up to <tt class="docutils literal"><span class="pre"><span class="Identifier">us</span></span></tt> time. This is useful to call in the main loop to ensure the garbage collector can do its work. To bind all garbage collector activity to a <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_step</span></span></tt> call, deactivate the garbage collector with <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_disable</span></span></tt> at program startup. If <tt class="docutils literal"><span class="pre"><span class="Identifier">strongAdvice</span></span></tt> is set to <tt class="docutils literal"><span class="pre"><span class="Identifier">true</span></span></tt>, then the garbage collector will be forced to perform the collection cycle. Otherwise, the garbage collector may decide not to do anything, if there is not much garbage to collect. You may also specify the current stack size via <tt class="docutils literal"><span class="pre"><span class="Identifier">stackSize</span></span></tt> parameter. It can improve performance when you know that there are no unique Nim references below a certain point on the stack. Make sure the size you specify is greater than the potential worst-case size.</p>
-<p>It can improve performance when you know that there are no unique Nim references below a certain point on the stack. Make sure the size you specify is greater than the potential worst-case size.</p>
-</li>
-</ol>
-<p>These procs provide a &quot;best effort&quot; real-time guarantee; in particular the cycle collector is not aware of deadlines. Deactivate it to get more predictable real-time behaviour. Tests show that a 1ms max pause time will be met in almost all cases on modern CPUs (with the cycle collector disabled).</p>
-
-<h2 id="time-measurement-with-garbage-collectors">Time measurement with garbage collectors</h2><p>The garbage collectors' way of measuring time uses (see <tt class="docutils literal"><span class="pre">lib/system/timers.nim</span></tt> for the implementation):</p>
-<ol class="simple"><li><tt class="docutils literal"><span class="pre"><span class="Identifier">QueryPerformanceCounter</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">QueryPerformanceFrequency</span></span></tt> on Windows.</li>
-<li><tt class="docutils literal"><span class="pre"><span class="Identifier">mach_absolute_time</span></span></tt> on Mac OS X.</li>
-<li><tt class="docutils literal"><span class="pre"><span class="Identifier">gettimeofday</span></span></tt> on Posix systems.</li>
-</ol>
-<p>As such it supports a resolution of nanoseconds internally; however, the API uses microseconds for convenience.</p>
-<p>Define the symbol <tt class="docutils literal"><span class="pre"><span class="Identifier">reportMissedDeadlines</span></span></tt> to make the garbage collector output whenever it missed a deadline. The reporting will be enhanced and supported by the API in later versions of the collector.</p>
-
-<h2 id="tweaking-the-garbage-collector">Tweaking the garbage collector</h2><p>The collector checks whether there is still time left for its work after every <tt class="docutils literal"><span class="pre"><span class="Identifier">workPackage</span></span></tt>'th iteration. This is currently set to 100 which means that up to 100 objects are traversed and freed before it checks again. Thus <tt class="docutils literal"><span class="pre"><span class="Identifier">workPackage</span></span></tt> affects the timing granularity and may need to be tweaked in highly specialized environments or for older hardware.</p>
 
 <h1 id="keeping-track-of-memory">Keeping track of memory</h1><p>If you need to pass around memory allocated by Nim to C, you can use the procs <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_ref</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_unref</span></span></tt> to mark objects as referenced to avoid them being freed by the garbage collector. Other useful procs from <a class="reference external" href="system.html">system</a> you can use to keep track of memory are:</p>
 <ul class="simple"><li><tt class="docutils literal"><span class="pre"><span class="Identifier">getTotalMem</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> Returns the amount of total memory managed by the garbage collector.</li>
@@ -205,7 +169,9 @@ how the <tt class="docutils literal"><span class="pre"><span class="Identifier">
 <p>In addition to <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_ref</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">GC_unref</span></span></tt> you can avoid the garbage collector by manually allocating memory with procs like <tt class="docutils literal"><span class="pre"><span class="Identifier">alloc</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">alloc0</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">allocShared</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">allocShared0</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">allocCStringArray</span></span></tt>. The garbage collector won't try to free them, you need to call their respective <em>dealloc</em> pairs (<tt class="docutils literal"><span class="pre"><span class="Identifier">dealloc</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">deallocShared</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">deallocCStringArray</span></span></tt>, etc) when you are done with them or they will leak.</p>
 
 <h1 id="heap-dump">Heap dump</h1><p>The heap dump feature is still in its infancy, but it already proved useful for us, so it might be useful for you. To get a heap dump, compile with <tt class="docutils literal"><span class="pre option">-d:nimTypeNames</span></tt> and call <tt class="docutils literal"><span class="pre"><span class="Identifier">dumpNumberOfInstances</span></span></tt> at a strategic place in your program. This produces a list of the used types in your program and for every type the total amount of object instances for this type as well as the total amount of bytes these instances take up.</p>
-<p>The numbers count the number of objects in all garbage collector heaps, they refer to all running threads, not only to the current thread. (The current thread would be the thread that calls <tt class="docutils literal"><span class="pre"><span class="Identifier">dumpNumberOfInstances</span></span></tt>.) This might change in later versions. </p>
+<p>The numbers count the number of objects in all garbage collector heaps, they refer to all running threads, not only to the current thread. (The current thread would be the thread that calls <tt class="docutils literal"><span class="pre"><span class="Identifier">dumpNumberOfInstances</span></span></tt>.) This might change in later versions.</p>
+<div class="admonition admonition-info"><span class="admonition-info-text"><b>Note:</b></span>
+this feature isn't supported at the moment, but will be again in the future</div>
 
 
 
@@ -213,7 +179,7 @@ how the <tt class="docutils literal"><span class="pre"><span class="Identifier">
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-11 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-12 00:00:00 UTC</small>
       </div>
     </div>
   </div>
