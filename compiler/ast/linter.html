@@ -95,7 +95,8 @@ window.addEventListener('DOMContentLoaded', main);
   </div>
   
   <ul class="simple simple-toc" id="toc-list">
-<li>
+<ul class="simple"><li><a class="reference" id="general-rules-of-stylecolon_toc" href="#general-rules-of-stylecolon">General rules of style:</a></li>
+</ul><li>
   <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
   <ul class="simple simple-toc-section">
     
@@ -117,11 +118,6 @@ window.addEventListener('DOMContentLoaded', main);
     title="checkPragmaUse(conf: ConfigRef; info: TLineInfo; w: TSpecialWord;
                pragmaName: string)">checkPragmaUse(conf: ConfigRef; info: TLineInfo; w: TSpecialWord;
                pragmaName: string)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">differ
-      <li><a class="reference" href="#differ%2Cstring%2Cint%2Cint%2Cstring"
-    title="differ(line: string; a, b: int; x: string): string">differ(line: string; a, b: int; x: string): string</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">identLen
@@ -157,18 +153,29 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/64c62d2d01debaf1105b55a9592e4b48f310f084/compiler/ast/linter.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/d3b919491d219ebb0b778bb4f736efee2a357457/compiler/ast/linter.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">This module implements the style checker.</p>
+  <p class="module-desc"><p>This module implements the style checker.</p>
+<p>Directionally, style will become part of the language, think <tt class="docutils literal"><span class="pre"><span class="Identifier">go</span> <span class="Identifier">fmt</span></span></tt> where violations are errors.</p>
+<p>Currently focused on names, but should cover spacing, and more.</p>
+
+<h2><a class="toc-backref" id="general-rules-of-stylecolon" href="#general-rules-of-stylecolon">General rules of style:</a></h2><ul class="simple"><li>Saem decides style matters</li>
+<li>lower/upper camel case good; snake case bad</li>
+<li>lower camel case for most things</li>
+<li>upper camel case for non-runtime things (types, some consts)</li>
+<li>single letter names are ok, should be lower; tolerate upper</li>
+<li>all-caps snake case is occassionally tolerated</li>
+</ul>
+</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="ast.html">ast</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="wordrecg.html">wordrecg</a>, <a class="reference external" href="reports.html">reports</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="reports_sem.html">reports_sem</a>
+<a class="reference external" href="ast.html">ast</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="wordrecg.html">wordrecg</a>, <a class="reference external" href="reports.html">reports</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="reports_sem.html">reports_sem</a>
 </dl></div>
 <div class="section" id="10">
 <h1><a class="toc-backref" href="#10">Consts</a></h1>
@@ -179,9 +186,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/64c62d2d01debaf1105b55a9592e4b48f310f084/compiler/ast/linter.nim#L30"
+href="https://github.com/nim-works/nimskull/tree/d3b919491d219ebb0b778bb4f736efee2a357457/compiler/ast/linter.nim#L47"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L30" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L47" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -198,21 +205,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/64c62d2d01debaf1105b55a9592e4b48f310f084/compiler/ast/linter.nim#L157"
+href="https://github.com/nim-works/nimskull/tree/d3b919491d219ebb0b778bb4f736efee2a357457/compiler/ast/linter.nim#L242"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L157" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="differ,string,int,int,string">
-<dt><pre><span class="Keyword">proc</span> <a href="#differ%2Cstring%2Cint%2Cint%2Cstring"><span class="Identifier">differ</span></a><span class="Other">(</span><span class="Identifier">line</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">x</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/64c62d2d01debaf1105b55a9592e4b48f310f084/compiler/ast/linter.nim#L87"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L87" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L242" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -222,9 +217,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/64c62d2d01debaf1105b55a9592e4b48f310f084/compiler/ast/linter.nim#L32"
+href="https://github.com/nim-works/nimskull/tree/d3b919491d219ebb0b778bb4f736efee2a357457/compiler/ast/linter.nim#L49"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L32" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L49" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -235,9 +230,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/64c62d2d01debaf1105b55a9592e4b48f310f084/compiler/ast/linter.nim#L134"
+href="https://github.com/nim-works/nimskull/tree/d3b919491d219ebb0b778bb4f736efee2a357457/compiler/ast/linter.nim#L219"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L134" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L219" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -252,9 +247,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/64c62d2d01debaf1105b55a9592e4b48f310f084/compiler/ast/linter.nim#L117"
+href="https://github.com/nim-works/nimskull/tree/d3b919491d219ebb0b778bb4f736efee2a357457/compiler/ast/linter.nim#L214"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L117" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L214" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -264,9 +259,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/64c62d2d01debaf1105b55a9592e4b48f310f084/compiler/ast/linter.nim#L113"
+href="https://github.com/nim-works/nimskull/tree/d3b919491d219ebb0b778bb4f736efee2a357457/compiler/ast/linter.nim#L209"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L113" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L209" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -276,9 +271,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/64c62d2d01debaf1105b55a9592e4b48f310f084/compiler/ast/linter.nim#L119"
+href="https://github.com/nim-works/nimskull/tree/d3b919491d219ebb0b778bb4f736efee2a357457/compiler/ast/linter.nim#L216"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/linter.nim#L216" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -292,7 +287,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-16 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-17 00:00:00 UTC</small>
       </div>
     </div>
   </div>
