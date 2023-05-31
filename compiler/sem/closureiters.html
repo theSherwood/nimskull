@@ -117,7 +117,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/33f0626884829597f62633af150370f539af3777/compiler/sem/closureiters.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/c41daf03e7f8de3b03812fb00aee154c43b14e05/compiler/sem/closureiters.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/closureiters.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -143,7 +143,8 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Punctuation">:</span><span class="Identifier">state</span> <span class="Operator">=</span> <span class="DecNumber">0</span> <span class="Comment"># Next state</span>
   <span class="Keyword">break</span> <span class="Punctuation">:</span><span class="Identifier">stateLoop</span> <span class="Comment"># Proceed to the next state</span>
 <span class="Identifier">STATE2</span><span class="Punctuation">:</span>
-  <span class="Punctuation">:</span><span class="Identifier">state</span> <span class="Operator">=</span> <span class="Operator">-</span><span class="DecNumber">1</span> <span class="Comment"># End of execution</span></pre><p>The transformation should play well with lambdalifting, however depending on situation, it can be called either before or after lambdalifting transformation. As such we behave slightly differently, when accessing iterator state, or using temp variables. If lambdalifting did not happen, we just create local variables, so that they will be lifted further on. Otherwise, we utilize existing env, created by lambdalifting. Lambdalifting treats :state variable specially, it should always end up as the first field in env. Currently C codegen depends on this behavior. One special subtransformation is nkStmtListExpr lowering. Example:</p>
+  <span class="Punctuation">:</span><span class="Identifier">state</span> <span class="Operator">=</span> <span class="Operator">-</span><span class="DecNumber">1</span> <span class="Comment"># End of execution</span></pre><p>The lambdalifting transformation has to have happend already, as it is responsible for setting up the environment type, to which we might need to append new fields.</p>
+<p>One special subtransformation is nkStmtListExpr lowering. Example:</p>
 <pre class="listing"><span class="Keyword">template</span> <span class="Identifier">foo</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Punctuation">:</span> <span class="Identifier">int</span> <span class="Operator">=</span>
   <span class="Keyword">yield</span> <span class="DecNumber">1</span>
   <span class="DecNumber">2</span>
@@ -221,9 +222,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/33f0626884829597f62633af150370f539af3777/compiler/sem/closureiters.nim#L1419"
+href="https://github.com/nim-works/nimskull/tree/c41daf03e7f8de3b03812fb00aee154c43b14e05/compiler/sem/closureiters.nim#L1390"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/closureiters.nim#L1419" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/closureiters.nim#L1390" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
