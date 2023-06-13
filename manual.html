@@ -223,7 +223,8 @@ window.addEventListener('DOMContentLoaded', main);
 </ul><li><a class="reference" id="iterators-and-the-for-statement_toc" href="#iterators-and-the-for-statement">Iterators and the for statement</a></li>
 <ul class="simple"><li><a class="reference" id="iterators-and-the-for-statement-implicit-itemsslashpairs-invocations_toc" href="#iterators-and-the-for-statement-implicit-itemsslashpairs-invocations">Implicit items/pairs invocations</a></li>
 <li><a class="reference" id="iterators-and-the-for-statement-firstminusclass-iterators_toc" href="#iterators-and-the-for-statement-firstminusclass-iterators">First-class iterators</a></li>
-</ul><li><a class="reference" id="converters_toc" href="#converters">Converters</a></li>
+<ul class="simple"><li><a class="reference" id="firstminusclass-iterators-parameter-passing-for-iterators-in-nimfor-loops_toc" href="#firstminusclass-iterators-parameter-passing-for-iterators-in-nimfor-loops">Parameter Passing For Iterators In <tt class="docutils literal"><span class="pre"><span class="Keyword">for</span></span></tt> Loops</a></li>
+</ul></ul><li><a class="reference" id="converters_toc" href="#converters">Converters</a></li>
 <li><a class="reference" id="type-sections_toc" href="#type-sections">Type sections</a></li>
 <li><a class="reference" id="exception-handling_toc" href="#exception-handling">Exception handling</a></li>
 <ul class="simple"><li><a class="reference" id="exception-handling-try-statement_toc" href="#exception-handling-try-statement">Try statement</a></li>
@@ -350,14 +351,14 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/fc03efbf5042eec7a65e79f495e5b0f29df4cbc0/doc/manual.rst#L1"
+href="https://github.com/nim-works/nimskull/tree/9f6c1dde4007edad40dc7937c173ec6fe3f70499/doc/manual.rst#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/doc/manual.rst#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20849</td></tr>
+  <p class="module-desc"><table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20850</td></tr>
 </tbody></table><blockquote><p>&quot;Complexity&quot; seems to be a lot like &quot;energy&quot;: you can transfer it from the end-user to one/some of the other players, but the total amount seems to remain pretty much constant for a given task. -- Ran</p></blockquote>
 
 <h1><a class="toc-backref" id="about-this-document" href="#about-this-document">About this document</a></h1><p><strong>Note</strong>: This document is a draft! Several of  NimSkull's features may need more precise wording. This manual is constantly evolving.</p>
@@ -2613,6 +2614,20 @@ is, shallowCopy, getAst, astToStr, procCall</pre>
 
 <span class="Keyword">for</span> <span class="Identifier">f</span> <span class="Keyword">in</span> <span class="Identifier">foo</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Punctuation">:</span>
   <span class="Identifier">echo</span> <span class="Identifier">f</span></pre>
+<h3><a class="toc-backref" id="firstminusclass-iterators-parameter-passing-for-iterators-in-nimfor-loops" href="#firstminusclass-iterators-parameter-passing-for-iterators-in-nimfor-loops">Parameter Passing For Iterators In <tt class="docutils literal"><span class="pre"><span class="Keyword">for</span></span></tt> Loops</a></h3><div class="admonition admonition-info"><span class="admonition-info-text"><b>Note:</b></span>
+The following only applies to <tt class="docutils literal"><span class="pre"><span class="Identifier">inline</span></span></tt> iterators at the moment.</div>
+<p>For iterators invoked in the context of <tt class="docutils literal"><span class="pre"><span class="Keyword">for</span></span></tt>-loops, the arguments are evaluated before passing control to the iterator's body. The argument evaluation order is the same as everywhere else, that is, left to right.</p>
+<p>How exactly this is achieved for <tt class="docutils literal"><span class="pre"><span class="Identifier">inline</span></span></tt> iterators is up to the compiler, but with the following restrictions / guarantees:</p>
+<ul class="simple"><li>no full copy must be introduced when passing to an immutable parameter (a full copy might still be needed in order to ensure the left-to-right evaluation order)</li>
+<li>except for <tt class="docutils literal"><span class="pre"><span class="Identifier">seq</span></span></tt>s, <tt class="docutils literal"><span class="pre"><span class="Identifier">string</span></span></tt>s, and <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt>s, if the argument is an lvalue expression, the parameter must not be an <em>owning</em> location, but only store the handle</li>
+<li>if the argument is an unamed location (e.g. the result of a call), an <em>owning</em> location <em>may</em> be used</li>
+<li>the lvalues passed to <tt class="docutils literal"><span class="pre"><span class="Keyword">var</span></span></tt> parameters are passed and stored by handle</li>
+</ul>
+<p>In the <tt class="docutils literal"><span class="pre"><span class="Keyword">for</span></span></tt>-loop body, modifying a location of which the handle was passed to a <tt class="docutils literal"><span class="pre"><span class="Keyword">var</span></span></tt> parameter of the iterator is allowed. Modifications to the location from the iterator's body are visible to the <tt class="docutils literal"><span class="pre"><span class="Keyword">for</span></span></tt>-loop's body, and vice versa.</p>
+<p><tt class="docutils literal"><span class="pre"><span class="Identifier">sink</span></span></tt> parameters work the same as they do with the other routines.</p>
+<div class="admonition admonition-warning"><span class="admonition-warning-text"><b>Warning:</b></span>
+There's currently no detection for location passed to immutable iterator parameters being modified inside the <tt class="docutils literal"><span class="pre"><span class="Keyword">for</span></span></tt>-loop's body. Doing so results in undefined behaviour.</div>
+
 <h1><a class="toc-backref" id="converters" href="#converters">Converters</a></h1><p>A converter is like an ordinary proc except that it enhances the &quot;implicitly convertible&quot; type relation (see <a class="reference external" href="#type-relations-convertible-relation">Convertible relation</a>):</p>
 <pre class="listing"><span class="Comment"># bad style ahead: Nim is not C.</span>
 <span class="Keyword">converter</span> <span class="Identifier">toBool</span><span class="Punctuation">(</span><span class="Identifier">x</span><span class="Punctuation">:</span> <span class="Identifier">int</span><span class="Punctuation">)</span><span class="Punctuation">:</span> <span class="Identifier">bool</span> <span class="Operator">=</span> <span class="Identifier">x</span> <span class="Operator">!=</span> <span class="DecNumber">0</span>
