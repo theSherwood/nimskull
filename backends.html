@@ -123,7 +123,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/2320cb938ca25069fdf6fd197e13353349807374/doc/backends.rst#L1"
+href="https://github.com/nim-works/nimskull/tree/5d75fe1e56918bf56bd653b2c6443f44dc5c0f06/doc/backends.rst#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/doc/backends.rst#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -131,7 +131,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div id="tocRoot"></div>
   
   <p class="module-desc"><h1 id="nimskull-backend-integration"><center>|NimSkull| Backend Integration</center></h1><table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Author:</th><td>Puppet Master</td></tr>
-<tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20857</td></tr>
+<tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20858</td></tr>
 </tbody></table><blockquote><p>&quot;Heresy grows from idleness.&quot; -- Unknown.</p></blockquote>
 
 <h2><a class="toc-backref" id="introduction" href="#introduction">Introduction</a></h2><p>The <a class="reference external" href="nimc.html">Nim Compiler User Guide</a> documents the typical compiler invocation, using the <tt class="docutils literal"><span class="pre option">compile</span></tt> or <tt class="docutils literal"><span class="pre option">c</span></tt> command to transform a <tt class="docutils literal"><span class="pre">.nim</span></tt> file into one or more <tt class="docutils literal"><span class="pre">.c</span></tt> files which are then compiled with the platform's C compiler into a static binary. However, there are other commands to compile to JavaScript or the VM. This document tries to concentrate in a single place all the backend and interfacing options.</p>
@@ -217,7 +217,7 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Keyword">return</span> <span class="DecNumber">0</span><span class="Punctuation">;</span>
 <span class="Punctuation">}</span></pre><p>Now you can run the following Unix like commands to first generate C sources from the Nim code, then link them into a static binary along your main C program:</p>
 <pre class="listing"><span class="program">nim</span> <span class="option">c</span> <span class="option">--noMain</span> <span class="option">--noLinking</span> <span class="Identifier">fib.nim</span>
-<span class="program">gcc</span> <span class="option">-o</span> <span class="option">m</span> <span class="Identifier">-I$HOME/.cache/nim/fib_d</span> <span class="Identifier">-Ipath/to/nim/lib</span> <span class="Identifier">$HOME/.cache/nim/fib_d/*.c</span> <span class="Identifier">maths.c</span></pre><p>The first command runs the Nim compiler with three special options to avoid generating a <tt class="docutils literal"><span class="pre"><span class="Identifier">main</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> function in the generated files and to avoid linking the object files into a final binary. All the generated files are placed into the <tt class="docutils literal"><span class="pre">nimcache</span></tt> directory. That's why the next command compiles the <tt class="docutils literal"><span class="pre">maths.c</span></tt> source plus all the <tt class="docutils literal"><span class="pre">.c</span></tt> files from <tt class="docutils literal"><span class="pre">nimcache</span></tt>. In addition to this path, you also have to tell the C compiler where to find Nim's <tt class="docutils literal"><span class="pre">nimbase.h</span></tt> header file.</p>
+<span class="program">gcc</span> <span class="option">-o</span> <span class="option">m</span> <span class="Identifier">-I$HOME/.cache/nimskull/fib_d</span> <span class="Identifier">-Ipath/to/nim/lib</span> <span class="Identifier">$HOME/.cache/nimskull/fib_d/*.c</span> <span class="Identifier">maths.c</span></pre><p>The first command runs the Nim compiler with three special options to avoid generating a <tt class="docutils literal"><span class="pre"><span class="Identifier">main</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt> function in the generated files and to avoid linking the object files into a final binary. All the generated files are placed into the <tt class="docutils literal"><span class="pre">nimcache</span></tt> directory. That's why the next command compiles the <tt class="docutils literal"><span class="pre">maths.c</span></tt> source plus all the <tt class="docutils literal"><span class="pre">.c</span></tt> files from <tt class="docutils literal"><span class="pre">nimcache</span></tt>. In addition to this path, you also have to tell the C compiler where to find Nim's <tt class="docutils literal"><span class="pre">nimbase.h</span></tt> header file.</p>
 <p>Instead of depending on the generation of the individual <tt class="docutils literal"><span class="pre">.c</span></tt> files you can also ask the Nim compiler to generate a statically linked library:</p>
 <pre class="listing"><span class="program">nim</span> <span class="option">c</span> <span class="option">--app:staticLib</span> <span class="option">--noMain</span> <span class="Identifier">fib.nim</span>
 <span class="program">gcc</span> <span class="option">-o</span> <span class="option">m</span> <span class="option">-Inimcache</span> <span class="Identifier">-Ipath/to/nim/lib</span> <span class="Identifier">libfib.nim.a</span> <span class="Identifier">maths.c</span></pre><p>The Nim compiler will handle linking the source files generated in the <tt class="docutils literal"><span class="pre">nimcache</span></tt> directory into the <tt class="docutils literal"><span class="pre">libfib.nim.a</span></tt> static library, which you can then link into your C program. Note that these commands are generic and will vary for each system. For instance, on Linux systems you will likely need to use <tt class="docutils literal"><span class="pre option">-ldl</span></tt> too to link in required dlopen functionality.</p>
@@ -260,7 +260,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-16 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-06-18 00:00:00 UTC</small>
       </div>
     </div>
   </div>
