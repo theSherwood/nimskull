@@ -102,11 +102,86 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
 </li>
 <li>
+  <a class="reference reference-toplevel" href="#7" id="57">Types</a>
+  <ul class="simple simple-toc-section">
+      <li><a class="reference" href="#BackendConfig"
+    title="BackendConfig = object
+  options*: set[GenOption] ## passed on to ``mirgen``. See ``mirgen.generateCode`` for more
+                           ## details
+  noImported*: bool ## if ``true``, indicates that a procedure with a body should not be
+                    ## treated as imported, even if it's marked as such">BackendConfig</a></li>
+  <li><a class="reference" href="#BackendEvent"
+    title="BackendEvent = object
+  module*: FileIndex ## the module in whose context the processing happens. For actions
+                     ## related to .inline procedures, this is not necessarily the module
+                     ## the symbol is attached to
+  case kind*: BackendEventKind
+  of bekModule:
+      nil
+
+  of bekPartial, bekProcedure:
+      sym*: PSym             ## the symbol of the procedure the event is about
+      body*: MirFragment">BackendEvent</a></li>
+  <li><a class="reference" href="#BackendEventKind"
+    title="BackendEventKind = enum
+  bekModule,                ## the initial set of alive entities for a module was
+                             ## discovered
+  bekPartial, ## a fragment of a procedure that's generated incrementally
+               ## became 
+               ## available
+  bekProcedure               ## a complete procedure was processed and transformed">BackendEventKind</a></li>
+  <li><a class="reference" href="#DiscoveryData"
+    title="DiscoveryData = object
+  seen: IntSet               ## remembers the symbol ID of all discovered entities
+  procedures*: Queue[PSym]
+  constants*: Queue[PSym]
+  globals*: Queue[PSym]
+  threadvars*: Queue[PSym]
+  additional: seq[tuple[m: FileIndex, prc: PSym]]">DiscoveryData</a></li>
+  <li><a class="reference" href="#MirFragment"
+    title="MirFragment = object
+  tree*: MirTree
+  source*: SourceMap">MirFragment</a></li>
+  <li><a class="reference" href="#Procedure"
+    title="Procedure = object
+  sym*: PSym
+  case isImported*: bool     ## wether it's a .dynlib procedure
+  of false:
+      body*: MirFragment     ## the procedure's body
+      globals*: seq[PNode] ## the unprocessed identdefs of globals defined as part of the
+                           ## procedure's body. Due to how ``transf`` handles inlining, this
+                           ## list can contain duplicates
+    
+  of true:
+      nil">Procedure</a></li>
+  <li><a class="reference" href="#Queue"
+    title="Queue[T] = object
+  data: seq[T]
+  progress: int ## remembers the position until which the items have already
+                ## been processed">Queue</a></li>
+
+  </ul>
+</li>
+<li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">finishDeinit
-      <li><a class="reference" href="#finishDeinit%2CModuleGraph%2CModuleList"
-    title="finishDeinit(graph: ModuleGraph; modules: var ModuleList)">finishDeinit(graph: ModuleGraph; modules: var ModuleList)</a></li>
+      <ul class="simple nested-toc-section">append
+      <li><a class="reference" href="#append%2CMirFragment%2CsinkMirFragment"
+    title="append(dest: var MirFragment; src: sink MirFragment)">append(dest: var MirFragment; src: sink MirFragment)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">discoverFrom
+      <li><a class="reference" href="#discoverFrom%2CDiscoveryData%2CPNode"
+    title="discoverFrom(data: var DiscoveryData; decl: PNode)">discoverFrom(data: var DiscoveryData; decl: PNode)</a></li>
+  <li><a class="reference" href="#discoverFrom%2CDiscoveryData%2Cset%5BTMagic%5D%2CMirTree"
+    title="discoverFrom(data: var DiscoveryData; noMagics: set[TMagic]; body: MirTree)">discoverFrom(data: var DiscoveryData; noMagics: set[TMagic]; body: MirTree)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">generateAST
+      <li><a class="reference" href="#generateAST%2CModuleGraph%2CIdGenerator%2CPSym%2CsinkMirFragment"
+    title="generateAST(graph: ModuleGraph; idgen: IdGenerator; owner: PSym;
+            code: sink MirFragment): PNode">generateAST(graph: ModuleGraph; idgen: IdGenerator; owner: PSym;
+            code: sink MirFragment): PNode</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">generateMain
@@ -126,6 +201,83 @@ window.addEventListener('DOMContentLoaded', main);
     title="generateTeardown(graph: ModuleGraph; modules: ModuleList; result: PNode)">generateTeardown(graph: ModuleGraph; modules: ModuleList; result: PNode)</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">isEmpty
+      <li><a class="reference" href="#isEmpty%2CMirFragment"
+    title="isEmpty(f: MirFragment): bool">isEmpty(f: MirFragment): bool</a></li>
+  <li><a class="reference" href="#isEmpty%2CMirTree"
+    title="isEmpty(tree: MirTree): bool">isEmpty(tree: MirTree): bool</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">isProcessed
+      <li><a class="reference" href="#isProcessed%2CQueue%5BT%5D"
+    title="isProcessed[T](q: Queue[T]): bool">isProcessed[T](q: Queue[T]): bool</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">len
+      <li><a class="reference" href="#len%2CQueue%5BT%5D"
+    title="len[T](q: Queue[T]): int">len[T](q: Queue[T]): int</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">moduleId
+      <li><a class="reference" href="#moduleId%2CPIdObj"
+    title="moduleId(o: PIdObj): int32">moduleId(o: PIdObj): int32</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">preprocess
+      <li><a class="reference" href="#preprocess%2CBackendConfig%2CPSym%2CModuleGraph%2CIdGenerator"
+    title="preprocess(conf: BackendConfig; prc: PSym; graph: ModuleGraph;
+           idgen: IdGenerator): Procedure">preprocess(conf: BackendConfig; prc: PSym; graph: ModuleGraph;
+           idgen: IdGenerator): Procedure</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">process
+      <li><a class="reference" href="#process%2CProcedure%2CModuleGraph%2CIdGenerator"
+    title="process(prc: var Procedure; graph: ModuleGraph; idgen: IdGenerator)">process(prc: var Procedure; graph: ModuleGraph; idgen: IdGenerator)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">register
+      <li><a class="reference" href="#register%2CDiscoveryData%2CPSym"
+    title="register(data: var DiscoveryData; prc: PSym)">register(data: var DiscoveryData; prc: PSym)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">registerLate
+      <li><a class="reference" href="#registerLate%2CDiscoveryData%2CPSym%2CFileIndex"
+    title="registerLate(discovery: var DiscoveryData; prc: PSym; module: FileIndex)">registerLate(discovery: var DiscoveryData; prc: PSym; module: FileIndex)</a></li>
+
+  </ul>
+
+  </ul>
+</li>
+<li>
+  <a class="reference reference-toplevel" href="#15" id="65">Iterators</a>
+  <ul class="simple simple-toc-section">
+      <ul class="simple nested-toc-section">all
+      <li><a class="reference" href="#all.i%2CQueue%5BT%5D"
+    title="all[T](q: Queue[T]): (int, lent T)">all[T](q: Queue[T]): (int, lent T)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">deps
+      <li><a class="reference" href="#deps.i%2CMirTree%2Cset%5BTMagic%5D"
+    title="deps(tree: MirTree; includeMagics: set[TMagic]): PSym">deps(tree: MirTree; includeMagics: set[TMagic]): PSym</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">peek
+      <li><a class="reference" href="#peek.i%2CQueue%5BT%5D"
+    title="peek[T](q: Queue[T]): (int, lent T)">peek[T](q: Queue[T]): (int, lent T)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">process
+      <li><a class="reference" href="#process.i%2CModuleGraph%2CModuleList%2CDiscoveryData%2Cset%5BTMagic%5D%2CBackendConfig"
+    title="process(graph: ModuleGraph; modules: var ModuleList;
+        discovery: var DiscoveryData; noMagics: set[TMagic]; conf: BackendConfig): BackendEvent">process(graph: ModuleGraph; modules: var ModuleList;
+        discovery: var DiscoveryData; noMagics: set[TMagic]; conf: BackendConfig): BackendEvent</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">visit
+      <li><a class="reference" href="#visit.i%2CQueue%5BT%5D"
+    title="visit[T](q: var Queue[T]): (int, lent T)">visit[T](q: var Queue[T]): (int, lent T)</a></li>
+
+  </ul>
 
   </ul>
 </li>
@@ -134,7 +286,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c864d3a941b3daddd3afa7f16b94a766a811611d/compiler/backend/backends.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -145,21 +297,198 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../modules/magicsys.html">../modules/magicsys</a>, <a class="reference external" href="../sem/modulelowering.html">../sem/modulelowering</a>, <a class="reference external" href="../utils/containers.html">../utils/containers</a>
+<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="cgmeth.html">cgmeth</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../mir/astgen.html">../mir/astgen</a>, <a class="reference external" href="../mir/mirbridge.html">../mir/mirbridge</a>, <a class="reference external" href="../mir/mirgen.html">../mir/mirgen</a>, <a class="reference external" href="../mir/mirtrees.html">../mir/mirtrees</a>, <a class="reference external" href="../mir/sourcemaps.html">../mir/sourcemaps</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../modules/magicsys.html">../modules/magicsys</a>, <a class="reference external" href="../sem/injectdestructors.html">../sem/injectdestructors</a>, <a class="reference external" href="../sem/modulelowering.html">../sem/modulelowering</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="../sem/varpartitions.html">../sem/varpartitions</a>, <a class="reference external" href="../utils/containers.html">../utils/containers</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>
+</dl></div>
+<div class="section" id="7">
+<h1><a class="toc-backref" href="#7">Types</a></h1>
+<dl class="item">
+<div id="BackendConfig">
+<dt><pre><a href="backends.html#BackendConfig"><span class="Identifier">BackendConfig</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">options</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">set</span><span class="Other">[</span><a href="../mir/mirgen.html#GenOption"><span class="Identifier">GenOption</span></a><span class="Other">]</span> <span class="Comment">## passed on to ``mirgen``. See ``mirgen.generateCode`` for more</span>
+                           <span class="Comment">## details</span>
+  <span class="Identifier">noImported</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Comment">## if ``true``, indicates that a procedure with a body should not be</span>
+                    <span class="Comment">## treated as imported, even if it's marked as such</span>
+  </pre></dt>
+<dd>
+
+Configuration state altering the operation of the <tt class="docutils literal"><span class="pre">process</span></tt> iterator.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L60"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="BackendEvent">
+<dt><pre><a href="backends.html#BackendEvent"><span class="Identifier">BackendEvent</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">module</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a> <span class="Comment">## the module in whose context the processing happens. For actions</span>
+                     <span class="Comment">## related to .inline procedures, this is not necessarily the module</span>
+                     <span class="Comment">## the symbol is attached to</span>
+  <span class="Keyword">case</span> <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="backends.html#BackendEventKind"><span class="Identifier">BackendEventKind</span></a>
+  <span class="Keyword">of</span> <span class="Identifier">bekModule</span><span class="Other">:</span>
+      <span class="Keyword">nil</span>
+
+  <span class="Keyword">of</span> <span class="Identifier">bekPartial</span><span class="Other">,</span> <span class="Identifier">bekProcedure</span><span class="Other">:</span>
+      <span class="Identifier">sym</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a>             <span class="Comment">## the symbol of the procedure the event is about</span>
+      <span class="Identifier">body</span><span class="Operator">*</span><span class="Other">:</span> <a href="backends.html#MirFragment"><span class="Identifier">MirFragment</span></a>
+
+  </pre></dt>
+<dd>
+
+Progress event returned by the <tt class="docutils literal"><span class="pre">process</span></tt> iterator.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L119"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="BackendEventKind">
+<dt><pre><a href="backends.html#BackendEventKind"><span class="Identifier">BackendEventKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">bekModule</span><span class="Other">,</span>                <span class="Comment">## the initial set of alive entities for a module was</span>
+                             <span class="Comment">## discovered</span>
+  <span class="Identifier">bekPartial</span><span class="Other">,</span> <span class="Comment">## a fragment of a procedure that's generated incrementally</span>
+               <span class="Comment">## became </span>
+               <span class="Comment">## available</span>
+  <span class="Identifier">bekProcedure</span>               <span class="Comment">## a complete procedure was processed and transformed</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L112"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L112" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="DiscoveryData">
+<dt><pre><a href="backends.html#DiscoveryData"><span class="Identifier">DiscoveryData</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">seen</span><span class="Other">:</span> <span class="Identifier">IntSet</span>               <span class="Comment">## remembers the symbol ID of all discovered entities</span>
+  <span class="Identifier">procedures</span><span class="Operator">*</span><span class="Other">:</span> <a href="backends.html#Queue"><span class="Identifier">Queue</span></a><span class="Other">[</span><a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">]</span>
+  <span class="Identifier">constants</span><span class="Operator">*</span><span class="Other">:</span> <a href="backends.html#Queue"><span class="Identifier">Queue</span></a><span class="Other">[</span><a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">]</span>
+  <span class="Identifier">globals</span><span class="Operator">*</span><span class="Other">:</span> <a href="backends.html#Queue"><span class="Identifier">Queue</span></a><span class="Other">[</span><a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">]</span>
+  <span class="Identifier">threadvars</span><span class="Operator">*</span><span class="Other">:</span> <a href="backends.html#Queue"><span class="Identifier">Queue</span></a><span class="Other">[</span><a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">]</span>
+  <span class="Identifier">additional</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">m</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">,</span> <span class="Identifier">prc</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">]</span><span class="Other">]</span>
+</pre></dt>
+<dd>
+
+Bundles all data needed during the disovery of alive, backend-relevant entities.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L82"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L82" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="MirFragment">
+<dt><pre><a href="backends.html#MirFragment"><span class="Identifier">MirFragment</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">tree</span><span class="Operator">*</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a>
+  <span class="Identifier">source</span><span class="Operator">*</span><span class="Other">:</span> <a href="../mir/sourcemaps.html#SourceMap"><span class="Identifier">SourceMap</span></a>
+</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L42"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L42" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="Procedure">
+<dt><pre><a href="backends.html#Procedure"><span class="Identifier">Procedure</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">sym</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a>
+  <span class="Keyword">case</span> <span class="Identifier">isImported</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>     <span class="Comment">## wether it's a .dynlib procedure</span>
+  <span class="Keyword">of</span> <span class="Identifier">false</span><span class="Other">:</span>
+      <span class="Identifier">body</span><span class="Operator">*</span><span class="Other">:</span> <a href="backends.html#MirFragment"><span class="Identifier">MirFragment</span></a>     <span class="Comment">## the procedure's body</span>
+      <span class="Identifier">globals</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">]</span> <span class="Comment">## the unprocessed identdefs of globals defined as part of the</span>
+                           <span class="Comment">## procedure's body. Due to how ``transf`` handles inlining, this</span>
+                           <span class="Comment">## list can contain duplicates</span>
+    
+  <span class="Keyword">of</span> <span class="Identifier">true</span><span class="Other">:</span>
+      <span class="Keyword">nil</span>
+
+  </pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L46"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="Queue">
+<dt><pre><a href="backends.html#Queue"><span class="Identifier">Queue</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span>
+  <span class="Identifier">progress</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Comment">## remembers the position until which the items have already</span>
+                <span class="Comment">## been processed</span>
+  </pre></dt>
+<dd>
+
+Combines a sequence of items with a &quot;read&quot; cursor.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L75"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L75" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+
 </dl></div>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="finishDeinit,ModuleGraph,ModuleList">
-<dt><pre><span class="Keyword">proc</span> <a href="#finishDeinit%2CModuleGraph%2CModuleList"><span class="Identifier">finishDeinit</span></a><span class="Other">(</span><span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">modules</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="../sem/modulelowering.html#ModuleList"><span class="Identifier">ModuleList</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="append,MirFragment,sinkMirFragment">
+<dt><pre><span class="Keyword">func</span> <a href="#append%2CMirFragment%2CsinkMirFragment"><span class="Identifier">append</span></a><span class="Other">(</span><span class="Identifier">dest</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="backends.html#MirFragment"><span class="Identifier">MirFragment</span></a><span class="Other">;</span> <span class="Identifier">src</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="backends.html#MirFragment"><span class="Identifier">MirFragment</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Appends destructor calls for lifted globals (those marked with <tt class="docutils literal"><span class="pre">.global</span></tt>) to the bodies of the modules' de-init procedures. Called at the very end of code generation once all alive lifted globals have been discovered.
+Appends the code from <tt class="docutils literal"><span class="pre"><span class="Identifier">src</span></span></tt> to <tt class="docutils literal"><span class="pre"><span class="Identifier">dest</span></span></tt>. No check whether the resulting code is semantically valid is performed
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c864d3a941b3daddd3afa7f16b94a766a811611d/compiler/backend/backends.nim#L63"
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L138"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L63" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L138" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="discoverFrom,DiscoveryData,PNode">
+<dt><pre><span class="Keyword">func</span> <a href="#discoverFrom%2CDiscoveryData%2CPNode"><span class="Identifier">discoverFrom</span></a><span class="Other">(</span><span class="Identifier">data</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="backends.html#DiscoveryData"><span class="Identifier">DiscoveryData</span></a><span class="Other">;</span> <span class="Identifier">decl</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Updates <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span></span></tt> with all not-yet-seen entities from the declarative statement list <tt class="docutils literal"><span class="pre"><span class="Identifier">decl</span></span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L477"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L477" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="discoverFrom,DiscoveryData,set[TMagic],MirTree">
+<dt><pre><span class="Keyword">func</span> <a href="#discoverFrom%2CDiscoveryData%2Cset%5BTMagic%5D%2CMirTree"><span class="Identifier">discoverFrom</span></a><span class="Other">(</span><span class="Identifier">data</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="backends.html#DiscoveryData"><span class="Identifier">DiscoveryData</span></a><span class="Other">;</span> <span class="Identifier">noMagics</span><span class="Other">:</span> <span class="Identifier">set</span><span class="Other">[</span><a href="../ast/ast_types.html#TMagic"><span class="Identifier">TMagic</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Updates <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span></span></tt> with all not-yet-seen entities (except for globals) that <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> references.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L463"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L463" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="generateAST,ModuleGraph,IdGenerator,PSym,sinkMirFragment">
+<dt><pre><span class="Keyword">proc</span> <a href="#generateAST%2CModuleGraph%2CIdGenerator%2CPSym%2CsinkMirFragment"><span class="Identifier">generateAST</span></a><span class="Other">(</span><span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">;</span> <span class="Identifier">owner</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span>
+                 <span class="Identifier">code</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="backends.html#MirFragment"><span class="Identifier">MirFragment</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Translates the MIR code provided by <tt class="docutils literal"><span class="pre"><span class="Identifier">code</span></span></tt> into <tt class="docutils literal"><span class="pre">PNode</span></tt> AST and, if enabled, echoes the result.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L355"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L355" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -170,9 +499,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates the program initialization code and emits it to <tt class="docutils literal"><span class="pre"><span class="Identifier">result</span></span></tt>. The initialization logic is the code that invokes each module's init procedures.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c864d3a941b3daddd3afa7f16b94a766a811611d/compiler/backend/backends.nim#L33"
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L202"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L33" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L202" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -184,9 +513,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates the procedure for initializing, running, and de-initializing the full program (<tt class="docutils literal"><span class="pre"><span class="Identifier">modules</span></span></tt>). The procedure returns the value of the internal <tt class="docutils literal"><span class="pre">programResult</span></tt> global.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c864d3a941b3daddd3afa7f16b94a766a811611d/compiler/backend/backends.nim#L93"
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L236"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L93" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L236" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -197,9 +526,197 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates the code for de-initializing the program, and emits it to <tt class="docutils literal"><span class="pre"><span class="Identifier">result</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c864d3a941b3daddd3afa7f16b94a766a811611d/compiler/backend/backends.nim#L52"
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L223"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L52" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="isEmpty,MirFragment">
+<dt><pre><span class="Keyword">func</span> <a href="#isEmpty%2CMirFragment"><span class="Identifier">isEmpty</span></a><span class="Other">(</span><span class="Identifier">f</span><span class="Other">:</span> <a href="backends.html#MirFragment"><span class="Identifier">MirFragment</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L283"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L283" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="isEmpty,MirTree">
+<dt><pre><span class="Keyword">func</span> <a href="#isEmpty%2CMirTree"><span class="Identifier">isEmpty</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Returns whether <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt> contains either no nodes or only nodes that have no meaning by themselves.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L274"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L274" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="isProcessed,Queue[T]">
+<dt><pre><span class="Keyword">func</span> <a href="#isProcessed%2CQueue%5BT%5D"><span class="Identifier">isProcessed</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">q</span><span class="Other">:</span> <a href="backends.html#Queue"><span class="Identifier">Queue</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L168"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="len,Queue[T]">
+<dt><pre><span class="Keyword">func</span> <a href="#len%2CQueue%5BT%5D"><span class="Identifier">len</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">q</span><span class="Other">:</span> <a href="backends.html#Queue"><span class="Identifier">Queue</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L165"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L165" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="moduleId,PIdObj">
+<dt><pre><span class="Keyword">func</span> <a href="#moduleId%2CPIdObj"><span class="Identifier">moduleId</span></a><span class="Other">(</span><span class="Identifier">o</span><span class="Other">:</span> <a href="../ast/ast_types.html#PIdObj"><span class="Identifier">PIdObj</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int32</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Returns the ID of the module <tt class="docutils literal"><span class="pre"><span class="Identifier">o</span></span></tt> is <em>attached</em> to. Do note that in the case of generic instantiations, this is not the necessarily the same module as the one indicated via the owner.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L188"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L188" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="preprocess,BackendConfig,PSym,ModuleGraph,IdGenerator">
+<dt><pre><span class="Keyword">proc</span> <a href="#preprocess%2CBackendConfig%2CPSym%2CModuleGraph%2CIdGenerator"><span class="Identifier">preprocess</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="backends.html#BackendConfig"><span class="Identifier">BackendConfig</span></a><span class="Other">;</span> <span class="Identifier">prc</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span>
+                <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">)</span><span class="Other">:</span> <a href="backends.html#Procedure"><span class="Identifier">Procedure</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Transforms the body of the given procedure and translates it to MIR code. No MIR passes are applied yet
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L311"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L311" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="process,Procedure,ModuleGraph,IdGenerator">
+<dt><pre><span class="Keyword">proc</span> <a href="#process%2CProcedure%2CModuleGraph%2CIdGenerator"><span class="Identifier">process</span></a><span class="Other">(</span><span class="Identifier">prc</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="backends.html#Procedure"><span class="Identifier">Procedure</span></a><span class="Other">;</span> <span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Applies all applicable MIR passes to the procedure <tt class="docutils literal"><span class="pre"><span class="Identifier">prc</span></span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L336"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L336" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="register,DiscoveryData,PSym">
+<dt><pre><span class="Keyword">func</span> <a href="#register%2CDiscoveryData%2CPSym"><span class="Identifier">register</span></a><span class="Other">(</span><span class="Identifier">data</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="backends.html#DiscoveryData"><span class="Identifier">DiscoveryData</span></a><span class="Other">;</span> <span class="Identifier">prc</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+If not already know to <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span></span></tt>, adds the procedure <tt class="docutils literal"><span class="pre"><span class="Identifier">prc</span></span></tt> to the list of known procedures.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L778"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L778" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="registerLate,DiscoveryData,PSym,FileIndex">
+<dt><pre><span class="Keyword">func</span> <a href="#registerLate%2CDiscoveryData%2CPSym%2CFileIndex"><span class="Identifier">registerLate</span></a><span class="Other">(</span><span class="Identifier">discovery</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="backends.html#DiscoveryData"><span class="Identifier">DiscoveryData</span></a><span class="Other">;</span> <span class="Identifier">prc</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">module</span><span class="Other">:</span> <a href="../ast/lineinfos.html#FileIndex"><span class="Identifier">FileIndex</span></a><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Registers a late late-dependency with <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span></span></tt>. These are dependencies that were raised while processing some code fragment, but that are not directly related to said fragment. They should be kept to a minimum, and <a class="reference external" href="#register,DiscoveryData,PSym">register</a> should be preferred whenever possible.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L783"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L783" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+
+</dl></div>
+<div class="section" id="15">
+<h1><a class="toc-backref" href="#15">Iterators</a></h1>
+<dl class="item">
+<div id="all.i,Queue[T]">
+<dt><pre><span class="Keyword">iterator</span> <a href="#all.i%2CQueue%5BT%5D"><span class="Identifier">all</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">q</span><span class="Other">:</span> <a href="backends.html#Queue"><span class="Identifier">Queue</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">int</span><span class="Other">,</span> <span class="Identifier">lent</span> <span class="Identifier">T</span><span class="Other">)</span></pre></dt>
+<dd>
+
+Returns <em>all</em> items (regardless of whether their read or unread) from <tt class="docutils literal"><span class="pre"><span class="Identifier">q</span></span></tt> together with their index.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L159"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L159" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="deps.i,MirTree,set[TMagic]">
+<dt><pre><span class="Keyword">iterator</span> <a href="#deps.i%2CMirTree%2Cset%5BTMagic%5D"><span class="Identifier">deps</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">includeMagics</span><span class="Other">:</span> <span class="Identifier">set</span><span class="Other">[</span><a href="../ast/ast_types.html#TMagic"><span class="Identifier">TMagic</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Returns all external entities (procedures, globals, etc.) that <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt> references <em>directly</em>, in an unspecified order.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L286"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L286" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="peek.i,Queue[T]">
+<dt><pre><span class="Keyword">iterator</span> <a href="#peek.i%2CQueue%5BT%5D"><span class="Identifier">peek</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">q</span><span class="Other">:</span> <a href="backends.html#Queue"><span class="Identifier">Queue</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">int</span><span class="Other">,</span> <span class="Identifier">lent</span> <span class="Identifier">T</span><span class="Other">)</span></pre></dt>
+<dd>
+
+Returns all unread items from <tt class="docutils literal"><span class="pre"><span class="Identifier">q</span></span></tt> together with their index, but doesn't mark them as read.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L153"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L153" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="process.i,ModuleGraph,ModuleList,DiscoveryData,set[TMagic],BackendConfig">
+<dt><pre><span class="Keyword">iterator</span> <a href="#process.i%2CModuleGraph%2CModuleList%2CDiscoveryData%2Cset%5BTMagic%5D%2CBackendConfig"><span class="Identifier">process</span></a><span class="Other">(</span><span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">modules</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="../sem/modulelowering.html#ModuleList"><span class="Identifier">ModuleList</span></a><span class="Other">;</span>
+                 <span class="Identifier">discovery</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="backends.html#DiscoveryData"><span class="Identifier">DiscoveryData</span></a><span class="Other">;</span> <span class="Identifier">noMagics</span><span class="Other">:</span> <span class="Identifier">set</span><span class="Other">[</span><a href="../ast/ast_types.html#TMagic"><span class="Identifier">TMagic</span></a><span class="Other">]</span><span class="Other">;</span>
+                 <span class="Identifier">conf</span><span class="Other">:</span> <a href="backends.html#BackendConfig"><span class="Identifier">BackendConfig</span></a><span class="Other">)</span><span class="Other">:</span> <a href="backends.html#BackendEvent"><span class="Identifier">BackendEvent</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+<p>Implements discovery of alive entities (procedures, globals, constants, etc.) and applying the various transformations and MIR passes to the alive procedures. Progress is reported by returning an event (refer to <a class="reference external" href="#BackendEventKind">BackendEventKind</a> for more informations about the events).</p>
+<p><tt class="docutils literal"><span class="pre"><span class="Identifier">noMagics</span></span></tt> is the set of magics that need to be treated as normal procedure during discovery of alive procedures, and <tt class="docutils literal"><span class="pre"><span class="Identifier">conf</span></span></tt> is additional configuration that modifies some aspects of the processing.</p>
+<p>The iterator is complex and contains multiple yield statements, so it's advised to implement <tt class="docutils literal"><span class="pre">BackendEvent</span></tt> processing with a dedicated procedure.</p>
+<p>When control is passed to the caller, the <tt class="docutils literal"><span class="pre"><span class="Identifier">discovery</span><span class="Operator">.</span><span class="Identifier">procedures</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">discovery</span><span class="Operator">.</span><span class="Identifier">constants</span></span></tt> queues contain all new procedures and constants that were discovered directly or indirectly for the entity that the returned event is about. The <tt class="docutils literal"><span class="pre"><span class="Identifier">globals</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">threadvars</span></span></tt> queues, while possibly filled with new content, are not &quot;drained&quot; yet, and have the same &quot;read&quot; position that the caller left them with.</p>
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L661"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L661" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="visit.i,Queue[T]">
+<dt><pre><span class="Keyword">iterator</span> <a href="#visit.i%2CQueue%5BT%5D"><span class="Identifier">visit</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">q</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="backends.html#Queue"><span class="Identifier">Queue</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">int</span><span class="Other">,</span> <span class="Identifier">lent</span> <span class="Identifier">T</span><span class="Other">)</span></pre></dt>
+<dd>
+
+Returns all unread items from <tt class="docutils literal"><span class="pre"><span class="Identifier">q</span></span></tt> together with their index, and marks them the items as read (or processed).
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/659867fe8a6750bd37fc62fe9c0f3113e3074c22/compiler/backend/backends.nim#L146"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/backends.nim#L146" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -213,7 +730,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-02 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-05 00:00:00 UTC</small>
       </div>
     </div>
   </div>
