@@ -148,6 +148,15 @@ window.addEventListener('DOMContentLoaded', main);
                              ## a frame var twice in an init proc
   isHeaderFile,             ## C source file is the header file
   includesStringh            ## C source file already includes ``&lt;string.h&gt;``">CodegenFlag</a></li>
+  <li><a class="reference" href="#LocFlag"
+    title="LocFlag = enum
+  lfIndirect,               ## code generator introduced a pointer
+  lfSingleUse,              ## no location yet and will only be used once
+  lfEnforceDeref,           ## a copyMem is required to dereference if this a
+                             ## 
+                             ## ptr array due to C array limitations.
+                             ## See #1181, #6422, #11171
+  lfPrepareForMutation       ## string location is about to be mutated">LocFlag</a></li>
   <li><a class="reference" href="#SymbolMap"
     title="SymbolMap[T] = object
   store: Store[range[0'u32 .. high(uint32) - 1], T]">SymbolMap</a></li>
@@ -211,7 +220,7 @@ window.addEventListener('DOMContentLoaded', main);
     title="TLoc = object
   k*: TLocKind               ## kind of location
   storage*: TStorageLoc
-  flags*: TLocFlags          ## location's flags
+  flags*: set[LocFlag]       ## location's flags
   lode*: PNode               ## Node where the location came from; can be faked
   r*: Rope                   ## rope value of location (code generators)">TLoc</a></li>
   <li><a class="reference" href="#TLocKind"
@@ -365,7 +374,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -387,9 +396,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L115"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L123"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L115" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L123" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -430,9 +439,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L171"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L179"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L171" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L179" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -442,9 +451,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L116"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L124"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L116" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -460,9 +469,28 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L163"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L171"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L163" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L171" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="LocFlag">
+<dt><pre><a href="cgendata.html#LocFlag"><span class="Identifier">LocFlag</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">lfIndirect</span><span class="Other">,</span>               <span class="Comment">## code generator introduced a pointer</span>
+  <span class="Identifier">lfSingleUse</span><span class="Other">,</span>              <span class="Comment">## no location yet and will only be used once</span>
+  <span class="Identifier">lfEnforceDeref</span><span class="Other">,</span>           <span class="Comment">## a copyMem is required to dereference if this a</span>
+                             <span class="Comment">## </span>
+                             <span class="Comment">## ptr array due to C array limitations.</span>
+                             <span class="Comment">## See #1181, #6422, #11171</span>
+  <span class="Identifier">lfPrepareForMutation</span>       <span class="Comment">## string location is about to be mutated</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L69"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L69" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -476,7 +504,7 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Mapping from a symbol to the associated data currently happens via <tt class="docutils literal"><span class="pre">TSym.locId</span></tt>.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L37"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L37"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L37" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -497,9 +525,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L117"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L125"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L117" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -532,9 +560,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 the sections a generated C file consists of
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L77"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L85"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L77" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L85" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -544,9 +572,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 represents a generated C file
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L109"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L117"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L109" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L117" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -558,9 +586,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L127"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L135"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L127" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L135" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -573,9 +601,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 the sections a generated C proc consists of
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L110"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L118"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L110" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L118" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -585,9 +613,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L114"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L122"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L114" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L122" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -601,9 +629,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 describes the type kind of a C type
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L101"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L109"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L101" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L109" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -613,9 +641,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 for the C generator a label is just a rope
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L76"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L84"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L76" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -623,7 +651,7 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><a href="cgendata.html#TLoc"><span class="Identifier">TLoc</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">k</span><span class="Operator">*</span><span class="Other">:</span> <a href="cgendata.html#TLocKind"><span class="Identifier">TLocKind</span></a>               <span class="Comment">## kind of location</span>
   <span class="Identifier">storage</span><span class="Operator">*</span><span class="Other">:</span> <a href="cgendata.html#TStorageLoc"><span class="Identifier">TStorageLoc</span></a>
-  <span class="Identifier">flags</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/ast_types.html#TLocFlags"><span class="Identifier">TLocFlags</span></a>          <span class="Comment">## location's flags</span>
+  <span class="Identifier">flags</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">set</span><span class="Other">[</span><a href="cgendata.html#LocFlag"><span class="Identifier">LocFlag</span></a><span class="Other">]</span>       <span class="Comment">## location's flags</span>
   <span class="Identifier">lode</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a>               <span class="Comment">## Node where the location came from; can be faked</span>
   <span class="Identifier">r</span><span class="Operator">*</span><span class="Other">:</span> <a href="../utils/ropes.html#Rope"><span class="Identifier">Rope</span></a>                   <span class="Comment">## rope value of location (code generators)</span>
   </pre></dt>
@@ -631,9 +659,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L69"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L77"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L69" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L77" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -654,7 +682,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L48"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L48"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L48" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -671,7 +699,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L61"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L61"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L61" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -683,9 +711,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L159"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L167"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L159" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L167" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -695,9 +723,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L160"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L168"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L160" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -707,9 +735,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L161"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L169"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L169" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -724,9 +752,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L313"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L321"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L313" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L321" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -736,9 +764,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L316"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L324"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L316" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L324" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -748,9 +776,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Sets the value of the item in <tt class="docutils literal"><span class="pre"><span class="Identifier">m</span></span></tt> with which <tt class="docutils literal"><span class="pre"><span class="Identifier">sym</span></span></tt> is associated. This is only meant as a workaround.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L307"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L315"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L307" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L315" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -760,9 +788,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L319"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L327"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L319" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L327" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -772,9 +800,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Adds <tt class="docutils literal"><span class="pre"><span class="Identifier">it</span></span></tt> to <tt class="docutils literal"><span class="pre"><span class="Identifier">m</span></span></tt> and register a mapping between the item and <tt class="docutils literal"><span class="pre"><span class="Identifier">sym</span></span></tt>, overwriting any existing mappings of <tt class="docutils literal"><span class="pre"><span class="Identifier">sym</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L302"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L310"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L302" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L310" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -784,9 +812,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L265"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L273"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L265" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L273" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -796,9 +824,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L287"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L295"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L287" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L295" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -808,9 +836,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L277"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L285"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L277" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L285" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -821,9 +849,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L273"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L281"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L273" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L281" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -833,9 +861,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Adds <tt class="docutils literal"><span class="pre"><span class="Identifier">it</span></span></tt> to <tt class="docutils literal"><span class="pre"><span class="Identifier">m</span></span></tt> and registers a mapping between the item and <tt class="docutils literal"><span class="pre"><span class="Identifier">sym</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">sym</span></span></tt> must have no mapping registered yet.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L296"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L304"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L296" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L304" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -845,9 +873,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L269"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L277"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L269" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L277" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -862,9 +890,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L291"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L299"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L291" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L299" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -874,9 +902,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L322"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L330"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L322" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L330" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -891,9 +919,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L248"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L256"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L248" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L256" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -903,9 +931,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L249"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L257"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L249" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L257" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -915,9 +943,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L254"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L262"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L254" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L262" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -927,9 +955,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the loc for the given <tt class="docutils literal"><span class="pre"><span class="Identifier">field</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L256"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L264"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L256" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L264" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -939,9 +967,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L252"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L260"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L252" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L260" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -951,9 +979,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L253"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L261"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L253" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L261" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -963,9 +991,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the mutable list with the locs of <tt class="docutils literal"><span class="pre"><span class="Identifier">p</span></span></tt>'s parameters.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L260"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L268"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L260" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L268" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -975,9 +1003,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/035b7549a2b72c50021e3cb64ba29bdde46d7fc7/compiler/backend/cgendata.nim#L251"
+href="https://github.com/nim-works/nimskull/tree/952981430fcd9317ab99461219eccbd3fd4c5af0/compiler/backend/cgendata.nim#L259"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L251" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/cgendata.nim#L259" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -991,7 +1019,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-09 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-10 00:00:00 UTC</small>
       </div>
     </div>
   </div>
