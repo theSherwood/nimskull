@@ -136,7 +136,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b7f2c04427750768f703674a4941272ac5ea03d1/compiler/mir/mirgen.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/a5bf48ea0de2bb3f677ee9df71fbfe0f1d92f05e/compiler/mir/mirgen.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -146,7 +146,6 @@ class="link-seesrc" target="_blank">Source</a>
   <p class="module-desc"><p><tt class="docutils literal"><span class="pre">mirgen</span></tt> is responsible for generating MIR code from <tt class="docutils literal"><span class="pre">PNode</span></tt> AST. The input AST is expected to have already been transformed by <tt class="docutils literal"><span class="pre">transf</span></tt>.</p>
 <p>Operation wise, the input AST is traversed via recursing into statements and expressions, ignoring declarative constructs that are not relevant to nor representable with the MIR.</p>
 <p>None of the MIR operations that imply structured control-flow produce a value, so the input expression that do (<tt class="docutils literal"><span class="pre">if</span></tt>, <tt class="docutils literal"><span class="pre">case</span></tt>, <tt class="docutils literal"><span class="pre">block</span></tt>, and <tt class="docutils literal"><span class="pre">try</span></tt>) are translated into statements where the last expression in each clause is turned into an assignment to, depending on the context where they're used, either a temporary or existing lvalue expression. The latter are forwarded to the generation procedures via <tt class="docutils literal"><span class="pre">Destination</span></tt>.</p>
-<p>To shorten the emit code and also make it a bit easier to read and understand, a mini DSL realised through templates is used.</p>
 
 <h1><a class="toc-backref" id="origin-information" href="#origin-information">Origin information</a></h1><p>Each generated <tt class="docutils literal"><span class="pre">MirNode</span></tt> is associated with the <tt class="docutils literal"><span class="pre">PNode</span></tt> it originated (referred to as &quot;source information&quot;) from. Setting the <tt class="docutils literal"><span class="pre">PNode</span></tt> to use as the origin is done by using the <tt class="docutils literal"><span class="pre">useSource</span></tt> template. It overrides the active source information until the end of the scope it is called inside -- all nodes without explicitly attached source information added till the end of the scope will store the provided <tt class="docutils literal"><span class="pre">PNode</span></tt> as their origin.</p>
 <p>The source information is set/attached lazily because:</p>
@@ -173,9 +172,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b7f2c04427750768f703674a4941272ac5ea03d1/compiler/mir/mirgen.nim#L139"
+href="https://github.com/nim-works/nimskull/tree/a5bf48ea0de2bb3f677ee9df71fbfe0f1d92f05e/compiler/mir/mirgen.nim#L124"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L139" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -193,9 +192,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates MIR code that is semantically equivalent to the expression or statement <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>, appending the resulting code and the corresponding origin information to <tt class="docutils literal"><span class="pre"><span class="Identifier">code</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">source</span></span></tt>, respectively.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b7f2c04427750768f703674a4941272ac5ea03d1/compiler/mir/mirgen.nim#L2035"
+href="https://github.com/nim-works/nimskull/tree/a5bf48ea0de2bb3f677ee9df71fbfe0f1d92f05e/compiler/mir/mirgen.nim#L1826"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2035" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L1826" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -211,9 +210,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p><tt class="docutils literal"><span class="pre"><span class="Identifier">isNimvm</span></span></tt> indicates the branch of a <tt class="docutils literal"><span class="pre">when nimvm</span></tt> statement that code should be generated code for</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b7f2c04427750768f703674a4941272ac5ea03d1/compiler/mir/mirgen.nim#L2079"
+href="https://github.com/nim-works/nimskull/tree/a5bf48ea0de2bb3f677ee9df71fbfe0f1d92f05e/compiler/mir/mirgen.nim#L1870"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2079" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L1870" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>

@@ -1,13 +1,69 @@
 Value	mir/mirconstr.html#Value	mirconstr: Value	
 Sink	mir/mirconstr.html#Sink	mirconstr: Sink	
 SinkAndValue	mir/mirconstr.html#SinkAndValue	mirconstr: SinkAndValue	
-`=&gt;`	mir/mirconstr.html#=>.t,Value,Sink	mirconstr: `=&gt;`(v: Value; sink: Sink)	
+EValue	mir/mirconstr.html#EValue	mirconstr: EValue	
+chain	mir/mirconstr.html#chain.t,MirNodeSeq,untyped	mirconstr: chain(buf: var MirNodeSeq; x: untyped)	
+forward	mir/mirconstr.html#forward.t,MirNodeSeq,untyped	mirconstr: forward(buf: var MirNodeSeq; x: untyped)	
+eval	mir/mirconstr.html#eval.t,MirNodeSeq,untyped	mirconstr: eval(buf: var MirNodeSeq; x: untyped): EValue	
+`=&gt;`	mir/mirconstr.html#=>.t,EValue,SinkAndValue	mirconstr: `=&gt;`(a: EValue; b: SinkAndValue): Value	
+`=&gt;`	mir/mirconstr.html#=>.t,Value,Sink	mirconstr: `=&gt;`(a: Value; b: Sink): ChainEnd	
+`=&gt;`	mir/mirconstr.html#=>.t,EValue,Sink	mirconstr: `=&gt;`(a: EValue; b: Sink): ChainEnd	
+`=&gt;`	mir/mirconstr.html#=>.t,Value,Cond	mirconstr: `=&gt;`(v: Value; c: Cond): Predicate	
+`=&gt;`	mir/mirconstr.html#=>.t,EValue,Cond	mirconstr: `=&gt;`(v: EValue; c: Cond): Predicate	
+`=&gt;`	mir/mirconstr.html#=>.t,Predicate,SinkAndValue	mirconstr: `=&gt;`(v: Predicate; sink: SinkAndValue): Value	
 `=&gt;`	mir/mirconstr.html#=>.t,Value,SinkAndValue	mirconstr: `=&gt;`(v: Value; sink: SinkAndValue): Value	
-`=&gt;|`	mir/mirconstr.html#=>|.t,Value,SinkAndValue	mirconstr: `=&gt;|`(v: Value; sink: SinkAndValue)	
-`|=&gt;`	mir/mirconstr.html#|=>.t,Sink	mirconstr: `|=&gt;`(sink: Sink)	
-`|=&gt;`	mir/mirconstr.html#|=>.t,SinkAndValue	mirconstr: `|=&gt;`(sink: SinkAndValue): Value	
-previous	mir/mirconstr.html#previous.t	mirconstr: previous(): Value	
 follows	mir/mirconstr.html#follows.t	mirconstr: follows(): Sink	
+emit	mir/mirconstr.html#emit,MirNodeSeq,sinkMirNode	mirconstr: emit(s: var MirNodeSeq; n: sink MirNode): EValue	
+procLit	mir/mirconstr.html#procLit,MirNodeSeq,PSym	mirconstr: procLit(s: var MirNodeSeq; sym: PSym): EValue	
+typeLit	mir/mirconstr.html#typeLit,MirNodeSeq,PType	mirconstr: typeLit(s: var MirNodeSeq; t: PType): EValue	
+literal	mir/mirconstr.html#literal,MirNodeSeq,PNode	mirconstr: literal(s: var MirNodeSeq; n: PNode): EValue	
+constr	mir/mirconstr.html#constr,MirNodeSeq,PType	mirconstr: constr(s: var MirNodeSeq; typ: PType): EValue	
+temp	mir/mirconstr.html#temp,MirNodeSeq,PType,TempId	mirconstr: temp(s: var MirNodeSeq; typ: PType; id: TempId): EValue	
+symbol	mir/mirconstr.html#symbol,MirNodeSeq,range[],PSym	mirconstr: symbol(s: var MirNodeSeq; kind: range[mnkConst .. mnkLocal]; sym: PSym): EValue	
+opParam	mir/mirconstr.html#opParam,MirNodeSeq,uint32,PType	mirconstr: opParam(s: var MirNodeSeq; i: uint32; typ: PType): EValue	
+magicCall	mir/mirconstr.html#magicCall,MirNodeSeq,TMagic,PType	mirconstr: magicCall(s: var MirNodeSeq; m: TMagic; typ: PType): EValue	
+tag	mir/mirconstr.html#tag,MirNodeSeq,EffectKind,EValue	mirconstr: tag(s: var MirNodeSeq; effect: EffectKind; val: var EValue)	
+castOp	mir/mirconstr.html#castOp,MirNodeSeq,PType,EValue	mirconstr: castOp(s: var MirNodeSeq; typ: PType; val: var EValue)	
+stdConvOp	mir/mirconstr.html#stdConvOp,MirNodeSeq,PType,EValue	mirconstr: stdConvOp(s: var MirNodeSeq; typ: PType; val: var EValue)	
+convOp	mir/mirconstr.html#convOp,MirNodeSeq,PType,EValue	mirconstr: convOp(s: var MirNodeSeq; typ: PType; val: var EValue)	
+addrOp	mir/mirconstr.html#addrOp,MirNodeSeq,PType,EValue	mirconstr: addrOp(s: var MirNodeSeq; typ: PType; val: var EValue)	
+viewOp	mir/mirconstr.html#viewOp,MirNodeSeq,PType,EValue	mirconstr: viewOp(s: var MirNodeSeq; typ: PType; val: var EValue)	
+derefOp	mir/mirconstr.html#derefOp,MirNodeSeq,PType,EValue	mirconstr: derefOp(s: var MirNodeSeq; typ: PType; val: var EValue)	
+derefViewOp	mir/mirconstr.html#derefViewOp,MirNodeSeq,PType,EValue	mirconstr: derefViewOp(s: var MirNodeSeq; typ: PType; val: var EValue)	
+pathObj	mir/mirconstr.html#pathObj,MirNodeSeq,PSym,EValue	mirconstr: pathObj(s: var MirNodeSeq; field: PSym; val: var EValue)	
+pathPos	mir/mirconstr.html#pathPos,MirNodeSeq,PType,uint32,EValue	mirconstr: pathPos(s: var MirNodeSeq; elemType: PType; position: uint32; val: var EValue)	
+pathVariant	mir/mirconstr.html#pathVariant,MirNodeSeq,PType,PSym,EValue	mirconstr: pathVariant(s: var MirNodeSeq; objType: PType; field: PSym; val: var EValue)	
+unaryMagicCall	mir/mirconstr.html#unaryMagicCall,MirNodeSeq,TMagic,PType,EValue	mirconstr: unaryMagicCall(s: var MirNodeSeq; m: TMagic; typ: PType; val: var EValue)	
+arg	mir/mirconstr.html#arg,MirNodeSeq,EValue	mirconstr: arg(s: var MirNodeSeq; val: EValue)	
+consume	mir/mirconstr.html#consume,MirNodeSeq,EValue	mirconstr: consume(s: var MirNodeSeq; val: EValue)	
+name	mir/mirconstr.html#name,MirNodeSeq,EValue	mirconstr: name(s: var MirNodeSeq; val: EValue)	
+voidOut	mir/mirconstr.html#voidOut,MirNodeSeq,EValue	mirconstr: voidOut(s: var MirNodeSeq; val: EValue)	
+predicate	mir/mirconstr.html#predicate.t,bool	mirconstr: predicate(val: bool): Cond	
+emit	mir/mirconstr.html#emit.t,untyped	mirconstr: emit(n: untyped): EValue	
+procLit	mir/mirconstr.html#procLit.t,untyped	mirconstr: procLit(sym: untyped): EValue	
+typeLit	mir/mirconstr.html#typeLit.t,untyped	mirconstr: typeLit(n: untyped): EValue	
+literal	mir/mirconstr.html#literal.t,untyped	mirconstr: literal(n: untyped): EValue	
+constr	mir/mirconstr.html#constr.t,untyped	mirconstr: constr(typ: untyped): EValue	
+temp	mir/mirconstr.html#temp.t,untyped,untyped	mirconstr: temp(typ, id: untyped): EValue	
+symbol	mir/mirconstr.html#symbol.t,untyped,untyped	mirconstr: symbol(kind, sym: untyped): EValue	
+opParam	mir/mirconstr.html#opParam.t,untyped,untyped	mirconstr: opParam(i, typ: untyped): EValue	
+magicCall	mir/mirconstr.html#magicCall.t,untyped,untyped	mirconstr: magicCall(typ, id: untyped): EValue	
+tag	mir/mirconstr.html#tag.t,untyped	mirconstr: tag(effect: untyped): SinkAndValue	
+castOp	mir/mirconstr.html#castOp.t,untyped	mirconstr: castOp(typ: untyped): SinkAndValue	
+stdConvOp	mir/mirconstr.html#stdConvOp.t,untyped	mirconstr: stdConvOp(typ: untyped): SinkAndValue	
+convOp	mir/mirconstr.html#convOp.t,untyped	mirconstr: convOp(typ: untyped): SinkAndValue	
+addrOp	mir/mirconstr.html#addrOp.t,untyped	mirconstr: addrOp(typ: untyped): SinkAndValue	
+viewOp	mir/mirconstr.html#viewOp.t,untyped	mirconstr: viewOp(typ: untyped): SinkAndValue	
+derefOp	mir/mirconstr.html#derefOp.t,untyped	mirconstr: derefOp(typ: untyped): SinkAndValue	
+derefViewOp	mir/mirconstr.html#derefViewOp.t,untyped	mirconstr: derefViewOp(typ: untyped): SinkAndValue	
+pathObj	mir/mirconstr.html#pathObj.t,untyped	mirconstr: pathObj(field: untyped): SinkAndValue	
+pathPos	mir/mirconstr.html#pathPos.t,untyped,untyped	mirconstr: pathPos(typ, pos: untyped): SinkAndValue	
+pathVariant	mir/mirconstr.html#pathVariant.t,untyped,untyped	mirconstr: pathVariant(typ, field: untyped): SinkAndValue	
+unaryMagicCall	mir/mirconstr.html#unaryMagicCall.t,untyped,untyped	mirconstr: unaryMagicCall(m, typ: untyped): SinkAndValue	
+arg	mir/mirconstr.html#arg.t	mirconstr: arg(): Sink	
+name	mir/mirconstr.html#name.t	mirconstr: name(): Sink	
+consume	mir/mirconstr.html#consume.t	mirconstr: consume(): Sink	
+voidOut	mir/mirconstr.html#voidOut.t	mirconstr: voidOut(): Sink	
 procNode	mir/mirconstr.html#procNode,PSym	mirconstr: procNode(s: PSym): MirNode	
 magic	mir/mirconstr.html#magic,TMagic,PType,PNode	mirconstr: magic(m: TMagic; typ: PType; n: PNode = nil): MirNode	
 endNode	mir/mirconstr.html#endNode.t,MirNodeKind	mirconstr: endNode(k: MirNodeKind): MirNode	
@@ -15,3 +71,4 @@ subTree	mir/mirconstr.html#subTree.t,MirTree,MirNode,untyped	mirconstr: subTree(
 stmtList	mir/mirconstr.html#stmtList.t,MirTree,untyped	mirconstr: stmtList(tree: var MirTree; body: untyped)	
 scope	mir/mirconstr.html#scope.t,MirTree,untyped	mirconstr: scope(tree: var MirTree; body: untyped)	
 argBlock	mir/mirconstr.html#argBlock.t,MirTree,untyped	mirconstr: argBlock(tree: var MirTree; body: untyped)	
+Chain DSL	mir/mirconstr.html#chain-dsl	 Chain DSL	
