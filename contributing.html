@@ -105,8 +105,7 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference" id="getting-started_toc" href="#getting-started">Getting Started</a></li>
 <li><a class="reference" id="change-approval_toc" href="#change-approval">Change Approval</a></li>
 <li><a class="reference" id="anatomy-of-a-pull-request_toc" href="#anatomy-of-a-pull-request">Anatomy of a Pull Request</a></li>
-<ul class="simple"><li><a class="reference" id="anatomy-of-a-pull-request-one-commit-per-pull-request_toc" href="#anatomy-of-a-pull-request-one-commit-per-pull-request">One Commit Per Pull Request</a></li>
-<li><a class="reference" id="anatomy-of-a-pull-request-commit-message_toc" href="#anatomy-of-a-pull-request-commit-message">Commit Message</a></li>
+<ul class="simple"><li><a class="reference" id="anatomy-of-a-pull-request-commit-message_toc" href="#anatomy-of-a-pull-request-commit-message">Commit Message</a></li>
 <ul class="simple"><li><a class="reference" id="commit-message-how-to-write-a-good-commit-message_toc" href="#commit-message-how-to-write-a-good-commit-message">How to Write a Good Commit Message</a></li>
 <li><a class="reference" id="commit-message-is-my-commit-message-is-acceptableqmark_toc" href="#commit-message-is-my-commit-message-is-acceptableqmark">Is my Commit Message is Acceptable?</a></li>
 <li><a class="reference" id="commit-message-getting-fancy-with-commit-messages_toc" href="#commit-message-getting-fancy-with-commit-messages">Getting Fancy with Commit Messages</a></li>
@@ -139,7 +138,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c824ed1e19de4f58660b516d7f1bf4bc97159542/doc/contributing.rst#L1"
+href="https://github.com/nim-works/nimskull/tree/f1cd43c6cae959ba760ca1106d4994e99c571730/doc/contributing.rst#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/doc/contributing.rst#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -179,25 +178,11 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="admonition admonition-info"><span class="admonition-info-text"><b>Tip:</b></span>
 Small PRs, simple implementation (state/control flow), principled design, thoughtful testing, documented code, and the like cut through lengthy back and forth.</div>
 
-<h1><a class="toc-backref" id="anatomy-of-a-pull-request" href="#anatomy-of-a-pull-request">Anatomy of a Pull Request</a></h1><p>There is a GitHub Pull Request template to help guide crafting a description, and you can liberally copy content from the commit message as needed.</p>
+<h1><a class="toc-backref" id="anatomy-of-a-pull-request" href="#anatomy-of-a-pull-request">Anatomy of a Pull Request</a></h1><p>There is a GitHub Pull Request template to help guide crafting a description, and you can liberally copy content from the commit messages as needed.</p>
 <p>If your PR isn't quite ready feel free to create it as a draft, then once you're all set feel free to flip it to &quot;Ready for review&quot;.</p>
-
-<h2><a class="toc-backref" id="anatomy-of-a-pull-request-one-commit-per-pull-request" href="#anatomy-of-a-pull-request-one-commit-per-pull-request">One Commit Per Pull Request</a></h2><p>Pull request should contain a single <strong>passing</strong> commit. This is necessary to ensure clean git history that is not cluttered by a partially working, failing and outright failing to compile states.</p>
-<p>To achieve this you can do either of the following:</p>
-<ul class="simple"><li>If the change fits into a single commit you don't need to do anything</li>
-<li>If you need to made some additional modifications (review requested) you can amend the commit and force-push it (<tt class="docutils literal"><span class="pre"><span class="program">git</span> <span class="option">commit</span> <span class="option">--amend</span> <span class="option">--no-edit</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="program">git</span> <span class="option">push</span> <span class="option">--force</span> <span class="option">&lt;remote&gt;</span> <span class="option">&lt;your</span> <span class="option">branch&gt;</span></span></tt>)</li>
-<li>Create multiple commits and then squash them when your pull request is approved.<ol class="simple"><li>Create multiple commits</li>
-<li>Create new branch based on <tt class="docutils literal"><span class="pre"><span class="Identifier">devel</span></span></tt> (<tt class="docutils literal"><span class="pre"><span class="program">git</span> <span class="option">checkout</span> <span class="option">devel</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="program">git</span> <span class="option">checkout</span> <span class="option">&lt;branch&gt;-squashed</span></span></tt>)</li>
-<li>Squash merge your original branch into a new one - <tt class="docutils literal"><span class="pre"><span class="program">git</span> <span class="option">merge</span> <span class="option">--squash</span> <span class="option">&lt;branch&gt;</span></span></tt></li>
-<li>Commit your squashed branch using <tt class="docutils literal"><span class="pre"><span class="program">git</span> <span class="option">commit</span></span></tt><div class="admonition admonition-info"><span class="admonition-info-text"><b>Note:</b></span>
-By default you will get pre-filled commit message which contains pretty verbose &quot;sqash of the following&quot; message - those are not going to be accepted by the PR reviewers, and need to be edited into human-readable error message according to the commit message guidelines.</div>
-<div class="admonition admonition-info"><span class="admonition-info-text"><b>Tip:</b></span>
-You can write a commit message as a PR description and then copy-paste it when you are done with the implementation.</div>
-</li>
-<li>Force-push your squashed branch using <tt class="docutils literal"><span class="pre"><span class="program">git</span> <span class="option">push</span> <span class="option">--force</span> <span class="option">&lt;remote&gt;</span> <span class="option">HEAD:&lt;branch&gt;</span></span></tt></li>
-</ol>
-</li>
-</ul>
+<p>The PR can have as many commits as you want, with multiple commits being preferred, as it can make review easier, especially when there are many changes.</p>
+<p>When the PR is merged, a squashed version of the commits is automatically created (leaving both the original branch and the commits as they show up in the history on GitHub intact), with everything coming before the first section break (<tt class="docutils literal"><span class="pre"><span class="Operator">---</span></span></tt>) in the PR message being used as the commit message.</p>
+<p>Force pushing to a branch for which a PR has already been created is okay, but please try to only rewrite history for commits that haven't been reviewed yet, so as to make incremental reviews easier.</p>
 
 <h2><a class="toc-backref" id="anatomy-of-a-pull-request-commit-message" href="#anatomy-of-a-pull-request-commit-message">Commit Message</a></h2><p>One of the key goals of the  nimskull project is sustainability. Writing good commit messages is important, since future contributors need to have a way to reason about decisions made in the past.</p>
 <p>The impact (<em>&quot;what&quot;</em>) and reasoning (<em>&quot;why&quot;</em>) of the change <strong>must</strong> be clear, and for more complex changes an overview of the approach (<em>&quot;how&quot;</em>).</p>
