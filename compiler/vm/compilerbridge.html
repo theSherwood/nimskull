@@ -107,6 +107,7 @@ window.addEventListener('DOMContentLoaded', main);
       <li><a class="reference" href="#EvalContext"
     title="EvalContext = object of TPassContext
   vm*: TCtx
+  jit*: JitState
   oldErrorCount: int">EvalContext</a></li>
   <li><a class="reference" href="#ExecErrorKind"
     title="ExecErrorKind = enum
@@ -149,8 +150,8 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">evalMacroCall
-      <li><a class="reference" href="#evalMacroCall%2CTCtx%2CPNode%2CPNode%2CPSym"
-    title="evalMacroCall(c: var TCtx; call, args: PNode; sym: PSym): PNode">evalMacroCall(c: var TCtx; call, args: PNode; sym: PSym): PNode</a></li>
+      <li><a class="reference" href="#evalMacroCall%2CJitState%2CTCtx%2CPNode%2CPNode%2CPSym"
+    title="evalMacroCall(jit: var JitState; c: var TCtx; call, args: PNode; sym: PSym): PNode">evalMacroCall(jit: var JitState; c: var TCtx; call, args: PNode; sym: PSym): PNode</a></li>
   <li><a class="reference" href="#evalMacroCall%2CPSym%2CIdGenerator%2CModuleGraph%2Cref.int%2CPNode%2CPNode%2CPSym"
     title="evalMacroCall(module: PSym; idgen: IdGenerator; g: ModuleGraph;
               templInstCounter: ref int; call, args: PNode; sym: PSym): PNode">evalMacroCall(module: PSym; idgen: IdGenerator; g: ModuleGraph;
@@ -172,8 +173,8 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">execProc
-      <li><a class="reference" href="#execProc%2CTCtx%2CPSym%2CopenArray%5BPNode%5D"
-    title="execProc(c: var TCtx; sym: PSym; args: openArray[PNode]): PNode">execProc(c: var TCtx; sym: PSym; args: openArray[PNode]): PNode</a></li>
+      <li><a class="reference" href="#execProc%2CJitState%2CTCtx%2CPSym%2CopenArray%5BPNode%5D"
+    title="execProc(jit: var JitState; c: var TCtx; sym: PSym; args: openArray[PNode]): PNode">execProc(jit: var JitState; c: var TCtx; sym: PSym; args: openArray[PNode]): PNode</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">getGlobalValue
@@ -204,7 +205,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -222,7 +223,7 @@ what follows is an implementation of the <tt class="docutils literal"><span clas
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/errorhandling.html">../ast/errorhandling</a>, <a class="reference external" href="../ast/errorreporting.html">../ast/errorreporting</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/trees.html">../ast/trees</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../sem/passes.html">../sem/passes</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="../utils/debugutils.html">../utils/debugutils</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="vmaux.html">vmaux</a>, <a class="reference external" href="vmcompilerserdes.html">vmcompilerserdes</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmjit.html">vmjit</a>, <a class="reference external" href="vmlegacy.html">vmlegacy</a>, <a class="reference external" href="vmops.html">vmops</a>, <a class="reference external" href="vmtypegen.html">vmtypegen</a>, <a class="reference external" href="vm.html">vm</a>, <a class="reference external" href="vmgen.html">vmgen</a>, <a class="reference external" href="../ast/reports.html">../ast/reports</a>, <a class="reference external" href="../ast/reports_vm.html">../ast/reports_vm</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/reports_internal.html">../ast/reports_internal</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>
+<a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/errorhandling.html">../ast/errorhandling</a>, <a class="reference external" href="../ast/errorreporting.html">../ast/errorreporting</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/trees.html">../ast/trees</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../sem/passes.html">../sem/passes</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="../utils/debugutils.html">../utils/debugutils</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="vmcompilerserdes.html">vmcompilerserdes</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmjit.html">vmjit</a>, <a class="reference external" href="vmlegacy.html">vmlegacy</a>, <a class="reference external" href="vmops.html">vmops</a>, <a class="reference external" href="vmtypegen.html">vmtypegen</a>, <a class="reference external" href="vm.html">vm</a>, <a class="reference external" href="vmgen.html">vmgen</a>, <a class="reference external" href="../ast/reports.html">../ast/reports</a>, <a class="reference external" href="../ast/reports_vm.html">../ast/reports_vm</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/reports_internal.html">../ast/reports_internal</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -230,15 +231,16 @@ what follows is an implementation of the <tt class="docutils literal"><span clas
 <div id="EvalContext">
 <dt><pre><a href="compilerbridge.html#EvalContext"><span class="Identifier">EvalContext</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="../modules/modulegraphs.html#TPassContext"><span class="Identifier">TPassContext</span></a>
   <span class="Identifier">vm</span><span class="Operator">*</span><span class="Other">:</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a>
+  <span class="Identifier">jit</span><span class="Operator">*</span><span class="Other">:</span> <a href="vmjit.html#JitState"><span class="Identifier">JitState</span></a>
   <span class="Identifier">oldErrorCount</span><span class="Other">:</span> <span class="Identifier">int</span>
 </pre></dt>
 <dd>
 
 All state required to on-demand translate AST to VM bytecode and execute it. An <tt class="docutils literal"><span class="pre">EvalContext</span></tt> instance makes up everything that is required for running code at compile-time.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L92"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L91"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L92" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L91" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -249,9 +251,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L72"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L71"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L72" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L71" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -275,9 +277,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L77"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L76"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L77" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L76" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -287,9 +289,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L89"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L88"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L89" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L88" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -299,9 +301,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L91"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L90"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L91" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -316,9 +318,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L701"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L707"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L701" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L707" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -340,14 +342,14 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L507"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L511"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L507" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L511" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="evalMacroCall,TCtx,PNode,PNode,PSym">
-<dt><pre><span class="Keyword">proc</span> <a href="#evalMacroCall%2CTCtx%2CPNode%2CPNode%2CPSym"><span class="Identifier">evalMacroCall</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">call</span><span class="Other">,</span> <span class="Identifier">args</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span> <span class="Identifier">sym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
+<div id="evalMacroCall,JitState,TCtx,PNode,PNode,PSym">
+<dt><pre><span class="Keyword">proc</span> <a href="#evalMacroCall%2CJitState%2CTCtx%2CPNode%2CPNode%2CPSym"><span class="Identifier">evalMacroCall</span></a><span class="Other">(</span><span class="Identifier">jit</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmjit.html#JitState"><span class="Identifier">JitState</span></a><span class="Other">;</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">call</span><span class="Other">,</span> <span class="Identifier">args</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span> <span class="Identifier">sym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
     <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span>
     <span class="Identifier">ResultErrorRef[vmdef.VmGenDiag]</span><span class="Other">,</span> <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span>
     <span class="Identifier">ResultErrorRef[compilerbridge.ExecErrorReport]</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
@@ -359,9 +361,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p><tt class="docutils literal"><span class="pre"><span class="Identifier">call</span></span></tt> is the original call expression, which is used as the <tt class="docutils literal"><span class="pre">wrongNode</span></tt> in case of an error, as the node returned by the <tt class="docutils literal"><span class="pre">callsite</span></tt> macro API procedure, and for providing line information.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L532"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L536"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L532" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L536" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -377,9 +379,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Similar to the other <tt class="docutils literal"><span class="pre">evalMacroCall</span></tt> overload, but also updates the compile-time execution context with the provided <tt class="docutils literal"><span class="pre"><span class="Identifier">module</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">idgen</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">g</span></span></tt>, and <tt class="docutils literal"><span class="pre"><span class="Identifier">templInstCounter</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L579"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L584"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L579" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L584" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -395,9 +397,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L510"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L514"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L510" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L514" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -413,14 +415,14 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L513"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L517"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L513" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L517" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="execProc,TCtx,PSym,openArray[PNode]">
-<dt><pre><span class="Keyword">proc</span> <a href="#execProc%2CTCtx%2CPSym%2CopenArray%5BPNode%5D"><span class="Identifier">execProc</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">sym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">args</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
+<div id="execProc,JitState,TCtx,PSym,openArray[PNode]">
+<dt><pre><span class="Keyword">proc</span> <a href="#execProc%2CJitState%2CTCtx%2CPSym%2CopenArray%5BPNode%5D"><span class="Identifier">execProc</span></a><span class="Other">(</span><span class="Identifier">jit</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmjit.html#JitState"><span class="Identifier">JitState</span></a><span class="Other">;</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">sym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">args</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
     <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span>
     <span class="Identifier">ResultErrorRef[system.void]</span><span class="Other">,</span> <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span>
     <span class="Identifier">ResultErrorRef[compilerbridge.ExecErrorReport]</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span>
@@ -430,9 +432,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L596"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L601"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L596" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L601" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -443,9 +445,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Does not perform type checking, so ensure that <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span><span class="Operator">.</span><span class="Identifier">typ</span></span></tt> matches the global's type
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L655"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L661"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L655" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L661" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -456,9 +458,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Does not do type checking so ensure the <tt class="docutils literal"><span class="pre"><span class="Identifier">val</span></span></tt> matches the <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span><span class="Operator">.</span><span class="Identifier">typ</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L664"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L670"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L664" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L670" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -474,9 +476,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L516"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L520"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L516" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L520" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -487,9 +489,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/4b59c9fbd88178cc10533775e6f1a326cf4464b8/compiler/vm/compilerbridge.nim#L448"
+href="https://github.com/nim-works/nimskull/tree/963542eb90013d41fba667cbc34f6280f87e1221/compiler/vm/compilerbridge.nim#L452"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L448" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/compilerbridge.nim#L452" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -503,7 +505,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-20 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-07-25 00:00:00 UTC</small>
       </div>
     </div>
   </div>
