@@ -17,7 +17,7 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>compiler/ast/ast_idgen</title>
+<title>compiler/mir/mirpasses</title>
 <link rel="stylesheet" type="text/css" href="../nimdoc.out.css">
 
 <script type="text/javascript" src="../dochack.js"></script>
@@ -69,7 +69,7 @@ window.addEventListener('DOMContentLoaded', main);
 <body>
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">compiler/ast/ast_idgen</h1>
+    <h1 class="title">compiler/mir/mirpasses</h1>
     <div class="row">
   <div class="three columns">
   <div class="theme-switch-wrapper">
@@ -104,39 +104,25 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#IdGenerator"
-    title="IdGenerator = ref object
-  module*: int32
-  symId*: int32
-  typeId*: int32
-  sealed*: bool">IdGenerator</a></li>
-
-  </ul>
-</li>
-<li>
-  <a class="reference reference-toplevel" href="#10" id="60">Consts</a>
-  <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#PackageModuleId"
-    title="PackageModuleId = -3'i32">PackageModuleId</a></li>
+      <li><a class="reference" href="#TargetBackend"
+    title="TargetBackend = enum
+  targetC, targetJs, targetVm">TargetBackend</a></li>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">idGeneratorFromModule
-      <li><a class="reference" href="#idGeneratorFromModule%2CPSym"
-    title="idGeneratorFromModule(m: PSym): IdGenerator">idGeneratorFromModule(m: PSym): IdGenerator</a></li>
+      <ul class="simple nested-toc-section">applyPasses
+      <li><a class="reference" href="#applyPasses%2CMirTree%2CSourceMap%2CPSym%2CTargetBackend"
+    title="applyPasses(tree: var MirTree; source: var SourceMap; prc: PSym;
+            target: TargetBackend)">applyPasses(tree: var MirTree; source: var SourceMap; prc: PSym;
+            target: TargetBackend)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">nextSymId
-      <li><a class="reference" href="#nextSymId%2CIdGenerator"
-    title="nextSymId(x: IdGenerator): ItemId">nextSymId(x: IdGenerator): ItemId</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">nextTypeId
-      <li><a class="reference" href="#nextTypeId%2CIdGenerator"
-    title="nextTypeId(x: IdGenerator): ItemId">nextTypeId(x: IdGenerator): ItemId</a></li>
+  <ul class="simple nested-toc-section">initArgIter
+      <li><a class="reference" href="#initArgIter%2CMirTree%2CNodePosition"
+    title="initArgIter(tree: MirTree; call: NodePosition): ArgIter">initArgIter(tree: MirTree; call: NodePosition): ArgIter</a></li>
 
   </ul>
 
@@ -147,53 +133,32 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/26178e4b05f74669d77055cd0f144089300aafae/compiler/ast/ast_idgen.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/26178e4b05f74669d77055cd0f144089300aafae/compiler/mir/mirpasses.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_idgen.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirpasses.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">id generator for modules, symbols, and types.</p>
+  <p class="module-desc">Implements the various MIR-based passes. The entry point is the <a class="reference external" href="#applyPasses">applyPasses</a> procedure.</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="ast_types.html">ast_types</a>
+<a class="reference external" href="../ast/ast_query.html">../ast/ast_query</a>, <a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="analysis.html">analysis</a>, <a class="reference external" href="mirchangesets.html">mirchangesets</a>, <a class="reference external" href="mirconstr.html">mirconstr</a>, <a class="reference external" href="mirtrees.html">mirtrees</a>, <a class="reference external" href="sourcemaps.html">sourcemaps</a>, <a class="reference external" href="../sem/aliasanalysis.html">../sem/aliasanalysis</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../sem/aliases.html">../sem/aliases</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<div id="IdGenerator">
-<dt><pre><a href="ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span>
-  <span class="Identifier">module</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int32</span>
-  <span class="Identifier">symId</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int32</span>
-  <span class="Identifier">typeId</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int32</span>
-  <span class="Identifier">sealed</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
-</pre></dt>
+<div id="TargetBackend">
+<dt><pre><a href="mirpasses.html#TargetBackend"><span class="Identifier">TargetBackend</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">targetC</span><span class="Other">,</span> <span class="Identifier">targetJs</span><span class="Other">,</span> <span class="Identifier">targetVm</span></pre></dt>
 <dd>
 
-
+The backend that is going to consume the MIR code. Used to select what passes to run.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/26178e4b05f74669d77055cd0f144089300aafae/compiler/ast/ast_idgen.nim#L9"
+href="https://github.com/nim-works/nimskull/tree/26178e4b05f74669d77055cd0f144089300aafae/compiler/mir/mirpasses.nim#L28"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_idgen.nim#L9" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-
-</dl></div>
-<div class="section" id="10">
-<h1><a class="toc-backref" href="#10">Consts</a></h1>
-<dl class="item">
-<div id="PackageModuleId">
-<dt><pre><a href="ast_idgen.html#PackageModuleId"><span class="Identifier">PackageModuleId</span></a> <span class="Other">=</span> <span class="DecNumber">-3'i32</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/26178e4b05f74669d77055cd0f144089300aafae/compiler/ast/ast_idgen.nim#L16"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_idgen.nim#L16" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirpasses.nim#L28" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -202,39 +167,30 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="idGeneratorFromModule,PSym">
-<dt><pre><span class="Keyword">proc</span> <a href="#idGeneratorFromModule%2CPSym"><span class="Identifier">idGeneratorFromModule</span></a><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="applyPasses,MirTree,SourceMap,PSym,TargetBackend">
+<dt><pre><span class="Keyword">proc</span> <a href="#applyPasses%2CMirTree%2CSourceMap%2CPSym%2CTargetBackend"><span class="Identifier">applyPasses</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">source</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="sourcemaps.html#SourceMap"><span class="Identifier">SourceMap</span></a><span class="Other">;</span> <span class="Identifier">prc</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span>
+                 <span class="Identifier">target</span><span class="Other">:</span> <a href="mirpasses.html#TargetBackend"><span class="Identifier">TargetBackend</span></a><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Applies all applicable MIR passes to the body (<tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">source</span></span></tt>) of <tt class="docutils literal"><span class="pre"><span class="Identifier">prc</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">target</span></span></tt> is the targeted backend and is used to enable/disable certain passes.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/26178e4b05f74669d77055cd0f144089300aafae/compiler/ast/ast_idgen.nim#L18"
+href="https://github.com/nim-works/nimskull/tree/26178e4b05f74669d77055cd0f144089300aafae/compiler/mir/mirpasses.nim#L280"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_idgen.nim#L18" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirpasses.nim#L280" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="nextSymId,IdGenerator">
-<dt><pre><span class="Keyword">proc</span> <a href="#nextSymId%2CIdGenerator"><span class="Identifier">nextSymId</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <a href="ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#ItemId"><span class="Identifier">ItemId</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="initArgIter,MirTree,NodePosition">
+<dt><pre><span class="Keyword">func</span> <a href="#initArgIter%2CMirTree%2CNodePosition"><span class="Identifier">initArgIter</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">call</span><span class="Other">:</span> <a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">ArgIter</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/26178e4b05f74669d77055cd0f144089300aafae/compiler/ast/ast_idgen.nim#L23"
+href="https://github.com/nim-works/nimskull/tree/26178e4b05f74669d77055cd0f144089300aafae/compiler/mir/mirpasses.nim#L91"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_idgen.nim#L23" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="nextTypeId,IdGenerator">
-<dt><pre><span class="Keyword">proc</span> <a href="#nextTypeId%2CIdGenerator"><span class="Identifier">nextTypeId</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <a href="ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast_types.html#ItemId"><span class="Identifier">ItemId</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/26178e4b05f74669d77055cd0f144089300aafae/compiler/ast/ast_idgen.nim#L28"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_idgen.nim#L28" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirpasses.nim#L91" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
