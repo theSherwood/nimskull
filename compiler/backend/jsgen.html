@@ -170,18 +170,18 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">genProc
-      <li><a class="reference" href="#genProc%2CPGlobals%2CBModule%2CPSym%2CPNode"
-    title="genProc(g: PGlobals; module: BModule; prc: PSym; transformedBody: PNode): Rope">genProc(g: PGlobals; module: BModule; prc: PSym; transformedBody: PNode): Rope</a></li>
+      <li><a class="reference" href="#genProc%2CPGlobals%2CBModule%2CPSym%2CCgNode"
+    title="genProc(g: PGlobals; module: BModule; prc: PSym; transformedBody: CgNode): Rope">genProc(g: PGlobals; module: BModule; prc: PSym; transformedBody: CgNode): Rope</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">genStmt
-      <li><a class="reference" href="#genStmt%2CPProc%2CPNode"
-    title="genStmt(p: PProc; n: PNode)">genStmt(p: PProc; n: PNode)</a></li>
+      <li><a class="reference" href="#genStmt%2CPProc%2CCgNode"
+    title="genStmt(p: PProc; n: CgNode)">genStmt(p: PProc; n: CgNode)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">genTopLevelStmt
-      <li><a class="reference" href="#genTopLevelStmt%2CPGlobals%2CBModule%2CPNode"
-    title="genTopLevelStmt(globals: PGlobals; m: BModule; n: PNode)">genTopLevelStmt(globals: PGlobals; m: BModule; n: PNode)</a></li>
+      <li><a class="reference" href="#genTopLevelStmt%2CPGlobals%2CBModule%2CCgNode"
+    title="genTopLevelStmt(globals: PGlobals; m: BModule; n: CgNode)">genTopLevelStmt(globals: PGlobals; m: BModule; n: CgNode)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">newGlobals
@@ -223,7 +223,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -234,7 +234,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/trees.html">../ast/trees</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../ast/wordrecg.html">../ast/wordrecg</a>, <a class="reference external" href="../ast/renderer.html">../ast/renderer</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/astmsgs.html">../ast/astmsgs</a>, <a class="reference external" href="../modules/magicsys.html">../modules/magicsys</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../utils/nversion.html">../utils/nversion</a>, <a class="reference external" href="../utils/ropes.html">../utils/ropes</a>, <a class="reference external" href="ccgutils.html">ccgutils</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/reports_backend.html">../ast/reports_backend</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>
+<a class="reference external" href="../ast/ast_idgen.html">../ast/ast_idgen</a>, <a class="reference external" href="../ast/ast_query.html">../ast/ast_query</a>, <a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../ast/renderer.html">../ast/renderer</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/astmsgs.html">../ast/astmsgs</a>, <a class="reference external" href="../modules/magicsys.html">../modules/magicsys</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../utils/int128.html">../utils/int128</a>, <a class="reference external" href="../utils/nversion.html">../utils/nversion</a>, <a class="reference external" href="../utils/ropes.html">../utils/ropes</a>, <a class="reference external" href="ccgutils.html">ccgutils</a>, <a class="reference external" href="cgir.html">cgir</a>, <a class="reference external" href="compat.html">compat</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/reports_backend.html">../ast/reports_backend</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -245,9 +245,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L76"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L79"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L76" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L79" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -263,9 +263,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L111"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L114"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L111" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L114" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -275,9 +275,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L121"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L124"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L121" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -299,9 +299,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L122"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L125"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L122" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -316,9 +316,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 magics that are treated like normal procedures by the code generator
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L142"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L145"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L142" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L145" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -328,9 +328,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 the procedure is the 'init' procedure of a module
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L139"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L142"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L139" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L142" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -347,9 +347,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Emits the definition for the single global <tt class="docutils literal"><span class="pre"><span class="Identifier">v</span></span></tt> into the top-level section, with <tt class="docutils literal"><span class="pre"><span class="Identifier">m</span></span></tt> being the module the global belongs to. Also sets up the symbol's JavaScript name.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L1643"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L1645"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L1643" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L1645" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -361,9 +361,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Emits definitions for the items in <tt class="docutils literal"><span class="pre"><span class="Identifier">vars</span></span></tt> into the top-level section, with <tt class="docutils literal"><span class="pre"><span class="Identifier">m</span></span></tt> being the module the globals belong to. Also sets up the JavaScript name for the globals.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L1656"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L1658"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L1656" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L1658" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -374,7 +374,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L2287"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L2287"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2287" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -388,9 +388,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L1722"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L1723"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L1722" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L1723" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -400,48 +400,48 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L2543"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L2536"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2543" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2536" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="genProc,PGlobals,BModule,PSym,PNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#genProc%2CPGlobals%2CBModule%2CPSym%2CPNode"><span class="Identifier">genProc</span></a><span class="Other">(</span><span class="Identifier">g</span><span class="Other">:</span> <a href="jsgen.html#PGlobals"><span class="Identifier">PGlobals</span></a><span class="Other">;</span> <span class="Identifier">module</span><span class="Other">:</span> <a href="jsgen.html#BModule"><span class="Identifier">BModule</span></a><span class="Other">;</span> <span class="Identifier">prc</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">transformedBody</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../utils/ropes.html#Rope"><span class="Identifier">Rope</span></a> {.
+<div id="genProc,PGlobals,BModule,PSym,CgNode">
+<dt><pre><span class="Keyword">proc</span> <a href="#genProc%2CPGlobals%2CBModule%2CPSym%2CCgNode"><span class="Identifier">genProc</span></a><span class="Other">(</span><span class="Identifier">g</span><span class="Other">:</span> <a href="jsgen.html#PGlobals"><span class="Identifier">PGlobals</span></a><span class="Other">;</span> <span class="Identifier">module</span><span class="Other">:</span> <a href="jsgen.html#BModule"><span class="Identifier">BModule</span></a><span class="Other">;</span> <span class="Identifier">prc</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">transformedBody</span><span class="Other">:</span> <a href="cgir.html#CgNode"><span class="Identifier">CgNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../utils/ropes.html#Rope"><span class="Identifier">Rope</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L2350"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L2350"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2350" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="genStmt,PProc,PNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#genStmt%2CPProc%2CPNode"><span class="Identifier">genStmt</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="jsgen.html#PProc"><span class="Identifier">PProc</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="genStmt,PProc,CgNode">
+<dt><pre><span class="Keyword">proc</span> <a href="#genStmt%2CPProc%2CCgNode"><span class="Identifier">genStmt</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="jsgen.html#PProc"><span class="Identifier">PProc</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="cgir.html#CgNode"><span class="Identifier">CgNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L2356"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L2356"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2356" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="genTopLevelStmt,PGlobals,BModule,PNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#genTopLevelStmt%2CPGlobals%2CBModule%2CPNode"><span class="Identifier">genTopLevelStmt</span></a><span class="Other">(</span><span class="Identifier">globals</span><span class="Other">:</span> <a href="jsgen.html#PGlobals"><span class="Identifier">PGlobals</span></a><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <a href="jsgen.html#BModule"><span class="Identifier">BModule</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span> {.
+<div id="genTopLevelStmt,PGlobals,BModule,CgNode">
+<dt><pre><span class="Keyword">proc</span> <a href="#genTopLevelStmt%2CPGlobals%2CBModule%2CCgNode"><span class="Identifier">genTopLevelStmt</span></a><span class="Other">(</span><span class="Identifier">globals</span><span class="Other">:</span> <a href="jsgen.html#PGlobals"><span class="Identifier">PGlobals</span></a><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <a href="jsgen.html#BModule"><span class="Identifier">BModule</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="cgir.html#CgNode"><span class="Identifier">CgNode</span></a><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L2550"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L2543"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2550" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2543" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -451,9 +451,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L167"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L170"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L167" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L170" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -463,9 +463,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L2537"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L2530"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2537" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2530" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -476,7 +476,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L2257"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L2257"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2257" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -488,9 +488,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L2558"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L2551"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2558" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L2551" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -505,9 +505,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3b21895e6a730500c84b5faa8facbb32f4bb96ab/compiler/backend/jsgen.nim#L146"
+href="https://github.com/nim-works/nimskull/tree/9c790db318c6573a69a8d57031d52023323f539d/compiler/backend/jsgen.nim#L149"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L146" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/backend/jsgen.nim#L149" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
