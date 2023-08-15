@@ -135,6 +135,11 @@ window.addEventListener('DOMContentLoaded', main);
     title="loadProc(jit: var JitState; c: var TCtx; sym: PSym): VmGenResult">loadProc(jit: var JitState; c: var TCtx; sym: PSym): VmGenResult</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">registerCallback
+      <li><a class="reference" href="#registerCallback%2CTCtx%2Cstring%2CVmCallback"
+    title="registerCallback(c: var TCtx; pattern: string; callback: VmCallback)">registerCallback(c: var TCtx; pattern: string; callback: VmCallback)</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">registerProcedure
       <li><a class="reference" href="#registerProcedure%2CJitState%2CTCtx%2CPSym"
     title="registerProcedure(jit: var JitState; c: var TCtx; prc: PSym): FunctionIndex">registerProcedure(jit: var JitState; c: var TCtx; prc: PSym): FunctionIndex</a></li>
@@ -154,7 +159,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmjit.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmjit.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -183,7 +188,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 State of the VM's just-in-time compiler that is kept across invocations.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmjit.nim#L59"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmjit.nim#L59"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L59" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -202,7 +207,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates code for the the given function and updates the execution environment. In addition, the function's table entry is updated with the bytecode position and execution requirements (i.e. register count). Make sure to only use <tt class="docutils literal"><span class="pre"><span class="Identifier">compile</span></span></tt> when you're sure the function wasn't generated yet
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmjit.nim#L308"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmjit.nim#L308"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L308" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -216,7 +221,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates and emits code for the standalone expression <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmjit.nim#L212"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmjit.nim#L212"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L212" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -230,7 +235,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates and emits code for the standalone top-level statement <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmjit.nim#L187"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmjit.nim#L187"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L187" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -244,9 +249,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 The main entry point into the JIT code-generator. Retrieves the information required for executing <tt class="docutils literal"><span class="pre"><span class="Identifier">sym</span></span></tt>. A function table entry is created first if it doesn't exist yet, and the procedure is also generated via <tt class="docutils literal"><span class="pre"><span class="Identifier">compile</span></span></tt> if it wasn't already
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmjit.nim#L329"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmjit.nim#L329"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L329" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="registerCallback,TCtx,string,VmCallback">
+<dt><pre><span class="Keyword">proc</span> <a href="#registerCallback%2CTCtx%2Cstring%2CVmCallback"><span class="Identifier">registerCallback</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">pattern</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">callback</span><span class="Other">:</span> <a href="vmdef.html#VmCallback"><span class="Identifier">VmCallback</span></a><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Registers the <tt class="docutils literal"><span class="pre"><span class="Identifier">callback</span></span></tt> with <tt class="docutils literal"><span class="pre"><span class="Identifier">c</span></span></tt>. After the <tt class="docutils literal"><span class="pre">registerCallback</span></tt> call, when a procedures of which the fully qualified identifier matches <tt class="docutils literal"><span class="pre"><span class="Identifier">pattern</span></span></tt> is added to the VM's function table, all invocations of the procedure at run-time will invoke the callback instead.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmjit.nim#L343"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L343" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -257,7 +275,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 If it hasn't been already, adds <tt class="docutils literal"><span class="pre"><span class="Identifier">prc</span></span></tt> to the set of procedures the JIT code-generator knowns about and sets up a function-table entry. <tt class="docutils literal"><span class="pre"><span class="Identifier">jit</span></span></tt> is required to not be in the process of generating code.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmjit.nim#L285"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmjit.nim#L285"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L285" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -278,7 +296,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-14 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-15 00:00:00 UTC</small>
       </div>
     </div>
   </div>

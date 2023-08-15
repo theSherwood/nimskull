@@ -102,56 +102,51 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
 </li>
 <li>
-  <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
+  <a class="reference reference-toplevel" href="#15" id="65">Iterators</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">registerAdditionalOps
-      <li><a class="reference" href="#registerAdditionalOps%2CTCtx%2Cbool"
-    title="registerAdditionalOps(c: var TCtx; disallowDangerous: bool)">registerAdditionalOps(c: var TCtx; disallowDangerous: bool)</a></li>
+      <ul class="simple nested-toc-section">basicOps
+      <li><a class="reference" href="#basicOps.i"
+    title="basicOps(): Override">basicOps(): Override</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">registerBasicOps
-      <li><a class="reference" href="#registerBasicOps%2CTCtx"
-    title="registerBasicOps(c: var TCtx)">registerBasicOps(c: var TCtx)</a></li>
+  <ul class="simple nested-toc-section">compileTimeOps
+      <li><a class="reference" href="#compileTimeOps.i"
+    title="compileTimeOps(): Override">compileTimeOps(): Override</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">registerCompileTimeOps
-      <li><a class="reference" href="#registerCompileTimeOps%2CTCtx"
-    title="registerCompileTimeOps(c: var TCtx)">registerCompileTimeOps(c: var TCtx)</a></li>
+  <ul class="simple nested-toc-section">debugOps
+      <li><a class="reference" href="#debugOps.i"
+    title="debugOps(): Override">debugOps(): Override</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">registerDebugOps
-      <li><a class="reference" href="#registerDebugOps%2CTCtx"
-    title="registerDebugOps(c: var TCtx)">registerDebugOps(c: var TCtx)</a></li>
+  <ul class="simple nested-toc-section">gorgeOps
+      <li><a class="reference" href="#gorgeOps.i"
+    title="gorgeOps(): Override">gorgeOps(): Override</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">registerGorgeOps
-      <li><a class="reference" href="#registerGorgeOps%2CTCtx"
-    title="registerGorgeOps(c: var TCtx)">registerGorgeOps(c: var TCtx)</a></li>
+  <ul class="simple nested-toc-section">ioReadOps
+      <li><a class="reference" href="#ioReadOps.i"
+    title="ioReadOps(): Override">ioReadOps(): Override</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">registerIoReadOps
-      <li><a class="reference" href="#registerIoReadOps%2CTCtx"
-    title="registerIoReadOps(c: var TCtx)">registerIoReadOps(c: var TCtx)</a></li>
+  <ul class="simple nested-toc-section">ioWriteOps
+      <li><a class="reference" href="#ioWriteOps.i"
+    title="ioWriteOps(): Override">ioWriteOps(): Override</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">registerIoWriteOps
-      <li><a class="reference" href="#registerIoWriteOps%2CTCtx"
-    title="registerIoWriteOps(c: var TCtx)">registerIoWriteOps(c: var TCtx)</a></li>
+  <ul class="simple nested-toc-section">macroOps
+      <li><a class="reference" href="#macroOps.i"
+    title="macroOps(): Override">macroOps(): Override</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">registerMacroOps
-      <li><a class="reference" href="#registerMacroOps%2CTCtx"
-    title="registerMacroOps(c: var TCtx)">registerMacroOps(c: var TCtx)</a></li>
+  <ul class="simple nested-toc-section">os2Ops
+      <li><a class="reference" href="#os2Ops.i"
+    title="os2Ops(): Override">os2Ops(): Override</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">registerOs2Ops
-      <li><a class="reference" href="#registerOs2Ops%2CTCtx"
-    title="registerOs2Ops(c: var TCtx)">registerOs2Ops(c: var TCtx)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">registerOsOps
-      <li><a class="reference" href="#registerOsOps%2CTCtx"
-    title="registerOsOps(c: var TCtx)">registerOsOps(c: var TCtx)</a></li>
+  <ul class="simple nested-toc-section">osOps
+      <li><a class="reference" href="#osOps.i"
+    title="osOps(): Override">osOps(): Override</a></li>
 
   </ul>
 
@@ -162,140 +157,127 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmops.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">This module implements callbacks for various stdlib and system functions. They are split up into multiple categories so that each can be separately registered via the <tt class="docutils literal"><span class="pre"><span class="Identifier">registerOps</span></span></tt> procedures.</p>
+  <p class="module-desc">This module implements overrides for various stdlib and system functions. The overrides are sorted into multiple categories and are provided through iterators.</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
 <a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/idents.html">../ast/idents</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../sem/sighashes.html">../sem/sighashes</a>, <a class="reference external" href="gorgeimpl.html">gorgeimpl</a>, <a class="reference external" href="vmconv.html">vmconv</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmdeps.html">vmdeps</a>, <a class="reference external" href="vmerrors.html">vmerrors</a>, <a class="reference external" href="vmhooks.html">vmhooks</a>, <a class="reference external" href="vmmemory.html">vmmemory</a>, <a class="reference external" href="vmobjects.html">vmobjects</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>
 </dl></div>
-<div class="section" id="12">
-<h1><a class="toc-backref" href="#12">Procs</a></h1>
+<div class="section" id="15">
+<h1><a class="toc-backref" href="#15">Iterators</a></h1>
 <dl class="item">
-<div id="registerAdditionalOps,TCtx,bool">
-<dt><pre><span class="Keyword">proc</span> <a href="#registerAdditionalOps%2CTCtx%2Cbool"><span class="Identifier">registerAdditionalOps</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">disallowDangerous</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="basicOps.i">
+<dt><pre><span class="Keyword">iterator</span> <a href="#basicOps.i"><span class="Identifier">basicOps</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Override</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Convenience proc used for setting up the callbacks relevant during compile-time execution. If <tt class="docutils literal"><span class="pre"><span class="Identifier">disallowDangerous</span></span></tt> is set to 'true', all operations that are able to modify the host's environment are replaced with no-ops
+Basic system operations as well as overrides for some stdlib functions that don't interact with the host environement, but use language features that the VM doesn't directly support (such as 'importc'-ed functions)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L474"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmops.nim#L228"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L474" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L228" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="registerBasicOps,TCtx">
-<dt><pre><span class="Keyword">proc</span> <a href="#registerBasicOps%2CTCtx"><span class="Identifier">registerBasicOps</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="compileTimeOps.i">
+<dt><pre><span class="Keyword">iterator</span> <a href="#compileTimeOps.i"><span class="Identifier">compileTimeOps</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Override</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Operations for querying compiler related information at compile-time.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L225"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmops.nim#L384"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L225" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L384" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="registerCompileTimeOps,TCtx">
-<dt><pre><span class="Keyword">proc</span> <a href="#registerCompileTimeOps%2CTCtx"><span class="Identifier">registerCompileTimeOps</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="debugOps.i">
+<dt><pre><span class="Keyword">iterator</span> <a href="#debugOps.i"><span class="Identifier">debugOps</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Override</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L381"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmops.nim#L403"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L381" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L403" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="registerDebugOps,TCtx">
-<dt><pre><span class="Keyword">proc</span> <a href="#registerDebugOps%2CTCtx"><span class="Identifier">registerDebugOps</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="gorgeOps.i">
+<dt><pre><span class="Keyword">iterator</span> <a href="#gorgeOps.i"><span class="Identifier">gorgeOps</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Override</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Special operations for executing external programs at compile time.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L401"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmops.nim#L396"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L401" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L396" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="registerGorgeOps,TCtx">
-<dt><pre><span class="Keyword">proc</span> <a href="#registerGorgeOps%2CTCtx"><span class="Identifier">registerGorgeOps</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="ioReadOps.i">
+<dt><pre><span class="Keyword">iterator</span> <a href="#ioReadOps.i"><span class="Identifier">ioReadOps</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Override</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Returns overrides for read operations from the <tt class="docutils literal"><span class="pre">io</span></tt> module.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L394"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmops.nim#L344"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L394" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L344" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="registerIoReadOps,TCtx">
-<dt><pre><span class="Keyword">proc</span> <a href="#registerIoReadOps%2CTCtx"><span class="Identifier">registerIoReadOps</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="ioWriteOps.i">
+<dt><pre><span class="Keyword">iterator</span> <a href="#ioWriteOps.i"><span class="Identifier">ioWriteOps</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Override</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Registers callbacks for read operations from the <tt class="docutils literal"><span class="pre">io</span></tt> module
+Returns overrides for write operations from the <tt class="docutils literal"><span class="pre">io</span></tt> module.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L341"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmops.nim#L349"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L341" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L349" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="registerIoWriteOps,TCtx">
-<dt><pre><span class="Keyword">proc</span> <a href="#registerIoWriteOps%2CTCtx"><span class="Identifier">registerIoWriteOps</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="macroOps.i">
+<dt><pre><span class="Keyword">iterator</span> <a href="#macroOps.i"><span class="Identifier">macroOps</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Override</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Registers callbacks for write operations from the <tt class="docutils literal"><span class="pre">io</span></tt> module
+Operations that are part of the Macro API
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L346"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmops.nim#L408"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L346" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L408" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="registerMacroOps,TCtx">
-<dt><pre><span class="Keyword">proc</span> <a href="#registerMacroOps%2CTCtx"><span class="Identifier">registerMacroOps</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="os2Ops.i">
+<dt><pre><span class="Keyword">iterator</span> <a href="#os2Ops.i"><span class="Identifier">os2Ops</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Override</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+OS operations that are able to modify the host's environment or run external programs
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L407"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmops.nim#L373"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L407" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L373" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="registerOs2Ops,TCtx">
-<dt><pre><span class="Keyword">proc</span> <a href="#registerOs2Ops%2CTCtx"><span class="Identifier">registerOs2Ops</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="osOps.i">
+<dt><pre><span class="Keyword">iterator</span> <a href="#osOps.i"><span class="Identifier">osOps</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Override</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+OS operations that can't modify the host's enivronment.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L370"
+href="https://github.com/nim-works/nimskull/tree/215d62166fe0be1d59647144c716fbc6162d282b/compiler/vm/vmops.nim#L353"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L370" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="registerOsOps,TCtx">
-<dt><pre><span class="Keyword">proc</span> <a href="#registerOsOps%2CTCtx"><span class="Identifier">registerOsOps</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/95b35300273504cdd9f357028b73729a8cc6949d/compiler/vm/vmops.nim#L350"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L350" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmops.nim#L353" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -309,7 +291,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-14 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-15 00:00:00 UTC</small>
       </div>
     </div>
   </div>
