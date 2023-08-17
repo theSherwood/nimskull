@@ -108,7 +108,8 @@ window.addEventListener('DOMContentLoaded', main);
     title="JitState = object
   discovery: DiscoveryData ## acts as the source-of-truth regarding what entities exists. All
                            ## entities not registered with `discovery` also don't exist in
-                           ## ``TCtx``">JitState</a></li>
+                           ## ``TCtx``
+  gen: CodeGenCtx            ## code generator state">JitState</a></li>
 
   </ul>
 </li>
@@ -159,7 +160,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e64d777e1d8b4dd1a25024eaebcfedc00a6a907f/compiler/vm/vmjit.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/255c9a6fdf23b6eeb029317e7e0b1a8a2488fa55/compiler/vm/vmjit.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -173,7 +174,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/ast_query.html">../ast/ast_query</a>, <a class="reference external" href="../backend/backends.html">../backend/backends</a>, <a class="reference external" href="../backend/cgir.html">../backend/cgir</a>, <a class="reference external" href="../backend/cgirgen.html">../backend/cgirgen</a>, <a class="reference external" href="../mir/mirbridge.html">../mir/mirbridge</a>, <a class="reference external" href="../mir/mirgen.html">../mir/mirgen</a>, <a class="reference external" href="../mir/mirpasses.html">../mir/mirpasses</a>, <a class="reference external" href="../mir/mirtrees.html">../mir/mirtrees</a>, <a class="reference external" href="../mir/sourcemaps.html">../mir/sourcemaps</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="vmaux.html">vmaux</a>, <a class="reference external" href="vmcompilerserdes.html">vmcompilerserdes</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmgen.html">vmgen</a>, <a class="reference external" href="vmmemory.html">vmmemory</a>, <a class="reference external" href="vmtypegen.html">vmtypegen</a>
+<a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/ast_query.html">../ast/ast_query</a>, <a class="reference external" href="../backend/backends.html">../backend/backends</a>, <a class="reference external" href="../backend/cgir.html">../backend/cgir</a>, <a class="reference external" href="../backend/cgirgen.html">../backend/cgirgen</a>, <a class="reference external" href="../mir/mirbridge.html">../mir/mirbridge</a>, <a class="reference external" href="../mir/mirgen.html">../mir/mirgen</a>, <a class="reference external" href="../mir/mirpasses.html">../mir/mirpasses</a>, <a class="reference external" href="../mir/mirtrees.html">../mir/mirtrees</a>, <a class="reference external" href="../mir/sourcemaps.html">../mir/sourcemaps</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="vmaux.html">vmaux</a>, <a class="reference external" href="vmcompilerserdes.html">vmcompilerserdes</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmgen.html">vmgen</a>, <a class="reference external" href="vmlinker.html">vmlinker</a>, <a class="reference external" href="vmmemory.html">vmmemory</a>, <a class="reference external" href="vmtypegen.html">vmtypegen</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -183,14 +184,15 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">discovery</span><span class="Other">:</span> <a href="../backend/backends.html#DiscoveryData"><span class="Identifier">DiscoveryData</span></a> <span class="Comment">## acts as the source-of-truth regarding what entities exists. All</span>
                            <span class="Comment">## entities not registered with `discovery` also don't exist in</span>
                            <span class="Comment">## ``TCtx``</span>
+  <span class="Identifier">gen</span><span class="Other">:</span> <a href="vmgen.html#CodeGenCtx"><span class="Identifier">CodeGenCtx</span></a>            <span class="Comment">## code generator state</span>
   </pre></dt>
 <dd>
 
 State of the VM's just-in-time compiler that is kept across invocations.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e64d777e1d8b4dd1a25024eaebcfedc00a6a907f/compiler/vm/vmjit.nim#L59"
+href="https://github.com/nim-works/nimskull/tree/255c9a6fdf23b6eeb029317e7e0b1a8a2488fa55/compiler/vm/vmjit.nim#L60"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L59" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -207,9 +209,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates code for the the given function and updates the execution environment. In addition, the function's table entry is updated with the bytecode position and execution requirements (i.e. register count). Make sure to only use <tt class="docutils literal"><span class="pre"><span class="Identifier">compile</span></span></tt> when you're sure the function wasn't generated yet
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e64d777e1d8b4dd1a25024eaebcfedc00a6a907f/compiler/vm/vmjit.nim#L308"
+href="https://github.com/nim-works/nimskull/tree/255c9a6fdf23b6eeb029317e7e0b1a8a2488fa55/compiler/vm/vmjit.nim#L348"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L308" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L348" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -221,9 +223,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates and emits code for the standalone expression <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e64d777e1d8b4dd1a25024eaebcfedc00a6a907f/compiler/vm/vmjit.nim#L212"
+href="https://github.com/nim-works/nimskull/tree/255c9a6fdf23b6eeb029317e7e0b1a8a2488fa55/compiler/vm/vmjit.nim#L249"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L212" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L249" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -235,9 +237,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates and emits code for the standalone top-level statement <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e64d777e1d8b4dd1a25024eaebcfedc00a6a907f/compiler/vm/vmjit.nim#L187"
+href="https://github.com/nim-works/nimskull/tree/255c9a6fdf23b6eeb029317e7e0b1a8a2488fa55/compiler/vm/vmjit.nim#L222"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L187" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L222" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -249,9 +251,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 The main entry point into the JIT code-generator. Retrieves the information required for executing <tt class="docutils literal"><span class="pre"><span class="Identifier">sym</span></span></tt>. A function table entry is created first if it doesn't exist yet, and the procedure is also generated via <tt class="docutils literal"><span class="pre"><span class="Identifier">compile</span></span></tt> if it wasn't already
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e64d777e1d8b4dd1a25024eaebcfedc00a6a907f/compiler/vm/vmjit.nim#L329"
+href="https://github.com/nim-works/nimskull/tree/255c9a6fdf23b6eeb029317e7e0b1a8a2488fa55/compiler/vm/vmjit.nim#L369"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L329" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L369" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -262,9 +264,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Registers the <tt class="docutils literal"><span class="pre"><span class="Identifier">callback</span></span></tt> with <tt class="docutils literal"><span class="pre"><span class="Identifier">c</span></span></tt>. After the <tt class="docutils literal"><span class="pre">registerCallback</span></tt> call, when a procedures of which the fully qualified identifier matches <tt class="docutils literal"><span class="pre"><span class="Identifier">pattern</span></span></tt> is added to the VM's function table, all invocations of the procedure at run-time will invoke the callback instead.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e64d777e1d8b4dd1a25024eaebcfedc00a6a907f/compiler/vm/vmjit.nim#L343"
+href="https://github.com/nim-works/nimskull/tree/255c9a6fdf23b6eeb029317e7e0b1a8a2488fa55/compiler/vm/vmjit.nim#L383"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L343" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L383" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -275,9 +277,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 If it hasn't been already, adds <tt class="docutils literal"><span class="pre"><span class="Identifier">prc</span></span></tt> to the set of procedures the JIT code-generator knowns about and sets up a function-table entry. <tt class="docutils literal"><span class="pre"><span class="Identifier">jit</span></span></tt> is required to not be in the process of generating code.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e64d777e1d8b4dd1a25024eaebcfedc00a6a907f/compiler/vm/vmjit.nim#L285"
+href="https://github.com/nim-works/nimskull/tree/255c9a6fdf23b6eeb029317e7e0b1a8a2488fa55/compiler/vm/vmjit.nim#L325"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L285" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L325" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
