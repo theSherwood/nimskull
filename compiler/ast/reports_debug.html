@@ -117,30 +117,8 @@ window.addEventListener('DOMContentLoaded', main);
   of rdbgVmExecTraceMinimal:
       vmgenExecMinimal*: tuple[info: TLineInfo, opc: TOpcode]
 
-  of rdbgVmCodeListing:
-      vmgenListing*: tuple[sym: PSym, ast: PNode, entries: seq[DebugVmCodeEntry]]
-
   else:
       nil">DebugReport</a></li>
-  <li><a class="reference" href="#DebugVmCodeEntry"
-    title="DebugVmCodeEntry = object
-  isTarget*: bool
-  info*: TLineInfo
-  pc*: int
-  idx*: int
-  case opc*: TOpcode
-  of opcConv, opcCast:
-      types*: tuple[tfrom, tto: PType]
-
-  of opcLdConst, opcAsgnConst:
-      ast*: PNode
-
-  else:
-      nil
-
-  ra*: int
-  rb*: int
-  rc*: int">DebugVmCodeEntry</a></li>
 
   </ul>
 </li>
@@ -160,7 +138,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/da8ce86ca57562185528ebfbd1beb295be293902/compiler/ast/reports_debug.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/e52904b2fe1a87db5c90e32fbf1e9355da48d4f1/compiler/ast/reports_debug.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_debug.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -174,7 +152,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="ast_types.html">ast_types</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="reports_base.html">reports_base</a>, <a class="reference external" href="report_enums.html">report_enums</a>, <a class="reference external" href="../front/in_options.html">../front/in_options</a>, <a class="reference external" href="../vm/vm_enums.html">../vm/vm_enums</a>
+<a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="reports_base.html">reports_base</a>, <a class="reference external" href="report_enums.html">report_enums</a>, <a class="reference external" href="../front/in_options.html">../front/in_options</a>, <a class="reference external" href="../vm/vm_enums.html">../vm/vm_enums</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -192,9 +170,6 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Keyword">of</span> <span class="Identifier">rdbgVmExecTraceMinimal</span><span class="Other">:</span>
       <span class="Identifier">vmgenExecMinimal</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">info</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">,</span> <span class="Identifier">opc</span><span class="Other">:</span> <a href="../vm/vm_enums.html#TOpcode"><span class="Identifier">TOpcode</span></a><span class="Other">]</span>
 
-  <span class="Keyword">of</span> <span class="Identifier">rdbgVmCodeListing</span><span class="Other">:</span>
-      <span class="Identifier">vmgenListing</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">sym</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">,</span> <span class="Identifier">ast</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">,</span> <span class="Identifier">entries</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="reports_debug.html#DebugVmCodeEntry"><span class="Identifier">DebugVmCodeEntry</span></a><span class="Other">]</span><span class="Other">]</span>
-
   <span class="Keyword">else</span><span class="Other">:</span>
       <span class="Keyword">nil</span>
 
@@ -203,39 +178,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/da8ce86ca57562185528ebfbd1beb295be293902/compiler/ast/reports_debug.nim#L36"
+href="https://github.com/nim-works/nimskull/tree/e52904b2fe1a87db5c90e32fbf1e9355da48d4f1/compiler/ast/reports_debug.nim#L19"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_debug.nim#L36" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="DebugVmCodeEntry">
-<dt><pre><a href="reports_debug.html#DebugVmCodeEntry"><span class="Identifier">DebugVmCodeEntry</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">isTarget</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
-  <span class="Identifier">info</span><span class="Operator">*</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a>
-  <span class="Identifier">pc</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
-  <span class="Identifier">idx</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
-  <span class="Keyword">case</span> <span class="Identifier">opc</span><span class="Operator">*</span><span class="Other">:</span> <a href="../vm/vm_enums.html#TOpcode"><span class="Identifier">TOpcode</span></a>
-  <span class="Keyword">of</span> <span class="Identifier">opcConv</span><span class="Other">,</span> <span class="Identifier">opcCast</span><span class="Other">:</span>
-      <span class="Identifier">types</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">tfrom</span><span class="Other">,</span> <span class="Identifier">tto</span><span class="Other">:</span> <a href="ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">]</span>
-
-  <span class="Keyword">of</span> <span class="Identifier">opcLdConst</span><span class="Other">,</span> <span class="Identifier">opcAsgnConst</span><span class="Other">:</span>
-      <span class="Identifier">ast</span><span class="Operator">*</span><span class="Other">:</span> <a href="ast_types.html#PNode"><span class="Identifier">PNode</span></a>
-
-  <span class="Keyword">else</span><span class="Other">:</span>
-      <span class="Keyword">nil</span>
-
-  <span class="Identifier">ra</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
-  <span class="Identifier">rb</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
-  <span class="Identifier">rc</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
-</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/da8ce86ca57562185528ebfbd1beb295be293902/compiler/ast/reports_debug.nim#L20"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_debug.nim#L20" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_debug.nim#L19" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -250,9 +195,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/da8ce86ca57562185528ebfbd1beb295be293902/compiler/ast/reports_debug.nim#L65"
+href="https://github.com/nim-works/nimskull/tree/e52904b2fe1a87db5c90e32fbf1e9355da48d4f1/compiler/ast/reports_debug.nim#L41"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_debug.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/reports_debug.nim#L41" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>

@@ -83,7 +83,6 @@ The process of identifying and removing errors from computer hardware or softwar
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">nimDebugUtils</span></span></tt></td><td>Allows for semantic analysis execution tracing and more</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">nimDebugUnreportedErrors</span></span></tt></td><td>Enable unreported error debugging</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">nimVMDebugExecute</span></span></tt></td><td>Print out every instruction executed by the VM</td></tr>
-<tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">nimVMDebugGenerate</span></span></tt></td><td>List VM code generated for every procedure called at compile-time</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">nimCompilerStacktraceHints</span></span></tt></td><td>Add extra information (node location + kind) to some</td></tr>
 </table><p><strong>Used when executing the compiler</strong></p>
 <p>(most of these require a compiler built with <tt class="docutils literal"><span class="pre"><span class="Identifier">nimDebugUtils</span></span></tt>)</p>
@@ -251,7 +250,8 @@ Specific details of processing for modules in presence of multiple compile-time 
 <p><tt class="docutils literal"><span class="pre"><span class="Operator">--</span><span class="Identifier">define</span><span class="Punctuation">:</span><span class="Identifier">nimShowMirOutput</span><span class="Operator">=</span><span class="Identifier">name</span></span></tt> prints the <tt class="docutils literal"><span class="pre"><span class="Identifier">CgNode</span></span></tt>-IR that is output by <tt class="docutils literal"><span class="pre"><span class="Identifier">cgirgen</span></span></tt>. This is IR that the code generators operate on.</p>
 <p>While all of the defines listed above can be used simultaneously, only a single occurrence of each is considered. Each further occurrence will override the respective name.</p>
 
-<h3 id="vm-codegen-and-execution">VM Codegen and Execution</h3><p>VM code generation prints all of the generated procedures. If this is not needed (which would be the majority of use cases) you can add <tt class="docutils literal"><span class="pre option">--define:expandVmListing=vmTarget</span></tt> to print only the code generated for this proc. For example (generated listing might not match exactly)</p>
+<h3 id="vm-codegen-and-execution">VM Codegen and Execution</h3><p>For echoing the VM bytecode generated for compile-time procedures and macros, <tt class="docutils literal"><span class="pre option">--define:expandVmListing=vmTarget</span></tt> can be passed to the compiler (no special build of the compiler is required). The bytecode for all routines of which the name is <tt class="docutils literal"><span class="pre"><span class="Identifier">vmTarget</span></span></tt> is then echoed to the standard output. Leaving <tt class="docutils literal"><span class="pre"><span class="Identifier">vmTarget</span></span></tt> empty enables echoing for <em>all</em> VM bytecode that is generated as part of compile-time execution.</p>
+<p>For example (generated listing might not match exactly)</p>
 <pre class="listing"><span class="Keyword">type</span>
   <span class="Identifier">Obj</span> <span class="Operator">=</span> <span class="Keyword">object</span>
     <span class="Identifier">charField</span><span class="Punctuation">:</span> <span class="Identifier">char</span>
@@ -261,7 +261,7 @@ Specific details of processing for modules in presence of multiple compile-time 
   <span class="Identifier">echo</span> <span class="Identifier">arg</span><span class="Operator">.</span><span class="Identifier">charField</span><span class="Operator">.</span><span class="Identifier">int</span> <span class="Operator">+</span> <span class="Identifier">arg</span><span class="Operator">.</span><span class="Identifier">intField</span>
 
 <span class="Keyword">static</span><span class="Punctuation">:</span>
-  <span class="Identifier">vmTarget</span><span class="Punctuation">(</span><span class="Identifier">Obj</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Punctuation">)</span></pre><pre class="listing"><span class="program">nim</span> <span class="option">c</span> <span class="option">--filenames:canonical</span> <span class="option">--define:expandVmListing=vmTarget</span> <span class="Identifier">file.nim</span></pre><pre class="listing">Code listing for the 'vmTarget' file.nim(6, 6)
+  <span class="Identifier">vmTarget</span><span class="Punctuation">(</span><span class="Identifier">Obj</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Punctuation">)</span></pre><pre class="listing"><span class="program">nim</span> <span class="option">c</span> <span class="option">--filenames:canonical</span> <span class="option">--define:expandVmListing=vmTarget</span> <span class="Identifier">file.nim</span></pre><pre class="listing">Code listing for 'vmTarget' file.nim(6, 6)
   
   LdConst      r3     $     1279                system.nim(2005, 30)
   LdObj        r6     r1     r0                 file.nim(7, 11)
