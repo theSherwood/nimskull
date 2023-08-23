@@ -107,8 +107,8 @@ window.addEventListener('DOMContentLoaded', main);
       <ul class="simple nested-toc-section">canonicalize
       <li><a class="reference" href="#canonicalize%2CModuleGraph%2CIdGenerator%2CPSym%2CPNode%2Cset%5BGenOption%5D"
     title="canonicalize(graph: ModuleGraph; idgen: IdGenerator; owner: PSym; body: PNode;
-             options: set[GenOption]): CgNode">canonicalize(graph: ModuleGraph; idgen: IdGenerator; owner: PSym; body: PNode;
-             options: set[GenOption]): CgNode</a></li>
+             options: set[GenOption]): Body">canonicalize(graph: ModuleGraph; idgen: IdGenerator; owner: PSym; body: PNode;
+             options: set[GenOption]): Body</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">echoInput
@@ -122,8 +122,8 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">echoOutput
-      <li><a class="reference" href="#echoOutput%2CConfigRef%2CPSym%2CCgNode"
-    title="echoOutput(config: ConfigRef; owner: PSym; body: CgNode)">echoOutput(config: ConfigRef; owner: PSym; body: CgNode)</a></li>
+      <li><a class="reference" href="#echoOutput%2CConfigRef%2CPSym%2CBody"
+    title="echoOutput(config: ConfigRef; owner: PSym; body: Body)">echoOutput(config: ConfigRef; owner: PSym; body: Body)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">rewriteGlobalDefs
@@ -145,7 +145,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e83f27d1142fd02a89560733f99959819b6e1ec6/compiler/mir/mirbridge.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/d202855a4494f7b902a0e5f3eba7a64f00b803b2/compiler/mir/mirbridge.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -163,14 +163,14 @@ class="link-seesrc" target="_blank">Source</a>
 <dl class="item">
 <div id="canonicalize,ModuleGraph,IdGenerator,PSym,PNode,set[GenOption]">
 <dt><pre><span class="Keyword">proc</span> <a href="#canonicalize%2CModuleGraph%2CIdGenerator%2CPSym%2CPNode%2Cset%5BGenOption%5D"><span class="Identifier">canonicalize</span></a><span class="Other">(</span><span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">;</span> <span class="Identifier">owner</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span>
-                  <span class="Identifier">body</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span> <span class="Identifier">options</span><span class="Other">:</span> <span class="Identifier">set</span><span class="Other">[</span><a href="mirgen.html#GenOption"><span class="Identifier">GenOption</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="../backend/cgir.html#CgNode"><span class="Identifier">CgNode</span></a> {.
+                  <span class="Identifier">body</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span> <span class="Identifier">options</span><span class="Other">:</span> <span class="Identifier">set</span><span class="Other">[</span><a href="mirgen.html#GenOption"><span class="Identifier">GenOption</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="../backend/cgir.html#Body"><span class="Identifier">Body</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Legacy routine. Translates the body <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> of the procedure <tt class="docutils literal"><span class="pre"><span class="Identifier">owner</span></span></tt> to MIR code, and the MIR code to <tt class="docutils literal"><span class="pre">CgNode</span></tt> IR.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e83f27d1142fd02a89560733f99959819b6e1ec6/compiler/mir/mirbridge.nim#L170"
+href="https://github.com/nim-works/nimskull/tree/d202855a4494f7b902a0e5f3eba7a64f00b803b2/compiler/mir/mirbridge.nim#L170"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L170" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -183,7 +183,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 If requested via the define, renders the input AST <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> and writes the result out through <tt class="docutils literal"><span class="pre">config.writeLine</span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e83f27d1142fd02a89560733f99959819b6e1ec6/compiler/mir/mirbridge.nim#L59"
+href="https://github.com/nim-works/nimskull/tree/d202855a4494f7b902a0e5f3eba7a64f00b803b2/compiler/mir/mirbridge.nim#L59"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L59" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -196,20 +196,20 @@ class="link-seesrc" target="_blank">Source</a>
 
 If requested via the define, renders the <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt> and writes the result out through <tt class="docutils literal"><span class="pre">config.writeln</span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e83f27d1142fd02a89560733f99959819b6e1ec6/compiler/mir/mirbridge.nim#L66"
+href="https://github.com/nim-works/nimskull/tree/d202855a4494f7b902a0e5f3eba7a64f00b803b2/compiler/mir/mirbridge.nim#L66"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L66" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="echoOutput,ConfigRef,PSym,CgNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#echoOutput%2CConfigRef%2CPSym%2CCgNode"><span class="Identifier">echoOutput</span></a><span class="Other">(</span><span class="Identifier">config</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">owner</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <a href="../backend/cgir.html#CgNode"><span class="Identifier">CgNode</span></a><span class="Other">)</span> {.
+<div id="echoOutput,ConfigRef,PSym,Body">
+<dt><pre><span class="Keyword">proc</span> <a href="#echoOutput%2CConfigRef%2CPSym%2CBody"><span class="Identifier">echoOutput</span></a><span class="Other">(</span><span class="Identifier">config</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">owner</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <a href="../backend/cgir.html#Body"><span class="Identifier">Body</span></a><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 If requested via the define, renders the output IR <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> and writes the result out through <tt class="docutils literal"><span class="pre">config.writeLine</span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e83f27d1142fd02a89560733f99959819b6e1ec6/compiler/mir/mirbridge.nim#L73"
+href="https://github.com/nim-works/nimskull/tree/d202855a4494f7b902a0e5f3eba7a64f00b803b2/compiler/mir/mirbridge.nim#L73"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L73" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -224,7 +224,7 @@ class="link-seesrc" target="_blank">Source</a>
 <p>If <tt class="docutils literal"><span class="pre"><span class="Identifier">outermost</span></span></tt> is true, only definitions in the outermost scope will be removed. This is a hack, but it's currently required for turning module-level AST into a procedure in a mostly transparent way.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e83f27d1142fd02a89560733f99959819b6e1ec6/compiler/mir/mirbridge.nim#L80"
+href="https://github.com/nim-works/nimskull/tree/d202855a4494f7b902a0e5f3eba7a64f00b803b2/compiler/mir/mirbridge.nim#L80"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L80" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -245,7 +245,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-22 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-23 00:00:00 UTC</small>
       </div>
     </div>
   </div>
