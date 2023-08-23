@@ -43,7 +43,7 @@ term	pegs.html#term,Peg	pegs: term(p: Peg): string
 ch	pegs.html#ch,Peg	pegs: ch(p: Peg): char	
 charChoice	pegs.html#charChoice,Peg	pegs: charChoice(p: Peg): ref set[char]	
 nt	pegs.html#nt,Peg	pegs: nt(p: Peg): NonTerminal	
-index	pegs.html#index,Peg	pegs: index(p: Peg): range[-20 .. 20 - 1]	
+index	pegs.html#index,Peg	pegs: index(p: Peg): range[-MaxSubpatterns .. MaxSubpatterns - 1]	
 items	pegs.html#items.i,Peg	pegs: items(p: Peg): Peg	
 pairs	pegs.html#pairs.i,Peg	pegs: pairs(p: Peg): (int, Peg)	
 name	pegs.html#name,NonTerminal	pegs: name(nt: NonTerminal): string	
@@ -90,7 +90,7 @@ ident	pegs.html#ident.t	pegs: ident(): Peg
 natural	pegs.html#natural.t	pegs: natural(): Peg	
 `$`	pegs.html#$,Peg	pegs: `$`(r: Peg): string	
 Captures	pegs.html#Captures	pegs: Captures	
-bounds	pegs.html#bounds,Captures,range[]	pegs: bounds(c: Captures; i: range[0 .. 20 - 1]): tuple[first, last: int]	
+bounds	pegs.html#bounds,Captures,range[]	pegs: bounds(c: Captures; i: range[0 .. MaxSubpatterns - 1]): tuple[first, last: int]	
 rawMatch	pegs.html#rawMatch,string,Peg,int,Captures	pegs: rawMatch(s: string; p: Peg; start: int; c: var Captures): int	
 eventParser	pegs.html#eventParser.t,untyped,untyped	pegs: eventParser(pegAst, handlers: untyped): (proc (s: string): int)	
 matchLen	pegs.html#matchLen,string,Peg,openArray[string],int	pegs: matchLen(s: string; pattern: Peg; matches: var openArray[string]; start = 0): int	
