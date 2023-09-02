@@ -181,6 +181,7 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference" id="statements-and-expressions-if-statement_toc" href="#statements-and-expressions-if-statement">If statement</a></li>
 <li><a class="reference" id="statements-and-expressions-case-statement_toc" href="#statements-and-expressions-case-statement">Case statement</a></li>
 <li><a class="reference" id="statements-and-expressions-when-statement_toc" href="#statements-and-expressions-when-statement">When statement</a></li>
+<li><a class="reference" id="statements-and-expressions-when-statement-inside-nimobject_toc" href="#statements-and-expressions-when-statement-inside-nimobject">When statement inside <tt class="docutils literal"><span class="pre"><span class="Keyword">object</span></span></tt></a></li>
 <li><a class="reference" id="statements-and-expressions-when-nimvm-statement_toc" href="#statements-and-expressions-when-nimvm-statement">When nimvm statement</a></li>
 <li><a class="reference" id="statements-and-expressions-return-statement_toc" href="#statements-and-expressions-return-statement">Return statement</a></li>
 <li><a class="reference" id="statements-and-expressions-yield-statement_toc" href="#statements-and-expressions-yield-statement">Yield statement</a></li>
@@ -351,14 +352,14 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/90ce9335d6e20dcdab3daca7685ca16e1d9bd520/doc/manual.rst#L1"
+href="https://github.com/nim-works/nimskull/tree/0121a7f4abfc802e3709fadaa0c3983dc15c94a8/doc/manual.rst#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/doc/manual.rst#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20953</td></tr>
+  <p class="module-desc"><table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.20954</td></tr>
 </tbody></table><blockquote><p>&quot;Complexity&quot; seems to be a lot like &quot;energy&quot;: you can transfer it from the end-user to one/some of the other players, but the total amount seems to remain pretty much constant for a given task. -- Ran</p></blockquote>
 
 <h1><a class="toc-backref" id="about-this-document" href="#about-this-document">About this document</a></h1><p><strong>Note</strong>: This document is a draft! Several of  NimSkull's features may need more precise wording. This manual is constantly evolving.</p>
@@ -2000,7 +2001,14 @@ Use of pragmas is not supporting during let, var, or const tuple unpacking. This
 <li>The statements do not open a new scope.</li>
 <li>The statements that belong to the expression that evaluated to true are translated by the compiler, the other statements are not checked for semantics! However, each condition is checked for semantics.</li>
 </ul>
-<p>The <tt class="docutils literal"><span class="pre"><span class="Keyword">when</span></span></tt> statement enables conditional compilation techniques. As a special syntactic extension, the <tt class="docutils literal"><span class="pre"><span class="Keyword">when</span></span></tt> construct is also available within <tt class="docutils literal"><span class="pre"><span class="Keyword">object</span></span></tt> definitions.</p>
+<p>The <tt class="docutils literal"><span class="pre"><span class="Keyword">when</span></span></tt> statement enables conditional compilation techniques.</p>
+
+<h2><a class="toc-backref" id="statements-and-expressions-when-statement-inside-nimobject" href="#statements-and-expressions-when-statement-inside-nimobject">When statement inside <tt class="docutils literal"><span class="pre"><span class="Keyword">object</span></span></tt></a></h2><p>As a special syntactic extension, the <tt class="docutils literal"><span class="pre"><span class="Keyword">when</span></span></tt> construct is also available within <tt class="docutils literal"><span class="pre"><span class="Keyword">object</span></span></tt> definitions.</p>
+<p>At which point the <tt class="docutils literal"><span class="pre"><span class="Keyword">when</span></span></tt> construct is evaluated and collapsed depends on whether the object is <em>generic</em>:</p>
+<ul class="simple"><li>if it is not, the conditions are evaluated and a branch is chosen when inside the definition</li>
+<li>if it is, all condition expressions are treated as generic expressions that are only instantiated, and a branch chosen, when the object type is instantiated</li>
+</ul>
+<p>Same as for <tt class="docutils literal"><span class="pre"><span class="Keyword">when</span></span></tt> statements outside of <tt class="docutils literal"><span class="pre"><span class="Keyword">object</span></span></tt> definitions, each condition is checked for semantics and evaluated.</p>
 
 <h2><a class="toc-backref" id="statements-and-expressions-when-nimvm-statement" href="#statements-and-expressions-when-nimvm-statement">When nimvm statement</a></h2><p><tt class="docutils literal"><span class="pre"><span class="Identifier">nimvm</span></span></tt> is a special symbol that may be used as the expression of a <tt class="docutils literal"><span class="pre"><span class="Keyword">when</span> <span class="Identifier">nimvm</span></span></tt> statement to differentiate the execution path between compile-time and the executable.</p>
 <div class="admonition admonition-info"><span class="admonition-info-text"><b>Note:</b></span>
