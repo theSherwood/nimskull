@@ -114,9 +114,19 @@ window.addEventListener('DOMContentLoaded', main);
     title="evalOp(m: TMagic; n, a, b, c: PNode; idgen: IdGenerator; g: ModuleGraph): PNode">evalOp(m: TMagic; n, a, b, c: PNode; idgen: IdGenerator; g: ModuleGraph): PNode</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">foldInAst
+      <li><a class="reference" href="#foldInAst%2CPSym%2CPNode%2CIdGenerator%2CModuleGraph"
+    title="foldInAst(m: PSym; n: PNode; idgen: IdGenerator; g: ModuleGraph): PNode">foldInAst(m: PSym; n: PNode; idgen: IdGenerator; g: ModuleGraph): PNode</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">getConstExpr
       <li><a class="reference" href="#getConstExpr%2CPSym%2CPNode%2CIdGenerator%2CModuleGraph"
     title="getConstExpr(m: PSym; n: PNode; idgen: IdGenerator; g: ModuleGraph): PNode">getConstExpr(m: PSym; n: PNode; idgen: IdGenerator; g: ModuleGraph): PNode</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">getConstExprError
+      <li><a class="reference" href="#getConstExprError%2CPSym%2CPNode%2CIdGenerator%2CModuleGraph"
+    title="getConstExprError(m: PSym; n: PNode; idgen: IdGenerator; g: ModuleGraph): PNode">getConstExprError(m: PSym; n: PNode; idgen: IdGenerator; g: ModuleGraph): PNode</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">leValueConv
@@ -152,7 +162,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/cc253ae4f35c4de2bd1d58bb98f78edfe50479b2/compiler/sem/semfold.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -174,9 +184,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 creates a type representing an error state
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/cc253ae4f35c4de2bd1d58bb98f78edfe50479b2/compiler/sem/semfold.nim#L45"
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L104"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L104" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -188,9 +198,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/cc253ae4f35c4de2bd1d58bb98f78edfe50479b2/compiler/sem/semfold.nim#L159"
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L217"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L159" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L217" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="foldInAst,PSym,PNode,IdGenerator,ModuleGraph">
+<dt><pre><span class="Keyword">proc</span> <a href="#foldInAst%2CPSym%2CPNode%2CIdGenerator%2CModuleGraph"><span class="Identifier">foldInAst</span></a><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">;</span> <span class="Identifier">g</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Performs constant folding on all expressions appearing in the statement or expression <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>. If nothing changed, <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> is returned, a new AST otherwise.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L969"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L969" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -203,9 +227,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/cc253ae4f35c4de2bd1d58bb98f78edfe50479b2/compiler/sem/semfold.nim#L567"
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L625"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L567" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L625" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="getConstExprError,PSym,PNode,IdGenerator,ModuleGraph">
+<dt><pre><span class="Keyword">proc</span> <a href="#getConstExprError%2CPSym%2CPNode%2CIdGenerator%2CModuleGraph"><span class="Identifier">getConstExprError</span></a><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span> <span class="Identifier">idgen</span><span class="Other">:</span> <a href="../ast/ast_idgen.html#IdGenerator"><span class="Identifier">IdGenerator</span></a><span class="Other">;</span> <span class="Identifier">g</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">ReadEnvEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+If <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> is an error, returns the error. Otherwise returns the folded value, or nil, if <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> isn't constant.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L981"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L981" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -215,9 +253,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/cc253ae4f35c4de2bd1d58bb98f78edfe50479b2/compiler/sem/semfold.nim#L359"
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L417"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L359" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L417" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -228,9 +266,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/cc253ae4f35c4de2bd1d58bb98f78edfe50479b2/compiler/sem/semfold.nim#L65"
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L124"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -242,9 +280,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/cc253ae4f35c4de2bd1d58bb98f78edfe50479b2/compiler/sem/semfold.nim#L56"
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L115"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L56" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L115" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -255,9 +293,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/cc253ae4f35c4de2bd1d58bb98f78edfe50479b2/compiler/sem/semfold.nim#L73"
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L132"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L73" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L132" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -268,9 +306,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/cc253ae4f35c4de2bd1d58bb98f78edfe50479b2/compiler/sem/semfold.nim#L559"
+href="https://github.com/nim-works/nimskull/tree/b723dc92042450ad50a94a06201c77cb51c73bfa/compiler/sem/semfold.nim#L617"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L559" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semfold.nim#L617" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
