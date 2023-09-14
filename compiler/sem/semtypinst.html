@@ -124,7 +124,12 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">checkConstructedType
+      <ul class="simple nested-toc-section">addInheritedFields
+      <li><a class="reference" href="#addInheritedFields%2CIntSet%2CPType"
+    title="addInheritedFields(check: var IntSet; obj: PType): int">addInheritedFields(check: var IntSet; obj: PType): int</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">checkConstructedType
       <li><a class="reference" href="#checkConstructedType%2CConfigRef%2CTLineInfo%2CPType"
     title="checkConstructedType(conf: ConfigRef; info: TLineInfo; typ: PType)">checkConstructedType(conf: ConfigRef; info: TLineInfo; typ: PType)</a></li>
 
@@ -167,11 +172,6 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">prepareNode
       <li><a class="reference" href="#prepareNode%2CTReplTypeVars%2CPNode"
     title="prepareNode(cl: var TReplTypeVars; n: PNode): PNode">prepareNode(cl: var TReplTypeVars; n: PNode): PNode</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">recomputeFieldPositions
-      <li><a class="reference" href="#recomputeFieldPositions%2CPType%2CPNode%2Cint"
-    title="recomputeFieldPositions(t: PType; obj: PNode; currPosition: var int)">recomputeFieldPositions(t: PType; obj: PNode; currPosition: var int)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">replaceTypeParamsInType
@@ -218,7 +218,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -243,9 +243,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L93"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L124"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L93" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -264,9 +264,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L97"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L128"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L97" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L128" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -275,6 +275,19 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
+<div id="addInheritedFields,IntSet,PType">
+<dt><pre><span class="Keyword">func</span> <a href="#addInheritedFields%2CIntSet%2CPType"><span class="Identifier">addInheritedFields</span></a><span class="Other">(</span><span class="Identifier">check</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">IntSet</span><span class="Other">;</span> <span class="Identifier">obj</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Counts the number of fields in <tt class="docutils literal"><span class="pre"><span class="Identifier">obj</span></span></tt> (and its base types) and returns it. In addition, adds the IDs of all field names in <tt class="docutils literal"><span class="pre"><span class="Identifier">obj</span></span></tt> and its base types to <tt class="docutils literal"><span class="pre"><span class="Identifier">check</span></span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L86"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L86" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="checkConstructedType,ConfigRef,TLineInfo,PType">
 <dt><pre><span class="Keyword">proc</span> <a href="#checkConstructedType%2CConfigRef%2CTLineInfo%2CPType"><span class="Identifier">checkConstructedType</span></a><span class="Other">(</span><span class="Identifier">conf</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
@@ -282,9 +295,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L48"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L51"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L48" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L51" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -294,9 +307,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L533"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L661"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L533" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L661" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -307,9 +320,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Produces the instantiated type for the generic type <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt>, using the bindings provided by <tt class="docutils literal"><span class="pre"><span class="Identifier">pt</span></span></tt>. All type variables used by <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt> must have <em>concrete</em> types bound to them -- both meta types and missing bindings are disallowed and will result in an instantiation failure.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L906"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L991"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L906" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L991" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -319,9 +332,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L112"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L143"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L112" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L143" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -332,9 +345,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L803"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L904"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L803" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L904" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -345,9 +358,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Instantiates all types referenced in the generic AST <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">pt</span></span></tt> provides the bindings for all used type variables (i.e., generic parameters and type-classes) -- missing bindings result in an error.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L811"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L912"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L811" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L912" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -358,9 +371,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L404"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L467"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L404" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L467" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -371,9 +384,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L116"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L147"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L116" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L147" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -386,22 +399,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Because of how late-bound static parameters are currently implemented, <tt class="docutils literal"><span class="pre">prepareNode</span></tt> is also responsible for replacing sub-expression of type <tt class="docutils literal"><span class="pre">tyStatic</span></tt> with the computed value.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L168"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L199"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="recomputeFieldPositions,PType,PNode,int">
-<dt><pre><span class="Keyword">proc</span> <a href="#recomputeFieldPositions%2CPType%2CPNode%2Cint"><span class="Identifier">recomputeFieldPositions</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">obj</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span> <span class="Identifier">currPosition</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">int</span><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L890"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L890" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L199" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -415,9 +415,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>If something was replaced, the returned type is <strong>not</strong> a proper instantiated one and thus must not be used in contexts where a proper type is expected.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L721"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L822"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L721" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L822" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -430,9 +430,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Use this procedure instead of <tt class="docutils literal"><span class="pre">instantiateTypesInBody</span></tt> when it's not guaranteed whether all type variables have been resolved.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L822"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L923"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L822" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L923" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -443,9 +443,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L138"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L169"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L138" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L169" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -455,9 +455,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L552"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L680"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L552" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L680" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -471,9 +471,9 @@ Tries to resolve the generic type <tt class="docutils literal"><span class="pre"
 </dl>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L982"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L1063"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L982" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L1063" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -488,9 +488,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ce91535b462e0bf4a10ed3c6444eb6b1629ef657/compiler/sem/semtypinst.nim#L926"
+href="https://github.com/nim-works/nimskull/tree/c756da6494dac6c0cdb1059e35175014822c0f3e/compiler/sem/semtypinst.nim#L1007"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L926" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypinst.nim#L1007" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
