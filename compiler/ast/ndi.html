@@ -110,7 +110,7 @@ window.addEventListener('DOMContentLoaded', main);
   f: File
   buf: string
   filename: AbsoluteFile
-  syms: seq[tuple[s: PSym, name: string]]">NdiFile</a></li>
+  mappings: seq[Mapping]">NdiFile</a></li>
 
   </ul>
 </li>
@@ -134,8 +134,12 @@ window.addEventListener('DOMContentLoaded', main);
   <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
   <ul class="simple simple-toc-section">
       <ul class="simple nested-toc-section">writeMangledName
-      <li><a class="reference" href="#writeMangledName.t%2CNdiFile%2CPSym%2Cstring%2CConfigRef"
-    title="writeMangledName(f: NdiFile; s: PSym; name: string; conf: ConfigRef)">writeMangledName(f: NdiFile; s: PSym; name: string; conf: ConfigRef)</a></li>
+      <li><a class="reference" href="#writeMangledName.t%2CNdiFile%2CTLineInfo%2CPIdent%2Cstring%2CConfigRef%2Cint"
+    title="writeMangledName(f: NdiFile; info: TLineInfo; orig: PIdent; n: string;
+                 conf: ConfigRef; id = 0)">writeMangledName(f: NdiFile; info: TLineInfo; orig: PIdent; n: string;
+                 conf: ConfigRef; id = 0)</a></li>
+  <li><a class="reference" href="#writeMangledName.t%2CNdiFile%2CPSym%2Cstring%2CConfigRef"
+    title="writeMangledName(f: NdiFile; s: PSym; n: string; conf: ConfigRef)">writeMangledName(f: NdiFile; s: PSym; n: string; conf: ConfigRef)</a></li>
 
   </ul>
 
@@ -146,7 +150,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/269890e694ca56395af90cef0c4812a9d4f6c070/compiler/ast/ndi.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/d8c750532c80f728dbde2b2700e941cce554dfcd/compiler/ast/ndi.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ndi.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -157,7 +161,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="ast.html">ast</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../utils/ropes.html">../utils/ropes</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>
+<a class="reference external" href="ast.html">ast</a>, <a class="reference external" href="lineinfos.html">lineinfos</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../utils/pathutils.html">../utils/pathutils</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -168,15 +172,15 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">f</span><span class="Other">:</span> <span class="Identifier">File</span>
   <span class="Identifier">buf</span><span class="Other">:</span> <span class="Identifier">string</span>
   <span class="Identifier">filename</span><span class="Other">:</span> <a href="../utils/pathutils.html#AbsoluteFile"><span class="Identifier">AbsoluteFile</span></a>
-  <span class="Identifier">syms</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">s</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">,</span> <span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">]</span><span class="Other">]</span>
+  <span class="Identifier">mappings</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">Mapping</span><span class="Other">]</span>
 </pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/269890e694ca56395af90cef0c4812a9d4f6c070/compiler/ast/ndi.nim#L27"
+href="https://github.com/nim-works/nimskull/tree/d8c750532c80f728dbde2b2700e941cce554dfcd/compiler/ast/ndi.nim#L35"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ndi.nim#L27" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ndi.nim#L35" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -192,9 +196,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/269890e694ca56395af90cef0c4812a9d4f6c070/compiler/ast/ndi.nim#L52"
+href="https://github.com/nim-works/nimskull/tree/d8c750532c80f728dbde2b2700e941cce554dfcd/compiler/ast/ndi.nim#L72"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ndi.nim#L52" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ndi.nim#L72" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -205,9 +209,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/269890e694ca56395af90cef0c4812a9d4f6c070/compiler/ast/ndi.nim#L46"
+href="https://github.com/nim-works/nimskull/tree/d8c750532c80f728dbde2b2700e941cce554dfcd/compiler/ast/ndi.nim#L66"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ndi.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ndi.nim#L66" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -216,15 +220,30 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="18">
 <h1><a class="toc-backref" href="#18">Templates</a></h1>
 <dl class="item">
-<div id="writeMangledName.t,NdiFile,PSym,string,ConfigRef">
-<dt><pre><span class="Keyword">template</span> <a href="#writeMangledName.t%2CNdiFile%2CPSym%2Cstring%2CConfigRef"><span class="Identifier">writeMangledName</span></a><span class="Other">(</span><span class="Identifier">f</span><span class="Other">:</span> <a href="ndi.html#NdiFile"><span class="Identifier">NdiFile</span></a><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">conf</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">)</span></pre></dt>
+<div id="writeMangledName.t,NdiFile,TLineInfo,PIdent,string,ConfigRef,int">
+<dt><pre><span class="Keyword">template</span> <a href="#writeMangledName.t%2CNdiFile%2CTLineInfo%2CPIdent%2Cstring%2CConfigRef%2Cint"><span class="Identifier">writeMangledName</span></a><span class="Other">(</span><span class="Identifier">f</span><span class="Other">:</span> <a href="ndi.html#NdiFile"><span class="Identifier">NdiFile</span></a><span class="Other">;</span> <span class="Identifier">info</span><span class="Other">:</span> <a href="lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">;</span> <span class="Identifier">orig</span><span class="Other">:</span> <a href="idents.html#PIdent"><span class="Identifier">PIdent</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
+                          <span class="Identifier">conf</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">;</span> <span class="Identifier">id</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">)</span></pre></dt>
 <dd>
 
+<p>If <tt class="docutils literal"><span class="pre"><span class="Identifier">f</span></span></tt> is enabled, registers a symbol-to-name mapping entry where <tt class="docutils literal"><span class="pre"><span class="Identifier">info</span></span></tt> is the definition's source position, <tt class="docutils literal"><span class="pre"><span class="Identifier">orig</span></span></tt> the user-provided symbol name, and <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> the mangled name. Nothing is written to disk yet.</p>
+<p><tt class="docutils literal"><span class="pre"><span class="Identifier">id</span></span></tt> is an additional value meant for debugging purposes that is stored toghether with the mapping but is not written to the file.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/269890e694ca56395af90cef0c4812a9d4f6c070/compiler/ast/ndi.nim#L43"
+href="https://github.com/nim-works/nimskull/tree/d8c750532c80f728dbde2b2700e941cce554dfcd/compiler/ast/ndi.nim#L51"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ndi.nim#L43" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ndi.nim#L51" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="writeMangledName.t,NdiFile,PSym,string,ConfigRef">
+<dt><pre><span class="Keyword">template</span> <a href="#writeMangledName.t%2CNdiFile%2CPSym%2Cstring%2CConfigRef"><span class="Identifier">writeMangledName</span></a><span class="Other">(</span><span class="Identifier">f</span><span class="Other">:</span> <a href="ndi.html#NdiFile"><span class="Identifier">NdiFile</span></a><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <a href="ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">conf</span><span class="Other">:</span> <a href="../front/options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a><span class="Other">)</span></pre></dt>
+<dd>
+
+Same as the other <tt class="docutils literal"><span class="pre">writeMangledName</span></tt> overload, but takes the <tt class="docutils literal"><span class="pre">TLineInfo</span></tt> and <tt class="docutils literal"><span class="pre">PIdent</span></tt> from the symbol <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/d8c750532c80f728dbde2b2700e941cce554dfcd/compiler/ast/ndi.nim#L61"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ndi.nim#L61" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
