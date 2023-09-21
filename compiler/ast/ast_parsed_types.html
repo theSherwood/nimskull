@@ -176,25 +176,24 @@ window.addEventListener('DOMContentLoaded', main);
   pnkUInt64Lit, pnkFloatLit, pnkFloat32Lit, pnkFloat64Lit, pnkFloat128Lit,
   pnkStrLit, pnkRStrLit, pnkTripleStrLit, pnkNilLit, pnkCustomLit, pnkAccQuoted,
   pnkCall, pnkCommand, pnkCallStrLit, pnkInfix, pnkPrefix, pnkPostfix,
-  pnkExprEqExpr, pnkExprColonExpr, pnkIdentDefs, pnkConstDef, pnkVarTuple,
-  pnkPar, pnkSqrBracket, pnkCurly, pnkTupleConstr, pnkObjConstr, pnkTableConstr,
-  pnkSqrBracketExpr, pnkCurlyExpr, pnkPragmaExpr, pnkPragma, pnkPragmaBlock,
-  pnkDotExpr, pnkIfExpr, pnkIfStmt, pnkElifBranch, pnkElifExpr, pnkElse,
-  pnkElseExpr, pnkCaseStmt, pnkOfBranch, pnkWhenExpr, pnkWhenStmt, pnkForStmt,
-  pnkWhileStmt, pnkBlockExpr, pnkBlockStmt, pnkDiscardStmt, pnkContinueStmt,
-  pnkBreakStmt, pnkReturnStmt, pnkRaiseStmt, pnkYieldStmt, pnkTryStmt,
-  pnkExceptBranch, pnkFinally, pnkDefer, pnkLambda, pnkDo, pnkBind, pnkBindStmt,
-  pnkMixinStmt, pnkCast, pnkStaticStmt, pnkAsgn, pnkGenericParams,
-  pnkFormalParams, pnkStmtList, pnkStmtListExpr, pnkImportStmt,
-  pnkImportExceptStmt, pnkFromStmt, pnkIncludeStmt, pnkExportStmt,
-  pnkExportExceptStmt, pnkConstSection, pnkLetSection, pnkVarSection,
-  pnkProcDef, pnkFuncDef, pnkMethodDef, pnkConverterDef, pnkIteratorDef,
-  pnkMacroDef, pnkTemplateDef, pnkTypeSection, pnkTypeDef, pnkEnumTy,
-  pnkEnumFieldDef, pnkObjectTy, pnkTupleTy, pnkProcTy, pnkIteratorTy,
-  pnkRecList, pnkRecCase, pnkRecWhen, pnkTypeOfExpr, pnkRefTy, pnkVarTy,
-  pnkPtrTy, pnkStaticTy, pnkDistinctTy, pnkMutableTy, pnkTupleClassTy,
-  pnkTypeClassTy, pnkOfInherit, pnkArgList, pnkWith, pnkWithout, pnkAsmStmt,
-  pnkCommentStmt, pnkUsingStmt">ParsedNodeKind</a></li>
+  pnkExprEqExpr, pnkExprColonExpr, pnkPar, pnkSqrBracket, pnkCurly,
+  pnkTupleConstr, pnkObjConstr, pnkTableConstr, pnkSqrBracketExpr, pnkCurlyExpr,
+  pnkPragmaExpr, pnkPragma, pnkPragmaBlock, pnkDotExpr, pnkIfExpr, pnkIfStmt,
+  pnkElifBranch, pnkElifExpr, pnkElse, pnkElseExpr, pnkCaseStmt, pnkOfBranch,
+  pnkWhenExpr, pnkWhenStmt, pnkForStmt, pnkWhileStmt, pnkBlockExpr,
+  pnkBlockStmt, pnkDiscardStmt, pnkContinueStmt, pnkBreakStmt, pnkReturnStmt,
+  pnkRaiseStmt, pnkYieldStmt, pnkTryStmt, pnkExceptBranch, pnkFinally, pnkDefer,
+  pnkLambda, pnkDo, pnkBind, pnkBindStmt, pnkMixinStmt, pnkCast, pnkStaticStmt,
+  pnkAsgn, pnkGenericParams, pnkFormalParams, pnkStmtList, pnkStmtListExpr,
+  pnkImportStmt, pnkImportExceptStmt, pnkFromStmt, pnkIncludeStmt,
+  pnkExportStmt, pnkExportExceptStmt, pnkTypeSection, pnkConstSection,
+  pnkLetSection, pnkVarSection, pnkProcDef, pnkFuncDef, pnkMethodDef,
+  pnkConverterDef, pnkIteratorDef, pnkMacroDef, pnkTemplateDef, pnkIdentDefs,
+  pnkConstDef, pnkTypeDef, pnkVarTuple, pnkEnumTy, pnkEnumFieldDef, pnkObjectTy,
+  pnkTupleTy, pnkProcTy, pnkIteratorTy, pnkRecList, pnkRecCase, pnkRecWhen,
+  pnkTypeOfExpr, pnkRefTy, pnkVarTy, pnkPtrTy, pnkStaticTy, pnkDistinctTy,
+  pnkMutableTy, pnkTupleClassTy, pnkTypeClassTy, pnkOfInherit, pnkArgList,
+  pnkWith, pnkWithout, pnkAsmStmt, pnkCommentStmt, pnkUsingStmt">ParsedNodeKind</a></li>
   <li><a class="reference" href="#ParsedToken"
     title="ParsedToken = object
   line*: uint16
@@ -224,12 +223,17 @@ window.addEventListener('DOMContentLoaded', main);
   <li><a class="reference" href="#pnkCallKinds"
     title="pnkCallKinds = {pnkCall, pnkInfix, pnkPrefix, pnkPostfix, pnkCommand,
                 pnkCallStrLit}">pnkCallKinds</a></li>
+  <li><a class="reference" href="#pnkDeclarativeDefs"
+    title="pnkDeclarativeDefs = {pnkProcDef, pnkFuncDef, pnkMethodDef, pnkIteratorDef,
+                      pnkConverterDef}">pnkDeclarativeDefs</a></li>
   <li><a class="reference" href="#pnkFloatKinds"
     title="pnkFloatKinds = {pnkFloatLit..pnkFloat128Lit}">pnkFloatKinds</a></li>
   <li><a class="reference" href="#pnkIntKinds"
     title="pnkIntKinds = {pnkCharLit..pnkUInt64Lit}">pnkIntKinds</a></li>
   <li><a class="reference" href="#pnkParsedKindsWithSons"
     title="pnkParsedKindsWithSons = {pnkCall..pnkUsingStmt}">pnkParsedKindsWithSons</a></li>
+  <li><a class="reference" href="#pnkRoutineDefs"
+    title="pnkRoutineDefs = {pnkProcDef..pnkTemplateDef}">pnkRoutineDefs</a></li>
   <li><a class="reference" href="#pnkStrKinds"
     title="pnkStrKinds = {pnkStrLit..pnkTripleStrLit}">pnkStrKinds</a></li>
 
@@ -340,7 +344,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -383,7 +387,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L68"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L68"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -402,7 +406,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L25"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L25"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -414,7 +418,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L217"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L217"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L217" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -426,7 +430,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L216"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L216"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L216" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -438,7 +442,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L215"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L215"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L215" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -450,7 +454,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L258"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L258"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L258" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -488,7 +492,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L230"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L230"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L230" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -502,30 +506,29 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">pnkUInt64Lit</span><span class="Other">,</span> <span class="Identifier">pnkFloatLit</span><span class="Other">,</span> <span class="Identifier">pnkFloat32Lit</span><span class="Other">,</span> <span class="Identifier">pnkFloat64Lit</span><span class="Other">,</span> <span class="Identifier">pnkFloat128Lit</span><span class="Other">,</span>
   <span class="Identifier">pnkStrLit</span><span class="Other">,</span> <span class="Identifier">pnkRStrLit</span><span class="Other">,</span> <span class="Identifier">pnkTripleStrLit</span><span class="Other">,</span> <span class="Identifier">pnkNilLit</span><span class="Other">,</span> <span class="Identifier">pnkCustomLit</span><span class="Other">,</span> <span class="Identifier">pnkAccQuoted</span><span class="Other">,</span>
   <span class="Identifier">pnkCall</span><span class="Other">,</span> <span class="Identifier">pnkCommand</span><span class="Other">,</span> <span class="Identifier">pnkCallStrLit</span><span class="Other">,</span> <span class="Identifier">pnkInfix</span><span class="Other">,</span> <span class="Identifier">pnkPrefix</span><span class="Other">,</span> <span class="Identifier">pnkPostfix</span><span class="Other">,</span>
-  <span class="Identifier">pnkExprEqExpr</span><span class="Other">,</span> <span class="Identifier">pnkExprColonExpr</span><span class="Other">,</span> <span class="Identifier">pnkIdentDefs</span><span class="Other">,</span> <span class="Identifier">pnkConstDef</span><span class="Other">,</span> <span class="Identifier">pnkVarTuple</span><span class="Other">,</span>
-  <span class="Identifier">pnkPar</span><span class="Other">,</span> <span class="Identifier">pnkSqrBracket</span><span class="Other">,</span> <span class="Identifier">pnkCurly</span><span class="Other">,</span> <span class="Identifier">pnkTupleConstr</span><span class="Other">,</span> <span class="Identifier">pnkObjConstr</span><span class="Other">,</span> <span class="Identifier">pnkTableConstr</span><span class="Other">,</span>
-  <span class="Identifier">pnkSqrBracketExpr</span><span class="Other">,</span> <span class="Identifier">pnkCurlyExpr</span><span class="Other">,</span> <span class="Identifier">pnkPragmaExpr</span><span class="Other">,</span> <span class="Identifier">pnkPragma</span><span class="Other">,</span> <span class="Identifier">pnkPragmaBlock</span><span class="Other">,</span>
-  <span class="Identifier">pnkDotExpr</span><span class="Other">,</span> <span class="Identifier">pnkIfExpr</span><span class="Other">,</span> <span class="Identifier">pnkIfStmt</span><span class="Other">,</span> <span class="Identifier">pnkElifBranch</span><span class="Other">,</span> <span class="Identifier">pnkElifExpr</span><span class="Other">,</span> <span class="Identifier">pnkElse</span><span class="Other">,</span>
-  <span class="Identifier">pnkElseExpr</span><span class="Other">,</span> <span class="Identifier">pnkCaseStmt</span><span class="Other">,</span> <span class="Identifier">pnkOfBranch</span><span class="Other">,</span> <span class="Identifier">pnkWhenExpr</span><span class="Other">,</span> <span class="Identifier">pnkWhenStmt</span><span class="Other">,</span> <span class="Identifier">pnkForStmt</span><span class="Other">,</span>
-  <span class="Identifier">pnkWhileStmt</span><span class="Other">,</span> <span class="Identifier">pnkBlockExpr</span><span class="Other">,</span> <span class="Identifier">pnkBlockStmt</span><span class="Other">,</span> <span class="Identifier">pnkDiscardStmt</span><span class="Other">,</span> <span class="Identifier">pnkContinueStmt</span><span class="Other">,</span>
-  <span class="Identifier">pnkBreakStmt</span><span class="Other">,</span> <span class="Identifier">pnkReturnStmt</span><span class="Other">,</span> <span class="Identifier">pnkRaiseStmt</span><span class="Other">,</span> <span class="Identifier">pnkYieldStmt</span><span class="Other">,</span> <span class="Identifier">pnkTryStmt</span><span class="Other">,</span>
-  <span class="Identifier">pnkExceptBranch</span><span class="Other">,</span> <span class="Identifier">pnkFinally</span><span class="Other">,</span> <span class="Identifier">pnkDefer</span><span class="Other">,</span> <span class="Identifier">pnkLambda</span><span class="Other">,</span> <span class="Identifier">pnkDo</span><span class="Other">,</span> <span class="Identifier">pnkBind</span><span class="Other">,</span> <span class="Identifier">pnkBindStmt</span><span class="Other">,</span>
-  <span class="Identifier">pnkMixinStmt</span><span class="Other">,</span> <span class="Identifier">pnkCast</span><span class="Other">,</span> <span class="Identifier">pnkStaticStmt</span><span class="Other">,</span> <span class="Identifier">pnkAsgn</span><span class="Other">,</span> <span class="Identifier">pnkGenericParams</span><span class="Other">,</span>
-  <span class="Identifier">pnkFormalParams</span><span class="Other">,</span> <span class="Identifier">pnkStmtList</span><span class="Other">,</span> <span class="Identifier">pnkStmtListExpr</span><span class="Other">,</span> <span class="Identifier">pnkImportStmt</span><span class="Other">,</span>
-  <span class="Identifier">pnkImportExceptStmt</span><span class="Other">,</span> <span class="Identifier">pnkFromStmt</span><span class="Other">,</span> <span class="Identifier">pnkIncludeStmt</span><span class="Other">,</span> <span class="Identifier">pnkExportStmt</span><span class="Other">,</span>
-  <span class="Identifier">pnkExportExceptStmt</span><span class="Other">,</span> <span class="Identifier">pnkConstSection</span><span class="Other">,</span> <span class="Identifier">pnkLetSection</span><span class="Other">,</span> <span class="Identifier">pnkVarSection</span><span class="Other">,</span>
-  <span class="Identifier">pnkProcDef</span><span class="Other">,</span> <span class="Identifier">pnkFuncDef</span><span class="Other">,</span> <span class="Identifier">pnkMethodDef</span><span class="Other">,</span> <span class="Identifier">pnkConverterDef</span><span class="Other">,</span> <span class="Identifier">pnkIteratorDef</span><span class="Other">,</span>
-  <span class="Identifier">pnkMacroDef</span><span class="Other">,</span> <span class="Identifier">pnkTemplateDef</span><span class="Other">,</span> <span class="Identifier">pnkTypeSection</span><span class="Other">,</span> <span class="Identifier">pnkTypeDef</span><span class="Other">,</span> <span class="Identifier">pnkEnumTy</span><span class="Other">,</span>
-  <span class="Identifier">pnkEnumFieldDef</span><span class="Other">,</span> <span class="Identifier">pnkObjectTy</span><span class="Other">,</span> <span class="Identifier">pnkTupleTy</span><span class="Other">,</span> <span class="Identifier">pnkProcTy</span><span class="Other">,</span> <span class="Identifier">pnkIteratorTy</span><span class="Other">,</span>
-  <span class="Identifier">pnkRecList</span><span class="Other">,</span> <span class="Identifier">pnkRecCase</span><span class="Other">,</span> <span class="Identifier">pnkRecWhen</span><span class="Other">,</span> <span class="Identifier">pnkTypeOfExpr</span><span class="Other">,</span> <span class="Identifier">pnkRefTy</span><span class="Other">,</span> <span class="Identifier">pnkVarTy</span><span class="Other">,</span>
-  <span class="Identifier">pnkPtrTy</span><span class="Other">,</span> <span class="Identifier">pnkStaticTy</span><span class="Other">,</span> <span class="Identifier">pnkDistinctTy</span><span class="Other">,</span> <span class="Identifier">pnkMutableTy</span><span class="Other">,</span> <span class="Identifier">pnkTupleClassTy</span><span class="Other">,</span>
-  <span class="Identifier">pnkTypeClassTy</span><span class="Other">,</span> <span class="Identifier">pnkOfInherit</span><span class="Other">,</span> <span class="Identifier">pnkArgList</span><span class="Other">,</span> <span class="Identifier">pnkWith</span><span class="Other">,</span> <span class="Identifier">pnkWithout</span><span class="Other">,</span> <span class="Identifier">pnkAsmStmt</span><span class="Other">,</span>
-  <span class="Identifier">pnkCommentStmt</span><span class="Other">,</span> <span class="Identifier">pnkUsingStmt</span></pre></dt>
+  <span class="Identifier">pnkExprEqExpr</span><span class="Other">,</span> <span class="Identifier">pnkExprColonExpr</span><span class="Other">,</span> <span class="Identifier">pnkPar</span><span class="Other">,</span> <span class="Identifier">pnkSqrBracket</span><span class="Other">,</span> <span class="Identifier">pnkCurly</span><span class="Other">,</span>
+  <span class="Identifier">pnkTupleConstr</span><span class="Other">,</span> <span class="Identifier">pnkObjConstr</span><span class="Other">,</span> <span class="Identifier">pnkTableConstr</span><span class="Other">,</span> <span class="Identifier">pnkSqrBracketExpr</span><span class="Other">,</span> <span class="Identifier">pnkCurlyExpr</span><span class="Other">,</span>
+  <span class="Identifier">pnkPragmaExpr</span><span class="Other">,</span> <span class="Identifier">pnkPragma</span><span class="Other">,</span> <span class="Identifier">pnkPragmaBlock</span><span class="Other">,</span> <span class="Identifier">pnkDotExpr</span><span class="Other">,</span> <span class="Identifier">pnkIfExpr</span><span class="Other">,</span> <span class="Identifier">pnkIfStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkElifBranch</span><span class="Other">,</span> <span class="Identifier">pnkElifExpr</span><span class="Other">,</span> <span class="Identifier">pnkElse</span><span class="Other">,</span> <span class="Identifier">pnkElseExpr</span><span class="Other">,</span> <span class="Identifier">pnkCaseStmt</span><span class="Other">,</span> <span class="Identifier">pnkOfBranch</span><span class="Other">,</span>
+  <span class="Identifier">pnkWhenExpr</span><span class="Other">,</span> <span class="Identifier">pnkWhenStmt</span><span class="Other">,</span> <span class="Identifier">pnkForStmt</span><span class="Other">,</span> <span class="Identifier">pnkWhileStmt</span><span class="Other">,</span> <span class="Identifier">pnkBlockExpr</span><span class="Other">,</span>
+  <span class="Identifier">pnkBlockStmt</span><span class="Other">,</span> <span class="Identifier">pnkDiscardStmt</span><span class="Other">,</span> <span class="Identifier">pnkContinueStmt</span><span class="Other">,</span> <span class="Identifier">pnkBreakStmt</span><span class="Other">,</span> <span class="Identifier">pnkReturnStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkRaiseStmt</span><span class="Other">,</span> <span class="Identifier">pnkYieldStmt</span><span class="Other">,</span> <span class="Identifier">pnkTryStmt</span><span class="Other">,</span> <span class="Identifier">pnkExceptBranch</span><span class="Other">,</span> <span class="Identifier">pnkFinally</span><span class="Other">,</span> <span class="Identifier">pnkDefer</span><span class="Other">,</span>
+  <span class="Identifier">pnkLambda</span><span class="Other">,</span> <span class="Identifier">pnkDo</span><span class="Other">,</span> <span class="Identifier">pnkBind</span><span class="Other">,</span> <span class="Identifier">pnkBindStmt</span><span class="Other">,</span> <span class="Identifier">pnkMixinStmt</span><span class="Other">,</span> <span class="Identifier">pnkCast</span><span class="Other">,</span> <span class="Identifier">pnkStaticStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkAsgn</span><span class="Other">,</span> <span class="Identifier">pnkGenericParams</span><span class="Other">,</span> <span class="Identifier">pnkFormalParams</span><span class="Other">,</span> <span class="Identifier">pnkStmtList</span><span class="Other">,</span> <span class="Identifier">pnkStmtListExpr</span><span class="Other">,</span>
+  <span class="Identifier">pnkImportStmt</span><span class="Other">,</span> <span class="Identifier">pnkImportExceptStmt</span><span class="Other">,</span> <span class="Identifier">pnkFromStmt</span><span class="Other">,</span> <span class="Identifier">pnkIncludeStmt</span><span class="Other">,</span>
+  <span class="Identifier">pnkExportStmt</span><span class="Other">,</span> <span class="Identifier">pnkExportExceptStmt</span><span class="Other">,</span> <span class="Identifier">pnkTypeSection</span><span class="Other">,</span> <span class="Identifier">pnkConstSection</span><span class="Other">,</span>
+  <span class="Identifier">pnkLetSection</span><span class="Other">,</span> <span class="Identifier">pnkVarSection</span><span class="Other">,</span> <span class="Identifier">pnkProcDef</span><span class="Other">,</span> <span class="Identifier">pnkFuncDef</span><span class="Other">,</span> <span class="Identifier">pnkMethodDef</span><span class="Other">,</span>
+  <span class="Identifier">pnkConverterDef</span><span class="Other">,</span> <span class="Identifier">pnkIteratorDef</span><span class="Other">,</span> <span class="Identifier">pnkMacroDef</span><span class="Other">,</span> <span class="Identifier">pnkTemplateDef</span><span class="Other">,</span> <span class="Identifier">pnkIdentDefs</span><span class="Other">,</span>
+  <span class="Identifier">pnkConstDef</span><span class="Other">,</span> <span class="Identifier">pnkTypeDef</span><span class="Other">,</span> <span class="Identifier">pnkVarTuple</span><span class="Other">,</span> <span class="Identifier">pnkEnumTy</span><span class="Other">,</span> <span class="Identifier">pnkEnumFieldDef</span><span class="Other">,</span> <span class="Identifier">pnkObjectTy</span><span class="Other">,</span>
+  <span class="Identifier">pnkTupleTy</span><span class="Other">,</span> <span class="Identifier">pnkProcTy</span><span class="Other">,</span> <span class="Identifier">pnkIteratorTy</span><span class="Other">,</span> <span class="Identifier">pnkRecList</span><span class="Other">,</span> <span class="Identifier">pnkRecCase</span><span class="Other">,</span> <span class="Identifier">pnkRecWhen</span><span class="Other">,</span>
+  <span class="Identifier">pnkTypeOfExpr</span><span class="Other">,</span> <span class="Identifier">pnkRefTy</span><span class="Other">,</span> <span class="Identifier">pnkVarTy</span><span class="Other">,</span> <span class="Identifier">pnkPtrTy</span><span class="Other">,</span> <span class="Identifier">pnkStaticTy</span><span class="Other">,</span> <span class="Identifier">pnkDistinctTy</span><span class="Other">,</span>
+  <span class="Identifier">pnkMutableTy</span><span class="Other">,</span> <span class="Identifier">pnkTupleClassTy</span><span class="Other">,</span> <span class="Identifier">pnkTypeClassTy</span><span class="Other">,</span> <span class="Identifier">pnkOfInherit</span><span class="Other">,</span> <span class="Identifier">pnkArgList</span><span class="Other">,</span>
+  <span class="Identifier">pnkWith</span><span class="Other">,</span> <span class="Identifier">pnkWithout</span><span class="Other">,</span> <span class="Identifier">pnkAsmStmt</span><span class="Other">,</span> <span class="Identifier">pnkCommentStmt</span><span class="Other">,</span> <span class="Identifier">pnkUsingStmt</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L87"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L87"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L87" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -546,7 +549,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Used instead of <tt class="docutils literal"><span class="pre"><span class="Identifier">Token</span></span></tt> to save memory
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L219"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L219"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L219" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -566,7 +569,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L57"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L57"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L57" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -581,7 +584,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L64"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L64"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L64" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -594,9 +597,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L263"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L263"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L263" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="pnkDeclarativeDefs">
+<dt><pre><a href="ast_parsed_types.html#pnkDeclarativeDefs"><span class="Identifier">pnkDeclarativeDefs</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">pnkProcDef</span><span class="Other">,</span> <span class="DecNumber">pnkFuncDef</span><span class="Other">,</span> <span class="DecNumber">pnkMethodDef</span><span class="Other">,</span> <span class="DecNumber">pnkIteratorDef</span><span class="Other">,</span>
+                      <span class="DecNumber">pnkConverterDef</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L268"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L268" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -606,7 +622,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L265"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L265"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L265" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -618,7 +634,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L266"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L266"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L266" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -630,9 +646,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L262"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L262"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L262" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="pnkRoutineDefs">
+<dt><pre><a href="ast_parsed_types.html#pnkRoutineDefs"><span class="Identifier">pnkRoutineDefs</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">pnkProcDef</span><span class="Other">..</span><span class="DecNumber">pnkTemplateDef</span><span class="Other">}</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L269"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L269" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -642,7 +670,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L267"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L267"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L267" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -659,9 +687,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L283"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L285"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L283" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L285" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -671,9 +699,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L280"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L282"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L280" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L282" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -683,9 +711,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 append <tt class="docutils literal"><span class="pre"><span class="Identifier">other</span></span></tt> to <tt class="docutils literal"><span class="pre"><span class="Identifier">node</span></span></tt>'s <tt class="docutils literal"><span class="pre"><span class="Identifier">sons</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L294"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L296"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L294" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L296" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -695,9 +723,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L335"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L337"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L335" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L337" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -707,9 +735,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L365"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L367"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L365" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L367" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -719,9 +747,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Number of sons of the parsed node
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L269"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L271"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L269" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L271" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -733,9 +761,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create an empty ParsedNode
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L309"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L311"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L309" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L311" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -746,9 +774,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new leaf literal parsed node.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L324"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L326"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L324" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L326" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -760,9 +788,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a new non-leaf parsed node with a specified location information and sons.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L315"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L317"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L315" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L317" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -773,9 +801,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Create a <tt class="docutils literal"><span class="pre"><span class="Identifier">pnkIdent</span></span></tt> node
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L331"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L333"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L331" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L333" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -787,9 +815,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L352"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L354"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L352" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L354" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -799,9 +827,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L274"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L276"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L274" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L276" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -811,9 +839,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L392"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L394"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L392" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L394" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -824,9 +852,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L298"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L300"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L298" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L300" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -841,9 +869,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L286"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L288"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L286" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L288" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -853,9 +881,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8beb528f5556f6f5f669458030d0e0bf5ec068a9/compiler/ast/ast_parsed_types.nim#L290"
+href="https://github.com/nim-works/nimskull/tree/37263e36ac5bce61f1e07772c7742532d28bc26b/compiler/ast/ast_parsed_types.nim#L292"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L290" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/ast/ast_parsed_types.nim#L292" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
