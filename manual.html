@@ -351,14 +351,14 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/9ab67142436f740b1ec7e4348b556806a0da4679/doc/manual.rst#L1"
+href="https://github.com/nim-works/nimskull/tree/b03bd7a1e4dee62887ea2ffdbddb5c12e39f20f3/doc/manual.rst#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/doc/manual.rst#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.21064</td></tr>
+  <p class="module-desc"><table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Version:</th><td>0.1.0-dev.21065</td></tr>
 </tbody></table><blockquote><p>&quot;Complexity&quot; seems to be a lot like &quot;energy&quot;: you can transfer it from the end-user to one/some of the other players, but the total amount seems to remain pretty much constant for a given task. -- Ran</p></blockquote>
 
 <h1><a class="toc-backref" id="about-this-document" href="#about-this-document">About this document</a></h1><p><strong>Note</strong>: This document is a draft! Several of  NimSkull's features may need more precise wording. This manual is constantly evolving.</p>
@@ -2924,7 +2924,7 @@ There's currently no detection for location passed to immutable iterator paramet
     <span class="Identifier">values</span><span class="Punctuation">:</span> <span class="Identifier">seq</span><span class="Punctuation">[</span><span class="Identifier">Value</span><span class="Punctuation">]</span>
     <span class="Keyword">when</span> <span class="Keyword">not</span> <span class="Punctuation">(</span><span class="Identifier">Key</span> <span class="Keyword">is</span> <span class="Identifier">string</span><span class="Punctuation">)</span><span class="Punctuation">:</span> <span class="Comment"># empty value for strings used for optimization</span>
       <span class="Identifier">deletedKeys</span><span class="Punctuation">:</span> <span class="Identifier">seq</span><span class="Punctuation">[</span><span class="Identifier">bool</span><span class="Punctuation">]</span></pre>
-<h2><a class="toc-backref" id="generics-type-classes" href="#generics-type-classes">Type classes</a></h2><p>A type class is a special pseudo-type that can be used to match against types in the context of overload resolution or the <tt class="docutils literal"><span class="pre"><span class="Keyword">is</span></span></tt> operator. Nim supports the following built-in type classes:</p>
+<h2><a class="toc-backref" id="generics-type-classes" href="#generics-type-classes">Type classes</a></h2><p>A type class is a special pseudo-type that can be used to match against types in the context of overload resolution or the <tt class="docutils literal"><span class="pre"><span class="Keyword">is</span></span></tt> operator. NimSkull supports the following built-in type classes:</p>
 <table border="1" class="docutils"><tr><th>type class</th><th>matches</th></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Keyword">object</span></span></tt></td><td>any object type</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Keyword">tuple</span></span></tt></td><td>any tuple type</td></tr>
@@ -2934,10 +2934,16 @@ There's currently no detection for location passed to immutable iterator paramet
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt></td><td>any <tt class="docutils literal"><span class="pre"><span class="Keyword">ref</span></span></tt> type</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Keyword">ptr</span></span></tt></td><td>any <tt class="docutils literal"><span class="pre"><span class="Keyword">ptr</span></span></tt> type</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Keyword">var</span></span></tt></td><td>any <tt class="docutils literal"><span class="pre"><span class="Keyword">var</span></span></tt> type</td></tr>
+<tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">lent</span></span></tt></td><td>any <tt class="docutils literal"><span class="pre"><span class="Identifier">lent</span></span></tt> type</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Keyword">distinct</span></span></tt></td><td>any distinct type</td></tr>
+<tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">range</span></span></tt></td><td>any <tt class="docutils literal"><span class="pre"><span class="Identifier">range</span></span></tt> type</td></tr>
+<tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">Ordinal</span></span></tt></td><td>any ordinal type (including <tt class="docutils literal"><span class="pre"><span class="Keyword">distinct</span></span></tt> ordinal types)</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">array</span></span></tt></td><td>any array type</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">set</span></span></tt></td><td>any set type</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">seq</span></span></tt></td><td>any seq type</td></tr>
+<tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">openArray</span></span></tt></td><td>any type <em>matching</em> an <tt class="docutils literal"><span class="pre"><span class="Identifier">openArray</span></span></tt></td></tr>
+<tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">varargs</span></span></tt></td><td>any type <em>matching</em> a <tt class="docutils literal"><span class="pre"><span class="Identifier">varargs</span></span></tt></td></tr>
+<tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">UncheckedArray</span></span></tt></td><td>any <tt class="docutils literal"><span class="pre"><span class="Identifier">UncheckedArray</span></span></tt> type</td></tr>
 <tr><td><tt class="docutils literal"><span class="pre"><span class="Identifier">auto</span></span></tt></td><td>any type</td></tr>
 </table><p>Furthermore, every generic type automatically creates a type class of the same name that will match any instantiation of the generic type.</p>
 <p>Type classes can be combined using the standard boolean operators to form more complex type classes:</p>
