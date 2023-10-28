@@ -142,8 +142,8 @@ window.addEventListener('DOMContentLoaded', main);
   tbranches*: seq[BranchListEntry]
   types*: seq[PackedVmType]
   globals*: seq[VmTypeId]    ## All globals. Only their types are stored
-  functions*: seq[tuple[sym: uint32, sig: RoutineSigId, t1, t2: VmTypeId,
-                        kind: CallableKind, a, b: uint32]]
+  functions*: seq[tuple[sym: uint32, sig: RoutineSigId, t1: VmTypeId,
+                        isClosure: bool, kind: CallableKind, a, b: uint32]]
   callbacks*: seq[string]
   code*: seq[TInstr]
   debug*: seq[uint32]
@@ -247,7 +247,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -277,9 +277,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Contextual state needed for turning data <tt class="docutils literal"><span class="pre"><span class="Identifier">PNode</span></span></tt>-trees into <tt class="docutils literal"><span class="pre"><span class="Identifier">PackedDataNode</span></span></tt> trees and storing them into packed environment
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L182"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L183"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L182" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L183" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -291,7 +291,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L46"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L46"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -310,7 +310,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 A single node in a depth-first linear tree that is meant for storing complex data. If a node has children, they follow directly after their parent node. <tt class="docutils literal"><span class="pre"><span class="Identifier">PackedDataNode</span></span></tt> can be seen as a specialized version of <tt class="docutils literal"><span class="pre"><span class="Identifier">PackedNodeLite</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L65"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L65"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -325,9 +325,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L175"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L176"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L175" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L176" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -348,8 +348,8 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">tbranches</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmdef.html#BranchListEntry"><span class="Identifier">BranchListEntry</span></a><span class="Other">]</span>
   <span class="Identifier">types</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="packed_env.html#PackedVmType"><span class="Identifier">PackedVmType</span></a><span class="Other">]</span>
   <span class="Identifier">globals</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmdef.html#VmTypeId"><span class="Identifier">VmTypeId</span></a><span class="Other">]</span>    <span class="Comment">## All globals. Only their types are stored</span>
-  <span class="Identifier">functions</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">sym</span><span class="Other">:</span> <span class="Identifier">uint32</span><span class="Other">,</span> <span class="Identifier">sig</span><span class="Other">:</span> <a href="vmdef.html#RoutineSigId"><span class="Identifier">RoutineSigId</span></a><span class="Other">,</span> <span class="Identifier">t1</span><span class="Other">,</span> <span class="Identifier">t2</span><span class="Other">:</span> <a href="vmdef.html#VmTypeId"><span class="Identifier">VmTypeId</span></a><span class="Other">,</span>
-                        <span class="Identifier">kind</span><span class="Other">:</span> <a href="vmdef.html#CallableKind"><span class="Identifier">CallableKind</span></a><span class="Other">,</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">uint32</span><span class="Other">]</span><span class="Other">]</span>
+  <span class="Identifier">functions</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">sym</span><span class="Other">:</span> <span class="Identifier">uint32</span><span class="Other">,</span> <span class="Identifier">sig</span><span class="Other">:</span> <a href="vmdef.html#RoutineSigId"><span class="Identifier">RoutineSigId</span></a><span class="Other">,</span> <span class="Identifier">t1</span><span class="Other">:</span> <a href="vmdef.html#VmTypeId"><span class="Identifier">VmTypeId</span></a><span class="Other">,</span>
+                        <span class="Identifier">isClosure</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">,</span> <span class="Identifier">kind</span><span class="Other">:</span> <a href="vmdef.html#CallableKind"><span class="Identifier">CallableKind</span></a><span class="Other">,</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">uint32</span><span class="Other">]</span><span class="Other">]</span>
   <span class="Identifier">callbacks</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span>
   <span class="Identifier">code</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmdef.html#TInstr"><span class="Identifier">TInstr</span></a><span class="Other">]</span>
   <span class="Identifier">debug</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">uint32</span><span class="Other">]</span>
@@ -364,7 +364,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L128"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L128"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L128" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -381,7 +381,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L115"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L115"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L115" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -393,7 +393,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L113"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L113"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L113" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -411,9 +411,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L376"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L377"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L376" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L377" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -424,9 +424,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L370"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L371"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L370" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L371" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -436,9 +436,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Initializes the encoder. The sequence pass to <tt class="docutils literal"><span class="pre"><span class="Identifier">types</span></span></tt> should not change past this point. Else, encoding error may happen
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L820"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L821"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L820" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L821" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -449,9 +449,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Loads all data from <tt class="docutils literal"><span class="pre"><span class="Identifier">src</span></span></tt> into <tt class="docutils literal"><span class="pre"><span class="Identifier">dst</span></span></tt> for which no further/extra processing is required. Things that are not loaded are: complex constants, globals, <tt class="docutils literal"><span class="pre"><span class="Identifier">code</span></span></tt>, and the callback list.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L767"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L768"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L767" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L768" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -461,9 +461,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L409"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L410"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L409" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L410" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -474,9 +474,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L758"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L759"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L758" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L759" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -487,7 +487,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L931"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L931"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L931" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -500,9 +500,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L255"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L256"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L255" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L256" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -513,9 +513,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Stores the data represented by the Data AST <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> in <tt class="docutils literal"><span class="pre"><span class="Identifier">e</span><span class="Operator">.</span><span class="Identifier">nodes</span></span></tt>. The caller is responsible for making sure that there's a slot allocated in <tt class="docutils literal"><span class="pre"><span class="Identifier">e</span><span class="Operator">.</span><span class="Identifier">nodes</span></span></tt> for the top data-node. Space allocation for the sub-data-nodes is handled by <tt class="docutils literal"><span class="pre">storeData</span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L333"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L334"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L333" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L334" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -526,9 +526,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Stores all relevant data provided by <tt class="docutils literal"><span class="pre"><span class="Identifier">c</span></span></tt> into <tt class="docutils literal"><span class="pre"><span class="Identifier">dst</span></span></tt>. Previously stored data (except <tt class="docutils literal"><span class="pre"><span class="Identifier">nodes</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">numbers</span></span></tt>, and <tt class="docutils literal"><span class="pre"><span class="Identifier">strings</span></span></tt>) is thrown away. The only parts of <tt class="docutils literal"><span class="pre"><span class="Identifier">dst</span></span></tt> not touched by <tt class="docutils literal"><span class="pre"><span class="Identifier">storeEnv</span></span></tt> are: <tt class="docutils literal"><span class="pre"><span class="Identifier">cconsts</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">globals</span></span></tt>, and <tt class="docutils literal"><span class="pre"><span class="Identifier">entryPoint</span></span></tt>. These have to be filled in separately.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L832"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L833"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L832" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L833" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -539,7 +539,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L882"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L882"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L882" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -556,9 +556,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">d</span></span></tt> get evaluated multiple times, so beware
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/d4f98e76465f0c467f8a80b42be5fbb83fc9577d/compiler/vm/packed_env.nim#L212"
+href="https://github.com/nim-works/nimskull/tree/90feefef6ae377400729a1ba61296e4606e3c9d4/compiler/vm/packed_env.nim#L213"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L212" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/packed_env.nim#L213" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -577,7 +577,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-10-27 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-10-28 00:00:00 UTC</small>
       </div>
     </div>
   </div>
