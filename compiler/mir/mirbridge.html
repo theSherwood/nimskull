@@ -126,9 +126,14 @@ window.addEventListener('DOMContentLoaded', main);
     title="echoOutput(config: ConfigRef; owner: PSym; body: Body)">echoOutput(config: ConfigRef; owner: PSym; body: Body)</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">patchGlobals
+      <li><a class="reference" href="#patchGlobals%2CMirTree%2CSourceMap"
+    title="patchGlobals(body: var MirTree; sourceMap: var SourceMap)">patchGlobals(body: var MirTree; sourceMap: var SourceMap)</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">rewriteGlobalDefs
       <li><a class="reference" href="#rewriteGlobalDefs%2CMirTree%2CSourceMap%2Cbool"
-    title="rewriteGlobalDefs(body: var MirTree; sourceMap: var SourceMap; outermost: bool)">rewriteGlobalDefs(body: var MirTree; sourceMap: var SourceMap; outermost: bool)</a></li>
+    title="rewriteGlobalDefs(body: var MirTree; sourceMap: var SourceMap; patch: bool)">rewriteGlobalDefs(body: var MirTree; sourceMap: var SourceMap; patch: bool)</a></li>
 
   </ul>
 
@@ -145,7 +150,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b7e881f483b57af613493fff735519c0fce7e9b2/compiler/mir/mirbridge.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/04f8b790793ec11b6736635adbdfea17ea7ffc0a/compiler/mir/mirbridge.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -170,9 +175,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Legacy routine. Translates the body <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> of the procedure <tt class="docutils literal"><span class="pre"><span class="Identifier">owner</span></span></tt> to MIR code, and the MIR code to <tt class="docutils literal"><span class="pre">CgNode</span></tt> IR.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b7e881f483b57af613493fff735519c0fce7e9b2/compiler/mir/mirbridge.nim#L170"
+href="https://github.com/nim-works/nimskull/tree/04f8b790793ec11b6736635adbdfea17ea7ffc0a/compiler/mir/mirbridge.nim#L182"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L170" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L182" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -183,7 +188,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 If requested via the define, renders the input AST <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> and writes the result out through <tt class="docutils literal"><span class="pre">config.writeLine</span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b7e881f483b57af613493fff735519c0fce7e9b2/compiler/mir/mirbridge.nim#L59"
+href="https://github.com/nim-works/nimskull/tree/04f8b790793ec11b6736635adbdfea17ea7ffc0a/compiler/mir/mirbridge.nim#L59"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L59" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -196,7 +201,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 If requested via the define, renders the <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt> and writes the result out through <tt class="docutils literal"><span class="pre">config.writeln</span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b7e881f483b57af613493fff735519c0fce7e9b2/compiler/mir/mirbridge.nim#L66"
+href="https://github.com/nim-works/nimskull/tree/04f8b790793ec11b6736635adbdfea17ea7ffc0a/compiler/mir/mirbridge.nim#L66"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L66" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -209,24 +214,35 @@ class="link-seesrc" target="_blank">Source</a>
 
 If requested via the define, renders the output IR <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> and writes the result out through <tt class="docutils literal"><span class="pre">config.writeLine</span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b7e881f483b57af613493fff735519c0fce7e9b2/compiler/mir/mirbridge.nim#L73"
+href="https://github.com/nim-works/nimskull/tree/04f8b790793ec11b6736635adbdfea17ea7ffc0a/compiler/mir/mirbridge.nim#L73"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L73" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="rewriteGlobalDefs,MirTree,SourceMap,bool">
-<dt><pre><span class="Keyword">proc</span> <a href="#rewriteGlobalDefs%2CMirTree%2CSourceMap%2Cbool"><span class="Identifier">rewriteGlobalDefs</span></a><span class="Other">(</span><span class="Identifier">body</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">sourceMap</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="sourcemaps.html#SourceMap"><span class="Identifier">SourceMap</span></a><span class="Other">;</span>
-                       <span class="Identifier">outermost</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="patchGlobals,MirTree,SourceMap">
+<dt><pre><span class="Keyword">proc</span> <a href="#patchGlobals%2CMirTree%2CSourceMap"><span class="Identifier">patchGlobals</span></a><span class="Other">(</span><span class="Identifier">body</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">sourceMap</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="sourcemaps.html#SourceMap"><span class="Identifier">SourceMap</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-<p>Removes definitions of non-pure globals from <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt>, replacing them with as assignment if necessary. The correct symbols for globals of which copies were introduced during <tt class="docutils literal"><span class="pre">transf</span></tt> are also restored here.</p>
-<p>If <tt class="docutils literal"><span class="pre"><span class="Identifier">outermost</span></span></tt> is true, only definitions in the outermost scope will be removed. This is a hack, but it's currently required for turning module-level AST into a procedure in a mostly transparent way.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/b7e881f483b57af613493fff735519c0fce7e9b2/compiler/mir/mirbridge.nim#L80"
+href="https://github.com/nim-works/nimskull/tree/04f8b790793ec11b6736635adbdfea17ea7ffc0a/compiler/mir/mirbridge.nim#L171"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L80" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L171" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="rewriteGlobalDefs,MirTree,SourceMap,bool">
+<dt><pre><span class="Keyword">proc</span> <a href="#rewriteGlobalDefs%2CMirTree%2CSourceMap%2Cbool"><span class="Identifier">rewriteGlobalDefs</span></a><span class="Other">(</span><span class="Identifier">body</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">sourceMap</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="sourcemaps.html#SourceMap"><span class="Identifier">SourceMap</span></a><span class="Other">;</span> <span class="Identifier">patch</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Rewrites definitions of globals in the outermost scope into assignments. If <tt class="docutils literal"><span class="pre"><span class="Identifier">patch</span></span></tt> is true, also restores the correct symbol for globals that were introduced in <tt class="docutils literal"><span class="pre">transf</span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/04f8b790793ec11b6736635adbdfea17ea7ffc0a/compiler/mir/mirbridge.nim#L91"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirbridge.nim#L91" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
