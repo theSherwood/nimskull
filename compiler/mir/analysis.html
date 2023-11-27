@@ -113,19 +113,7 @@ window.addEventListener('DOMContentLoaded', main);
   unknown">Owned</a></li>
   <li><a class="reference" href="#Values"
     title="Values = object
-  values: OrdinalSeq[OpValue, ValueInfo]
-  effects: EffectMap">Values</a></li>
-
-  </ul>
-</li>
-<li>
-  <a class="reference reference-toplevel" href="#10" id="60">Consts</a>
-  <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#ConsumeCtx"
-    title="ConsumeCtx = {mnkConsume, mnkRaise, mnkDefUnpack}">ConsumeCtx</a></li>
-  <li><a class="reference" href="#UseContext"
-    title="UseContext = {mnkDefUnpack, mnkDeref, mnkDerefView..mnkCast, mnkRaise, mnkArg,
-              mnkConsume..mnkVoid, mnkIf..mnkCase}">UseContext</a></li>
+  values: OrdinalSeq[OpValue, ValueInfo]">Values</a></li>
 
   </ul>
 </li>
@@ -133,24 +121,24 @@ window.addEventListener('DOMContentLoaded', main);
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
       <ul class="simple nested-toc-section">computeAlive
-      <li><a class="reference" href="#computeAlive%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CT%2Cbool%2CstaticComputeAliveProc%5BT%5D"
-    title="computeAlive[T](tree: MirTree; cfg: ControlFlowGraph; values: Values;
-                span: Slice[NodePosition]; loc: T; hasInitialValue: bool;
-                op: static ComputeAliveProc[T]): tuple[alive, escapes: bool]">computeAlive[T](tree: MirTree; cfg: ControlFlowGraph; values: Values;
-                span: Slice[NodePosition]; loc: T; hasInitialValue: bool;
+      <li><a class="reference" href="#computeAlive%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CT%2CstaticComputeAliveProc%5BT%5D"
+    title="computeAlive[T](tree: MirTree; cfg: DataFlowGraph; values: Values;
+                span: Slice[NodePosition]; loc: T;
+                op: static ComputeAliveProc[T]): tuple[alive, escapes: bool]">computeAlive[T](tree: MirTree; cfg: DataFlowGraph; values: Values;
+                span: Slice[NodePosition]; loc: T;
                 op: static ComputeAliveProc[T]): tuple[alive, escapes: bool]</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">computeAliveOp
-      <li><a class="reference" href="#computeAliveOp%2CMirTree%2CValues%2CT%2CMirNode%2COperation"
+      <li><a class="reference" href="#computeAliveOp%2CMirTree%2CValues%2CT%2COpcode%2COpValue"
     title="computeAliveOp[T: PSym | TempId](tree: MirTree; values: Values; loc: T;
-                                 n: MirNode; op: Operation): AliveState">computeAliveOp[T: PSym | TempId](tree: MirTree; values: Values; loc: T;
-                                 n: MirNode; op: Operation): AliveState</a></li>
+                                 op: Opcode; n: OpValue): AliveState">computeAliveOp[T: PSym | TempId](tree: MirTree; values: Values; loc: T;
+                                 op: Opcode; n: OpValue): AliveState</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">computeValuesAndEffects
-      <li><a class="reference" href="#computeValuesAndEffects%2CMirTree"
-    title="computeValuesAndEffects(body: MirTree): Values">computeValuesAndEffects(body: MirTree): Values</a></li>
+  <ul class="simple nested-toc-section">computeValues
+      <li><a class="reference" href="#computeValues%2CMirTree"
+    title="computeValues(body: MirTree): Values">computeValues(body: MirTree): Values</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">doesGlobalEscape
@@ -161,10 +149,10 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">isAlive
-      <li><a class="reference" href="#isAlive%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"
-    title="isAlive(tree: MirTree; cfg: ControlFlowGraph; v: Values;
-        span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool">isAlive(tree: MirTree; cfg: ControlFlowGraph; v: Values;
-        span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool</a></li>
+      <li><a class="reference" href="#isAlive%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"
+    title="isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Slice[NodePosition];
+        loc: LvalueExpr; pos: NodePosition): bool">isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Slice[NodePosition];
+        loc: LvalueExpr; pos: NodePosition): bool</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">isConsumed
@@ -173,17 +161,17 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">isLastRead
-      <li><a class="reference" href="#isLastRead%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"
-    title="isLastRead(tree: MirTree; cfg: ControlFlowGraph; values: Values;
-           span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool">isLastRead(tree: MirTree; cfg: ControlFlowGraph; values: Values;
+      <li><a class="reference" href="#isLastRead%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"
+    title="isLastRead(tree: MirTree; cfg: DataFlowGraph; values: Values;
+           span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool">isLastRead(tree: MirTree; cfg: DataFlowGraph; values: Values;
            span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">isLastWrite
-      <li><a class="reference" href="#isLastWrite%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"
-    title="isLastWrite(tree: MirTree; cfg: ControlFlowGraph; values: Values;
+      <li><a class="reference" href="#isLastWrite%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"
+    title="isLastWrite(tree: MirTree; cfg: DataFlowGraph; values: Values;
             span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): tuple[
-    result, exits, escapes: bool]">isLastWrite(tree: MirTree; cfg: ControlFlowGraph; values: Values;
+    result, exits, escapes: bool]">isLastWrite(tree: MirTree; cfg: DataFlowGraph; values: Values;
             span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): tuple[
     result, exits, escapes: bool]</a></li>
 
@@ -222,20 +210,20 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><p>This module implements various data-flow related analysis for MIR code. They're based on the <tt class="docutils literal"><span class="pre">mirexec</span></tt> traversal algorithms and require a <tt class="docutils literal"><span class="pre">Values</span></tt> dictionary and a <tt class="docutils literal"><span class="pre">ControlFlowGraph</span></tt> object, both corresponding to the code fragment (i.e. <tt class="docutils literal"><span class="pre">MirTree</span></tt>) that is analysed.</p>
-<p>A <tt class="docutils literal"><span class="pre">Values</span></tt> dictionary stores information about the result of operations, namely, whether the value is owned and, for lvalues, the root. It also stores the lvalue effects of operations. An instance of the dictionary is created and initialized via the <tt class="docutils literal"><span class="pre">computeValuesAndEffects</span></tt> procedure.</p>
+  <p class="module-desc"><p>This module implements various data-flow related analysis for MIR code. They're based on the <tt class="docutils literal"><span class="pre">mirexec</span></tt> traversal algorithms and require a <tt class="docutils literal"><span class="pre">Values</span></tt> dictionary and a <tt class="docutils literal"><span class="pre">DataFlowGraph</span></tt> object, both corresponding to the code fragment (i.e. <tt class="docutils literal"><span class="pre">MirTree</span></tt>) that is analysed.</p>
+<p>A <tt class="docutils literal"><span class="pre">Values</span></tt> dictionary stores information about the result of operations, namely, whether the value is owned and, for lvalues, the root. An instance of the dictionary is created and initialized via the <tt class="docutils literal"><span class="pre">computeValues</span></tt> procedure.</p>
 <p>Each location that is not allocated via <tt class="docutils literal"><span class="pre">new</span></tt> or <tt class="docutils literal"><span class="pre">alloc</span></tt> is owned by a single handle (the name of a local, global, etc.), but can be aliased through both pointers and views. Once the owning handle goes out of scope, the lifetime of the corresponding locatins ends, irrespective of whether an unsafe alias (pointer) of it still exists.</p>
 <p>Instead of assigning a unique ID to each value/lvalue, they're identified via the operation sequence that produces them (stored as a <tt class="docutils literal"><span class="pre">NodePosition</span></tt> tuple). While the comparision is not as efficient as an equality test between two integers, it is still relatively cheap, and, in addition, also allows for part-of analysis without requiring complex algorithms or data-structures.</p>
 <p>Do note that it is assumed that there only exists one handle for each location -- pointers or views are not tracked. Reads or writes through aliases are not detected.</p>
 <dl class="docutils"><dt>..note:: implementing this is possible. A second step after</dt>
-<dd><tt class="docutils literal"><span class="pre">computeValuesAndEffects</span></tt> could perform an abstract execution of the MIR code to produce a conservative set of possible handles for each pointer-like dereferencing operation. The analysis routines would then compare the analysed handle with each set element, optionally taking types into account in order to reduce the number of comparisons (i.e. by not comparing handles of differing type)</dd>
+<dd><tt class="docutils literal"><span class="pre">computeValues</span></tt> could perform an abstract execution of the MIR code to produce a conservative set of possible handles for each pointer-like dereferencing operation. The analysis routines would then compare the analysed handle with each set element, optionally taking types into account in order to reduce the number of comparisons (i.e. by not comparing handles of differing type)</dd>
 </dl>
 <p>When a &quot;before&quot; or &quot;after&quot; relationship is mentioned in the context of operations, it doesn't refer to the relative memory location of the nodes representing the operations, but rather to the operations' control-flow relationship. If control-flow visits A first and then B, A is said to come before B and B to come after A. Not all operations are connected to each other through control-flow however, in which case the aforementioned relationship doesn't exist.</p>
 </p>
@@ -258,54 +246,23 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L71"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L70"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L71" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L70" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="Values">
 <dt><pre><a href="analysis.html#Values"><span class="Identifier">Values</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">values</span><span class="Other">:</span> <a href="../utils/containers.html#OrdinalSeq"><span class="Identifier">OrdinalSeq</span></a><span class="Other">[</span><a href="mirtrees.html#OpValue"><span class="Identifier">OpValue</span></a><span class="Other">,</span> <span class="Identifier">ValueInfo</span><span class="Other">]</span>
-  <span class="Identifier">effects</span><span class="Other">:</span> <span class="Identifier">EffectMap</span>
 </pre></dt>
 <dd>
 
 Stores information about the produced values plus the lvalue effects of operations
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L94"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L84"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L94" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-
-</dl></div>
-<div class="section" id="10">
-<h1><a class="toc-backref" href="#10">Consts</a></h1>
-<dl class="item">
-<div id="ConsumeCtx">
-<dt><pre><a href="analysis.html#ConsumeCtx"><span class="Identifier">ConsumeCtx</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">mnkConsume</span><span class="Other">,</span> <span class="DecNumber">mnkRaise</span><span class="Other">,</span> <span class="DecNumber">mnkDefUnpack</span><span class="Other">}</span></pre></dt>
-<dd>
-
-if an lvalue is used as an operand to these operators, the value stored in the named location is considered to be consumed (ownership over it transfered to the operation)
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L116"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L116" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="UseContext">
-<dt><pre><a href="analysis.html#UseContext"><span class="Identifier">UseContext</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">mnkDefUnpack</span><span class="Other">,</span> <span class="DecNumber">mnkDeref</span><span class="Other">,</span> <span class="DecNumber">mnkDerefView</span><span class="Other">..</span><span class="DecNumber">mnkCast</span><span class="Other">,</span> <span class="DecNumber">mnkRaise</span><span class="Other">,</span> <span class="DecNumber">mnkArg</span><span class="Other">,</span>
-              <span class="DecNumber">mnkConsume</span><span class="Other">..</span><span class="DecNumber">mnkVoid</span><span class="Other">,</span> <span class="DecNumber">mnkIf</span><span class="Other">..</span><span class="DecNumber">mnkCase</span><span class="Other">}</span></pre></dt>
-<dd>
-
-using an lvalue as the operand to one of these operators means that the content of the location is observed (when control-flow reaches the operator). In other words, applying the operator results in a read
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L120"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L120" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -314,42 +271,42 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="computeAlive,MirTree,ControlFlowGraph,Values,Slice[NodePosition],T,bool,staticComputeAliveProc[T]">
-<dt><pre><span class="Keyword">func</span> <a href="#computeAlive%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CT%2Cbool%2CstaticComputeAliveProc%5BT%5D"><span class="Identifier">computeAlive</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">cfg</span><span class="Other">:</span> <a href="../sem/mirexec.html#ControlFlowGraph"><span class="Identifier">ControlFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">values</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span>
-                     <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">loc</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">hasInitialValue</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">;</span>
+<div id="computeAlive,MirTree,DataFlowGraph,Values,Slice[NodePosition],T,staticComputeAliveProc[T]">
+<dt><pre><span class="Keyword">func</span> <a href="#computeAlive%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CT%2CstaticComputeAliveProc%5BT%5D"><span class="Identifier">computeAlive</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">cfg</span><span class="Other">:</span> <a href="../sem/mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">values</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span>
+                     <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">loc</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
                      <span class="Identifier">op</span><span class="Other">:</span> <span class="Identifier">static</span> <span class="Identifier">ComputeAliveProc</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">alive</span><span class="Other">,</span> <span class="Identifier">escapes</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">]</span></pre></dt>
 <dd>
 
 Computes whether the location is alive when <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> is exited via either structured or unstructured control-flow. A location is considered alive if it contains a value
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L524"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L430"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L524" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L430" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="computeAliveOp,MirTree,Values,T,MirNode,Operation">
-<dt><pre><span class="Keyword">func</span> <a href="#computeAliveOp%2CMirTree%2CValues%2CT%2CMirNode%2COperation"><span class="Identifier">computeAliveOp</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a> <span class="Operator">|</span> <a href="mirtrees.html#TempId"><span class="Identifier">TempId</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">values</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span> <span class="Identifier">loc</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
-                                      <span class="Identifier">n</span><span class="Other">:</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">;</span> <span class="Identifier">op</span><span class="Other">:</span> <a href="mirtrees.html#Operation"><span class="Identifier">Operation</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">AliveState</span></pre></dt>
+<div id="computeAliveOp,MirTree,Values,T,Opcode,OpValue">
+<dt><pre><span class="Keyword">func</span> <a href="#computeAliveOp%2CMirTree%2CValues%2CT%2COpcode%2COpValue"><span class="Identifier">computeAliveOp</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a> <span class="Operator">|</span> <a href="mirtrees.html#TempId"><span class="Identifier">TempId</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">values</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span> <span class="Identifier">loc</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
+                                      <span class="Identifier">op</span><span class="Other">:</span> <a href="../sem/mirexec.html#Opcode"><span class="Identifier">Opcode</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="mirtrees.html#OpValue"><span class="Identifier">OpValue</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">AliveState</span></pre></dt>
 <dd>
 
 Computes the state of <tt class="docutils literal"><span class="pre"><span class="Identifier">loc</span></span></tt> at the <em>end</em> of the given operation. The operands are expected to <em>not</em> alias with each other. The analysis result will be wrong if they do
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L465"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L379"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L465" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L379" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="computeValuesAndEffects,MirTree">
-<dt><pre><span class="Keyword">func</span> <a href="#computeValuesAndEffects%2CMirTree"><span class="Identifier">computeValuesAndEffects</span></a><span class="Other">(</span><span class="Identifier">body</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">)</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="computeValues,MirTree">
+<dt><pre><span class="Keyword">func</span> <a href="#computeValues%2CMirTree"><span class="Identifier">computeValues</span></a><span class="Other">(</span><span class="Identifier">body</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">)</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Creates a <tt class="docutils literal"><span class="pre">Values</span></tt> dictionary with all operation effects collected and (static) value roots computed. Value ownership is already computed where it is possible to do so by just taking the static operation sequences into account (i.e. no control- or data-flow analysis is performed)
+Creates a <tt class="docutils literal"><span class="pre">Values</span></tt> dictionary storing static information about lvalue expressions. Value ownership is already computed where it is possible to do so by just taking the static operation sequences into account (i.e., no control- or data-flow analysis is performed)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L174"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L132"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L174" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L132" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -371,23 +328,23 @@ Computes if the global <tt class="docutils literal"><span class="pre"><span clas
 
 <span class="Identifier">p</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L567"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L468"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L567" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L468" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="isAlive,MirTree,ControlFlowGraph,Values,Slice[NodePosition],LvalueExpr,NodePosition">
-<dt><pre><span class="Keyword">func</span> <a href="#isAlive%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"><span class="Identifier">isAlive</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">cfg</span><span class="Other">:</span> <a href="../sem/mirexec.html#ControlFlowGraph"><span class="Identifier">ControlFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span>
+<div id="isAlive,MirTree,DataFlowGraph,Values,Slice[NodePosition],LvalueExpr,NodePosition">
+<dt><pre><span class="Keyword">func</span> <a href="#isAlive%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"><span class="Identifier">isAlive</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">cfg</span><span class="Other">:</span> <a href="../sem/mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span>
              <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">loc</span><span class="Other">:</span> <a href="../sem/aliasanalysis.html#LvalueExpr"><span class="Identifier">LvalueExpr</span></a><span class="Other">;</span> <span class="Identifier">pos</span><span class="Other">:</span> <a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Computes if the location named by <tt class="docutils literal"><span class="pre"><span class="Identifier">loc</span></span></tt> does contain a value at <tt class="docutils literal"><span class="pre"><span class="Identifier">pos</span></span></tt> (i.e. is alive). The performed data-flow analysis only considers code inside <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L283"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L216"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L283" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L216" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -397,39 +354,39 @@ class="link-seesrc" target="_blank">Source</a>
 
 Computes if <tt class="docutils literal"><span class="pre"><span class="Identifier">val</span></span></tt> is definitely consumed. This is the case if it's directly used in a consume context, ignoring handle conversions.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L605"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L506"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L605" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L506" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="isLastRead,MirTree,ControlFlowGraph,Values,Slice[NodePosition],LvalueExpr,NodePosition">
-<dt><pre><span class="Keyword">func</span> <a href="#isLastRead%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"><span class="Identifier">isLastRead</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">cfg</span><span class="Other">:</span> <a href="../sem/mirexec.html#ControlFlowGraph"><span class="Identifier">ControlFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">values</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span>
+<div id="isLastRead,MirTree,DataFlowGraph,Values,Slice[NodePosition],LvalueExpr,NodePosition">
+<dt><pre><span class="Keyword">func</span> <a href="#isLastRead%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"><span class="Identifier">isLastRead</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">cfg</span><span class="Other">:</span> <a href="../sem/mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">values</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span>
                 <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">loc</span><span class="Other">:</span> <a href="../sem/aliasanalysis.html#LvalueExpr"><span class="Identifier">LvalueExpr</span></a><span class="Other">;</span> <span class="Identifier">pos</span><span class="Other">:</span> <a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Performs data-flow analysis to compute whether the value that <tt class="docutils literal"><span class="pre"><span class="Identifier">loc</span></span></tt> evaluates to at <tt class="docutils literal"><span class="pre"><span class="Identifier">pos</span></span></tt> is <em>not</em> observed by operations that have a control-flow dependency on the operation/statement at <tt class="docutils literal"><span class="pre"><span class="Identifier">pos</span></span></tt> and are located inside <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt>. It's important to note that this analysis does not test whether the underlying <em>location</em> is accessed, but rather the <em>value</em> it stores. If a new value is assigned to the underlying location which is then accessed after, it won't cause the analysis to return false
+Performs data-flow analysis to compute whether the value in <tt class="docutils literal"><span class="pre"><span class="Identifier">loc</span></span></tt> is observed on any paths starting from and including <tt class="docutils literal"><span class="pre"><span class="Identifier">pos</span></span></tt>. If it is observed, 'false' is returned, 'true' otherwise. Only operations within <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> are considered. It's important to note that this analysis does not test whether the underlying <em>location</em> is accessed, but rather the <em>value</em> it stores. If a new value is assigned to the underlying location which is then accessed after, it won't cause the analysis to return false
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L351"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L277"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L351" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L277" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="isLastWrite,MirTree,ControlFlowGraph,Values,Slice[NodePosition],LvalueExpr,NodePosition">
-<dt><pre><span class="Keyword">func</span> <a href="#isLastWrite%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"><span class="Identifier">isLastWrite</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">cfg</span><span class="Other">:</span> <a href="../sem/mirexec.html#ControlFlowGraph"><span class="Identifier">ControlFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">values</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span>
+<div id="isLastWrite,MirTree,DataFlowGraph,Values,Slice[NodePosition],LvalueExpr,NodePosition">
+<dt><pre><span class="Keyword">func</span> <a href="#isLastWrite%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition"><span class="Identifier">isLastWrite</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">cfg</span><span class="Other">:</span> <a href="../sem/mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">values</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span>
                  <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">loc</span><span class="Other">:</span> <a href="../sem/aliasanalysis.html#LvalueExpr"><span class="Identifier">LvalueExpr</span></a><span class="Other">;</span> <span class="Identifier">pos</span><span class="Other">:</span> <a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span>
     <span class="Identifier">result</span><span class="Other">,</span> <span class="Identifier">exits</span><span class="Other">,</span> <span class="Identifier">escapes</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-<p>Computes if the location <tt class="docutils literal"><span class="pre"><span class="Identifier">loc</span></span></tt> is not reassigned to or modified while it still contains the value it contains at <tt class="docutils literal"><span class="pre"><span class="Identifier">pos</span></span></tt>. In other words, computes whether a reassignment or mutation that has a control-flow dependency on <tt class="docutils literal"><span class="pre"><span class="Identifier">pos</span></span></tt> and is located inside <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> observes the current value.</p>
+<p>Computes whether the location <tt class="docutils literal"><span class="pre"><span class="Identifier">loc</span></span></tt> is reassigned or modified on any paths starting from and including <tt class="docutils literal"><span class="pre"><span class="Identifier">pos</span></span></tt>, returning 'false' if yes and 'true' if not. In other words, computes whether a reassignment or mutation that has a control-flow dependency on <tt class="docutils literal"><span class="pre"><span class="Identifier">pos</span></span></tt> and is located inside <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> observes the current value.</p>
 <p>In addition, whether the <tt class="docutils literal"><span class="pre"><span class="Identifier">pos</span></span></tt> is connected to a structured or unstructured exit of <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> is also returned</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L420"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L337"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L420" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L337" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -440,9 +397,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L148"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L119"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L148" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -453,9 +410,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L151"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L122"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L151" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L122" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -470,9 +427,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L142"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L113"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L142" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L113" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -482,9 +439,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/mir/analysis.nim#L145"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/mir/analysis.nim#L116"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L145" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L116" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -498,7 +455,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-11-26 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-11-27 00:00:00 UTC</small>
       </div>
     </div>
   </div>

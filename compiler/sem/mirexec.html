@@ -104,10 +104,26 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#ControlFlowGraph"
-    title="ControlFlowGraph = object
-  instructions: seq[Instr]
-  map: seq[InstrPos]         ## joind ID -&gt; instruction">ControlFlowGraph</a></li>
+      <li><a class="reference" href="#DataFlowGraph"
+    title="DataFlowGraph = object
+  instructions: seq[Instr]   ## sorted in ascending order by attached-to node position
+  map: seq[InstrPos]         ## join ID -&gt; instruction">DataFlowGraph</a></li>
+  <li><a class="reference" href="#Opcode"
+    title="Opcode = enum
+  opFork,                   ## branching control-flow that cannot introduce a cycle
+  opGoto,                   ## unconditional jump that cannot introduce a cycle
+  opLoop,                   ## unconditional jump to the start of a loop. The start of a cycle
+  opJoin,                   ## a join point for control-flow
+  opUse,                    ## use of a value
+  opDef,                    ## definition of a value
+  opKill,                   ## end-of-life for a value
+  opInvalidate,             ## all information gathered about a value becomes invalid
+  opMutate, ## mutation of a value. Can be viewed as a combined 'use' +
+             ## 'def'
+  opConsume, ## a value is consumed. Counts as either a 'use' or a 'use'
+              ## + 'kill', 
+              ## depending on the context
+  opMutateGlobal             ## an unspecified global is mutated">Opcode</a></li>
   <li><a class="reference" href="#TraverseState"
     title="TraverseState = object
   exit*: bool ## used to communicate to ``traverse`` that the active path
@@ -124,13 +140,13 @@ window.addEventListener('DOMContentLoaded', main);
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
       <ul class="simple nested-toc-section">$
-      <li><a class="reference" href="#%24%2CControlFlowGraph"
-    title="`$`(c: ControlFlowGraph): string">`$`(c: ControlFlowGraph): string</a></li>
+      <li><a class="reference" href="#%24%2CDataFlowGraph"
+    title="`$`(c: DataFlowGraph): string">`$`(c: DataFlowGraph): string</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">computeCfg
-      <li><a class="reference" href="#computeCfg%2CMirTree"
-    title="computeCfg(tree: MirTree): ControlFlowGraph">computeCfg(tree: MirTree): ControlFlowGraph</a></li>
+  <ul class="simple nested-toc-section">computeDfg
+      <li><a class="reference" href="#computeDfg%2CMirTree"
+    title="computeDfg(tree: MirTree): DataFlowGraph">computeDfg(tree: MirTree): DataFlowGraph</a></li>
 
   </ul>
 
@@ -140,28 +156,24 @@ window.addEventListener('DOMContentLoaded', main);
   <a class="reference reference-toplevel" href="#15" id="65">Iterators</a>
   <ul class="simple simple-toc-section">
       <ul class="simple nested-toc-section">traverse
-      <li><a class="reference" href="#traverse.i%2CMirTree%2CControlFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2CTraverseState"
-    title="traverse(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-         start: NodePosition; state: var TraverseState): (NodePosition,
-    lent MirNode)">traverse(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-         start: NodePosition; state: var TraverseState): (NodePosition,
-    lent MirNode)</a></li>
+      <li><a class="reference" href="#traverse.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2CTraverseState"
+    title="traverse(c: DataFlowGraph; span: Slice[NodePosition]; start: NodePosition;
+         state: var TraverseState): (Opcode, OpValue)">traverse(c: DataFlowGraph; span: Slice[NodePosition]; start: NodePosition;
+         state: var TraverseState): (Opcode, OpValue)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">traverseFromExits
-      <li><a class="reference" href="#traverseFromExits.i%2CMirTree%2CControlFlowGraph%2CSlice%5BNodePosition%5D%2Cbool"
-    title="traverseFromExits(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-                  exit: var bool): (NodePosition, lent MirNode)">traverseFromExits(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-                  exit: var bool): (NodePosition, lent MirNode)</a></li>
+      <li><a class="reference" href="#traverseFromExits.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2Cbool"
+    title="traverseFromExits(c: DataFlowGraph; span: Slice[NodePosition]; exit: var bool): (
+    Opcode, OpValue)">traverseFromExits(c: DataFlowGraph; span: Slice[NodePosition]; exit: var bool): (
+    Opcode, OpValue)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">traverseReverse
-      <li><a class="reference" href="#traverseReverse.i%2CMirTree%2CControlFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2Cbool"
-    title="traverseReverse(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-                start: NodePosition; exit: var bool): (NodePosition,
-    lent MirNode)">traverseReverse(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-                start: NodePosition; exit: var bool): (NodePosition,
-    lent MirNode)</a></li>
+      <li><a class="reference" href="#traverseReverse.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2Cbool"
+    title="traverseReverse(c: DataFlowGraph; span: Slice[NodePosition];
+                start: NodePosition; exit: var bool): (Opcode, OpValue)">traverseReverse(c: DataFlowGraph; span: Slice[NodePosition];
+                start: NodePosition; exit: var bool): (Opcode, OpValue)</a></li>
 
   </ul>
 
@@ -172,19 +184,16 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/sem/mirexec.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/sem/mirexec.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><p>This module implements algorithms for traversing a control-flow graph (=CFG) in forward or backward direction. In the abstract, it means visiting the nodes in topological-order (forward) or post-order (backward), with special handling for loops.</p>
-<p>In the compiler, this is mainly used for control- and/or data-flow analysis, meant to propagate properties through the graph or to to answer questions such as: &quot;is point A connected to point B?&quot;, &quot;is X initialized on all paths?&quot;, etc.</p>
-<p>Before traversing a control-flow graph, one has to be created via <tt class="docutils literal"><span class="pre">computeCfg</span></tt> first. Instead of a pointer-based graph structure, the graph is represented via a linear list of instruction.</p>
-<dl class="docutils"><dt>TODO: expand this section with how the algorithms used by for- and backward</dt>
-<dd>traversal work</dd>
-</dl>
+  <p class="module-desc"><p>Implements a data-flow graph (=DFG) representation plus algorithms for traversing the graph in both forward or backward direction. In the abstract, this means visiting the nodes in topological-order (forward) or post-order (backward), with special handling for loops.</p>
+<p>In the compiler, this is mainly used for control- and/or data-flow analysis, meant to propagate properties through the graph or to answer questions such as: &quot;is point A connected to point B?&quot;, &quot;is X initialized on all paths?&quot;, etc.</p>
+<p>A DFG is built via the <a class="reference external" href="#computeDfg,MirTree">computeDfg</a> routine. Instead of a pointer-based graph structure, the graph is represented as a sequence of instructions encoding all data- and control-flow relevant properties for a piece of code.</p>
 </p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
@@ -194,18 +203,44 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<div id="ControlFlowGraph">
-<dt><pre><a href="mirexec.html#ControlFlowGraph"><span class="Identifier">ControlFlowGraph</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">instructions</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">Instr</span><span class="Other">]</span>
-  <span class="Identifier">map</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">InstrPos</span><span class="Other">]</span>         <span class="Comment">## joind ID -&gt; instruction</span>
+<div id="DataFlowGraph">
+<dt><pre><a href="mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">instructions</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">Instr</span><span class="Other">]</span>   <span class="Comment">## sorted in ascending order by attached-to node position</span>
+  <span class="Identifier">map</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">InstrPos</span><span class="Other">]</span>         <span class="Comment">## join ID -&gt; instruction</span>
   </pre></dt>
 <dd>
 
-The control-flow graph is represented as a linear sequence of instructions
+Encodes the data-flow graph of a local program as a sequence of control- and data-flow instructions.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/sem/mirexec.nim#L59"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/sem/mirexec.nim#L78"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L59" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L78" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="Opcode">
+<dt><pre><a href="mirexec.html#Opcode"><span class="Identifier">Opcode</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">opFork</span><span class="Other">,</span>                   <span class="Comment">## branching control-flow that cannot introduce a cycle</span>
+  <span class="Identifier">opGoto</span><span class="Other">,</span>                   <span class="Comment">## unconditional jump that cannot introduce a cycle</span>
+  <span class="Identifier">opLoop</span><span class="Other">,</span>                   <span class="Comment">## unconditional jump to the start of a loop. The start of a cycle</span>
+  <span class="Identifier">opJoin</span><span class="Other">,</span>                   <span class="Comment">## a join point for control-flow</span>
+  <span class="Identifier">opUse</span><span class="Other">,</span>                    <span class="Comment">## use of a value</span>
+  <span class="Identifier">opDef</span><span class="Other">,</span>                    <span class="Comment">## definition of a value</span>
+  <span class="Identifier">opKill</span><span class="Other">,</span>                   <span class="Comment">## end-of-life for a value</span>
+  <span class="Identifier">opInvalidate</span><span class="Other">,</span>             <span class="Comment">## all information gathered about a value becomes invalid</span>
+  <span class="Identifier">opMutate</span><span class="Other">,</span> <span class="Comment">## mutation of a value. Can be viewed as a combined 'use' +</span>
+             <span class="Comment">## 'def'</span>
+  <span class="Identifier">opConsume</span><span class="Other">,</span> <span class="Comment">## a value is consumed. Counts as either a 'use' or a 'use'</span>
+              <span class="Comment">## + 'kill', </span>
+              <span class="Comment">## depending on the context</span>
+  <span class="Identifier">opMutateGlobal</span>             <span class="Comment">## an unspecified global is mutated</span></pre></dt>
+<dd>
+
+The opcode of a data-/control-flow instruction, representing edges and nodes in the graph.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/sem/mirexec.nim#L39"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L39" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -223,9 +258,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/sem/mirexec.nim#L65"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/sem/mirexec.nim#L86"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L86" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -234,31 +269,31 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="$,ControlFlowGraph">
-<dt><pre><span class="Keyword">func</span> <a href="#%24%2CControlFlowGraph"><span class="Identifier">`$`</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="mirexec.html#ControlFlowGraph"><span class="Identifier">ControlFlowGraph</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="$,DataFlowGraph">
+<dt><pre><span class="Keyword">func</span> <a href="#%24%2CDataFlowGraph"><span class="Identifier">`$`</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Renders the instructions of <tt class="docutils literal"><span class="pre"><span class="Identifier">c</span></span></tt> as a human-readable text representation
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/sem/mirexec.nim#L775"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/sem/mirexec.nim#L818"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L775" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L818" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="computeCfg,MirTree">
-<dt><pre><span class="Keyword">func</span> <a href="#computeCfg%2CMirTree"><span class="Identifier">computeCfg</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirexec.html#ControlFlowGraph"><span class="Identifier">ControlFlowGraph</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="computeDfg,MirTree">
+<dt><pre><span class="Keyword">func</span> <a href="#computeDfg%2CMirTree"><span class="Identifier">computeDfg</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Computes the control-flow graph for the given <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt>. This is a very expensive operation! The high cost is due to two essential reasons:<ol class="simple"><li>a control-flow graph needs to materialize all edges for a given <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt></li>
+Computes the data-flow graph for the given <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt>. This is an expensive operation! The high cost is due to two essential reasons:<ol class="simple"><li>a control-flow graph needs to materialize all edges for a given <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt></li>
 <li>the amount of allocations/bookkeeping necessary to do so</li>
 </ol>
 <p>The most amount of bookkeeping is required for finalizers and exceptions.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/sem/mirexec.nim#L137"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/sem/mirexec.nim#L156"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L156" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -267,27 +302,27 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="15">
 <h1><a class="toc-backref" href="#15">Iterators</a></h1>
 <dl class="item">
-<div id="traverse.i,MirTree,ControlFlowGraph,Slice[NodePosition],NodePosition,TraverseState">
-<dt><pre><span class="Keyword">iterator</span> <a href="#traverse.i%2CMirTree%2CControlFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2CTraverseState"><span class="Identifier">traverse</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">c</span><span class="Other">:</span> <a href="mirexec.html#ControlFlowGraph"><span class="Identifier">ControlFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span>
-                  <span class="Identifier">start</span><span class="Other">:</span> <a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">;</span> <span class="Identifier">state</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirexec.html#TraverseState"><span class="Identifier">TraverseState</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">,</span>
-    <span class="Identifier">lent</span> <a href="../mir/mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="traverse.i,DataFlowGraph,Slice[NodePosition],NodePosition,TraverseState">
+<dt><pre><span class="Keyword">iterator</span> <a href="#traverse.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2CTraverseState"><span class="Identifier">traverse</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span>
+                  <span class="Identifier">start</span><span class="Other">:</span> <a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">;</span> <span class="Identifier">state</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirexec.html#TraverseState"><span class="Identifier">TraverseState</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><a href="mirexec.html#Opcode"><span class="Identifier">Opcode</span></a><span class="Other">,</span>
+    <a href="../mir/mirtrees.html#OpValue"><span class="Identifier">OpValue</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-<p>Starts at <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span> <span class="Operator">+</span> <span class="DecNumber">1</span></span></tt> and traverses/yields all basic blocks inside <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> in control-flow order. That is, except for in the context of loops, each basic block is yielded before those having a control-flow dependency on it. Traversal begins at <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span></span></tt>, which is allowed to point inside a basic block.</p>
+<p>Starts at the data-flow operation closest to <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span></span></tt> and traverses/yields all data-flow operations inside <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> in control-flow order. Outside of loops, this means that an operation is visited <em>before</em> operations that have a control-flow dependency on it. If <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span></span></tt> is not part of <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt>, nothing is returned and <tt class="docutils literal"><span class="pre"><span class="Identifier">state</span><span class="Operator">.</span><span class="Identifier">exit</span></span></tt> is set to 'false'.</p>
 <p>The same basic block may be yielded multiple times. This is not a general limitation, but rather because of a shortcut taken by the implementation.</p>
 <p><tt class="docutils literal"><span class="pre"><span class="Identifier">state</span></span></tt> is used for bi-directional communication -- see the documentation of <tt class="docutils literal"><span class="pre">TraverseState</span></tt> for more information.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/sem/mirexec.nim#L408"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/sem/mirexec.nim#L477"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L408" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L477" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="traverseFromExits.i,MirTree,ControlFlowGraph,Slice[NodePosition],bool">
-<dt><pre><span class="Keyword">iterator</span> <a href="#traverseFromExits.i%2CMirTree%2CControlFlowGraph%2CSlice%5BNodePosition%5D%2Cbool"><span class="Identifier">traverseFromExits</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">c</span><span class="Other">:</span> <a href="mirexec.html#ControlFlowGraph"><span class="Identifier">ControlFlowGraph</span></a><span class="Other">;</span>
-                           <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">exit</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span>
-    <a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">,</span> <span class="Identifier">lent</span> <a href="../mir/mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="traverseFromExits.i,DataFlowGraph,Slice[NodePosition],bool">
+<dt><pre><span class="Keyword">iterator</span> <a href="#traverseFromExits.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2Cbool"><span class="Identifier">traverseFromExits</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span>
+                           <span class="Identifier">exit</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><a href="mirexec.html#Opcode"><span class="Identifier">Opcode</span></a><span class="Other">,</span> <a href="../mir/mirtrees.html#OpValue"><span class="Identifier">OpValue</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 <p>Similar to <tt class="docutils literal"><span class="pre">traverseReverse</span></tt>, but starts traversal at each unstructured exit of <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt>. Here, unstructured exit means that the control-flow leaves <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> via a 'goto' or 'fork'.</p>
@@ -295,27 +330,26 @@ class="link-seesrc" target="_blank">Source</a>
 <p><tt class="docutils literal"><span class="pre"><span class="Identifier">exit</span></span></tt> works the same way as it does for <tt class="docutils literal"><span class="pre">traverseReverse</span></tt></p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/sem/mirexec.nim#L689"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/sem/mirexec.nim#L737"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L689" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L737" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="traverseReverse.i,MirTree,ControlFlowGraph,Slice[NodePosition],NodePosition,bool">
-<dt><pre><span class="Keyword">iterator</span> <a href="#traverseReverse.i%2CMirTree%2CControlFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2Cbool"><span class="Identifier">traverseReverse</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">c</span><span class="Other">:</span> <a href="mirexec.html#ControlFlowGraph"><span class="Identifier">ControlFlowGraph</span></a><span class="Other">;</span>
-                         <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">start</span><span class="Other">:</span> <a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">;</span>
-                         <span class="Identifier">exit</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">,</span> <span class="Identifier">lent</span> <a href="../mir/mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">)</span> {.
+<div id="traverseReverse.i,DataFlowGraph,Slice[NodePosition],NodePosition,bool">
+<dt><pre><span class="Keyword">iterator</span> <a href="#traverseReverse.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2Cbool"><span class="Identifier">traverseReverse</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">span</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span><span class="Other">;</span>
+                         <span class="Identifier">start</span><span class="Other">:</span> <a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">;</span> <span class="Identifier">exit</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Other">(</span><a href="mirexec.html#Opcode"><span class="Identifier">Opcode</span></a><span class="Other">,</span> <a href="../mir/mirtrees.html#OpValue"><span class="Identifier">OpValue</span></a><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-<p>Starts at <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span> <span class="Operator">-</span> <span class="DecNumber">1</span></span></tt> and visits and returns all basic blocks inside <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> in post-order.</p>
+<p>Starts at <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span> <span class="Operator">-</span> <span class="DecNumber">1</span></span></tt> and visits and returns all data-flow operations inside <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> in post-order.</p>
 <p><tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> being empty is supported: nothing is returned in that case.</p>
 <p>Similar to <tt class="docutils literal"><span class="pre">traverse</span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">exit</span></span></tt> is used, with the same meaning, for bi-directional communication.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/bdccaeb803fb80e39310cd9c3cf47c3b992495b2/compiler/sem/mirexec.nim#L572"
+href="https://github.com/nim-works/nimskull/tree/47a0fd55ab0809f0eee62e6cabe764f41bfc4332/compiler/sem/mirexec.nim#L624"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L572" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L624" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -329,7 +363,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-11-26 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-11-27 00:00:00 UTC</small>
       </div>
     </div>
   </div>

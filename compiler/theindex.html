@@ -99,7 +99,7 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="nimblecmd: `$`(ver: Version): string" href="modules/nimblecmd.html#%24%2CVersion">nimblecmd: `$`(ver: Version): string</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="mirexec: `$`(c: ControlFlowGraph): string" href="sem/mirexec.html#%24%2CControlFlowGraph">mirexec: `$`(c: ControlFlowGraph): string</a></li>
+          data-doc-search-tag="mirexec: `$`(c: DataFlowGraph): string" href="sem/mirexec.html#%24%2CDataFlowGraph">mirexec: `$`(c: DataFlowGraph): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="nilcheck: `$`(a: ExprIndex): string" href="sem/nilcheck.html#%24%2CExprIndex">nilcheck: `$`(a: ExprIndex): string</a></li>
           <li><a class="reference external"
@@ -4409,29 +4409,29 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="computeAlive" href="#computeAlive"><span>computeAlive:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="analysis: computeAlive[T](tree: MirTree; cfg: ControlFlowGraph; values: Values;
-                span: Slice[NodePosition]; loc: T; hasInitialValue: bool;
-                op: static ComputeAliveProc[T]): tuple[alive, escapes: bool]" href="mir/analysis.html#computeAlive%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CT%2Cbool%2CstaticComputeAliveProc%5BT%5D">analysis: computeAlive[T](tree: MirTree; cfg: ControlFlowGraph; values: Values;
-                span: Slice[NodePosition]; loc: T; hasInitialValue: bool;
+          data-doc-search-tag="analysis: computeAlive[T](tree: MirTree; cfg: DataFlowGraph; values: Values;
+                span: Slice[NodePosition]; loc: T;
+                op: static ComputeAliveProc[T]): tuple[alive, escapes: bool]" href="mir/analysis.html#computeAlive%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CT%2CstaticComputeAliveProc%5BT%5D">analysis: computeAlive[T](tree: MirTree; cfg: DataFlowGraph; values: Values;
+                span: Slice[NodePosition]; loc: T;
                 op: static ComputeAliveProc[T]): tuple[alive, escapes: bool]</a></li>
           </ul></dd>
 <dt><a name="computeAliveOp" href="#computeAliveOp"><span>computeAliveOp:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="analysis: computeAliveOp[T: PSym | TempId](tree: MirTree; values: Values; loc: T;
-                                 n: MirNode; op: Operation): AliveState" href="mir/analysis.html#computeAliveOp%2CMirTree%2CValues%2CT%2CMirNode%2COperation">analysis: computeAliveOp[T: PSym | TempId](tree: MirTree; values: Values; loc: T;
-                                 n: MirNode; op: Operation): AliveState</a></li>
+                                 op: Opcode; n: OpValue): AliveState" href="mir/analysis.html#computeAliveOp%2CMirTree%2CValues%2CT%2COpcode%2COpValue">analysis: computeAliveOp[T: PSym | TempId](tree: MirTree; values: Values; loc: T;
+                                 op: Opcode; n: OpValue): AliveState</a></li>
           </ul></dd>
 <dt><a name="computeAliveSyms" href="#computeAliveSyms"><span>computeAliveSyms:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="dce: computeAliveSyms(g: PackedModuleGraph; graph: ModuleGraph; conf: ConfigRef): AliveSyms" href="ic/dce.html#computeAliveSyms%2CPackedModuleGraph%2CModuleGraph%2CConfigRef">dce: computeAliveSyms(g: PackedModuleGraph; graph: ModuleGraph; conf: ConfigRef): AliveSyms</a></li>
           </ul></dd>
-<dt><a name="computeCfg" href="#computeCfg"><span>computeCfg:</span></a></dt><dd><ul class="simple">
-<li><a class="reference external"
-          data-doc-search-tag="mirexec: computeCfg(tree: MirTree): ControlFlowGraph" href="sem/mirexec.html#computeCfg%2CMirTree">mirexec: computeCfg(tree: MirTree): ControlFlowGraph</a></li>
-          </ul></dd>
 <dt><a name="computeCursors" href="#computeCursors"><span>computeCursors:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="varpartitions: computeCursors(s: PSym; n: PNode; g: ModuleGraph)" href="sem/varpartitions.html#computeCursors%2CPSym%2CPNode%2CModuleGraph">varpartitions: computeCursors(s: PSym; n: PNode; g: ModuleGraph)</a></li>
+          </ul></dd>
+<dt><a name="computeDfg" href="#computeDfg"><span>computeDfg:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="mirexec: computeDfg(tree: MirTree): DataFlowGraph" href="sem/mirexec.html#computeDfg%2CMirTree">mirexec: computeDfg(tree: MirTree): DataFlowGraph</a></li>
           </ul></dd>
 <dt><a name="computeGraphPartitions" href="#computeGraphPartitions"><span>computeGraphPartitions:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -4445,9 +4445,9 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="mirtrees: computeSpan(tree: MirTree; n: NodePosition): Slice[NodePosition]" href="mir/mirtrees.html#computeSpan%2CMirTree%2CNodePosition">mirtrees: computeSpan(tree: MirTree; n: NodePosition): Slice[NodePosition]</a></li>
           </ul></dd>
-<dt><a name="computeValuesAndEffects" href="#computeValuesAndEffects"><span>computeValuesAndEffects:</span></a></dt><dd><ul class="simple">
+<dt><a name="computeValues" href="#computeValues"><span>computeValues:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="analysis: computeValuesAndEffects(body: MirTree): Values" href="mir/analysis.html#computeValuesAndEffects%2CMirTree">analysis: computeValuesAndEffects(body: MirTree): Values</a></li>
+          data-doc-search-tag="analysis: computeValues(body: MirTree): Values" href="mir/analysis.html#computeValues%2CMirTree">analysis: computeValues(body: MirTree): Values</a></li>
           </ul></dd>
 <dt><a name="compVerbosityDefault" href="#compVerbosityDefault"><span>compVerbosityDefault:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -4587,7 +4587,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="ConsumeCtx" href="#ConsumeCtx"><span>ConsumeCtx:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="analysis: ConsumeCtx" href="mir/analysis.html#ConsumeCtx">analysis: ConsumeCtx</a></li>
+          data-doc-search-tag="mirtrees: ConsumeCtx" href="mir/mirtrees.html#ConsumeCtx">mirtrees: ConsumeCtx</a></li>
           </ul></dd>
 <dt><a name="contains" href="#contains"><span>contains:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -4642,10 +4642,6 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="context%3D" href="#context%3D"><span>context=:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="reports: context=(report: var Report; context: seq[ReportContext])" href="ast/reports.html#context%3D%2CReport%2Cseq%5BReportContext%5D">reports: context=(report: var Report; context: seq[ReportContext])</a></li>
-          </ul></dd>
-<dt><a name="ControlFlowGraph" href="#ControlFlowGraph"><span>ControlFlowGraph:</span></a></dt><dd><ul class="simple">
-<li><a class="reference external"
-          data-doc-search-tag="mirexec: ControlFlowGraph" href="sem/mirexec.html#ControlFlowGraph">mirexec: ControlFlowGraph</a></li>
           </ul></dd>
 <dt><a name="converterPragmas" href="#converterPragmas"><span>converterPragmas:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -5116,6 +5112,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="DataEncoder" href="#DataEncoder"><span>DataEncoder:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="packed_env: DataEncoder" href="vm/packed_env.html#DataEncoder">packed_env: DataEncoder</a></li>
+          </ul></dd>
+<dt><a name="DataFlowGraph" href="#DataFlowGraph"><span>DataFlowGraph:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="mirexec: DataFlowGraph" href="sem/mirexec.html#DataFlowGraph">mirexec: DataFlowGraph</a></li>
           </ul></dd>
 <dt><a name="dcEq" href="#dcEq"><span>dcEq:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -5636,6 +5636,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="effectListLen" href="#effectListLen"><span>effectListLen:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="ast_types: effectListLen" href="ast/ast_types.html#effectListLen">ast_types: effectListLen</a></li>
+          </ul></dd>
+<dt><a name="effects" href="#effects"><span>effects:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="mirtrees: effects(tree: MirTree; n: NodePosition): (EffectKind, OpValue)" href="mir/mirtrees.html#effects.i%2CMirTree%2CNodePosition">mirtrees: effects(tree: MirTree; n: NodePosition): (EffectKind, OpValue)</a></li>
           </ul></dd>
 <dt><a name="EffectsCompat" href="#EffectsCompat"><span>EffectsCompat:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -8975,9 +8979,9 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="dce: isAlive(a: AliveSyms; module: int; item: int32): bool" href="ic/dce.html#isAlive%2CAliveSyms%2Cint%2Cint32">dce: isAlive(a: AliveSyms; module: int; item: int32): bool</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="analysis: isAlive(tree: MirTree; cfg: ControlFlowGraph; v: Values;
-        span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool" href="mir/analysis.html#isAlive%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition">analysis: isAlive(tree: MirTree; cfg: ControlFlowGraph; v: Values;
-        span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool</a></li>
+          data-doc-search-tag="analysis: isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Slice[NodePosition];
+        loc: LvalueExpr; pos: NodePosition): bool" href="mir/analysis.html#isAlive%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition">analysis: isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Slice[NodePosition];
+        loc: LvalueExpr; pos: NodePosition): bool</a></li>
           </ul></dd>
 <dt><a name="isAPartOfB" href="#isAPartOfB"><span>isAPartOfB:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -9235,15 +9239,15 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="isLastRead" href="#isLastRead"><span>isLastRead:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="analysis: isLastRead(tree: MirTree; cfg: ControlFlowGraph; values: Values;
-           span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool" href="mir/analysis.html#isLastRead%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition">analysis: isLastRead(tree: MirTree; cfg: ControlFlowGraph; values: Values;
+          data-doc-search-tag="analysis: isLastRead(tree: MirTree; cfg: DataFlowGraph; values: Values;
+           span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool" href="mir/analysis.html#isLastRead%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition">analysis: isLastRead(tree: MirTree; cfg: DataFlowGraph; values: Values;
            span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool</a></li>
           </ul></dd>
 <dt><a name="isLastWrite" href="#isLastWrite"><span>isLastWrite:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="analysis: isLastWrite(tree: MirTree; cfg: ControlFlowGraph; values: Values;
+          data-doc-search-tag="analysis: isLastWrite(tree: MirTree; cfg: DataFlowGraph; values: Values;
             span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): tuple[
-    result, exits, escapes: bool]" href="mir/analysis.html#isLastWrite%2CMirTree%2CControlFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition">analysis: isLastWrite(tree: MirTree; cfg: ControlFlowGraph; values: Values;
+    result, exits, escapes: bool]" href="mir/analysis.html#isLastWrite%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition">analysis: isLastWrite(tree: MirTree; cfg: DataFlowGraph; values: Values;
             span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): tuple[
     result, exits, escapes: bool]</a></li>
           </ul></dd>
@@ -14179,6 +14183,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="TOpcode.opcObjConv" href="vm/vm_enums.html#opcObjConv">TOpcode.opcObjConv</a></li>
           </ul></dd>
+<dt><a name="Opcode" href="#Opcode"><span>Opcode:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="mirexec: Opcode" href="sem/mirexec.html#Opcode">mirexec: Opcode</a></li>
+          </ul></dd>
 <dt><a name="opcode" href="#opcode"><span>opcode:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="vmdef: opcode(x: TInstr): TOpcode" href="vm/vmdef.html#opcode.t%2CTInstr">vmdef: opcode(x: TInstr): TOpcode</a></li>
@@ -14186,6 +14194,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="opcOf" href="#opcOf"><span>opcOf:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="TOpcode.opcOf" href="vm/vm_enums.html#opcOf">TOpcode.opcOf</a></li>
+          </ul></dd>
+<dt><a name="opConsume" href="#opConsume"><span>opConsume:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opConsume" href="sem/mirexec.html#opConsume">Opcode.opConsume</a></li>
           </ul></dd>
 <dt><a name="opcParseExprToAst" href="#opcParseExprToAst"><span>opcParseExprToAst:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -14339,6 +14351,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="TOpcode.opcYldYoid" href="vm/vm_enums.html#opcYldYoid">TOpcode.opcYldYoid</a></li>
           </ul></dd>
+<dt><a name="opDef" href="#opDef"><span>opDef:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opDef" href="sem/mirexec.html#opDef">Opcode.opDef</a></li>
+          </ul></dd>
 <dt><a name="open" href="#open"><span>open:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="ndi: open(f: var NdiFile; filename: AbsoluteFile; conf: ConfigRef)" href="ast/ndi.html#open%2CNdiFile%2CAbsoluteFile%2CConfigRef">ndi: open(f: var NdiFile; filename: AbsoluteFile; conf: ConfigRef)</a></li>
@@ -14403,11 +14419,35 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="modulegraphs: Operators" href="modules/modulegraphs.html#Operators">modulegraphs: Operators</a></li>
           </ul></dd>
+<dt><a name="opFork" href="#opFork"><span>opFork:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opFork" href="sem/mirexec.html#opFork">Opcode.opFork</a></li>
+          </ul></dd>
 <dt><a name="opGorge" href="#opGorge"><span>opGorge:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="gorgeimpl: opGorge(cmd, input, cache: string; info: TLineInfo; conf: ConfigRef): (string,
     int)" href="vm/gorgeimpl.html#opGorge%2Cstring%2Cstring%2Cstring%2CTLineInfo%2CConfigRef">gorgeimpl: opGorge(cmd, input, cache: string; info: TLineInfo; conf: ConfigRef): (string,
     int)</a></li>
+          </ul></dd>
+<dt><a name="opGoto" href="#opGoto"><span>opGoto:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opGoto" href="sem/mirexec.html#opGoto">Opcode.opGoto</a></li>
+          </ul></dd>
+<dt><a name="opInvalidate" href="#opInvalidate"><span>opInvalidate:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opInvalidate" href="sem/mirexec.html#opInvalidate">Opcode.opInvalidate</a></li>
+          </ul></dd>
+<dt><a name="opJoin" href="#opJoin"><span>opJoin:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opJoin" href="sem/mirexec.html#opJoin">Opcode.opJoin</a></li>
+          </ul></dd>
+<dt><a name="opKill" href="#opKill"><span>opKill:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opKill" href="sem/mirexec.html#opKill">Opcode.opKill</a></li>
+          </ul></dd>
+<dt><a name="opLoop" href="#opLoop"><span>opLoop:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opLoop" href="sem/mirexec.html#opLoop">Opcode.opLoop</a></li>
           </ul></dd>
 <dt><a name="opMapTypeImplToAst" href="#opMapTypeImplToAst"><span>opMapTypeImplToAst:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -14424,6 +14464,14 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="opMapTypeToAst" href="#opMapTypeToAst"><span>opMapTypeToAst:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="vmdeps: opMapTypeToAst(cache: IdentCache; t: PType; info: TLineInfo; idgen: IdGenerator): PNode" href="vm/vmdeps.html#opMapTypeToAst%2CIdentCache%2CPType%2CTLineInfo%2CIdGenerator">vmdeps: opMapTypeToAst(cache: IdentCache; t: PType; info: TLineInfo; idgen: IdGenerator): PNode</a></li>
+          </ul></dd>
+<dt><a name="opMutate" href="#opMutate"><span>opMutate:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opMutate" href="sem/mirexec.html#opMutate">Opcode.opMutate</a></li>
+          </ul></dd>
+<dt><a name="opMutateGlobal" href="#opMutateGlobal"><span>opMutateGlobal:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opMutateGlobal" href="sem/mirexec.html#opMutateGlobal">Opcode.opMutateGlobal</a></li>
           </ul></dd>
 <dt><a name="opParam" href="#opParam"><span>opParam:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -14446,6 +14494,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="opSlurp" href="#opSlurp"><span>opSlurp:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="vmdeps: opSlurp(file: string; info: TLineInfo; module: PSym; conf: ConfigRef): string" href="vm/vmdeps.html#opSlurp%2Cstring%2CTLineInfo%2CPSym%2CConfigRef">vmdeps: opSlurp(file: string; info: TLineInfo; module: PSym; conf: ConfigRef): string</a></li>
+          </ul></dd>
+<dt><a name="OpsWithEffects" href="#OpsWithEffects"><span>OpsWithEffects:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="mirtrees: OpsWithEffects" href="mir/mirtrees.html#OpsWithEffects">mirtrees: OpsWithEffects</a></li>
           </ul></dd>
 <dt><a name="optAssert" href="#optAssert"><span>optAssert:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -14742,6 +14794,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="optWholeProject" href="#optWholeProject"><span>optWholeProject:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="TGlobalOption.optWholeProject" href="front/in_options.html#optWholeProject">TGlobalOption.optWholeProject</a></li>
+          </ul></dd>
+<dt><a name="opUse" href="#opUse"><span>opUse:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="Opcode.opUse" href="sem/mirexec.html#opUse">Opcode.opUse</a></li>
           </ul></dd>
 <dt><a name="OpValue" href="#OpValue"><span>OpValue:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -23211,25 +23267,21 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="traverse" href="#traverse"><span>traverse:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="mirexec: traverse(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-         start: NodePosition; state: var TraverseState): (NodePosition,
-    lent MirNode)" href="sem/mirexec.html#traverse.i%2CMirTree%2CControlFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2CTraverseState">mirexec: traverse(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-         start: NodePosition; state: var TraverseState): (NodePosition,
-    lent MirNode)</a></li>
+          data-doc-search-tag="mirexec: traverse(c: DataFlowGraph; span: Slice[NodePosition]; start: NodePosition;
+         state: var TraverseState): (Opcode, OpValue)" href="sem/mirexec.html#traverse.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2CTraverseState">mirexec: traverse(c: DataFlowGraph; span: Slice[NodePosition]; start: NodePosition;
+         state: var TraverseState): (Opcode, OpValue)</a></li>
           </ul></dd>
 <dt><a name="traverseFromExits" href="#traverseFromExits"><span>traverseFromExits:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="mirexec: traverseFromExits(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-                  exit: var bool): (NodePosition, lent MirNode)" href="sem/mirexec.html#traverseFromExits.i%2CMirTree%2CControlFlowGraph%2CSlice%5BNodePosition%5D%2Cbool">mirexec: traverseFromExits(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-                  exit: var bool): (NodePosition, lent MirNode)</a></li>
+          data-doc-search-tag="mirexec: traverseFromExits(c: DataFlowGraph; span: Slice[NodePosition]; exit: var bool): (
+    Opcode, OpValue)" href="sem/mirexec.html#traverseFromExits.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2Cbool">mirexec: traverseFromExits(c: DataFlowGraph; span: Slice[NodePosition]; exit: var bool): (
+    Opcode, OpValue)</a></li>
           </ul></dd>
 <dt><a name="traverseReverse" href="#traverseReverse"><span>traverseReverse:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="mirexec: traverseReverse(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-                start: NodePosition; exit: var bool): (NodePosition,
-    lent MirNode)" href="sem/mirexec.html#traverseReverse.i%2CMirTree%2CControlFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2Cbool">mirexec: traverseReverse(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];
-                start: NodePosition; exit: var bool): (NodePosition,
-    lent MirNode)</a></li>
+          data-doc-search-tag="mirexec: traverseReverse(c: DataFlowGraph; span: Slice[NodePosition];
+                start: NodePosition; exit: var bool): (Opcode, OpValue)" href="sem/mirexec.html#traverseReverse.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2Cbool">mirexec: traverseReverse(c: DataFlowGraph; span: Slice[NodePosition];
+                start: NodePosition; exit: var bool): (Opcode, OpValue)</a></li>
           </ul></dd>
 <dt><a name="TraverseState" href="#TraverseState"><span>TraverseState:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -24141,7 +24193,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="UseContext" href="#UseContext"><span>UseContext:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="analysis: UseContext" href="mir/analysis.html#UseContext">analysis: UseContext</a></li>
+          data-doc-search-tag="mirtrees: UseContext" href="mir/mirtrees.html#UseContext">mirtrees: UseContext</a></li>
           </ul></dd>
 <dt><a name="UsedBuildParams" href="#UsedBuildParams"><span>UsedBuildParams:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -25958,7 +26010,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-11-26 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-11-27 00:00:00 UTC</small>
       </div>
     </div>
   </div>

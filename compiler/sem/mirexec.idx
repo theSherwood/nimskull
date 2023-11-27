@@ -1,7 +1,19 @@
-ControlFlowGraph	sem/mirexec.html#ControlFlowGraph	mirexec: ControlFlowGraph	
+opFork	sem/mirexec.html#opFork	Opcode.opFork	
+opGoto	sem/mirexec.html#opGoto	Opcode.opGoto	
+opLoop	sem/mirexec.html#opLoop	Opcode.opLoop	
+opJoin	sem/mirexec.html#opJoin	Opcode.opJoin	
+opUse	sem/mirexec.html#opUse	Opcode.opUse	
+opDef	sem/mirexec.html#opDef	Opcode.opDef	
+opKill	sem/mirexec.html#opKill	Opcode.opKill	
+opInvalidate	sem/mirexec.html#opInvalidate	Opcode.opInvalidate	
+opMutate	sem/mirexec.html#opMutate	Opcode.opMutate	
+opConsume	sem/mirexec.html#opConsume	Opcode.opConsume	
+opMutateGlobal	sem/mirexec.html#opMutateGlobal	Opcode.opMutateGlobal	
+Opcode	sem/mirexec.html#Opcode	mirexec: Opcode	
+DataFlowGraph	sem/mirexec.html#DataFlowGraph	mirexec: DataFlowGraph	
 TraverseState	sem/mirexec.html#TraverseState	mirexec: TraverseState	
-computeCfg	sem/mirexec.html#computeCfg,MirTree	mirexec: computeCfg(tree: MirTree): ControlFlowGraph	
-traverse	sem/mirexec.html#traverse.i,MirTree,ControlFlowGraph,Slice[NodePosition],NodePosition,TraverseState	mirexec: traverse(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];\n         start: NodePosition; state: var TraverseState): (NodePosition,\n    lent MirNode)	
-traverseReverse	sem/mirexec.html#traverseReverse.i,MirTree,ControlFlowGraph,Slice[NodePosition],NodePosition,bool	mirexec: traverseReverse(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];\n                start: NodePosition; exit: var bool): (NodePosition,\n    lent MirNode)	
-traverseFromExits	sem/mirexec.html#traverseFromExits.i,MirTree,ControlFlowGraph,Slice[NodePosition],bool	mirexec: traverseFromExits(tree: MirTree; c: ControlFlowGraph; span: Slice[NodePosition];\n                  exit: var bool): (NodePosition, lent MirNode)	
-`$`	sem/mirexec.html#$,ControlFlowGraph	mirexec: `$`(c: ControlFlowGraph): string	
+computeDfg	sem/mirexec.html#computeDfg,MirTree	mirexec: computeDfg(tree: MirTree): DataFlowGraph	
+traverse	sem/mirexec.html#traverse.i,DataFlowGraph,Slice[NodePosition],NodePosition,TraverseState	mirexec: traverse(c: DataFlowGraph; span: Slice[NodePosition]; start: NodePosition;\n         state: var TraverseState): (Opcode, OpValue)	
+traverseReverse	sem/mirexec.html#traverseReverse.i,DataFlowGraph,Slice[NodePosition],NodePosition,bool	mirexec: traverseReverse(c: DataFlowGraph; span: Slice[NodePosition];\n                start: NodePosition; exit: var bool): (Opcode, OpValue)	
+traverseFromExits	sem/mirexec.html#traverseFromExits.i,DataFlowGraph,Slice[NodePosition],bool	mirexec: traverseFromExits(c: DataFlowGraph; span: Slice[NodePosition]; exit: var bool): (\n    Opcode, OpValue)	
+`$`	sem/mirexec.html#$,DataFlowGraph	mirexec: `$`(c: DataFlowGraph): string	
