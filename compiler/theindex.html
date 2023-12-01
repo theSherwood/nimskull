@@ -4410,10 +4410,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="computeAlive" href="#computeAlive"><span>computeAlive:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="analysis: computeAlive[T](tree: MirTree; cfg: DataFlowGraph; values: Values;
-                span: Slice[NodePosition]; loc: T;
-                op: static ComputeAliveProc[T]): tuple[alive, escapes: bool]" href="mir/analysis.html#computeAlive%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CT%2CstaticComputeAliveProc%5BT%5D">analysis: computeAlive[T](tree: MirTree; cfg: DataFlowGraph; values: Values;
-                span: Slice[NodePosition]; loc: T;
-                op: static ComputeAliveProc[T]): tuple[alive, escapes: bool]</a></li>
+                span: Subgraph; loc: T; op: static ComputeAliveProc[T]): tuple[
+    alive, escapes: bool]" href="mir/analysis.html#computeAlive%2CMirTree%2CDataFlowGraph%2CValues%2CSubgraph%2CT%2CstaticComputeAliveProc%5BT%5D">analysis: computeAlive[T](tree: MirTree; cfg: DataFlowGraph; values: Values;
+                span: Subgraph; loc: T; op: static ComputeAliveProc[T]): tuple[
+    alive, escapes: bool]</a></li>
           </ul></dd>
 <dt><a name="computeAliveOp" href="#computeAliveOp"><span>computeAliveOp:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -5541,9 +5541,7 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="doesGlobalEscape" href="#doesGlobalEscape"><span>doesGlobalEscape:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="analysis: doesGlobalEscape(tree: MirTree; scope: Slice[NodePosition]; start: NodePosition;
-                 s: PSym): bool" href="mir/analysis.html#doesGlobalEscape%2CMirTree%2CSlice%5BNodePosition%5D%2CNodePosition%2CPSym">analysis: doesGlobalEscape(tree: MirTree; scope: Slice[NodePosition]; start: NodePosition;
-                 s: PSym): bool</a></li>
+          data-doc-search-tag="analysis: doesGlobalEscape(tree: MirTree; scope: Subgraph; start: InstrPos; s: PSym): bool" href="mir/analysis.html#doesGlobalEscape%2CMirTree%2CSubgraph%2CInstrPos%2CPSym">analysis: doesGlobalEscape(tree: MirTree; scope: Subgraph; start: InstrPos; s: PSym): bool</a></li>
           </ul></dd>
 <dt><a name="doesImply" href="#doesImply"><span>doesImply:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -6410,6 +6408,10 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="finalizeModule" href="#finalizeModule"><span>finalizeModule:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="cgen: finalizeModule(m: BModule)" href="backend/cgen.html#finalizeModule%2CBModule">cgen: finalizeModule(m: BModule)</a></li>
+          </ul></dd>
+<dt><a name="find" href="#find"><span>find:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="mirexec: find(dfg: DataFlowGraph; n: NodePosition): InstrPos" href="sem/mirexec.html#find%2CDataFlowGraph%2CNodePosition">mirexec: find(dfg: DataFlowGraph; n: NodePosition): InstrPos</a></li>
           </ul></dd>
 <dt><a name="findDiscrBranchEntry" href="#findDiscrBranchEntry"><span>findDiscrBranchEntry:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -8871,6 +8873,10 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="lineinfos: instLoc(depth: int = -2): InstantiationInfo" href="ast/lineinfos.html#instLoc.t%2Cint">lineinfos: instLoc(depth: int = -2): InstantiationInfo</a></li>
           </ul></dd>
+<dt><a name="InstrPos" href="#InstrPos"><span>InstrPos:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="mirexec: InstrPos" href="sem/mirexec.html#InstrPos">mirexec: InstrPos</a></li>
+          </ul></dd>
 <dt><a name="instTypeBoundOp" href="#instTypeBoundOp"><span>instTypeBoundOp:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="sigmatch: instTypeBoundOp(c: PContext; dc: PSym; t: PType; info: TLineInfo;
@@ -8979,9 +8985,9 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="dce: isAlive(a: AliveSyms; module: int; item: int32): bool" href="ic/dce.html#isAlive%2CAliveSyms%2Cint%2Cint32">dce: isAlive(a: AliveSyms; module: int; item: int32): bool</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="analysis: isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Slice[NodePosition];
-        loc: LvalueExpr; pos: NodePosition): bool" href="mir/analysis.html#isAlive%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition">analysis: isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Slice[NodePosition];
-        loc: LvalueExpr; pos: NodePosition): bool</a></li>
+          data-doc-search-tag="analysis: isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Subgraph;
+        loc: LvalueExpr; start: InstrPos): bool" href="mir/analysis.html#isAlive%2CMirTree%2CDataFlowGraph%2CValues%2CSubgraph%2CLvalueExpr%2CInstrPos">analysis: isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Subgraph;
+        loc: LvalueExpr; start: InstrPos): bool</a></li>
           </ul></dd>
 <dt><a name="isAPartOfB" href="#isAPartOfB"><span>isAPartOfB:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -9239,16 +9245,16 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="isLastRead" href="#isLastRead"><span>isLastRead:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="analysis: isLastRead(tree: MirTree; cfg: DataFlowGraph; values: Values;
-           span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool" href="mir/analysis.html#isLastRead%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition">analysis: isLastRead(tree: MirTree; cfg: DataFlowGraph; values: Values;
-           span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): bool</a></li>
+          data-doc-search-tag="analysis: isLastRead(tree: MirTree; cfg: DataFlowGraph; values: Values; span: Subgraph;
+           loc: LvalueExpr; start: InstrPos): bool" href="mir/analysis.html#isLastRead%2CMirTree%2CDataFlowGraph%2CValues%2CSubgraph%2CLvalueExpr%2CInstrPos">analysis: isLastRead(tree: MirTree; cfg: DataFlowGraph; values: Values; span: Subgraph;
+           loc: LvalueExpr; start: InstrPos): bool</a></li>
           </ul></dd>
 <dt><a name="isLastWrite" href="#isLastWrite"><span>isLastWrite:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="analysis: isLastWrite(tree: MirTree; cfg: DataFlowGraph; values: Values;
-            span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): tuple[
-    result, exits, escapes: bool]" href="mir/analysis.html#isLastWrite%2CMirTree%2CDataFlowGraph%2CValues%2CSlice%5BNodePosition%5D%2CLvalueExpr%2CNodePosition">analysis: isLastWrite(tree: MirTree; cfg: DataFlowGraph; values: Values;
-            span: Slice[NodePosition]; loc: LvalueExpr; pos: NodePosition): tuple[
+          data-doc-search-tag="analysis: isLastWrite(tree: MirTree; cfg: DataFlowGraph; values: Values; span: Subgraph;
+            loc: LvalueExpr; start: InstrPos): tuple[
+    result, exits, escapes: bool]" href="mir/analysis.html#isLastWrite%2CMirTree%2CDataFlowGraph%2CValues%2CSubgraph%2CLvalueExpr%2CInstrPos">analysis: isLastWrite(tree: MirTree; cfg: DataFlowGraph; values: Values; span: Subgraph;
+            loc: LvalueExpr; start: InstrPos): tuple[
     result, exits, escapes: bool]</a></li>
           </ul></dd>
 <dt><a name="isLValue" href="#isLValue"><span>isLValue:</span></a></dt><dd><ul class="simple">
@@ -21441,6 +21447,14 @@ window.addEventListener('DOMContentLoaded', main);
           <li><a class="reference external"
           data-doc-search-tag="commands: stylize(str: string; color: ForegroundColor; style: Style): string" href="front/commands.html#stylize%2Cstring%2CForegroundColor%2CStyle">commands: stylize(str: string; color: ForegroundColor; style: Style): string</a></li>
           </ul></dd>
+<dt><a name="Subgraph" href="#Subgraph"><span>Subgraph:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="mirexec: Subgraph" href="sem/mirexec.html#Subgraph">mirexec: Subgraph</a></li>
+          </ul></dd>
+<dt><a name="subgraphFor" href="#subgraphFor"><span>subgraphFor:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="mirexec: subgraphFor(dfg: DataFlowGraph; span: Slice[NodePosition]): Subgraph" href="sem/mirexec.html#subgraphFor%2CDataFlowGraph%2CSlice%5BNodePosition%5D">mirexec: subgraphFor(dfg: DataFlowGraph; span: Slice[NodePosition]): Subgraph</a></li>
+          </ul></dd>
 <dt><a name="subLocation" href="#subLocation"><span>subLocation:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="vmmemory: subLocation(h: LocHandle; offset: Natural; typ: PVmType): LocHandle" href="vm/vmmemory.html#subLocation%2CLocHandle%2CNatural%2CPVmType">vmmemory: subLocation(h: LocHandle; offset: Natural; typ: PVmType): LocHandle</a></li>
@@ -23267,21 +23281,21 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="traverse" href="#traverse"><span>traverse:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="mirexec: traverse(c: DataFlowGraph; span: Slice[NodePosition]; start: NodePosition;
-         state: var TraverseState): (Opcode, OpValue)" href="sem/mirexec.html#traverse.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2CTraverseState">mirexec: traverse(c: DataFlowGraph; span: Slice[NodePosition]; start: NodePosition;
-         state: var TraverseState): (Opcode, OpValue)</a></li>
+          data-doc-search-tag="mirexec: traverse(c: DataFlowGraph; span: Subgraph; start: InstrPos;
+         state: var TraverseState): (DataFlowOpcode, OpValue)" href="sem/mirexec.html#traverse.i%2CDataFlowGraph%2CSubgraph%2CInstrPos%2CTraverseState">mirexec: traverse(c: DataFlowGraph; span: Subgraph; start: InstrPos;
+         state: var TraverseState): (DataFlowOpcode, OpValue)</a></li>
           </ul></dd>
 <dt><a name="traverseFromExits" href="#traverseFromExits"><span>traverseFromExits:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="mirexec: traverseFromExits(c: DataFlowGraph; span: Slice[NodePosition]; exit: var bool): (
-    Opcode, OpValue)" href="sem/mirexec.html#traverseFromExits.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2Cbool">mirexec: traverseFromExits(c: DataFlowGraph; span: Slice[NodePosition]; exit: var bool): (
-    Opcode, OpValue)</a></li>
+          data-doc-search-tag="mirexec: traverseFromExits(c: DataFlowGraph; span: Subgraph; exit: var bool): (
+    DataFlowOpcode, OpValue)" href="sem/mirexec.html#traverseFromExits.i%2CDataFlowGraph%2CSubgraph%2Cbool">mirexec: traverseFromExits(c: DataFlowGraph; span: Subgraph; exit: var bool): (
+    DataFlowOpcode, OpValue)</a></li>
           </ul></dd>
 <dt><a name="traverseReverse" href="#traverseReverse"><span>traverseReverse:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="mirexec: traverseReverse(c: DataFlowGraph; span: Slice[NodePosition];
-                start: NodePosition; exit: var bool): (Opcode, OpValue)" href="sem/mirexec.html#traverseReverse.i%2CDataFlowGraph%2CSlice%5BNodePosition%5D%2CNodePosition%2Cbool">mirexec: traverseReverse(c: DataFlowGraph; span: Slice[NodePosition];
-                start: NodePosition; exit: var bool): (Opcode, OpValue)</a></li>
+          data-doc-search-tag="mirexec: traverseReverse(c: DataFlowGraph; span: Subgraph; start: InstrPos;
+                exit: var bool): (DataFlowOpcode, OpValue)" href="sem/mirexec.html#traverseReverse.i%2CDataFlowGraph%2CSubgraph%2CInstrPos%2Cbool">mirexec: traverseReverse(c: DataFlowGraph; span: Subgraph; start: InstrPos;
+                exit: var bool): (DataFlowOpcode, OpValue)</a></li>
           </ul></dd>
 <dt><a name="TraverseState" href="#TraverseState"><span>TraverseState:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
