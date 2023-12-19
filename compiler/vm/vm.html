@@ -107,7 +107,13 @@ window.addEventListener('DOMContentLoaded', main);
       <li><a class="reference" href="#VmThread"
     title="VmThread = object
   pc: int                    ## the program counter. Points to the instruction to execute next
-  frame: StackFrameIndex     ## the index of the active stack frame">VmThread</a></li>
+  sframes: seq[TStackFrame]  ## stack frames
+  loopIterations: int        ## the number of remaining jumps backwards
+  currentException: HeapSlotHandle ## the exception ref that's returned when querying the current exception
+  activeException: HeapSlotHandle ## the exception that is currently in-flight (i.e. being raised), or
+                                  ## nil, if none is in-flight. Note that `activeException` is different
+                                  ## from `currentException`
+  activeExceptionTrace: VmRawStackTrace ## the stack-trace of where the exception was raised from">VmThread</a></li>
   <li><a class="reference" href="#YieldReason"
     title="YieldReason = object
   case kind*: YieldReasonKind
@@ -202,7 +208,12 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">source
+      <ul class="simple nested-toc-section">[]
+      <li><a class="reference" href="#%5B%5D.t%2CVmThread%2CNatural"
+    title="`[]`(t: VmThread; i: Natural): TStackFrame">`[]`(t: VmThread; i: Natural): TStackFrame</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">source
       <li><a class="reference" href="#source.t%2CTCtx%2CVmThread"
     title="source(c: TCtx; t: VmThread): TLineInfo">source(c: TCtx; t: VmThread): TLineInfo</a></li>
 
@@ -227,7 +238,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -248,13 +259,19 @@ class="link-seesrc" target="_blank">Source</a>
 <div id="VmThread">
 <dt><pre><a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">pc</span><span class="Other">:</span> <span class="Identifier">int</span>                    <span class="Comment">## the program counter. Points to the instruction to execute next</span>
-  <span class="Identifier">frame</span><span class="Other">:</span> <a href="vmdef.html#StackFrameIndex"><span class="Identifier">StackFrameIndex</span></a>     <span class="Comment">## the index of the active stack frame</span>
+  <span class="Identifier">sframes</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmdef.html#TStackFrame"><span class="Identifier">TStackFrame</span></a><span class="Other">]</span>  <span class="Comment">## stack frames</span>
+  <span class="Identifier">loopIterations</span><span class="Other">:</span> <span class="Identifier">int</span>        <span class="Comment">## the number of remaining jumps backwards</span>
+  <span class="Identifier">currentException</span><span class="Other">:</span> <a href="vmdef.html#HeapSlotHandle"><span class="Identifier">HeapSlotHandle</span></a> <span class="Comment">## the exception ref that's returned when querying the current exception</span>
+  <span class="Identifier">activeException</span><span class="Other">:</span> <a href="vmdef.html#HeapSlotHandle"><span class="Identifier">HeapSlotHandle</span></a> <span class="Comment">## the exception that is currently in-flight (i.e. being raised), or</span>
+                                  <span class="Comment">## nil, if none is in-flight. Note that `activeException` is different</span>
+                                  <span class="Comment">## from `currentException`</span>
+  <span class="Identifier">activeExceptionTrace</span><span class="Other">:</span> <a href="vmdef.html#VmRawStackTrace"><span class="Identifier">VmRawStackTrace</span></a> <span class="Comment">## the stack-trace of where the exception was raised from</span>
   </pre></dt>
 <dd>
 
 This is beginning of splitting up <tt class="docutils literal"><span class="pre">TCtx</span></tt>. A <tt class="docutils literal"><span class="pre">VmThread</span></tt> is meant to encapsulate the state that makes up a single execution. This includes things like the program counter, stack frames, active exception, etc.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L85"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L85"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L85" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -284,9 +301,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 The result of a single execution step (i.e. a call to <tt class="docutils literal"><span class="pre">execute</span></tt>)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L115"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L125"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L115" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -306,9 +323,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L95"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L105"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L95" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L105" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -323,9 +340,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L2915"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L2923"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2915" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2923" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -336,9 +353,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates a stack-trace report starting at frame <tt class="docutils literal"><span class="pre"><span class="Identifier">sframe</span></span></tt> (inclusive). The amount of entries in the trace is limited to <tt class="docutils literal"><span class="pre"><span class="Identifier">recursionLimit</span></span></tt>, further entries are skipped, though the entry function is always included in the trace
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L136"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L146"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L136" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L146" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -347,11 +364,11 @@ class="link-seesrc" target="_blank">Source</a>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Cleans up and frees all VM data owned by <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt>
+Cleans up and frees all VM data owned by <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L2929"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L2933"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2929" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2933" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -362,9 +379,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L300"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L310"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L300" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L310" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -377,9 +394,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Executes the VM thread until it yields. The reason for yielding together with associated data is returned as a <tt class="docutils literal"><span class="pre">YieldReason</span></tt> object
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L2938"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L2944"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2938" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2944" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -390,9 +407,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Transitions <tt class="docutils literal"><span class="pre"><span class="Identifier">r</span></span></tt> to a location register storing a location of type <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L305"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L315"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L305" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L315" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -401,13 +418,11 @@ class="link-seesrc" target="_blank">Source</a>
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Sets up a <tt class="docutils literal"><span class="pre">VmThread</span></tt> instance that will start execution at <tt class="docutils literal"><span class="pre"><span class="Identifier">pc</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">frame</span></span></tt> provides the initial stack frame.<div class="admonition admonition-info"><span class="admonition-info-text"><b>Note:</b></span>
-due to an implementation limitation, there can currently only exist a single <tt class="docutils literal"><span class="pre">VmThread</span></tt> instance for a <tt class="docutils literal"><span class="pre">TCtx</span></tt></div>
-
+Sets up a <tt class="docutils literal"><span class="pre">VmThread</span></tt> instance that will start execution at <tt class="docutils literal"><span class="pre"><span class="Identifier">pc</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">frame</span></span></tt> provides the initial stack frame.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L2917"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L2925"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2917" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2925" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -419,9 +434,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 If a value of <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt> fits into a register, transitions <tt class="docutils literal"><span class="pre"><span class="Identifier">r</span></span></tt> to the correct state, loads the default value and returns true. Returns false otherwise
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L736"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L746"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L736" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L746" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -432,9 +447,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Deserializes the value stored by <tt class="docutils literal"><span class="pre"><span class="Identifier">x</span></span></tt> to a <tt class="docutils literal"><span class="pre"><span class="Identifier">PNode</span></span></tt> of type <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L449"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L459"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L449" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L459" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -445,9 +460,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L2963"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L2971"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2963" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2971" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -456,15 +471,27 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="18">
 <h1><a class="toc-backref" href="#18">Templates</a></h1>
 <dl class="item">
+<div id="[].t,VmThread,Natural">
+<dt><pre><span class="Keyword">template</span> <a href="#%5B%5D.t%2CVmThread%2CNatural"><span class="Identifier">`[]`</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">)</span><span class="Other">:</span> <a href="vmdef.html#TStackFrame"><span class="Identifier">TStackFrame</span></a></pre></dt>
+<dd>
+
+Returns <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt>'s stack frame at index <tt class="docutils literal"><span class="pre"><span class="Identifier">i</span></span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L2967"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2967" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
 <div id="source.t,TCtx,VmThread">
 <dt><pre><span class="Keyword">template</span> <a href="#source.t%2CTCtx%2CVmThread"><span class="Identifier">source</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">t</span><span class="Other">:</span> <a href="vm.html#VmThread"><span class="Identifier">VmThread</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a></pre></dt>
 <dd>
 
 Gets the source-code information for the instruction the program counter of <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt> currently points to
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L2957"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L2962"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2957" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L2962" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -474,9 +501,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L608"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L618"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L608" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L618" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -486,9 +513,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L618"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L628"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L618" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L628" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -498,9 +525,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/e0ad2f115d73e4111bcdee1aec4f3e175d776ee2/compiler/vm/vm.nim#L613"
+href="https://github.com/nim-works/nimskull/tree/16551f4d85809d17ff444319872f4c99feb85221/compiler/vm/vm.nim#L623"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L613" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm.nim#L623" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -514,7 +541,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-12-17 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-12-19 00:00:00 UTC</small>
       </div>
     </div>
   </div>
