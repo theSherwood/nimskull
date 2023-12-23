@@ -128,9 +128,9 @@ window.addEventListener('DOMContentLoaded', main);
     title="apply(tree: var MirTree; c: sink PreparedChangeset)">apply(tree: var MirTree; c: sink PreparedChangeset)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">getTemp
-      <li><a class="reference" href="#getTemp%2CChangeset"
-    title="getTemp(c: var Changeset): TempId">getTemp(c: var Changeset): TempId</a></li>
+  <ul class="simple nested-toc-section">changeTree
+      <li><a class="reference" href="#changeTree%2CChangeset%2CMirTree%2CNodePosition%2CsinkMirNode"
+    title="changeTree(c: var Changeset; tree: MirTree; at: NodePosition; with: sink MirNode)">changeTree(c: var Changeset; tree: MirTree; at: NodePosition; with: sink MirNode)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">initChangeset
@@ -186,7 +186,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -203,7 +203,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="mirtrees.html">mirtrees</a>, <a class="reference external" href="sourcemaps.html">sourcemaps</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>
+<a class="reference external" href="mirtrees.html">mirtrees</a>, <a class="reference external" href="mirconstr.html">mirconstr</a>, <a class="reference external" href="sourcemaps.html">sourcemaps</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -218,9 +218,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Represents a set of changes to be applied to a <tt class="docutils literal"><span class="pre">MirTree</span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L52"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L53"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L52" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L53" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -236,9 +236,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L59"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L60"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L59" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -253,21 +253,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 Applies the changeset <tt class="docutils literal"><span class="pre"><span class="Identifier">c</span></span></tt> to the <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt>, modifying the tree in-place. The tree's underlying sequence is resized 0 to 2 times.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L259"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L273"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L259" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L273" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="getTemp,Changeset">
-<dt><pre><span class="Keyword">func</span> <a href="#getTemp%2CChangeset"><span class="Identifier">getTemp</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirchangesets.html#Changeset"><span class="Identifier">Changeset</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirtrees.html#TempId"><span class="Identifier">TempId</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="changeTree,Changeset,MirTree,NodePosition,sinkMirNode">
+<dt><pre><span class="Keyword">func</span> <a href="#changeTree%2CChangeset%2CMirTree%2CNodePosition%2CsinkMirNode"><span class="Identifier">changeTree</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirchangesets.html#Changeset"><span class="Identifier">Changeset</span></a><span class="Other">;</span> <span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">at</span><span class="Other">:</span> <a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">;</span>
+                <span class="Identifier">with</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Allocates a slot for new temporary and returns its ID
+Replaces the sub-tree at <tt class="docutils literal"><span class="pre"><span class="Identifier">at</span></span></tt> with <tt class="docutils literal"><span class="pre"><span class="Identifier">with</span></span></tt> while keeping all child trees. The origin information is taken from the replaced node.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L102"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L105"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L102" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L105" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -277,9 +278,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Initializes a new <tt class="docutils literal"><span class="pre">Changeset</span></tt> instance. Until the resulting <tt class="docutils literal"><span class="pre">Changeset</span></tt> is applied, the associated tree must not be modified.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L92"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L87"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L92" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L87" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -290,9 +291,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Records the insertion of <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> at <tt class="docutils literal"><span class="pre"><span class="Identifier">at</span></span></tt>. The <tt class="docutils literal"><span class="pre">info</span></tt> field on the node is not modified.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L113"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L119"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L113" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L119" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -302,9 +303,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Prepares <tt class="docutils literal"><span class="pre"><span class="Identifier">c</span></span></tt> for being applied
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L165"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L179"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L165" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L179" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -315,9 +316,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Records the removal of the node or sub-tree at <tt class="docutils literal"><span class="pre"><span class="Identifier">at</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L159"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L173"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L159" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L173" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -326,11 +327,11 @@ class="link-seesrc" target="_blank">Source</a>
              <span class="Identifier">with</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Records replacing the node or sub-tree at <tt class="docutils literal"><span class="pre"><span class="Identifier">at</span></span></tt> with <tt class="docutils literal"><span class="pre"><span class="Identifier">with</span></span></tt>.
+Records replacing the node or sub-tree at <tt class="docutils literal"><span class="pre"><span class="Identifier">at</span></span></tt> with <tt class="docutils literal"><span class="pre"><span class="Identifier">with</span></span></tt>. The origin information is taken from the replaced node.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L107"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L97"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L107" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L97" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -346,9 +347,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Records an insertion at the <tt class="docutils literal"><span class="pre"><span class="Identifier">at</span></span></tt> position, providing direct access to the internal node buffer inside <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> via an injected variable of the name <tt class="docutils literal"><span class="pre"><span class="Identifier">name</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">source</span></span></tt> is the node to inherit the source/origin information from
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L118"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L135"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L118" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L135" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -359,9 +360,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Records a replacement of the node or sub-tree at the <tt class="docutils literal"><span class="pre"><span class="Identifier">at</span></span></tt> position, providing direct access to the internal node buffer inside <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> via an injected variable of the name <tt class="docutils literal"><span class="pre"><span class="Identifier">name</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirchangesets.nim#L140"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirchangesets.nim#L155"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L140" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirchangesets.nim#L155" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>

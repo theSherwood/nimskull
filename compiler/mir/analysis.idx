@@ -1,14 +1,10 @@
-Owned	mir/analysis.html#Owned	analysis: Owned	
 Values	mir/analysis.html#Values	analysis: Values	
-getRoot	mir/analysis.html#getRoot.t,Values,OpValue	analysis: getRoot(v: Values; val: OpValue): OpValue	
-owned	mir/analysis.html#owned.t,Values,OpValue	analysis: owned(v: Values; val: OpValue): Owned	
-setOwned	mir/analysis.html#setOwned,Values,OpValue,Owned	analysis: setOwned(v: var Values; val: OpValue; owns: Owned)	
-toLvalue	mir/analysis.html#toLvalue,Values,OpValue	analysis: toLvalue(v: Values; val: OpValue): LvalueExpr	
-computeValues	mir/analysis.html#computeValues,MirTree	analysis: computeValues(body: MirTree): Values	
-isAlive	mir/analysis.html#isAlive,MirTree,DataFlowGraph,Values,Subgraph,LvalueExpr,InstrPos	analysis: isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Subgraph;\n        loc: LvalueExpr; start: InstrPos): bool	
-isLastRead	mir/analysis.html#isLastRead,MirTree,DataFlowGraph,Values,Subgraph,LvalueExpr,InstrPos	analysis: isLastRead(tree: MirTree; cfg: DataFlowGraph; values: Values; span: Subgraph;\n           loc: LvalueExpr; start: InstrPos): bool	
-isLastWrite	mir/analysis.html#isLastWrite,MirTree,DataFlowGraph,Values,Subgraph,LvalueExpr,InstrPos	analysis: isLastWrite(tree: MirTree; cfg: DataFlowGraph; values: Values; span: Subgraph;\n            loc: LvalueExpr; start: InstrPos): tuple[\n    result, exits, escapes: bool]	
+skipConversions	mir/analysis.html#skipConversions,MirTree,OpValue	analysis: skipConversions(tree: MirTree; val: OpValue): OpValue	
+isOwned	mir/analysis.html#isOwned,Values,OpValue	analysis: isOwned(v: Values; val: OpValue): bool	
+markOwned	mir/analysis.html#markOwned,Values,OpValue	analysis: markOwned(v: var Values; val: OpValue)	
+isAlive	mir/analysis.html#isAlive,MirTree,DataFlowGraph,Values,Subgraph,Path,InstrPos	analysis: isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Subgraph; loc: Path;\n        start: InstrPos): bool	
+isLastRead	mir/analysis.html#isLastRead,MirTree,DataFlowGraph,Subgraph,Path,InstrPos	analysis: isLastRead(tree: MirTree; cfg: DataFlowGraph; span: Subgraph; loc: Path;\n           start: InstrPos): bool	
+isLastWrite	mir/analysis.html#isLastWrite,MirTree,DataFlowGraph,Subgraph,Path,InstrPos	analysis: isLastWrite(tree: MirTree; cfg: DataFlowGraph; span: Subgraph; loc: Path;\n            start: InstrPos): tuple[result, exits, escapes: bool]	
 computeAliveOp	mir/analysis.html#computeAliveOp,MirTree,Values,T,Opcode,OpValue	analysis: computeAliveOp[T: PSym | TempId](tree: MirTree; values: Values; loc: T;\n                                 op: Opcode; n: OpValue): AliveState	
 computeAlive	mir/analysis.html#computeAlive,MirTree,DataFlowGraph,Values,Subgraph,T,staticComputeAliveProc[T]	analysis: computeAlive[T](tree: MirTree; cfg: DataFlowGraph; values: Values;\n                span: Subgraph; loc: T; op: static ComputeAliveProc[T]): tuple[\n    alive, escapes: bool]	
 doesGlobalEscape	mir/analysis.html#doesGlobalEscape,MirTree,Subgraph,InstrPos,PSym	analysis: doesGlobalEscape(tree: MirTree; scope: Subgraph; start: InstrPos; s: PSym): bool	
-isConsumed	mir/analysis.html#isConsumed,MirTree,OpValue	analysis: isConsumed(tree: MirTree; val: OpValue): bool	

@@ -109,8 +109,13 @@ window.addEventListener('DOMContentLoaded', main);
   endA, endB: bool ## whether the `last` operation of the provided sequences
                    ## was reached
   overlaps: Ternary">CmpLocsResult</a></li>
-  <li><a class="reference" href="#LvalueExpr"
-    title="LvalueExpr = tuple[root, last: NodePosition]">LvalueExpr</a></li>
+  <li><a class="reference" href="#Path"
+    title="Path = object
+  root*: NodePosition        ## the root node of the path.
+  short: array[6, PathInstr] ## short-sequence-optimization: no dynamic sequence is allocated for
+                             ## short paths (which many of them are).
+  shortLen: int              ## the number of items in `short`. Zero if the dynamic sequence is used.
+  long: seq[PathInstr]">Path</a></li>
   <li><a class="reference" href="#Ternary"
     title="Ternary = enum
   no, maybe, yes">Ternary</a></li>
@@ -120,9 +125,19 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">compareLvalues
-      <li><a class="reference" href="#compareLvalues%2CMirTree%2CLvalueExpr%2CLvalueExpr"
-    title="compareLvalues(tree: MirTree; ea, eb: LvalueExpr): CmpLocsResult">compareLvalues(tree: MirTree; ea, eb: LvalueExpr): CmpLocsResult</a></li>
+      <ul class="simple nested-toc-section">compare
+      <li><a class="reference" href="#compare%2CMirTree%2CPath%2CPath"
+    title="compare(body: MirTree; a, b: Path): CmpLocsResult">compare(body: MirTree; a, b: Path): CmpLocsResult</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">computePath
+      <li><a class="reference" href="#computePath%2CMirTree%2CNodePosition"
+    title="computePath(tree: MirTree; at: NodePosition): Path">computePath(tree: MirTree; at: NodePosition): Path</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">getRoot
+      <li><a class="reference" href="#getRoot%2CMirTree%2COpValue"
+    title="getRoot(tree: MirTree; n: OpValue): OpValue">getRoot(tree: MirTree; n: OpValue): OpValue</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">isAPartOfB
@@ -135,9 +150,14 @@ window.addEventListener('DOMContentLoaded', main);
     title="isBPartOfA(r: CmpLocsResult): Ternary">isBPartOfA(r: CmpLocsResult): Ternary</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">isCursor
+      <li><a class="reference" href="#isCursor%2CMirTree%2CPath"
+    title="isCursor(tree: MirTree; path: Path): bool">isCursor(tree: MirTree; path: Path): bool</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">isPartOf
-      <li><a class="reference" href="#isPartOf%2CMirTree%2CLvalueExpr%2CLvalueExpr"
-    title="isPartOf(tree: MirTree; ea, eb: LvalueExpr): Ternary">isPartOf(tree: MirTree; ea, eb: LvalueExpr): Ternary</a></li>
+      <li><a class="reference" href="#isPartOf%2CMirTree%2CPath%2CPath"
+    title="isPartOf(tree: MirTree; a, b: Path): Ternary">isPartOf(tree: MirTree; a, b: Path): Ternary</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">isSame
@@ -146,8 +166,8 @@ window.addEventListener('DOMContentLoaded', main);
 
   </ul>
   <ul class="simple nested-toc-section">overlaps
-      <li><a class="reference" href="#overlaps%2CMirTree%2CLvalueExpr%2CLvalueExpr"
-    title="overlaps(tree: MirTree; ea, eb: LvalueExpr): Ternary">overlaps(tree: MirTree; ea, eb: LvalueExpr): Ternary</a></li>
+      <li><a class="reference" href="#overlaps%2CMirTree%2CPath%2CPath"
+    title="overlaps(tree: MirTree; a, b: Path): Ternary">overlaps(tree: MirTree; a, b: Path): Ternary</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">sameIndex
@@ -174,16 +194,16 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><p>This module implements a simple alias analysis based on MIR operation sequences, used to compute the relationship between two lvalues, i.e. if the underlying locations potentially overlap or are part sub- or super-locations of each other.</p>
-<p>Only lvalues with statically know roots (derived from named locals, global, etc.) are supported.</p>
-<p>The main procedure is <tt class="docutils literal"><span class="pre">compareLvalues</span></tt>: it performs the comparison and returns the result as an opaque object <tt class="docutils literal"><span class="pre">CmpLocsResult</span></tt>, which can then be queried for the relationship between the two inputs.</p>
+  <p class="module-desc"><p>This module implements a simple MIR-path-based alias analysis. Path-based means that the analysis is <em>local</em> and thus that pointer indirections are not followed.</p>
+<p>MIR aliases are followed, however. So that the comparison can be implemented efficiently, the path expression is first compiled into a <tt class="docutils literal"><span class="pre">Path</span></tt> object via <a class="reference external" href="#computePath,MirTree,NodePosition">computePath</a>.</p>
+<p>Two compiled <tt class="docutils literal"><span class="pre">Path</span></tt> objects can then be passed to <a class="reference external" href="#comparePaths,MirTree,Path,Path">comparePaths</a>. Since there are oftentimes multiple facts one wants to know about when comparing two paths, <tt class="docutils literal"><span class="pre">comparePaths</span></tt> only gathers the necessary information for deriving all the facts.</p>
 <p>Whether two lvalues refer to overlapping locations is not always statically known (e.g. when accessing an array with a value only known at run-time) -- if it is not, the uncertainity is communicated via the <tt class="docutils literal"><span class="pre">maybe</span></tt> result.</p>
 </p>
   <div class="section" id="6">
@@ -204,21 +224,27 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L36"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L34"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L36" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="LvalueExpr">
-<dt><pre><a href="aliasanalysis.html#LvalueExpr"><span class="Identifier">LvalueExpr</span></a> <span class="Other">=</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">root</span><span class="Other">,</span> <span class="Identifier">last</span><span class="Other">:</span> <a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">]</span></pre></dt>
+<div id="Path">
+<dt><pre><a href="aliasanalysis.html#Path"><span class="Identifier">Path</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">root</span><span class="Operator">*</span><span class="Other">:</span> <a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a>        <span class="Comment">## the root node of the path.</span>
+  <span class="Identifier">short</span><span class="Other">:</span> <span class="Identifier">array</span><span class="Other">[</span><span class="DecNumber">6</span><span class="Other">,</span> <span class="Identifier">PathInstr</span><span class="Other">]</span> <span class="Comment">## short-sequence-optimization: no dynamic sequence is allocated for</span>
+                             <span class="Comment">## short paths (which many of them are).</span>
+  <span class="Identifier">shortLen</span><span class="Other">:</span> <span class="Identifier">int</span>              <span class="Comment">## the number of items in `short`. Zero if the dynamic sequence is used.</span>
+  <span class="Identifier">long</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">PathInstr</span><span class="Other">]</span>
+</pre></dt>
 <dd>
 
-
+Acceleration structure for representing a path expression. This allows for more efficient comparison of paths.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L32"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L49"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L32" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L49" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -229,9 +255,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L29"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L31"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L29" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L31" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -240,16 +266,43 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="compareLvalues,MirTree,LvalueExpr,LvalueExpr">
-<dt><pre><span class="Keyword">func</span> <a href="#compareLvalues%2CMirTree%2CLvalueExpr%2CLvalueExpr"><span class="Identifier">compareLvalues</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">ea</span><span class="Other">,</span> <span class="Identifier">eb</span><span class="Other">:</span> <a href="aliasanalysis.html#LvalueExpr"><span class="Identifier">LvalueExpr</span></a><span class="Other">)</span><span class="Other">:</span> <a href="aliasanalysis.html#CmpLocsResult"><span class="Identifier">CmpLocsResult</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="compare,MirTree,Path,Path">
+<dt><pre><span class="Keyword">proc</span> <a href="#compare%2CMirTree%2CPath%2CPath"><span class="Identifier">compare</span></a><span class="Other">(</span><span class="Identifier">body</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="aliasanalysis.html#Path"><span class="Identifier">Path</span></a><span class="Other">)</span><span class="Other">:</span> <a href="aliasanalysis.html#CmpLocsResult"><span class="Identifier">CmpLocsResult</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
+Compares the paths <tt class="docutils literal"><span class="pre"><span class="Identifier">a</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">b</span></span></tt> and returns the information to later derive the facts from (e.g.: is A a part B).
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L176"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L176" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="computePath,MirTree,NodePosition">
+<dt><pre><span class="Keyword">proc</span> <a href="#computePath%2CMirTree%2CNodePosition"><span class="Identifier">computePath</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">at</span><span class="Other">:</span> <a href="../mir/mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">)</span><span class="Other">:</span> <a href="aliasanalysis.html#Path"><span class="Identifier">Path</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Computes the <tt class="docutils literal"><span class="pre">Path</span></tt> for the given expression. The expression not being a path expression is allowed too.<dl class="docutils"><dt>Locals view are followed as far as possible. Given:</dt>
+<dd>bind _1 = x.a y = _1.b</dd>
+</dl>
+<p>the collected path will be <tt class="docutils literal"><span class="pre">x.a.b</span></tt>.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L156"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L122"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L156" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L122" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="getRoot,MirTree,OpValue">
+<dt><pre><span class="Keyword">proc</span> <a href="#getRoot%2CMirTree%2COpValue"><span class="Identifier">getRoot</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="../mir/mirtrees.html#OpValue"><span class="Identifier">OpValue</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../mir/mirtrees.html#OpValue"><span class="Identifier">OpValue</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+If <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> doesn't point to a path expression, returns <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>, the root of the path otherwise. Aliases are followed.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L100"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L100" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -259,9 +312,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L137"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L222"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L222" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -271,22 +324,33 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L143"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L228"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L143" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L228" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="isPartOf,MirTree,LvalueExpr,LvalueExpr">
-<dt><pre><span class="Keyword">func</span> <a href="#isPartOf%2CMirTree%2CLvalueExpr%2CLvalueExpr"><span class="Identifier">isPartOf</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">ea</span><span class="Other">,</span> <span class="Identifier">eb</span><span class="Other">:</span> <a href="aliasanalysis.html#LvalueExpr"><span class="Identifier">LvalueExpr</span></a><span class="Other">)</span><span class="Other">:</span> <a href="aliasanalysis.html#Ternary"><span class="Identifier">Ternary</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="isCursor,MirTree,Path">
+<dt><pre><span class="Keyword">func</span> <a href="#isCursor%2CMirTree%2CPath"><span class="Identifier">isCursor</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">path</span><span class="Other">:</span> <a href="aliasanalysis.html#Path"><span class="Identifier">Path</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Computes if the location named by <tt class="docutils literal"><span class="pre"><span class="Identifier">ea</span></span></tt> is part of <tt class="docutils literal"><span class="pre"><span class="Identifier">eb</span></span></tt>. Also evaluates to 'yes' if both name the exact same location
+Returns whether the path <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> denotes a cursor location.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L163"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L112"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L163" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L112" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="isPartOf,MirTree,Path,Path">
+<dt><pre><span class="Keyword">func</span> <a href="#isPartOf%2CMirTree%2CPath%2CPath"><span class="Identifier">isPartOf</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="aliasanalysis.html#Path"><span class="Identifier">Path</span></a><span class="Other">)</span><span class="Other">:</span> <a href="aliasanalysis.html#Ternary"><span class="Identifier">Ternary</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Computes if the location named by <tt class="docutils literal"><span class="pre"><span class="Identifier">a</span></span></tt> is part of <tt class="docutils literal"><span class="pre"><span class="Identifier">b</span></span></tt>. Also evaluates to 'yes' if both name the exact same location
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L245"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L245" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -296,22 +360,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns whether A and B refer to the exact same location (ignoring the type)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L148"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L233"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L148" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L233" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="overlaps,MirTree,LvalueExpr,LvalueExpr">
-<dt><pre><span class="Keyword">func</span> <a href="#overlaps%2CMirTree%2CLvalueExpr%2CLvalueExpr"><span class="Identifier">overlaps</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">ea</span><span class="Other">,</span> <span class="Identifier">eb</span><span class="Other">:</span> <a href="aliasanalysis.html#LvalueExpr"><span class="Identifier">LvalueExpr</span></a><span class="Other">)</span><span class="Other">:</span> <a href="aliasanalysis.html#Ternary"><span class="Identifier">Ternary</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="overlaps,MirTree,Path,Path">
+<dt><pre><span class="Keyword">func</span> <a href="#overlaps%2CMirTree%2CPath%2CPath"><span class="Identifier">overlaps</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="aliasanalysis.html#Path"><span class="Identifier">Path</span></a><span class="Other">)</span><span class="Other">:</span> <a href="aliasanalysis.html#Ternary"><span class="Identifier">Ternary</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Convenience wrapper
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L159"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L241"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L159" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L241" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -321,9 +384,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L58"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L81"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L58" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L81" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -338,9 +401,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/aliasanalysis.nim#L153"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/aliasanalysis.nim#L238"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L153" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/aliasanalysis.nim#L238" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>

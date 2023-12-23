@@ -95,7 +95,6 @@ window.addEventListener('DOMContentLoaded', main);
   </div>
   
   <ul class="simple simple-toc" id="toc-list">
-<li><a class="reference" id="chain-dsl_toc" href="#chain-dsl">Chain DSL</a></li>
 <li>
   <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
   <ul class="simple simple-toc-section">
@@ -105,124 +104,126 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#EValue"
-    title="EValue = object
-  typ* {.cursor.}: PType">EValue</a></li>
-  <li><a class="reference" href="#Sink"
-    title="Sink = distinct bool">Sink</a></li>
-  <li><a class="reference" href="#SinkAndValue"
-    title="SinkAndValue = distinct bool">SinkAndValue</a></li>
+      <li><a class="reference" href="#Fragment"
+    title="Fragment = object
+  s: Slice[NodeIndex]
+  typ*: PType">Fragment</a></li>
+  <li><a class="reference" href="#MirBuilder"
+    title="MirBuilder = object
+  front*: MirBuffer ## the front buffer, targeted by all add/subTree operations. By default,
+                    ## this is the &quot;final&quot; buffer
+  back: MirBuffer            ## by default, this the &quot;staging&quot; buffer
+  swapped: bool ## whether the buffers were swapped. If 'true', `front` holds the
+                ## staging buffer
+  currentSourceId: SourceId ## the ID of the meta-data to associate with all added nodes (that
+                            ## don't have an explicitly assigned source ID)
+  numTemps*: uint32 ## tracks the number of existing temporaries. Used for allocating new
+                    ## IDs.">MirBuilder</a></li>
   <li><a class="reference" href="#Value"
-    title="Value = distinct bool">Value</a></li>
+    title="Value = object
+  node: MirNode
+  info: opt(SourceId)        ## the source ID associated with the node, or none">Value</a></li>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">addrOp
-      <li><a class="reference" href="#addrOp%2CMirNodeSeq%2CPType%2CEValue"
-    title="addrOp(s: var MirNodeSeq; typ: PType; val: var EValue)">addrOp(s: var MirNodeSeq; typ: PType; val: var EValue)</a></li>
+      <ul class="simple nested-toc-section">add
+      <li><a class="reference" href="#add%2CMirBuilder%2CSourceId%2CsinkMirNode"
+    title="add(bu: var MirBuilder; id: SourceId; n: sink MirNode)">add(bu: var MirBuilder; id: SourceId; n: sink MirNode)</a></li>
+  <li><a class="reference" href="#add%2CMirBuilder%2CsinkMirNode"
+    title="add(bu: var MirBuilder; n: sink MirNode)">add(bu: var MirBuilder; n: sink MirNode)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">arg
-      <li><a class="reference" href="#arg%2CMirNodeSeq%2CEValue"
-    title="arg(s: var MirNodeSeq; val: EValue)">arg(s: var MirNodeSeq; val: EValue)</a></li>
+  <ul class="simple nested-toc-section">alias
+      <li><a class="reference" href="#alias%2CPType%2CTempId"
+    title="alias(typ: PType; id: TempId): Value">alias(typ: PType; id: TempId): Value</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">callOp
-      <li><a class="reference" href="#callOp%2CMirNodeSeq%2CPType"
-    title="callOp(s: var MirNodeSeq; typ: PType): EValue">callOp(s: var MirNodeSeq; typ: PType): EValue</a></li>
+  <ul class="simple nested-toc-section">asgn
+      <li><a class="reference" href="#asgn%2CMirBuilder%2CValue%2CValue"
+    title="asgn(buf: var MirBuilder; a, b: Value)">asgn(buf: var MirBuilder; a, b: Value)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">castOp
-      <li><a class="reference" href="#castOp%2CMirNodeSeq%2CPType%2CEValue"
-    title="castOp(s: var MirNodeSeq; typ: PType; val: var EValue)">castOp(s: var MirNodeSeq; typ: PType; val: var EValue)</a></li>
+  <ul class="simple nested-toc-section">bindImmutable
+      <li><a class="reference" href="#bindImmutable%2CMirBuilder%2CMirTree%2CNodePosition"
+    title="bindImmutable(bu: var MirBuilder; tree: MirTree; lval: NodePosition): Value">bindImmutable(bu: var MirBuilder; tree: MirTree; lval: NodePosition): Value</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">constr
-      <li><a class="reference" href="#constr%2CMirNodeSeq%2CPType"
-    title="constr(s: var MirNodeSeq; typ: PType): EValue">constr(s: var MirNodeSeq; typ: PType): EValue</a></li>
+  <ul class="simple nested-toc-section">bindMut
+      <li><a class="reference" href="#bindMut%2CMirBuilder%2CMirTree%2CNodePosition"
+    title="bindMut(bu: var MirBuilder; tree: MirTree; lval: NodePosition): Value">bindMut(bu: var MirBuilder; tree: MirTree; lval: NodePosition): Value</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">consume
-      <li><a class="reference" href="#consume%2CMirNodeSeq%2CEValue"
-    title="consume(s: var MirNodeSeq; val: EValue)">consume(s: var MirNodeSeq; val: EValue)</a></li>
+  <ul class="simple nested-toc-section">emitByName
+      <li><a class="reference" href="#emitByName%2CMirBuilder%2CValue%2CEffectKind"
+    title="emitByName(bu: var MirBuilder; val: Value; e: EffectKind)">emitByName(bu: var MirBuilder; val: Value; e: EffectKind)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">convOp
-      <li><a class="reference" href="#convOp%2CMirNodeSeq%2CPType%2CEValue"
-    title="convOp(s: var MirNodeSeq; typ: PType; val: var EValue)">convOp(s: var MirNodeSeq; typ: PType; val: var EValue)</a></li>
+  <ul class="simple nested-toc-section">emitByVal
+      <li><a class="reference" href="#emitByVal%2CMirBuilder%2CValue"
+    title="emitByVal(bu: var MirBuilder; y: Value)">emitByVal(bu: var MirBuilder; y: Value)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">derefOp
-      <li><a class="reference" href="#derefOp%2CMirNodeSeq%2CPType%2CEValue"
-    title="derefOp(s: var MirNodeSeq; typ: PType; val: var EValue)">derefOp(s: var MirNodeSeq; typ: PType; val: var EValue)</a></li>
+  <ul class="simple nested-toc-section">emitFrom
+      <li><a class="reference" href="#emitFrom%2CMirBuilder%2CMirTree%2CNodePosition"
+    title="emitFrom(bu: var MirBuilder; tree: MirTree; n: NodePosition)">emitFrom(bu: var MirBuilder; tree: MirTree; n: NodePosition)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">derefViewOp
-      <li><a class="reference" href="#derefViewOp%2CMirNodeSeq%2CPType%2CEValue"
-    title="derefViewOp(s: var MirNodeSeq; typ: PType; val: var EValue)">derefViewOp(s: var MirNodeSeq; typ: PType; val: var EValue)</a></li>
+  <ul class="simple nested-toc-section">endNode
+      <li><a class="reference" href="#endNode%2CMirNodeKind"
+    title="endNode(k: MirNodeKind): MirNode">endNode(k: MirNodeKind): MirNode</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">emit
-      <li><a class="reference" href="#emit%2CMirNodeSeq%2CsinkMirNode"
-    title="emit(s: var MirNodeSeq; n: sink MirNode): EValue">emit(s: var MirNodeSeq; n: sink MirNode): EValue</a></li>
+  <ul class="simple nested-toc-section">finish
+      <li><a class="reference" href="#finish%2CsinkMirBuilder"
+    title="finish(bu: sink MirBuilder): MirTree">finish(bu: sink MirBuilder): MirTree</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">hasUnassigned
+      <li><a class="reference" href="#hasUnassigned%2CMirBuilder"
+    title="hasUnassigned(bu: MirBuilder): bool">hasUnassigned(bu: MirBuilder): bool</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">initBuilder
+      <li><a class="reference" href="#initBuilder%2CSourceId%2CsinkMirNodeSeq"
+    title="initBuilder(id: SourceId; buf: sink MirNodeSeq = @[]): MirBuilder">initBuilder(id: SourceId; buf: sink MirNodeSeq = @[]): MirBuilder</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">inline
+      <li><a class="reference" href="#inline%2CMirBuilder%2CMirTree%2CNodePosition"
+    title="inline(bu: var MirBuilder; tree: MirTree; fr: NodePosition): Value">inline(bu: var MirBuilder; tree: MirTree; fr: NodePosition): Value</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">len
+      <li><a class="reference" href="#len%2CMirBuffer"
+    title="len(b: MirBuffer): int">len(b: MirBuffer): int</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">literal
-      <li><a class="reference" href="#literal%2CMirNodeSeq%2CPNode"
-    title="literal(s: var MirNodeSeq; n: PNode): EValue">literal(s: var MirNodeSeq; n: PNode): EValue</a></li>
+      <li><a class="reference" href="#literal%2CPNode"
+    title="literal(n: PNode): Value">literal(n: PNode): Value</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">magic
-      <li><a class="reference" href="#magic%2CTMagic%2CPType%2CPNode"
-    title="magic(m: TMagic; typ: PType; n: PNode = nil): MirNode">magic(m: TMagic; typ: PType; n: PNode = nil): MirNode</a></li>
+  <ul class="simple nested-toc-section">materialize
+      <li><a class="reference" href="#materialize%2CMirBuilder%2CValue"
+    title="materialize(bu: var MirBuilder; loc: Value): Value">materialize(bu: var MirBuilder; loc: Value): Value</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">magicCall
-      <li><a class="reference" href="#magicCall%2CMirNodeSeq%2CTMagic%2CPType"
-    title="magicCall(s: var MirNodeSeq; m: TMagic; typ: PType): EValue">magicCall(s: var MirNodeSeq; m: TMagic; typ: PType): EValue</a></li>
+  <ul class="simple nested-toc-section">pop
+      <li><a class="reference" href="#pop%2CMirBuilder%2CFragment"
+    title="pop(bu: var MirBuilder; f: Fragment)">pop(bu: var MirBuilder; f: Fragment)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">name
-      <li><a class="reference" href="#name%2CMirNodeSeq%2CEValue"
-    title="name(s: var MirNodeSeq; val: EValue)">name(s: var MirNodeSeq; val: EValue)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">opParam
-      <li><a class="reference" href="#opParam%2CMirNodeSeq%2Cuint32%2CPType"
-    title="opParam(s: var MirNodeSeq; i: uint32; typ: PType): EValue">opParam(s: var MirNodeSeq; i: uint32; typ: PType): EValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">opParamNode
-      <li><a class="reference" href="#opParamNode%2Cuint32%2CPType"
-    title="opParamNode(index: uint32; typ: PType): MirNode">opParamNode(index: uint32; typ: PType): MirNode</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">pathConv
-      <li><a class="reference" href="#pathConv%2CMirNodeSeq%2CPType%2CEValue"
-    title="pathConv(s: var MirNodeSeq; typ: PType; val: var EValue)">pathConv(s: var MirNodeSeq; typ: PType; val: var EValue)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">pathObj
-      <li><a class="reference" href="#pathObj%2CMirNodeSeq%2CPSym%2CEValue"
-    title="pathObj(s: var MirNodeSeq; field: PSym; val: var EValue)">pathObj(s: var MirNodeSeq; field: PSym; val: var EValue)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">pathPos
-      <li><a class="reference" href="#pathPos%2CMirNodeSeq%2CPType%2Cuint32%2CEValue"
-    title="pathPos(s: var MirNodeSeq; elemType: PType; position: uint32; val: var EValue)">pathPos(s: var MirNodeSeq; elemType: PType; position: uint32; val: var EValue)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">pathVariant
-      <li><a class="reference" href="#pathVariant%2CMirNodeSeq%2CPType%2CPSym%2CEValue"
-    title="pathVariant(s: var MirNodeSeq; objType: PType; field: PSym; val: var EValue)">pathVariant(s: var MirNodeSeq; objType: PType; field: PSym; val: var EValue)</a></li>
+  <ul class="simple nested-toc-section">popSingle
+      <li><a class="reference" href="#popSingle%2CMirBuilder%2CFragment"
+    title="popSingle(bu: var MirBuilder; f: Fragment): Value">popSingle(bu: var MirBuilder; f: Fragment): Value</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">procLit
-      <li><a class="reference" href="#procLit%2CMirNodeSeq%2CPSym"
-    title="procLit(s: var MirNodeSeq; sym: PSym): EValue">procLit(s: var MirNodeSeq; sym: PSym): EValue</a></li>
+      <li><a class="reference" href="#procLit%2CPSym"
+    title="procLit(sym: PSym): Value">procLit(sym: PSym): Value</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">procNode
@@ -230,44 +231,39 @@ window.addEventListener('DOMContentLoaded', main);
     title="procNode(s: PSym): MirNode">procNode(s: PSym): MirNode</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">stdConvOp
-      <li><a class="reference" href="#stdConvOp%2CMirNodeSeq%2CPType%2CEValue"
-    title="stdConvOp(s: var MirNodeSeq; typ: PType; val: var EValue)">stdConvOp(s: var MirNodeSeq; typ: PType; val: var EValue)</a></li>
+  <ul class="simple nested-toc-section">setSource
+      <li><a class="reference" href="#setSource%2CMirBuilder%2CSourceId"
+    title="setSource(bu: var MirBuilder; id: SourceId)">setSource(bu: var MirBuilder; id: SourceId)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">staging
+      <li><a class="reference" href="#staging%2CMirBuilder"
+    title="staging(bu: var MirBuilder): var MirNodeSeq">staging(bu: var MirBuilder): var MirNodeSeq</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">symbol
-      <li><a class="reference" href="#symbol%2CMirNodeSeq%2Crange%5B%5D%2CPSym"
-    title="symbol(s: var MirNodeSeq; kind: range[mnkConst .. mnkLocal]; sym: PSym): EValue">symbol(s: var MirNodeSeq; kind: range[mnkConst .. mnkLocal]; sym: PSym): EValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">tag
-      <li><a class="reference" href="#tag%2CMirNodeSeq%2CEffectKind%2CEValue"
-    title="tag(s: var MirNodeSeq; effect: EffectKind; val: var EValue)">tag(s: var MirNodeSeq; effect: EffectKind; val: var EValue)</a></li>
+      <li><a class="reference" href="#symbol%2Crange%5B%5D%2CPSym"
+    title="symbol(kind: range[mnkConst .. mnkLocal]; sym: PSym): Value">symbol(kind: range[mnkConst .. mnkLocal]; sym: PSym): Value</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">temp
-      <li><a class="reference" href="#temp%2CMirNodeSeq%2CPType%2CTempId"
-    title="temp(s: var MirNodeSeq; typ: PType; id: TempId): EValue">temp(s: var MirNodeSeq; typ: PType; id: TempId): EValue</a></li>
+      <li><a class="reference" href="#temp%2CPType%2CTempId"
+    title="temp(typ: PType; id: TempId): Value">temp(typ: PType; id: TempId): Value</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">typ
+      <li><a class="reference" href="#typ%2CValue"
+    title="typ(val: Value): PType">typ(val: Value): PType</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">typeLit
-      <li><a class="reference" href="#typeLit%2CMirNodeSeq%2CPType"
-    title="typeLit(s: var MirNodeSeq; t: PType): EValue">typeLit(s: var MirNodeSeq; t: PType): EValue</a></li>
+      <li><a class="reference" href="#typeLit%2CPType"
+    title="typeLit(t: PType): Value">typeLit(t: PType): Value</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">unaryMagicCall
-      <li><a class="reference" href="#unaryMagicCall%2CMirNodeSeq%2CTMagic%2CPType%2CEValue"
-    title="unaryMagicCall(s: var MirNodeSeq; m: TMagic; typ: PType; val: var EValue)">unaryMagicCall(s: var MirNodeSeq; m: TMagic; typ: PType; val: var EValue)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">viewOp
-      <li><a class="reference" href="#viewOp%2CMirNodeSeq%2CPType%2CEValue"
-    title="viewOp(s: var MirNodeSeq; typ: PType; val: var EValue)">viewOp(s: var MirNodeSeq; typ: PType; val: var EValue)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">voidOut
-      <li><a class="reference" href="#voidOut%2CMirNodeSeq%2CEValue"
-    title="voidOut(s: var MirNodeSeq; val: EValue)">voidOut(s: var MirNodeSeq; val: EValue)</a></li>
+  <ul class="simple nested-toc-section">use
+      <li><a class="reference" href="#use%2CMirBuilder%2CsinkValue"
+    title="use(bu: var MirBuilder; val: sink Value)">use(bu: var MirBuilder; val: sink Value)</a></li>
 
   </ul>
 
@@ -276,206 +272,68 @@ window.addEventListener('DOMContentLoaded', main);
 <li>
   <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">=>
-      <li><a class="reference" href="#%3D%3E.t%2CEValue%2CSink"
-    title="`=&gt;`(a: EValue; b: Sink): ChainEnd">`=&gt;`(a: EValue; b: Sink): ChainEnd</a></li>
-  <li><a class="reference" href="#%3D%3E.t%2CEValue%2CSinkAndValue"
-    title="`=&gt;`(a: EValue; b: SinkAndValue): Value">`=&gt;`(a: EValue; b: SinkAndValue): Value</a></li>
-  <li><a class="reference" href="#%3D%3E.t%2CValue%2CSink"
-    title="`=&gt;`(a: Value; b: Sink): ChainEnd">`=&gt;`(a: Value; b: Sink): ChainEnd</a></li>
-  <li><a class="reference" href="#%3D%3E.t%2CEValue%2CCond"
-    title="`=&gt;`(v: EValue; c: Cond): Predicate">`=&gt;`(v: EValue; c: Cond): Predicate</a></li>
-  <li><a class="reference" href="#%3D%3E.t%2CPredicate%2CSinkAndValue"
-    title="`=&gt;`(v: Predicate; sink: SinkAndValue): Value">`=&gt;`(v: Predicate; sink: SinkAndValue): Value</a></li>
-  <li><a class="reference" href="#%3D%3E.t%2CValue%2CCond"
-    title="`=&gt;`(v: Value; c: Cond): Predicate">`=&gt;`(v: Value; c: Cond): Predicate</a></li>
-  <li><a class="reference" href="#%3D%3E.t%2CValue%2CSinkAndValue"
-    title="`=&gt;`(v: Value; sink: SinkAndValue): Value">`=&gt;`(v: Value; sink: SinkAndValue): Value</a></li>
+      <ul class="simple nested-toc-section">allocTemp
+      <li><a class="reference" href="#allocTemp.t%2CMirBuilder%2CPType"
+    title="allocTemp(bu: var MirBuilder; t: PType; alias = false): Value">allocTemp(bu: var MirBuilder; t: PType; alias = false): Value</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">addrOp
-      <li><a class="reference" href="#addrOp.t%2Cuntyped"
-    title="addrOp(typ: untyped): SinkAndValue">addrOp(typ: untyped): SinkAndValue</a></li>
+  <ul class="simple nested-toc-section">buildCall
+      <li><a class="reference" href="#buildCall.t%2CMirBuilder%2CPSym%2CPType%2Cuntyped"
+    title="buildCall(bu: var MirBuilder; prc: PSym; t: PType; d: untyped)">buildCall(bu: var MirBuilder; prc: PSym; t: PType; d: untyped)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">arg
-      <li><a class="reference" href="#arg.t"
-    title="arg(): Sink">arg(): Sink</a></li>
+  <ul class="simple nested-toc-section">buildMagicCall
+      <li><a class="reference" href="#buildMagicCall.t%2CMirBuilder%2CTMagic%2CPType%2Cuntyped"
+    title="buildMagicCall(bu: var MirBuilder; m: TMagic; t: PType; body: untyped)">buildMagicCall(bu: var MirBuilder; m: TMagic; t: PType; body: untyped)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">argBlock
-      <li><a class="reference" href="#argBlock.t%2CMirTree%2Cuntyped"
-    title="argBlock(tree: var MirTree; body: untyped)">argBlock(tree: var MirTree; body: untyped)</a></li>
+  <ul class="simple nested-toc-section">buildStmt
+      <li><a class="reference" href="#buildStmt.t%2CMirBuilder%2Cuntyped"
+    title="buildStmt(bu: var MirBuilder; body: untyped)">buildStmt(bu: var MirBuilder; body: untyped)</a></li>
+  <li><a class="reference" href="#buildStmt.t%2CMirBuilder%2CMirNodeKind%2Cuntyped"
+    title="buildStmt(bu: var MirBuilder; k: MirNodeKind; body: untyped)">buildStmt(bu: var MirBuilder; k: MirNodeKind; body: untyped)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">callOp
-      <li><a class="reference" href="#callOp.t%2Cuntyped"
-    title="callOp(typ: untyped): EValue">callOp(typ: untyped): EValue</a></li>
+  <ul class="simple nested-toc-section">pos
+      <li><a class="reference" href="#pos.t%2CFragment"
+    title="pos(f: Fragment): NodePosition">pos(f: Fragment): NodePosition</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">castOp
-      <li><a class="reference" href="#castOp.t%2Cuntyped"
-    title="castOp(typ: untyped): SinkAndValue">castOp(typ: untyped): SinkAndValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">chain
-      <li><a class="reference" href="#chain.t%2CMirNodeSeq%2Cuntyped"
-    title="chain(buf: var MirNodeSeq; x: untyped)">chain(buf: var MirNodeSeq; x: untyped)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">constr
-      <li><a class="reference" href="#constr.t%2Cuntyped"
-    title="constr(typ: untyped): EValue">constr(typ: untyped): EValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">consume
-      <li><a class="reference" href="#consume.t"
-    title="consume(): Sink">consume(): Sink</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">convOp
-      <li><a class="reference" href="#convOp.t%2Cuntyped"
-    title="convOp(typ: untyped): SinkAndValue">convOp(typ: untyped): SinkAndValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">derefOp
-      <li><a class="reference" href="#derefOp.t%2Cuntyped"
-    title="derefOp(typ: untyped): SinkAndValue">derefOp(typ: untyped): SinkAndValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">derefViewOp
-      <li><a class="reference" href="#derefViewOp.t%2Cuntyped"
-    title="derefViewOp(typ: untyped): SinkAndValue">derefViewOp(typ: untyped): SinkAndValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">emit
-      <li><a class="reference" href="#emit.t%2Cuntyped"
-    title="emit(n: untyped): EValue">emit(n: untyped): EValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">endNode
-      <li><a class="reference" href="#endNode.t%2CMirNodeKind"
-    title="endNode(k: MirNodeKind): MirNode">endNode(k: MirNodeKind): MirNode</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">eval
-      <li><a class="reference" href="#eval.t%2CMirNodeSeq%2Cuntyped"
-    title="eval(buf: var MirNodeSeq; x: untyped): EValue">eval(buf: var MirNodeSeq; x: untyped): EValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">follows
-      <li><a class="reference" href="#follows.t"
-    title="follows(): Sink">follows(): Sink</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">forward
-      <li><a class="reference" href="#forward.t%2CMirNodeSeq%2Cuntyped"
-    title="forward(buf: var MirNodeSeq; x: untyped)">forward(buf: var MirNodeSeq; x: untyped)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">literal
-      <li><a class="reference" href="#literal.t%2Cuntyped"
-    title="literal(n: untyped): EValue">literal(n: untyped): EValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">magicCall
-      <li><a class="reference" href="#magicCall.t%2Cuntyped%2Cuntyped"
-    title="magicCall(typ, id: untyped): EValue">magicCall(typ, id: untyped): EValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">name
-      <li><a class="reference" href="#name.t"
-    title="name(): Sink">name(): Sink</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">opParam
-      <li><a class="reference" href="#opParam.t%2Cuntyped%2Cuntyped"
-    title="opParam(i, typ: untyped): EValue">opParam(i, typ: untyped): EValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">pathConv
-      <li><a class="reference" href="#pathConv.t%2Cuntyped"
-    title="pathConv(typ: untyped): SinkAndValue">pathConv(typ: untyped): SinkAndValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">pathObj
-      <li><a class="reference" href="#pathObj.t%2Cuntyped"
-    title="pathObj(field: untyped): SinkAndValue">pathObj(field: untyped): SinkAndValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">pathPos
-      <li><a class="reference" href="#pathPos.t%2Cuntyped%2Cuntyped"
-    title="pathPos(typ, pos: untyped): SinkAndValue">pathPos(typ, pos: untyped): SinkAndValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">pathVariant
-      <li><a class="reference" href="#pathVariant.t%2Cuntyped%2Cuntyped"
-    title="pathVariant(typ, field: untyped): SinkAndValue">pathVariant(typ, field: untyped): SinkAndValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">predicate
-      <li><a class="reference" href="#predicate.t%2Cbool"
-    title="predicate(val: bool): Cond">predicate(val: bool): Cond</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">procLit
-      <li><a class="reference" href="#procLit.t%2Cuntyped"
-    title="procLit(sym: untyped): EValue">procLit(sym: untyped): EValue</a></li>
+  <ul class="simple nested-toc-section">push
+      <li><a class="reference" href="#push.t%2CMirBuilder%2Cuntyped"
+    title="push(bu: var MirBuilder; body: untyped): Fragment">push(bu: var MirBuilder; body: untyped): Fragment</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">scope
-      <li><a class="reference" href="#scope.t%2CMirTree%2Cuntyped"
-    title="scope(tree: var MirTree; body: untyped)">scope(tree: var MirTree; body: untyped)</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">stdConvOp
-      <li><a class="reference" href="#stdConvOp.t%2Cuntyped"
-    title="stdConvOp(typ: untyped): SinkAndValue">stdConvOp(typ: untyped): SinkAndValue</a></li>
+      <li><a class="reference" href="#scope.t%2CMirBuilder%2Cuntyped"
+    title="scope(bu: var MirBuilder; body: untyped)">scope(bu: var MirBuilder; body: untyped)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">stmtList
-      <li><a class="reference" href="#stmtList.t%2CMirTree%2Cuntyped"
-    title="stmtList(tree: var MirTree; body: untyped)">stmtList(tree: var MirTree; body: untyped)</a></li>
+      <li><a class="reference" href="#stmtList.t%2CMirBuilder%2Cuntyped"
+    title="stmtList(bu: var MirBuilder; body: untyped)">stmtList(bu: var MirBuilder; body: untyped)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">subTree
-      <li><a class="reference" href="#subTree.t%2CMirTree%2CMirNode%2Cuntyped"
-    title="subTree(tree: var MirTree; n: MirNode; body: untyped)">subTree(tree: var MirTree; n: MirNode; body: untyped)</a></li>
+      <li><a class="reference" href="#subTree.t%2CMirBuilder%2CMirNodeKind%2Cuntyped"
+    title="subTree(bu: var MirBuilder; k: MirNodeKind; body: untyped)">subTree(bu: var MirBuilder; k: MirNodeKind; body: untyped)</a></li>
+  <li><a class="reference" href="#subTree.t%2CMirBuilder%2CMirNode%2Cuntyped"
+    title="subTree(bu: var MirBuilder; n: MirNode; body: untyped)">subTree(bu: var MirBuilder; n: MirNode; body: untyped)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">symbol
-      <li><a class="reference" href="#symbol.t%2Cuntyped%2Cuntyped"
-    title="symbol(kind, sym: untyped): EValue">symbol(kind, sym: untyped): EValue</a></li>
+  <ul class="simple nested-toc-section">withFront
+      <li><a class="reference" href="#withFront.t%2CMirBuilder%2Cuntyped"
+    title="withFront(bu: var MirBuilder; body: untyped)">withFront(bu: var MirBuilder; body: untyped)</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">tag
-      <li><a class="reference" href="#tag.t%2Cuntyped"
-    title="tag(effect: untyped): SinkAndValue">tag(effect: untyped): SinkAndValue</a></li>
+  <ul class="simple nested-toc-section">wrapMutAlias
+      <li><a class="reference" href="#wrapMutAlias.t%2CMirBuilder%2CPType%2Cuntyped"
+    title="wrapMutAlias(bu: var MirBuilder; t: PType; body: untyped): Value">wrapMutAlias(bu: var MirBuilder; t: PType; body: untyped): Value</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">temp
-      <li><a class="reference" href="#temp.t%2Cuntyped%2Cuntyped"
-    title="temp(typ, id: untyped): EValue">temp(typ, id: untyped): EValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">typeLit
-      <li><a class="reference" href="#typeLit.t%2Cuntyped"
-    title="typeLit(n: untyped): EValue">typeLit(n: untyped): EValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">unaryMagicCall
-      <li><a class="reference" href="#unaryMagicCall.t%2Cuntyped%2Cuntyped"
-    title="unaryMagicCall(m, typ: untyped): SinkAndValue">unaryMagicCall(m, typ: untyped): SinkAndValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">viewOp
-      <li><a class="reference" href="#viewOp.t%2Cuntyped"
-    title="viewOp(typ: untyped): SinkAndValue">viewOp(typ: untyped): SinkAndValue</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">voidOut
-      <li><a class="reference" href="#voidOut.t"
-    title="voidOut(): Sink">voidOut(): Sink</a></li>
+  <ul class="simple nested-toc-section">wrapTemp
+      <li><a class="reference" href="#wrapTemp.t%2CMirBuilder%2CPType%2Cuntyped"
+    title="wrapTemp(bu: var MirBuilder; t: PType; body: untyped): Value">wrapTemp(bu: var MirBuilder; t: PType; body: untyped): Value</a></li>
 
   </ul>
 
@@ -486,77 +344,71 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">This module implements a small domain-specific language (=DSL) for constructing sequences of MIR code, and constructor routines for <tt class="docutils literal"><span class="pre">MirNode</span></tt>s.
-<h1><a class="toc-backref" id="chain-dsl" href="#chain-dsl">Chain DSL</a></h1><p>The idea is to provide a simple DSL that makes generating MIR code more ergonomic than manually adding nodes to a buffer. It is entirely realized via templates, and looks like this:</p>
-<pre class="listing"><span class="Identifier">chain</span><span class="Punctuation">:</span> <span class="Identifier">input</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Operator">=&gt;</span> <span class="Identifier">in_out</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Operator">=&gt;</span> <span class="Identifier">in_out</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Operator">=&gt;</span> <span class="Identifier">sink</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre><p>The <a class="reference external" href="#chain.t,MirNodeSeq,untyped">chain</a> template provides the context for the generator routines. The <tt class="docutils literal"><span class="pre">=&gt;</span></tt> operator does the actual chaining -- each call of it yields a sentinel value that informs the next <tt class="docutils literal"><span class="pre">=&gt;</span></tt> invocation on how to interpet the sub-expression. The <tt class="docutils literal"><span class="pre"><span class="Identifier">input</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">in_out</span></span></tt>, and <tt class="docutils literal"><span class="pre"><span class="Identifier">sink</span></span></tt> calls are referred to as <em>operands</em>.</p>
-<p>The first operand must always be an <em>input</em> (something that provides an initial <a class="reference external" href="#EValue">EValue</a>), the following operands must be an <em>input-output</em>, and the last operand, depending on the the context, either an <em>sink</em> or <em>input-output</em>.</p>
-<p>There are two kinds of operands:</p>
-<ul class="simple"><li>those that emit an MIR node (or sequence) and update (or return) an <tt class="docutils literal"><span class="pre">EValue</span></tt></li>
-<li>those that emit neither MIR code nor modify the <tt class="docutils literal"><span class="pre">EValue</span></tt>, but instead affect how the operands following it are interpreted</li>
-</ul>
-</p>
+  <p class="module-desc">Implements routines and types that assist in producing MIR code.</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="mirtrees.html">mirtrees</a>
+<a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="mirtrees.html">mirtrees</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<div id="EValue">
-<dt><pre><a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">typ</span><span class="Operator">*</span> {.<span class="Identifier">cursor</span>.}<span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a>
+<div id="Fragment">
+<dt><pre><a href="mirconstr.html#Fragment"><span class="Identifier">Fragment</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><a href="mirtrees.html#NodeIndex"><span class="Identifier">NodeIndex</span></a><span class="Other">]</span>
+  <span class="Identifier">typ</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a>
 </pre></dt>
 <dd>
 
-Encapsulates information about the abstract value that results from an operation sequence. It's used as a way to transport said information between the generator procedures for operators.
+Identifies a fragment (usually a sub-tree) within the staging buffer.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L60"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L23"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L23" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="Sink">
-<dt><pre><a href="mirconstr.html#Sink"><span class="Identifier">Sink</span></a> <span class="Other">=</span> <span class="Keyword">distinct</span> <span class="Identifier">bool</span></pre></dt>
+<div id="MirBuilder">
+<dt><pre><a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">front</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">MirBuffer</span> <span class="Comment">## the front buffer, targeted by all add/subTree operations. By default,</span>
+                    <span class="Comment">## this is the &quot;final&quot; buffer</span>
+  <span class="Identifier">back</span><span class="Other">:</span> <span class="Identifier">MirBuffer</span>            <span class="Comment">## by default, this the &quot;staging&quot; buffer</span>
+  <span class="Identifier">swapped</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Comment">## whether the buffers were swapped. If 'true', `front` holds the</span>
+                <span class="Comment">## staging buffer</span>
+  <span class="Identifier">currentSourceId</span><span class="Other">:</span> <a href="mirtrees.html#SourceId"><span class="Identifier">SourceId</span></a> <span class="Comment">## the ID of the meta-data to associate with all added nodes (that</span>
+                            <span class="Comment">## don't have an explicitly assigned source ID)</span>
+  <span class="Identifier">numTemps</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">uint32</span> <span class="Comment">## tracks the number of existing temporaries. Used for allocating new</span>
+                    <span class="Comment">## IDs.</span>
+  </pre></dt>
 <dd>
 
-Used to mark a procedure as generating code that acts as a sink
+Holds the state needed for building MIR trees and allocating temporaries. A double-buffering scheme is used.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L44"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L36"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L44" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="SinkAndValue">
-<dt><pre><a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a> <span class="Other">=</span> <span class="Keyword">distinct</span> <span class="Identifier">bool</span></pre></dt>
-<dd>
-
-Marks a procedure as generating code that acts as a sink and yields a value.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L46"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L36" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="Value">
-<dt><pre><a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> <span class="Other">=</span> <span class="Keyword">distinct</span> <span class="Identifier">bool</span></pre></dt>
+<dt><pre><a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">node</span><span class="Other">:</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a>
+  <span class="Identifier">info</span><span class="Other">:</span> <span class="Identifier">opt</span><span class="Other">(</span><a href="mirtrees.html#SourceId"><span class="Identifier">SourceId</span></a><span class="Other">)</span>        <span class="Comment">## the source ID associated with the node, or none</span>
+  </pre></dt>
 <dd>
 
-Used to mark a procedure as generating code that yields a value
+
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L42"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L18"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L42" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L18" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -565,272 +417,250 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="addrOp,MirNodeSeq,PType,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#addrOp%2CMirNodeSeq%2CPType%2CEValue"><span class="Identifier">addrOp</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L216"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L216" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="arg,MirNodeSeq,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#arg%2CMirNodeSeq%2CEValue"><span class="Identifier">arg</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L258"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L258" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="callOp,MirNodeSeq,PType">
-<dt><pre><span class="Keyword">func</span> <a href="#callOp%2CMirNodeSeq%2CPType"><span class="Identifier">callOp</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<div id="add,MirBuilder,SourceId,sinkMirNode">
+<dt><pre><span class="Keyword">func</span> <a href="#add%2CMirBuilder%2CSourceId%2CsinkMirNode"><span class="Identifier">add</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <a href="mirtrees.html#SourceId"><span class="Identifier">SourceId</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Adds <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> to the front buffer and sets the node's source/info ID to <tt class="docutils literal"><span class="pre"><span class="Identifier">id</span></span></tt>, ignoring the active ID set via <tt class="docutils literal"><span class="pre">setSource</span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L176"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L236"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L176" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L236" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="castOp,MirNodeSeq,PType,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#castOp%2CMirNodeSeq%2CPType%2CEValue"><span class="Identifier">castOp</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="add,MirBuilder,sinkMirNode">
+<dt><pre><span class="Keyword">func</span> <a href="#add%2CMirBuilder%2CsinkMirNode"><span class="Identifier">add</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Emits <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> to the node buffers.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L204"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L204" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="constr,MirNodeSeq,PType">
-<dt><pre><span class="Keyword">func</span> <a href="#constr%2CMirNodeSeq%2CPType"><span class="Identifier">constr</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L172"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L172" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="consume,MirNodeSeq,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#consume%2CMirNodeSeq%2CEValue"><span class="Identifier">consume</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L261"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L261" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="convOp,MirNodeSeq,PType,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#convOp%2CMirNodeSeq%2CPType%2CEValue"><span class="Identifier">convOp</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L212"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L212" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="derefOp,MirNodeSeq,PType,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#derefOp%2CMirNodeSeq%2CPType%2CEValue"><span class="Identifier">derefOp</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L224"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L224" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="derefViewOp,MirNodeSeq,PType,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#derefViewOp%2CMirNodeSeq%2CPType%2CEValue"><span class="Identifier">derefViewOp</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L228"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L228" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="emit,MirNodeSeq,sinkMirNode">
-<dt><pre><span class="Keyword">func</span> <a href="#emit%2CMirNodeSeq%2CsinkMirNode"><span class="Identifier">emit</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Adds <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> to the node sequences, with its type providing the initial type information for the result.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L154"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L154" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="literal,MirNodeSeq,PNode">
-<dt><pre><span class="Keyword">func</span> <a href="#literal%2CMirNodeSeq%2CPNode"><span class="Identifier">literal</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L168"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="magic,TMagic,PType,PNode">
-<dt><pre><span class="Keyword">func</span> <a href="#magic%2CTMagic%2CPType%2CPNode"><span class="Identifier">magic</span></a><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="../ast/ast_types.html#TMagic"><span class="Identifier">TMagic</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span><span class="Other">:</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L349"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L349" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="magicCall,MirNodeSeq,TMagic,PType">
-<dt><pre><span class="Keyword">func</span> <a href="#magicCall%2CMirNodeSeq%2CTMagic%2CPType"><span class="Identifier">magicCall</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <a href="../ast/ast_types.html#TMagic"><span class="Identifier">TMagic</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L194"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L194" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="name,MirNodeSeq,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#name%2CMirNodeSeq%2CEValue"><span class="Identifier">name</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L264"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L264" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="opParam,MirNodeSeq,uint32,PType">
-<dt><pre><span class="Keyword">func</span> <a href="#opParam%2CMirNodeSeq%2Cuint32%2CPType"><span class="Identifier">opParam</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">uint32</span><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L189"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L189" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="opParamNode,uint32,PType">
-<dt><pre><span class="Keyword">func</span> <a href="#opParamNode%2Cuint32%2CPType"><span class="Identifier">opParamNode</span></a><span class="Other">(</span><span class="Identifier">index</span><span class="Other">:</span> <span class="Identifier">uint32</span><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L355"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L355" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="pathConv,MirNodeSeq,PType,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#pathConv%2CMirNodeSeq%2CPType%2CEValue"><span class="Identifier">pathConv</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Emits an <tt class="docutils literal"><span class="pre">mnkPathConv</span></tt> node, representing a handle-conversion to <tt class="docutils literal"><span class="pre"><span class="Identifier">typ</span></span></tt>.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L245"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L245" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="pathObj,MirNodeSeq,PSym,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#pathObj%2CMirNodeSeq%2CPSym%2CEValue"><span class="Identifier">pathObj</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">field</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L232"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L232"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L232" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="pathPos,MirNodeSeq,PType,uint32,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#pathPos%2CMirNodeSeq%2CPType%2Cuint32%2CEValue"><span class="Identifier">pathPos</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">elemType</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">position</span><span class="Other">:</span> <span class="Identifier">uint32</span><span class="Other">;</span>
-             <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="alias,PType,TempId">
+<dt><pre><span class="Keyword">func</span> <a href="#alias%2CPType%2CTempId"><span class="Identifier">alias</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <a href="mirtrees.html#TempId"><span class="Identifier">TempId</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L237"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L85"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L237" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L85" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="pathVariant,MirNodeSeq,PType,PSym,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#pathVariant%2CMirNodeSeq%2CPType%2CPSym%2CEValue"><span class="Identifier">pathVariant</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">objType</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">field</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.
-    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="asgn,MirBuilder,Value,Value">
+<dt><pre><span class="Keyword">func</span> <a href="#asgn%2CMirBuilder%2CValue%2CValue"><span class="Identifier">asgn</span></a><span class="Other">(</span><span class="Identifier">buf</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Emits an assignment of <tt class="docutils literal"><span class="pre"><span class="Identifier">b</span></span></tt> to <tt class="docutils literal"><span class="pre"><span class="Identifier">a</span></span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L329"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L329" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="bindImmutable,MirBuilder,MirTree,NodePosition">
+<dt><pre><span class="Keyword">func</span> <a href="#bindImmutable%2CMirBuilder%2CMirTree%2CNodePosition"><span class="Identifier">bindImmutable</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">lval</span><span class="Other">:</span> <a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L241"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L348"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L241" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L348" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="procLit,MirNodeSeq,PSym">
-<dt><pre><span class="Keyword">func</span> <a href="#procLit%2CMirNodeSeq%2CPSym"><span class="Identifier">procLit</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">sym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+<div id="bindMut,MirBuilder,MirTree,NodePosition">
+<dt><pre><span class="Keyword">func</span> <a href="#bindMut%2CMirBuilder%2CMirTree%2CNodePosition"><span class="Identifier">bindMut</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">lval</span><span class="Other">:</span> <a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Creates an alias from the lvalue <tt class="docutils literal"><span class="pre"><span class="Identifier">lval</span></span></tt> that supports mutations (e.g., using as the destination of an assignment, passing to <tt class="docutils literal"><span class="pre">var</span></tt>. parameter, etc.).
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L361"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L361" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="emitByName,MirBuilder,Value,EffectKind">
+<dt><pre><span class="Keyword">func</span> <a href="#emitByName%2CMirBuilder%2CValue%2CEffectKind"><span class="Identifier">emitByName</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a><span class="Other">;</span> <span class="Identifier">e</span><span class="Other">:</span> <a href="mirtrees.html#EffectKind"><span class="Identifier">EffectKind</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L160"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L324"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L160" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L324" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="emitByVal,MirBuilder,Value">
+<dt><pre><span class="Keyword">func</span> <a href="#emitByVal%2CMirBuilder%2CValue"><span class="Identifier">emitByVal</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">y</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L320"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L320" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="emitFrom,MirBuilder,MirTree,NodePosition">
+<dt><pre><span class="Keyword">func</span> <a href="#emitFrom%2CMirBuilder%2CMirTree%2CNodePosition"><span class="Identifier">emitFrom</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Emits the sub-tree at <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> within <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt> into <tt class="docutils literal"><span class="pre"><span class="Identifier">bu</span></span></tt>'s front buffer.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L245"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L245" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="endNode,MirNodeKind">
+<dt><pre><span class="Keyword">func</span> <a href="#endNode%2CMirNodeKind"><span class="Identifier">endNode</span></a><span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <a href="mirtrees.html#MirNodeKind"><span class="Identifier">MirNodeKind</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L68"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="finish,sinkMirBuilder">
+<dt><pre><span class="Keyword">func</span> <a href="#finish%2CsinkMirBuilder"><span class="Identifier">finish</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Consumes <tt class="docutils literal"><span class="pre"><span class="Identifier">bu</span></span></tt> and returns the finished tree.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L387"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L387" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="hasUnassigned,MirBuilder">
+<dt><pre><span class="Keyword">func</span> <a href="#hasUnassigned%2CMirBuilder"><span class="Identifier">hasUnassigned</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Returns whether nodes with unassigned <tt class="docutils literal"><span class="pre">info</span></tt> fields exist in the buffers.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L129"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L129" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="initBuilder,SourceId,sinkMirNodeSeq">
+<dt><pre><span class="Keyword">func</span> <a href="#initBuilder%2CSourceId%2CsinkMirNodeSeq"><span class="Identifier">initBuilder</span></a><span class="Other">(</span><span class="Identifier">id</span><span class="Other">:</span> <a href="mirtrees.html#SourceId"><span class="Identifier">SourceId</span></a><span class="Other">;</span> <span class="Identifier">buf</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Initializes a <tt class="docutils literal"><span class="pre">MirBuilder</span></tt> with the given <tt class="docutils literal"><span class="pre"><span class="Identifier">id</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">buf</span></span></tt> as the final buffer's initial content.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L215"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L215" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="inline,MirBuilder,MirTree,NodePosition">
+<dt><pre><span class="Keyword">func</span> <a href="#inline%2CMirBuilder%2CMirTree%2CNodePosition"><span class="Identifier">inline</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">fr</span><span class="Other">:</span> <a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Inlines the operand for non-mutating use. This is meant to be used for materialzing immutable arguments when inlining calls / expanding assignments.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L335"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L335" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="len,MirBuffer">
+<dt><pre><span class="Keyword">func</span> <a href="#len%2CMirBuffer"><span class="Identifier">len</span></a><span class="Other">(</span><span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">MirBuffer</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L93"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L93" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="literal,PNode">
+<dt><pre><span class="Keyword">func</span> <a href="#literal%2CPNode"><span class="Identifier">literal</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L79"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L79" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="materialize,MirBuilder,Value">
+<dt><pre><span class="Keyword">func</span> <a href="#materialize%2CMirBuilder%2CValue"><span class="Identifier">materialize</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">loc</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Captures the value of the location <tt class="docutils literal"><span class="pre"><span class="Identifier">loc</span></span></tt> into a non-owning temporary and returns the name of the temporary.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L379"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L379" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="pop,MirBuilder,Fragment">
+<dt><pre><span class="Keyword">func</span> <a href="#pop%2CMirBuilder%2CFragment"><span class="Identifier">pop</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">f</span><span class="Other">:</span> <a href="mirconstr.html#Fragment"><span class="Identifier">Fragment</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Moves the expression/statement identified by <tt class="docutils literal"><span class="pre"><span class="Identifier">v</span></span></tt> from the top of the staging buffer to the final buffer.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L178"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L178" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="popSingle,MirBuilder,Fragment">
+<dt><pre><span class="Keyword">func</span> <a href="#popSingle%2CMirBuilder%2CFragment"><span class="Identifier">popSingle</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">f</span><span class="Other">:</span> <a href="mirconstr.html#Fragment"><span class="Identifier">Fragment</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Retrieves the topmost atom node identified by <tt class="docutils literal"><span class="pre"><span class="Identifier">v</span></span></tt> from the staging buffer.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L141"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L141" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="procLit,PSym">
+<dt><pre><span class="Keyword">func</span> <a href="#procLit%2CPSym"><span class="Identifier">procLit</span></a><span class="Other">(</span><span class="Identifier">sym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L73"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L73" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -840,111 +670,94 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L345"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L64"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L345" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L64" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="stdConvOp,MirNodeSeq,PType,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#stdConvOp%2CMirNodeSeq%2CPType%2CEValue"><span class="Identifier">stdConvOp</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="setSource,MirBuilder,SourceId">
+<dt><pre><span class="Keyword">func</span> <a href="#setSource%2CMirBuilder%2CSourceId"><span class="Identifier">setSource</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <a href="mirtrees.html#SourceId"><span class="Identifier">SourceId</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Sets <tt class="docutils literal"><span class="pre"><span class="Identifier">id</span></span></tt> as the active source/info ID. All nodes added after a call to <tt class="docutils literal"><span class="pre">setSource</span></tt> will use <tt class="docutils literal"><span class="pre"><span class="Identifier">id</span></span></tt> for their <tt class="docutils literal"><span class="pre">info</span></tt> field.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L221"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L221" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="staging,MirBuilder">
+<dt><pre><span class="Keyword">func</span> <a href="#staging%2CMirBuilder"><span class="Identifier">staging</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Provides access to the staging buffer.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L134"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L134" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="symbol,range[],PSym">
+<dt><pre><span class="Keyword">func</span> <a href="#symbol%2Crange%5B%5D%2CPSym"><span class="Identifier">symbol</span></a><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">:</span> <span class="Identifier">range</span><span class="Other">[</span><span class="Identifier">mnkConst</span> <span class="Operator">..</span> <span class="Identifier">mnkLocal</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">sym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L208"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L88"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L208" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L88" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="symbol,MirNodeSeq,range[],PSym">
-<dt><pre><span class="Keyword">func</span> <a href="#symbol%2CMirNodeSeq%2Crange%5B%5D%2CPSym"><span class="Identifier">symbol</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">kind</span><span class="Other">:</span> <span class="Identifier">range</span><span class="Other">[</span><span class="Identifier">mnkConst</span> <span class="Operator">..</span> <span class="Identifier">mnkLocal</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">sym</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> {.
-    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="temp,PType,TempId">
+<dt><pre><span class="Keyword">func</span> <a href="#temp%2CPType%2CTempId"><span class="Identifier">temp</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <a href="mirtrees.html#TempId"><span class="Identifier">TempId</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L184"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L82"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L184" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L82" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="tag,MirNodeSeq,EffectKind,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#tag%2CMirNodeSeq%2CEffectKind%2CEValue"><span class="Identifier">tag</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">effect</span><span class="Other">:</span> <a href="mirtrees.html#EffectKind"><span class="Identifier">EffectKind</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="typ,Value">
+<dt><pre><span class="Keyword">func</span> <a href="#typ%2CValue"><span class="Identifier">typ</span></a><span class="Other">(</span><span class="Identifier">val</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L201"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L60"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L201" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="temp,MirNodeSeq,PType,TempId">
-<dt><pre><span class="Keyword">func</span> <a href="#temp%2CMirNodeSeq%2CPType%2CTempId"><span class="Identifier">temp</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <a href="mirtrees.html#TempId"><span class="Identifier">TempId</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="typeLit,PType">
+<dt><pre><span class="Keyword">func</span> <a href="#typeLit%2CPType"><span class="Identifier">typeLit</span></a><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L180"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L76"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L180" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L76" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="typeLit,MirNodeSeq,PType">
-<dt><pre><span class="Keyword">func</span> <a href="#typeLit%2CMirNodeSeq%2CPType"><span class="Identifier">typeLit</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">t</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="use,MirBuilder,sinkValue">
+<dt><pre><span class="Keyword">func</span> <a href="#use%2CMirBuilder%2CsinkValue"><span class="Identifier">use</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-
+Emits a use of <tt class="docutils literal"><span class="pre"><span class="Identifier">val</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L164"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L284"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L164" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="unaryMagicCall,MirNodeSeq,TMagic,PType,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#unaryMagicCall%2CMirNodeSeq%2CTMagic%2CPType%2CEValue"><span class="Identifier">unaryMagicCall</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <a href="../ast/ast_types.html#TMagic"><span class="Identifier">TMagic</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.
-    <span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L251"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L251" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="viewOp,MirNodeSeq,PType,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#viewOp%2CMirNodeSeq%2CPType%2CEValue"><span class="Identifier">viewOp</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L220"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L220" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="voidOut,MirNodeSeq,EValue">
-<dt><pre><span class="Keyword">func</span> <a href="#voidOut%2CMirNodeSeq%2CEValue"><span class="Identifier">voidOut</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Ends the input MIR expression as a void-expression (i.e., the computed result of the expression is discarded). Corresponds to <tt class="docutils literal"><span class="pre">mnkVoid</span></tt>.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L267"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L267" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L284" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -953,531 +766,171 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="18">
 <h1><a class="toc-backref" href="#18">Templates</a></h1>
 <dl class="item">
-<div id="=>.t,EValue,Sink">
-<dt><pre><span class="Keyword">template</span> <a href="#%3D%3E.t%2CEValue%2CSink"><span class="Identifier">`=&gt;`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="mirconstr.html#Sink"><span class="Identifier">Sink</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">ChainEnd</span></pre></dt>
+<div id="allocTemp.t,MirBuilder,PType">
+<dt><pre><span class="Keyword">template</span> <a href="#allocTemp.t%2CMirBuilder%2CPType"><span class="Identifier">allocTemp</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">t</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">alias</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L116"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L278"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L116" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L278" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="=>.t,EValue,SinkAndValue">
-<dt><pre><span class="Keyword">template</span> <a href="#%3D%3E.t%2CEValue%2CSinkAndValue"><span class="Identifier">`=&gt;`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a></pre></dt>
+<div id="buildCall.t,MirBuilder,PSym,PType,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#buildCall.t%2CMirBuilder%2CPSym%2CPType%2Cuntyped"><span class="Identifier">buildCall</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">prc</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">t</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">d</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L105"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L105" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="=>.t,Value,Sink">
-<dt><pre><span class="Keyword">template</span> <a href="#%3D%3E.t%2CValue%2CSink"><span class="Identifier">`=&gt;`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="mirconstr.html#Sink"><span class="Identifier">Sink</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">ChainEnd</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L111"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L111" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="=>.t,EValue,Cond">
-<dt><pre><span class="Keyword">template</span> <a href="#%3D%3E.t%2CEValue%2CCond"><span class="Identifier">`=&gt;`</span></a><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a><span class="Other">;</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Identifier">Cond</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Predicate</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L126"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L126" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="=>.t,Predicate,SinkAndValue">
-<dt><pre><span class="Keyword">template</span> <a href="#%3D%3E.t%2CPredicate%2CSinkAndValue"><span class="Identifier">`=&gt;`</span></a><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">Predicate</span><span class="Other">;</span> <span class="Identifier">sink</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L130"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L130" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="=>.t,Value,Cond">
-<dt><pre><span class="Keyword">template</span> <a href="#%3D%3E.t%2CValue%2CCond"><span class="Identifier">`=&gt;`</span></a><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a><span class="Other">;</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Identifier">Cond</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Predicate</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L122"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L122" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="=>.t,Value,SinkAndValue">
-<dt><pre><span class="Keyword">template</span> <a href="#%3D%3E.t%2CValue%2CSinkAndValue"><span class="Identifier">`=&gt;`</span></a><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a><span class="Other">;</span> <span class="Identifier">sink</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L135"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L135" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="addrOp.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#addrOp.t%2Cuntyped"><span class="Identifier">addrOp</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L328"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L328" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="arg.t">
-<dt><pre><span class="Keyword">template</span> <a href="#arg.t"><span class="Identifier">arg</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Sink"><span class="Identifier">Sink</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L338"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L338" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="argBlock.t,MirTree,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#argBlock.t%2CMirTree%2Cuntyped"><span class="Identifier">argBlock</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L375"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L375" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="callOp.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#callOp.t%2Cuntyped"><span class="Identifier">callOp</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L318"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L318" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="castOp.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#castOp.t%2Cuntyped"><span class="Identifier">castOp</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L325"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L325" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="chain.t,MirNodeSeq,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#chain.t%2CMirNodeSeq%2Cuntyped"><span class="Identifier">chain</span></a><span class="Other">(</span><span class="Identifier">buf</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">x</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
-<dd>
-
-Provides the context for chaining operators together via <tt class="docutils literal"><span class="pre">=&gt;</span></tt> that end in a value sink
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L76"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L76" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="constr.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#constr.t%2Cuntyped"><span class="Identifier">constr</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L317"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L317" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="consume.t">
-<dt><pre><span class="Keyword">template</span> <a href="#consume.t"><span class="Identifier">consume</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Sink"><span class="Identifier">Sink</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L340"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L340" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="convOp.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#convOp.t%2Cuntyped"><span class="Identifier">convOp</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L327"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L327" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="derefOp.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#derefOp.t%2Cuntyped"><span class="Identifier">derefOp</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L330"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L330" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="derefViewOp.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#derefViewOp.t%2Cuntyped"><span class="Identifier">derefViewOp</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L331"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L331" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="emit.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#emit.t%2Cuntyped"><span class="Identifier">emit</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L313"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L313" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="endNode.t,MirNodeKind">
-<dt><pre><span class="Keyword">template</span> <a href="#endNode.t%2CMirNodeKind"><span class="Identifier">endNode</span></a><span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <a href="mirtrees.html#MirNodeKind"><span class="Identifier">MirNodeKind</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L352"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L352" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="eval.t,MirNodeSeq,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#eval.t%2CMirNodeSeq%2Cuntyped"><span class="Identifier">eval</span></a><span class="Other">(</span><span class="Identifier">buf</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">x</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-Similar to <tt class="docutils literal"><span class="pre">forward</span></tt>, but returns the resulting <tt class="docutils literal"><span class="pre">EValue</span></tt> to be used as the input to another generator chain
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L96"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L96" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="follows.t">
-<dt><pre><span class="Keyword">template</span> <a href="#follows.t"><span class="Identifier">follows</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Sink"><span class="Identifier">Sink</span></a></pre></dt>
-<dd>
-
-A pseudo-sink used to indicate that the actual output expression is either generated separately next or is already present and, in the context where <tt class="docutils literal"><span class="pre">follows</span></tt> is used, comes next
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L140"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L140" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="forward.t,MirNodeSeq,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#forward.t%2CMirNodeSeq%2Cuntyped"><span class="Identifier">forward</span></a><span class="Other">(</span><span class="Identifier">buf</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">x</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
-<dd>
-
-Provides the context for chaining operators together via <tt class="docutils literal"><span class="pre">=&gt;</span></tt> that end in a <em>value</em>. This is used in places where the consuming operator can't be expressed as part of the chain and is expected to be emitted immediately after
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L84"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="literal.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#literal.t%2Cuntyped"><span class="Identifier">literal</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L316"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L316" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="magicCall.t,untyped,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#magicCall.t%2Cuntyped%2Cuntyped"><span class="Identifier">magicCall</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">,</span> <span class="Identifier">id</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L322"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L322" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="name.t">
-<dt><pre><span class="Keyword">template</span> <a href="#name.t"><span class="Identifier">name</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Sink"><span class="Identifier">Sink</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L339"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L339" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="opParam.t,untyped,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#opParam.t%2Cuntyped%2Cuntyped"><span class="Identifier">opParam</span></a><span class="Other">(</span><span class="Identifier">i</span><span class="Other">,</span> <span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L321"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L321" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="pathConv.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#pathConv.t%2Cuntyped"><span class="Identifier">pathConv</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L333"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L333" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="pathObj.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#pathObj.t%2Cuntyped"><span class="Identifier">pathObj</span></a><span class="Other">(</span><span class="Identifier">field</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L332"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L332" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="pathPos.t,untyped,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#pathPos.t%2Cuntyped%2Cuntyped"><span class="Identifier">pathPos</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">,</span> <span class="Identifier">pos</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L334"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L334" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="pathVariant.t,untyped,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#pathVariant.t%2Cuntyped%2Cuntyped"><span class="Identifier">pathVariant</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">,</span> <span class="Identifier">field</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L335"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L335" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="predicate.t,bool">
-<dt><pre><span class="Keyword">template</span> <a href="#predicate.t%2Cbool"><span class="Identifier">predicate</span></a><span class="Other">(</span><span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Cond</span></pre></dt>
-<dd>
-
-If <tt class="docutils literal"><span class="pre"><span class="Identifier">val</span></span></tt> evaluates to 'false', the operand following next in the chain is not evaluated.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L275"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L275" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="procLit.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#procLit.t%2Cuntyped"><span class="Identifier">procLit</span></a><span class="Other">(</span><span class="Identifier">sym</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L314"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L314" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="scope.t,MirTree,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#scope.t%2CMirTree%2Cuntyped"><span class="Identifier">scope</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L371"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L371" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="stdConvOp.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#stdConvOp.t%2Cuntyped"><span class="Identifier">stdConvOp</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L326"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L326" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="stmtList.t,MirTree,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#stmtList.t%2CMirTree%2Cuntyped"><span class="Identifier">stmtList</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L367"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L367" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="subTree.t,MirTree,MirNode,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#subTree.t%2CMirTree%2CMirNode%2Cuntyped"><span class="Identifier">subTree</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L360"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L360" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="symbol.t,untyped,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#symbol.t%2Cuntyped%2Cuntyped"><span class="Identifier">symbol</span></a><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">,</span> <span class="Identifier">sym</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L320"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L320" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="tag.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#tag.t%2Cuntyped"><span class="Identifier">tag</span></a><span class="Other">(</span><span class="Identifier">effect</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L324"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L324" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="temp.t,untyped,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#temp.t%2Cuntyped%2Cuntyped"><span class="Identifier">temp</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">,</span> <span class="Identifier">id</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L319"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L319" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="typeLit.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#typeLit.t%2Cuntyped"><span class="Identifier">typeLit</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#EValue"><span class="Identifier">EValue</span></a></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L315"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L315"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L315" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="unaryMagicCall.t,untyped,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#unaryMagicCall.t%2Cuntyped%2Cuntyped"><span class="Identifier">unaryMagicCall</span></a><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
+<div id="buildMagicCall.t,MirBuilder,TMagic,PType,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#buildMagicCall.t%2CMirBuilder%2CTMagic%2CPType%2Cuntyped"><span class="Identifier">buildMagicCall</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <a href="../ast/ast_types.html#TMagic"><span class="Identifier">TMagic</span></a><span class="Other">;</span> <span class="Identifier">t</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L336"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L310"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L336" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L310" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="viewOp.t,untyped">
-<dt><pre><span class="Keyword">template</span> <a href="#viewOp.t%2Cuntyped"><span class="Identifier">viewOp</span></a><span class="Other">(</span><span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#SinkAndValue"><span class="Identifier">SinkAndValue</span></a></pre></dt>
+<div id="buildStmt.t,MirBuilder,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#buildStmt.t%2CMirBuilder%2Cuntyped"><span class="Identifier">buildStmt</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
 <dd>
 
-
+A shortcut for <tt class="docutils literal"><span class="pre">push</span></tt> + <tt class="docutils literal"><span class="pre">pop</span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L329"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L197"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L329" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L197" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="voidOut.t">
-<dt><pre><span class="Keyword">template</span> <a href="#voidOut.t"><span class="Identifier">voidOut</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Sink"><span class="Identifier">Sink</span></a></pre></dt>
+<div id="buildStmt.t,MirBuilder,MirNodeKind,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#buildStmt.t%2CMirBuilder%2CMirNodeKind%2Cuntyped"><span class="Identifier">buildStmt</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <a href="mirtrees.html#MirNodeKind"><span class="Identifier">MirNodeKind</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
+<dd>
+
+Similar to <a class="reference external" href="#buildStmt,TCtx,untyped">buildStmt</a>, but also starts a sub- tree of kind <tt class="docutils literal"><span class="pre"><span class="Identifier">k</span></span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L202"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L202" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="pos.t,Fragment">
+<dt><pre><span class="Keyword">template</span> <a href="#pos.t%2CFragment"><span class="Identifier">pos</span></a><span class="Other">(</span><span class="Identifier">f</span><span class="Other">:</span> <a href="mirconstr.html#Fragment"><span class="Identifier">Fragment</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirtrees.html#NodePosition"><span class="Identifier">NodePosition</span></a></pre></dt>
+<dd>
+
+Returns the fragment's starting position in the staging buffer.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L209"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L209" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="push.t,MirBuilder,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#push.t%2CMirBuilder%2Cuntyped"><span class="Identifier">push</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Fragment"><span class="Identifier">Fragment</span></a></pre></dt>
+<dd>
+
+Makes the staging buffer the active one and runs <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt>. The pushed but not-yet-popped fragment is returned.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L162"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L162" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="scope.t,MirBuilder,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#scope.t%2CMirBuilder%2Cuntyped"><span class="Identifier">scope</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/mir/mirconstr.nim#L341"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L266"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L341" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L266" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="stmtList.t,MirBuilder,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#stmtList.t%2CMirBuilder%2Cuntyped"><span class="Identifier">stmtList</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L262"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L262" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="subTree.t,MirBuilder,MirNodeKind,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#subTree.t%2CMirBuilder%2CMirNodeKind%2Cuntyped"><span class="Identifier">subTree</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <a href="mirtrees.html#MirNodeKind"><span class="Identifier">MirNodeKind</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L258"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L258" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="subTree.t,MirBuilder,MirNode,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#subTree.t%2CMirBuilder%2CMirNode%2Cuntyped"><span class="Identifier">subTree</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L251"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L251" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="withFront.t,MirBuilder,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#withFront.t%2CMirBuilder%2Cuntyped"><span class="Identifier">withFront</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
+<dd>
+
+Runs <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> with the final buffer as the front buffer.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L190"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L190" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="wrapMutAlias.t,MirBuilder,PType,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#wrapMutAlias.t%2CMirBuilder%2CPType%2Cuntyped"><span class="Identifier">wrapMutAlias</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">t</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a></pre></dt>
+<dd>
+
+Emits a <tt class="docutils literal"><span class="pre">mnkBind</span></tt> statement with <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> as the lvalue expression. Returns the name of the alias.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L301"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L301" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="wrapTemp.t,MirBuilder,PType,untyped">
+<dt><pre><span class="Keyword">template</span> <a href="#wrapTemp.t%2CMirBuilder%2CPType%2Cuntyped"><span class="Identifier">wrapTemp</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">t</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <a href="mirconstr.html#Value"><span class="Identifier">Value</span></a></pre></dt>
+<dd>
+
+Emits a definition of a temporary with <tt class="docutils literal"><span class="pre"><span class="Identifier">body</span></span></tt> as the initializer expression.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/mir/mirconstr.nim#L291"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirconstr.nim#L291" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>

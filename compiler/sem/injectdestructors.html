@@ -97,7 +97,6 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple simple-toc" id="toc-list">
 <li><a class="reference" id="overview_toc" href="#overview">Overview</a></li>
 <li><a class="reference" id="ownership-analysis_toc" href="#ownership-analysis">Ownership analysis</a></li>
-<li><a class="reference" id="escaping-temporaries_toc" href="#escaping-temporaries">Escaping temporaries</a></li>
 <li>
   <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
   <ul class="simple simple-toc-section">
@@ -108,10 +107,8 @@ window.addEventListener('DOMContentLoaded', main);
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
       <ul class="simple nested-toc-section">genDestroy
-      <li><a class="reference" href="#genDestroy%2CMirNodeSeq%2CModuleGraph%2CPType%2CsinkMirNode"
-    title="genDestroy(buf: var MirNodeSeq; graph: ModuleGraph; t: PType;
-           target: sink MirNode)">genDestroy(buf: var MirNodeSeq; graph: ModuleGraph; t: PType;
-           target: sink MirNode)</a></li>
+      <li><a class="reference" href="#genDestroy%2CMirBuilder%2CModuleGraph%2CValue"
+    title="genDestroy(bu: var MirBuilder; graph: ModuleGraph; target: Value)">genDestroy(bu: var MirBuilder; graph: ModuleGraph; target: Value)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">getOp
@@ -139,24 +136,21 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/injectdestructors.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/injectdestructors.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">This module implements the following MIR passes:<ul class="simple"><li>the pass for injecting temporaries for unconsumed rvalues that have destructors (<tt class="docutils literal"><span class="pre">injectTemporaries</span></tt>)</li>
-<li>the 'switch' operation lowering (<tt class="docutils literal"><span class="pre">lowerBranchSwitch</span></tt>)</li>
-<li>the pass for rewriting assignments into call to the respective lifetime-tracking hooks</li>
-<li>the pass for introducing copies for unowned values passed to <tt class="docutils literal"><span class="pre">sink</span></tt> parameters</li>
+  <p class="module-desc">This module implements the following MIR passes:<ul class="simple"><li>the 'switch' operation lowering (<tt class="docutils literal"><span class="pre">lowerBranchSwitch</span></tt>)</li>
+<li>the pass for rewriting assignments into calls to the respective lifetime-tracking hooks</li>
+<li>the pass for injected <tt class="docutils literal"><span class="pre">wasMoved</span></tt> calls for consumed lvalues</li>
 <li>the destructor (i.e. <tt class="docutils literal"><span class="pre">=destroy</span></tt> hook) injection</li>
 </ul>
 
-<h1><a class="toc-backref" id="overview" href="#overview">Overview</a></h1><p>The injection of temporaries is required to prevent leaks. Only locations can be destroyed, so if the result of a procedure call is a resource that requires cleanup and is not directly consumed (by assigning it to a location or passing it to a <tt class="docutils literal"><span class="pre">sink</span></tt> argument), it is materialized into a temporary. The analysis of what requires destruction only takes entities (globals, locals, temporaries, etc.) into account that are explicitly defined in the code fragment (<tt class="docutils literal"><span class="pre">MirTree</span></tt>), so the changes performed by the temporary injection have to be visible to it.</p>
-<p>An analysis pass is performed that collects all entities that require destruction into an <tt class="docutils literal"><span class="pre">EntityDict</span></tt>. These are: locals, temporaries, <tt class="docutils literal"><span class="pre">sink</span></tt> parameters, and globals (with some exceptions). If a location has no type-bound <tt class="docutils literal"><span class="pre">=destroy</span></tt> hook (both user-provided and lifted), it is not included.</p>
-<p>As an optimization, only entities for which it can't be statically proven that they don't contain a value at the end of their scope are collected.</p>
-<p>Next, an instance of a <tt class="docutils literal"><span class="pre">Values</span></tt> dictionary corresponding to the input code-fragment is created and initialized. For all arguments that appear in a consume context (e.g. passed to <tt class="docutils literal"><span class="pre">sink</span></tt> argument, assignment source) and for which the ownership status could not be resolved to either 'yes' or 'no' by <tt class="docutils literal"><span class="pre">analysis.computeValues</span></tt>, a data-flow analysis is performed to figure out the status (see <tt class="docutils literal"><span class="pre">solveOwnership</span></tt>).</p>
+<h1><a class="toc-backref" id="overview" href="#overview">Overview</a></h1><p>An analysis pass is performed that collects all entities that require destruction into an <tt class="docutils literal"><span class="pre">EntityDict</span></tt>. These are: locals, temporaries, <tt class="docutils literal"><span class="pre">sink</span></tt> parameters, and globals (with some exceptions). If a location has no type-bound <tt class="docutils literal"><span class="pre">=destroy</span></tt> hook (both user-provided and lifted), it is not included.</p>
+<p><tt class="docutils literal"><span class="pre">solveOwnership</span></tt> then computes for all lvalue expression appearing in consume (e.g., argument to <tt class="docutils literal"><span class="pre">sink</span></tt> parameter) or sink contexts (source lvalue in an assignment).</p>
 <p>Using the now resolved ownership status of all expressions, the next analysis step computes which locations need to be destroyed via a destructor call (see <tt class="docutils literal"><span class="pre">computeDestructors</span></tt>).</p>
 <p>As the last step, the assignment rewriting and destructor injection is performed, using the previously gathered data.</p>
 <p>For the assignment rewriting, if the source operand of an assignment is owned, a move is used instead of a copy.</p>
@@ -170,43 +164,26 @@ class="link-seesrc" target="_blank">Source</a>
 <span class="Identifier">doAssert</span> <span class="Identifier">p</span><span class="Punctuation">[</span><span class="Punctuation">]</span><span class="Punctuation">[</span><span class="DecNumber">0</span><span class="Punctuation">]</span> <span class="Operator">==</span> <span class="DecNumber">1</span>
 
 <span class="Identifier">a</span> <span class="Operator">=</span> <span class="Operator">...</span> <span class="Comment"># force the earlier move to be destructive</span></pre><p>the analysis will detect <tt class="docutils literal"><span class="pre"><span class="Keyword">var</span> <span class="Identifier">b</span> <span class="Operator">=</span> <span class="Identifier">a</span></span></tt> to be the last usage of <tt class="docutils literal"><span class="pre"><span class="Identifier">a</span></span></tt>, subsequently turning the assignment into a move and thus making the assertion fail with an <tt class="docutils literal"><span class="pre">IndexDefect</span></tt>.</p>
-
-<h1><a class="toc-backref" id="escaping-temporaries" href="#escaping-temporaries">Escaping temporaries</a></h1><p>There exists the general problem of both temporaries and rvalues escaping in the context of consumed arguments. Consider:</p>
-<pre class="listing"><span class="Keyword">proc</span> <span class="Identifier">f_sink</span><span class="Punctuation">(</span><span class="Identifier">x</span><span class="Punctuation">:</span> <span class="Identifier">sink</span> <span class="Identifier">Obj</span><span class="Punctuation">,</span> <span class="Identifier">y</span><span class="Punctuation">:</span> <span class="Identifier">int</span><span class="Punctuation">)</span> <span class="Operator">=</span> <span class="Keyword">discard</span>
-
-<span class="Identifier">f_sink</span><span class="Punctuation">(</span><span class="Identifier">create</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Punctuation">,</span> <span class="Identifier">callThatRaises</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Comment"># 1</span>
-
-<span class="Keyword">var</span> <span class="Identifier">x</span> <span class="Operator">=</span> <span class="Identifier">Obj</span><span class="Punctuation">(</span><span class="Punctuation">)</span>
-<span class="Identifier">f_sink</span><span class="Punctuation">(</span><span class="Identifier">notLastUseOf</span> <span class="Identifier">x</span><span class="Punctuation">,</span> <span class="Identifier">callThatRaises</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Comment"># 2</span>
-
-<span class="Keyword">var</span> <span class="Identifier">y</span> <span class="Operator">=</span> <span class="Identifier">Obj</span><span class="Punctuation">(</span><span class="Punctuation">)</span>
-<span class="Identifier">f_sink</span><span class="Punctuation">(</span><span class="Identifier">lastUseOf</span> <span class="Identifier">y</span><span class="Punctuation">,</span> <span class="Identifier">callThatRaises</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Comment"># 3</span>
-
-<span class="Keyword">var</span> <span class="Identifier">z</span> <span class="Operator">=</span> <span class="Identifier">Obj</span><span class="Punctuation">(</span><span class="Punctuation">)</span>
-<span class="Identifier">f_sink</span><span class="Punctuation">(</span><span class="Identifier">lastUseOf</span> <span class="Identifier">z</span><span class="Punctuation">,</span> <span class="Identifier">callThatRaises</span><span class="Punctuation">(</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Comment"># 4</span>
-<span class="Identifier">z</span> <span class="Operator">=</span> <span class="Identifier">Obj</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre><p>For #1, the temporary injection pass recognizes that the result of <tt class="docutils literal"><span class="pre">create()</span></tt> is used in a consume context and thus doesn't inject a temporary. This then causes the value to leak when <tt class="docutils literal"><span class="pre">callThatRaises()</span></tt> raises an exception. Note that the raising of an exception is only used as an example -- the same issue is present with all other unstructured control-flow (<tt class="docutils literal"><span class="pre">return</span></tt>, <tt class="docutils literal"><span class="pre">break</span></tt>, etc.).</p>
-<p>Fixing this would require for the temporary injection pass to check if the consume is connected to the call on all control-flow paths and only then omit the temporary. A clean solution that introduces no duplication of logic would be to use the <tt class="docutils literal"><span class="pre">DataFlowGraph</span></tt> for this, but it is not yet available at that point.</p>
-<p>#2, #3, and #4 are variations of the same problem. Consume-argument handling happens concurrently to destructor injection and a communication channel between the two would be required in order to notify the destructor injection pass about the introduced temporaries.</p>
 </p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../mir/analysis.html">../mir/analysis</a>, <a class="reference external" href="../mir/mirchangesets.html">../mir/mirchangesets</a>, <a class="reference external" href="../mir/mirconstr.html">../mir/mirconstr</a>, <a class="reference external" href="../mir/mirtrees.html">../mir/mirtrees</a>, <a class="reference external" href="../mir/sourcemaps.html">../mir/sourcemaps</a>, <a class="reference external" href="../modules/magicsys.html">../modules/magicsys</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="aliasanalysis.html">aliasanalysis</a>, <a class="reference external" href="liftdestructors.html">liftdestructors</a>, <a class="reference external" href="mirexec.html">mirexec</a>, <a class="reference external" href="sighashes.html">sighashes</a>, <a class="reference external" href="../utils/cursors.html">../utils/cursors</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>, <a class="reference external" href="../backend/cgirutils.html">../backend/cgirutils</a>, <a class="reference external" href="../backend/cgirgen.html">../backend/cgirgen</a>
+<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../mir/analysis.html">../mir/analysis</a>, <a class="reference external" href="../mir/mirchangesets.html">../mir/mirchangesets</a>, <a class="reference external" href="../mir/mirconstr.html">../mir/mirconstr</a>, <a class="reference external" href="../mir/mirtrees.html">../mir/mirtrees</a>, <a class="reference external" href="../mir/sourcemaps.html">../mir/sourcemaps</a>, <a class="reference external" href="../mir/utils.html">../mir/utils</a>, <a class="reference external" href="../modules/magicsys.html">../modules/magicsys</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="aliasanalysis.html">aliasanalysis</a>, <a class="reference external" href="liftdestructors.html">liftdestructors</a>, <a class="reference external" href="mirexec.html">mirexec</a>, <a class="reference external" href="sighashes.html">sighashes</a>, <a class="reference external" href="../utils/cursors.html">../utils/cursors</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../ast/reports_sem.html">../ast/reports_sem</a>, <a class="reference external" href="../ast/report_enums.html">../ast/report_enums</a>
 </dl></div>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="genDestroy,MirNodeSeq,ModuleGraph,PType,sinkMirNode">
-<dt><pre><span class="Keyword">proc</span> <a href="#genDestroy%2CMirNodeSeq%2CModuleGraph%2CPType%2CsinkMirNode"><span class="Identifier">genDestroy</span></a><span class="Other">(</span><span class="Identifier">buf</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="../mir/mirtrees.html#MirNodeSeq"><span class="Identifier">MirNodeSeq</span></a><span class="Other">;</span> <span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">t</span><span class="Other">:</span> <a href="../ast/ast_types.html#PType"><span class="Identifier">PType</span></a><span class="Other">;</span>
-                <span class="Identifier">target</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="../mir/mirtrees.html#MirNode"><span class="Identifier">MirNode</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span>
-    <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="genDestroy,MirBuilder,ModuleGraph,Value">
+<dt><pre><span class="Keyword">proc</span> <a href="#genDestroy%2CMirBuilder%2CModuleGraph%2CValue"><span class="Identifier">genDestroy</span></a><span class="Other">(</span><span class="Identifier">bu</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="../mir/mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">target</span><span class="Other">:</span> <a href="../mir/mirconstr.html#Value"><span class="Identifier">Value</span></a><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadDirEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/injectdestructors.nim#L650"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/injectdestructors.nim#L560"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L650" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L560" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -217,9 +194,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/injectdestructors.nim#L300"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/injectdestructors.nim#L235"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L300" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L235" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -234,9 +211,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>For now, semantic errors and other diagnostics related to lifetime-hook usage are also reported here.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/injectdestructors.nim#L1191"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/injectdestructors.nim#L1093"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L1191" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L1093" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -246,9 +223,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/263da8d1678f5d61693bd98c4151d8c4eacf9f0a/compiler/sem/injectdestructors.nim#L1184"
+href="https://github.com/nim-works/nimskull/tree/dc2ff8a4c49f3eb57ce11d84aeb5d33aa46b5f42/compiler/sem/injectdestructors.nim#L1086"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L1184" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L1086" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
