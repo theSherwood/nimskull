@@ -122,6 +122,12 @@ CALL_EXPR = Call &lt;Proc&gt; CALL_ARG ...   # a static call of the provided
                                        # one for which the behaviour cannot
                                        # be represented in the MIR)
 
+# checked calls have the same shape as normal calls. The difference is that
+# the call has an exceptional exit (i.e., it might raise an exception)
+CHECKED_CALL_EXPR = CheckedCall &lt;Proc&gt; CALL_ARG ...
+                  | CheckedCall LVALUE CALL_ARG ...
+                  | CheckedCall &lt;Magic&gt; CALL_ARG ...
+
 RVALUE = CALL_EXPR
        | Constr   CONSTR_ARG ...       # construct a tuple, closure, set, or
        | ObjConstr (&lt;Field&gt; CONSTR_ARG) ... # construct an `object` or
@@ -223,7 +229,7 @@ TRY_STMT = Try STATEMENT (HANDLER)? (Finally STATEMENT)?
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-12-27 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-12-30 00:00:00 UTC</small>
       </div>
     </div>
   </div>
