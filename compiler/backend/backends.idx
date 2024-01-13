@@ -1,10 +1,10 @@
 MirFragment	backend/backends.html#MirFragment	backends: MirFragment	
-Procedure	backend/backends.html#Procedure	backends: Procedure	
 BackendConfig	backend/backends.html#BackendConfig	backends: BackendConfig	
 Queue	backend/backends.html#Queue	backends: Queue	
 DiscoveryData	backend/backends.html#DiscoveryData	backends: DiscoveryData	
 bekDiscovered	backend/backends.html#bekDiscovered	BackendEventKind.bekDiscovered	
 bekModule	backend/backends.html#bekModule	BackendEventKind.bekModule	
+bekConstant	backend/backends.html#bekConstant	BackendEventKind.bekConstant	
 bekPartial	backend/backends.html#bekPartial	BackendEventKind.bekPartial	
 bekProcedure	backend/backends.html#bekProcedure	BackendEventKind.bekProcedure	
 bekImported	backend/backends.html#bekImported	BackendEventKind.bekImported	
@@ -23,8 +23,8 @@ generateMainProcedure	backend/backends.html#generateMainProcedure,ModuleGraph,Id
 isEmpty	backend/backends.html#isEmpty,MirTree	backends: isEmpty(tree: MirTree): bool	
 isEmpty	backend/backends.html#isEmpty,MirFragment	backends: isEmpty(f: MirFragment): bool	
 deps	backend/backends.html#deps.i,MirTree	backends: deps(tree: MirTree): PSym	
-preprocess	backend/backends.html#preprocess,BackendConfig,PSym,ModuleGraph,IdGenerator	backends: preprocess(conf: BackendConfig; prc: PSym; graph: ModuleGraph;\n           idgen: IdGenerator): Procedure	
-process	backend/backends.html#process,Procedure,ModuleGraph,IdGenerator	backends: process(prc: var Procedure; graph: ModuleGraph; idgen: IdGenerator)	
+preprocess	backend/backends.html#preprocess,WorkQueue,ModuleGraph,IdGenerator,PSym,FileIndex	backends: preprocess(queue: var WorkQueue; graph: ModuleGraph; idgen: IdGenerator;\n           prc: PSym; module: FileIndex)	
+translate	backend/backends.html#translate,PSym,PNode,ModuleGraph,BackendConfig,IdGenerator	backends: translate(prc: PSym; body: PNode; graph: ModuleGraph; config: BackendConfig;\n          idgen: IdGenerator): MirFragment	
 generateIR	backend/backends.html#generateIR,ModuleGraph,IdGenerator,PSym,sinkMirFragment	backends: generateIR(graph: ModuleGraph; idgen: IdGenerator; owner: PSym;\n           code: sink MirFragment): Body	
 discoverFrom	backend/backends.html#discoverFrom,DiscoveryData,MirTree	backends: discoverFrom(data: var DiscoveryData; body: MirTree)	
 discoverFrom	backend/backends.html#discoverFrom,DiscoveryData,PNode	backends: discoverFrom(data: var DiscoveryData; decl: PNode)	
