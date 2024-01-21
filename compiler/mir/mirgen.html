@@ -142,7 +142,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c09295d62b879d6b064304caea51f87e83a6c3e7/compiler/mir/mirgen.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/e7e344c45d5f113fca858272eb3319f8095b65ce/compiler/mir/mirgen.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -153,7 +153,7 @@ class="link-seesrc" target="_blank">Source</a>
 <p>In terms of operation, the input AST is traversed via recursion, with declarative constructs not relevant to the MIR being ignored.</p>
 <p>None of the MIR operations that imply structured control-flow produce a value, so the input expression that do (<tt class="docutils literal"><span class="pre">if</span></tt>, <tt class="docutils literal"><span class="pre">case</span></tt>, <tt class="docutils literal"><span class="pre">block</span></tt>, and <tt class="docutils literal"><span class="pre">try</span></tt>) are translated into statements where the last expression in each clause is turned into an assignment to, depending on the context where they're used, either a temporary or existing lvalue expression. The latter are forwarded to the generation procedures via <tt class="docutils literal"><span class="pre">Destination</span></tt>.</p>
 <p>For efficiency, <tt class="docutils literal"><span class="pre">MirBuilder</span></tt> double-buffering functionality is used for emitting the trees. Statements are directly emitted into the final buffer (after all their operands were emitted), while expressions are first emitted into the staging buffer, with the callsite then deciding what to do with them.</p>
-<p>The values of rvalue operations, calls, and construction are first captured in temporaries (as the MIR doesn't support them being used as, e.g., call arguments directly). Lvalues that have side-effects (e.g., index errors) are captured (together with their side-effects) via MIR alias. In general, all call arguments are first assigned to a temporary, except if the expression is stable (in case of by-name arguments) or pure (in case of non-sink by-value arguments).</p>
+<p>The values of rvalue operations, calls, and construction are first captured in temporaries (as the MIR doesn't support them being used as, e.g., call arguments directly). In general, all call arguments are first assigned to a temporary, except if the expression is stable (in case of by-name arguments) or pure (in case of non-sink by-value arguments).</p>
 <p>Pure expression are those that don't have side-effect and always refer to the exact same value, whereas stable expression are those that don't have side-effects and always refer to the same <em>location</em>.</p>
 <p>Whether a temporary is owning (that is, it needs to be destroyed later) depends on both the value it captures and how its used. If the captured value is coming from a call or construction of destructible value, the temporary, otherwise its non-owning, except if used in a consuming context (<tt class="docutils literal"><span class="pre"><span class="Identifier">sink</span></span></tt> parameter or aggregate construction).</p>
 
@@ -179,9 +179,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c09295d62b879d6b064304caea51f87e83a6c3e7/compiler/mir/mirgen.nim#L125"
+href="https://github.com/nim-works/nimskull/tree/e7e344c45d5f113fca858272eb3319f8095b65ce/compiler/mir/mirgen.nim#L123"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L123" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -196,9 +196,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Extra configuration for the AST -&gt; MIR translation.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c09295d62b879d6b064304caea51f87e83a6c3e7/compiler/mir/mirgen.nim#L131"
+href="https://github.com/nim-works/nimskull/tree/e7e344c45d5f113fca858272eb3319f8095b65ce/compiler/mir/mirgen.nim#L129"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L131" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L129" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -216,9 +216,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates MIR code that is semantically equivalent to the expression or statement <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>, appending the resulting code and the corresponding origin information to <tt class="docutils literal"><span class="pre"><span class="Identifier">code</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">source</span></span></tt>, respectively.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c09295d62b879d6b064304caea51f87e83a6c3e7/compiler/mir/mirgen.nim#L2186"
+href="https://github.com/nim-works/nimskull/tree/e7e344c45d5f113fca858272eb3319f8095b65ce/compiler/mir/mirgen.nim#L2184"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2186" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2184" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -234,9 +234,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p><tt class="docutils literal"><span class="pre"><span class="Identifier">config</span></span></tt> provides additional configuration options that alter how some AST is translated.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/c09295d62b879d6b064304caea51f87e83a6c3e7/compiler/mir/mirgen.nim#L2223"
+href="https://github.com/nim-works/nimskull/tree/e7e344c45d5f113fca858272eb3319f8095b65ce/compiler/mir/mirgen.nim#L2221"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2223" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2221" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -250,7 +250,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-20 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-21 00:00:00 UTC</small>
       </div>
     </div>
   </div>
