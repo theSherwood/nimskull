@@ -2,14 +2,15 @@ Value	mir/mirconstr.html#Value	mirconstr: Value
 Fragment	mir/mirconstr.html#Fragment	mirconstr: Fragment	
 MirBuilder	mir/mirconstr.html#MirBuilder	mirconstr: MirBuilder	
 typ	mir/mirconstr.html#typ,Value	mirconstr: typ(val: Value): PType	
-procNode	mir/mirconstr.html#procNode,PSym	mirconstr: procNode(s: PSym): MirNode	
+procNode	mir/mirconstr.html#procNode,ProcedureId	mirconstr: procNode(id: ProcedureId): MirNode	
 endNode	mir/mirconstr.html#endNode,MirNodeKind	mirconstr: endNode(k: MirNodeKind): MirNode	
-procLit	mir/mirconstr.html#procLit,PSym	mirconstr: procLit(sym: PSym): Value	
 typeLit	mir/mirconstr.html#typeLit,PType	mirconstr: typeLit(t: PType): Value	
 literal	mir/mirconstr.html#literal,PNode	mirconstr: literal(n: PNode): Value	
 temp	mir/mirconstr.html#temp,PType,TempId	mirconstr: temp(typ: PType; id: TempId): Value	
 alias	mir/mirconstr.html#alias,PType,TempId	mirconstr: alias(typ: PType; id: TempId): Value	
-symbol	mir/mirconstr.html#symbol,range[],PSym	mirconstr: symbol(kind: range[mnkConst .. mnkLocal]; sym: PSym): Value	
+toValue	mir/mirconstr.html#toValue,ConstId,PType	mirconstr: toValue(id: ConstId; typ: PType): Value	
+toValue	mir/mirconstr.html#toValue,GlobalId,PType	mirconstr: toValue(id: GlobalId; typ: PType): Value	
+toValue	mir/mirconstr.html#toValue,ProcedureId,PType	mirconstr: toValue(id: ProcedureId; typ: PType): Value	
 len	mir/mirconstr.html#len,MirBuffer	mirconstr: len(b: MirBuffer): int	
 hasUnassigned	mir/mirconstr.html#hasUnassigned,MirBuilder	mirconstr: hasUnassigned(bu: MirBuilder): bool	
 staging	mir/mirconstr.html#staging,MirBuilder	mirconstr: staging(bu: var MirBuilder): var MirNodeSeq	
@@ -36,7 +37,7 @@ wrapTemp	mir/mirconstr.html#wrapTemp.t,MirBuilder,PType,untyped	mirconstr: wrapT
 wrapAlias	mir/mirconstr.html#wrapAlias.t,MirBuilder,PType,untyped	mirconstr: wrapAlias(bu: var MirBuilder; t: PType; body: untyped): Value	
 wrapMutAlias	mir/mirconstr.html#wrapMutAlias.t,MirBuilder,PType,untyped	mirconstr: wrapMutAlias(bu: var MirBuilder; t: PType; body: untyped): Value	
 buildMagicCall	mir/mirconstr.html#buildMagicCall.t,MirBuilder,TMagic,PType,untyped	mirconstr: buildMagicCall(bu: var MirBuilder; m: TMagic; t: PType; body: untyped)	
-buildCall	mir/mirconstr.html#buildCall.t,MirBuilder,PSym,PType,untyped	mirconstr: buildCall(bu: var MirBuilder; prc: PSym; t: PType; d: untyped)	
+buildCall	mir/mirconstr.html#buildCall.t,MirBuilder,ProcedureId,PType,PType,untyped	mirconstr: buildCall(bu: var MirBuilder; prc: ProcedureId; pt, t: PType; body: untyped)	
 emitByVal	mir/mirconstr.html#emitByVal,MirBuilder,Value	mirconstr: emitByVal(bu: var MirBuilder; y: Value)	
 emitByName	mir/mirconstr.html#emitByName,MirBuilder,Value,EffectKind	mirconstr: emitByName(bu: var MirBuilder; val: Value; e: EffectKind)	
 asgn	mir/mirconstr.html#asgn,MirBuilder,Value,Value	mirconstr: asgn(buf: var MirBuilder; a, b: Value)	

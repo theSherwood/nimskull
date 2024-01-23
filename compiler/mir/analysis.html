@@ -124,14 +124,14 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
   <ul class="simple nested-toc-section">computeAliveOp
       <li><a class="reference" href="#computeAliveOp%2CMirTree%2CValues%2CT%2COpcode%2COpValue"
-    title="computeAliveOp[T: PSym | TempId](tree: MirTree; values: Values; loc: T;
-                                 op: Opcode; n: OpValue): AliveState">computeAliveOp[T: PSym | TempId](tree: MirTree; values: Values; loc: T;
-                                 op: Opcode; n: OpValue): AliveState</a></li>
+    title="computeAliveOp[T: PSym | GlobalId | TempId](tree: MirTree; values: Values;
+    loc: T; op: Opcode; n: OpValue): AliveState">computeAliveOp[T: PSym | GlobalId | TempId](tree: MirTree; values: Values;
+    loc: T; op: Opcode; n: OpValue): AliveState</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">doesGlobalEscape
-      <li><a class="reference" href="#doesGlobalEscape%2CMirTree%2CSubgraph%2CInstrPos%2CPSym"
-    title="doesGlobalEscape(tree: MirTree; scope: Subgraph; start: InstrPos; s: PSym): bool">doesGlobalEscape(tree: MirTree; scope: Subgraph; start: InstrPos; s: PSym): bool</a></li>
+      <li><a class="reference" href="#doesGlobalEscape%2CMirTree%2CSubgraph%2CInstrPos%2CGlobalId"
+    title="doesGlobalEscape(tree: MirTree; scope: Subgraph; start: InstrPos; s: GlobalId): bool">doesGlobalEscape(tree: MirTree; scope: Subgraph; start: InstrPos; s: GlobalId): bool</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">isAlive
@@ -178,7 +178,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -206,7 +206,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Stores information about MIR expressions.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L45"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L45"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -225,28 +225,28 @@ class="link-seesrc" target="_blank">Source</a>
 
 Computes whether the location is alive when <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> is exited via either structured or unstructured control-flow. A location is considered alive if it contains a value
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L279"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L277"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L279" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L277" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="computeAliveOp,MirTree,Values,T,Opcode,OpValue">
-<dt><pre><span class="Keyword">func</span> <a href="#computeAliveOp%2CMirTree%2CValues%2CT%2COpcode%2COpValue"><span class="Identifier">computeAliveOp</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a> <span class="Operator">|</span> <a href="mirtrees.html#TempId"><span class="Identifier">TempId</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">values</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span> <span class="Identifier">loc</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span>
-                                      <span class="Identifier">op</span><span class="Other">:</span> <a href="../sem/mirexec.html#Opcode"><span class="Identifier">Opcode</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="mirtrees.html#OpValue"><span class="Identifier">OpValue</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">AliveState</span></pre></dt>
+<dt><pre><span class="Keyword">func</span> <a href="#computeAliveOp%2CMirTree%2CValues%2CT%2COpcode%2COpValue"><span class="Identifier">computeAliveOp</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a> <span class="Operator">|</span> <a href="mirtrees.html#GlobalId"><span class="Identifier">GlobalId</span></a> <span class="Operator">|</span> <a href="mirtrees.html#TempId"><span class="Identifier">TempId</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">values</span><span class="Other">:</span> <a href="analysis.html#Values"><span class="Identifier">Values</span></a><span class="Other">;</span>
+    <span class="Identifier">loc</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">op</span><span class="Other">:</span> <a href="../sem/mirexec.html#Opcode"><span class="Identifier">Opcode</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="mirtrees.html#OpValue"><span class="Identifier">OpValue</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">AliveState</span></pre></dt>
 <dd>
 
 Computes the state of <tt class="docutils literal"><span class="pre"><span class="Identifier">loc</span></span></tt> at the <em>end</em> of the given operation. The operands are expected to <em>not</em> alias with each other. The analysis result will be wrong if they do
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L228"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L228"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L228" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="doesGlobalEscape,MirTree,Subgraph,InstrPos,PSym">
-<dt><pre><span class="Keyword">proc</span> <a href="#doesGlobalEscape%2CMirTree%2CSubgraph%2CInstrPos%2CPSym"><span class="Identifier">doesGlobalEscape</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">scope</span><span class="Other">:</span> <a href="../sem/mirexec.html#Subgraph"><span class="Identifier">Subgraph</span></a><span class="Other">;</span> <span class="Identifier">start</span><span class="Other">:</span> <a href="../sem/mirexec.html#InstrPos"><span class="Identifier">InstrPos</span></a><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="doesGlobalEscape,MirTree,Subgraph,InstrPos,GlobalId">
+<dt><pre><span class="Keyword">proc</span> <a href="#doesGlobalEscape%2CMirTree%2CSubgraph%2CInstrPos%2CGlobalId"><span class="Identifier">doesGlobalEscape</span></a><span class="Other">(</span><span class="Identifier">tree</span><span class="Other">:</span> <a href="mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">scope</span><span class="Other">:</span> <a href="../sem/mirexec.html#Subgraph"><span class="Identifier">Subgraph</span></a><span class="Other">;</span> <span class="Identifier">start</span><span class="Other">:</span> <a href="../sem/mirexec.html#InstrPos"><span class="Identifier">InstrPos</span></a><span class="Other">;</span>
+                      <span class="Identifier">s</span><span class="Other">:</span> <a href="mirtrees.html#GlobalId"><span class="Identifier">GlobalId</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Computes if the global <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> potentially &quot;escapes&quot;. A global escapes if it is not declared at module scope and is used inside a procedure that is then called outside the analysed global's scope. Example:<pre class="listing"><span class="Comment"># a.nim</span>
@@ -262,9 +262,9 @@ Computes if the global <tt class="docutils literal"><span class="pre"><span clas
 
 <span class="Identifier">p</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L316"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L314"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L316" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L314" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -275,7 +275,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Computes whether the location named by <tt class="docutils literal"><span class="pre"><span class="Identifier">loc</span></span></tt> does contain a value (i.e., is alive) when the data-flow operation at <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span></span></tt> is reached (but not executed). Only the <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> sub-graph is considered by the analysis.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L71"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L71"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L71" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -288,7 +288,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Performs data-flow analysis to compute whether the value that <tt class="docutils literal"><span class="pre"><span class="Identifier">loc</span></span></tt> evaluates to when <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span></span></tt> is reached (but not executed) is <em>not</em> observed by operations that have a control-flow dependency on the operation/statement at <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span></span></tt> and are located inside <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt>. It's important to note that this analysis does not test whether the underlying <em>location</em> is accessed, but rather the <em>value</em> it stores. If a new value is assigned to the underlying location which is then accessed after, it won't cause the analysis to return false
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L131"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L131"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L131" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -304,7 +304,7 @@ class="link-seesrc" target="_blank">Source</a>
 <p>In addition, whether the <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span></span></tt> is connected to a structured or unstructured exit of <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> is also returned</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L187"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L187"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L187" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -316,7 +316,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L65"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L65"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -328,7 +328,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L68"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L68"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -341,7 +341,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the expression after skipping handle-only conversions.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8c0b79fd6f3dea5ff310ab57b91fe9357990f7b8/compiler/mir/analysis.nim#L59"
+href="https://github.com/nim-works/nimskull/tree/9ef2edcb3404cd9c21238401508b6ef1181a44a0/compiler/mir/analysis.nim#L59"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/analysis.nim#L59" class="link-seesrc" target="_blank" >Edit</a>
 
