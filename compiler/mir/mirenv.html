@@ -105,12 +105,15 @@ window.addEventListener('DOMContentLoaded', main);
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#EnvCheckpoint"
-    title="EnvCheckpoint = tuple[procs, globals, consts: Checkpoint]">EnvCheckpoint</a></li>
+    title="EnvCheckpoint = tuple[procs, globals, consts, data: Checkpoint]">EnvCheckpoint</a></li>
   <li><a class="reference" href="#MirEnv"
     title="MirEnv = object
+  data*: DataTable           ## stores all constant data referenced by constants and MIR code
   constants*: SymbolTable[ConstId, PSym]
   globals*: SymbolTable[GlobalId, PSym] ## includes both normal globals and threadvars
-  procedures*: SymbolTable[ProcedureId, PSym]">MirEnv</a></li>
+  procedures*: SymbolTable[ProcedureId, PSym]
+  bodies*: OrdinalSeq[ConstId, DataId] ## associates each user-defined constant with its content
+                                       ## ## TODO: this needs to be merged into `constants`">MirEnv</a></li>
   <li><a class="reference" href="#SymbolTable"
     title="SymbolTable[I; T] = object
   data: Store[I, T]
@@ -124,6 +127,8 @@ window.addEventListener('DOMContentLoaded', main);
       <ul class="simple nested-toc-section">[]
       <li><a class="reference" href="#%5B%5D%2CMirEnv%2CConstId"
     title="`[]`(env: MirEnv; id: ConstId): lent PSym">`[]`(env: MirEnv; id: ConstId): lent PSym</a></li>
+  <li><a class="reference" href="#%5B%5D%2CMirEnv%2CDataId"
+    title="`[]`(env: MirEnv; id: DataId): lent ConstrTree">`[]`(env: MirEnv; id: DataId): lent ConstrTree</a></li>
   <li><a class="reference" href="#%5B%5D%2CMirEnv%2CGlobalId"
     title="`[]`(env: MirEnv; id: GlobalId): lent PSym">`[]`(env: MirEnv; id: GlobalId): lent PSym</a></li>
   <li><a class="reference" href="#%5B%5D%2CMirEnv%2CProcedureId"
@@ -151,6 +156,11 @@ window.addEventListener('DOMContentLoaded', main);
     title="contains[I, T](tab: SymbolTable[I, T]; s: PSym): bool">contains[I, T](tab: SymbolTable[I, T]; s: PSym): bool</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">dataFor
+      <li><a class="reference" href="#dataFor%2CMirEnv%2CConstId"
+    title="dataFor(env: MirEnv; id: ConstId): DataId">dataFor(env: MirEnv; id: ConstId): DataId</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">len
       <li><a class="reference" href="#len%2CSymbolTable%5BI%2CT%5D"
     title="len[I, T](tab: SymbolTable[I, T]): int">len[I, T](tab: SymbolTable[I, T]): int</a></li>
@@ -159,6 +169,11 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">rewind
       <li><a class="reference" href="#rewind%2CMirEnv%2CEnvCheckpoint"
     title="rewind(env: var MirEnv; to: EnvCheckpoint)">rewind(env: var MirEnv; to: EnvCheckpoint)</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">setData
+      <li><a class="reference" href="#setData%2CMirEnv%2CConstId%2CDataId"
+    title="setData(env: var MirEnv; id: ConstId; data: DataId)">setData(env: var MirEnv; id: ConstId; data: DataId)</a></li>
 
   </ul>
 
@@ -185,7 +200,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -196,36 +211,39 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast_query.html">../ast/ast_query</a>, <a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="mirtrees.html">mirtrees</a>, <a class="reference external" href="../utils/containers.html">../utils/containers</a>
+<a class="reference external" href="../ast/ast_query.html">../ast/ast_query</a>, <a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="datatables.html">datatables</a>, <a class="reference external" href="mirtrees.html">mirtrees</a>, <a class="reference external" href="../utils/containers.html">../utils/containers</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
 <div id="EnvCheckpoint">
-<dt><pre><a href="mirenv.html#EnvCheckpoint"><span class="Identifier">EnvCheckpoint</span></a> <span class="Other">=</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">procs</span><span class="Other">,</span> <span class="Identifier">globals</span><span class="Other">,</span> <span class="Identifier">consts</span><span class="Other">:</span> <a href="../utils/containers.html#Checkpoint"><span class="Identifier">Checkpoint</span></a><span class="Other">]</span></pre></dt>
+<dt><pre><a href="mirenv.html#EnvCheckpoint"><span class="Identifier">EnvCheckpoint</span></a> <span class="Other">=</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">procs</span><span class="Other">,</span> <span class="Identifier">globals</span><span class="Other">,</span> <span class="Identifier">consts</span><span class="Other">,</span> <span class="Identifier">data</span><span class="Other">:</span> <a href="../utils/containers.html#Checkpoint"><span class="Identifier">Checkpoint</span></a><span class="Other">]</span></pre></dt>
 <dd>
 
 A low-cost snapshot of a <a class="reference external" href="#MirEnv">MirEnv</a>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L39"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L47"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L39" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L47" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="MirEnv">
 <dt><pre><a href="mirenv.html#MirEnv"><span class="Identifier">MirEnv</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">data</span><span class="Operator">*</span><span class="Other">:</span> <a href="datatables.html#DataTable"><span class="Identifier">DataTable</span></a>           <span class="Comment">## stores all constant data referenced by constants and MIR code</span>
   <span class="Identifier">constants</span><span class="Operator">*</span><span class="Other">:</span> <a href="mirenv.html#SymbolTable"><span class="Identifier">SymbolTable</span></a><span class="Other">[</span><a href="mirtrees.html#ConstId"><span class="Identifier">ConstId</span></a><span class="Other">,</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">]</span>
   <span class="Identifier">globals</span><span class="Operator">*</span><span class="Other">:</span> <a href="mirenv.html#SymbolTable"><span class="Identifier">SymbolTable</span></a><span class="Other">[</span><a href="mirtrees.html#GlobalId"><span class="Identifier">GlobalId</span></a><span class="Other">,</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">]</span> <span class="Comment">## includes both normal globals and threadvars</span>
   <span class="Identifier">procedures</span><span class="Operator">*</span><span class="Other">:</span> <a href="mirenv.html#SymbolTable"><span class="Identifier">SymbolTable</span></a><span class="Other">[</span><a href="mirtrees.html#ProcedureId"><span class="Identifier">ProcedureId</span></a><span class="Other">,</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">]</span>
-</pre></dt>
+  <span class="Identifier">bodies</span><span class="Operator">*</span><span class="Other">:</span> <a href="../utils/containers.html#OrdinalSeq"><span class="Identifier">OrdinalSeq</span></a><span class="Other">[</span><a href="mirtrees.html#ConstId"><span class="Identifier">ConstId</span></a><span class="Other">,</span> <a href="mirtrees.html#DataId"><span class="Identifier">DataId</span></a><span class="Other">]</span> <span class="Comment">## associates each user-defined constant with its content</span>
+                                       <span class="Comment">## ## TODO: this needs to be merged into `constants`</span>
+  </pre></dt>
 <dd>
 
 Stores everything MIR-related that is shared/exists across MIR bodies, such as information about global variables, global constants, etc.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L31"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L33"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L31" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L33" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -240,9 +258,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>In the mid- and backend, symbols are represented with IDs rather than with <tt class="docutils literal"><span class="pre">ref</span></tt> types.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L20"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L22"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L20" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L22" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -257,9 +275,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L84"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L94"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L84" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L94" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="[],MirEnv,DataId">
+<dt><pre><span class="Keyword">func</span> <a href="#%5B%5D%2CMirEnv%2CDataId"><span class="Identifier">`[]`</span></a><span class="Other">(</span><span class="Identifier">env</span><span class="Other">:</span> <a href="mirenv.html#MirEnv"><span class="Identifier">MirEnv</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <a href="mirtrees.html#DataId"><span class="Identifier">DataId</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">lent</span> <a href="datatables.html#ConstrTree"><span class="Identifier">ConstrTree</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L103"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L103" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -269,9 +300,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L87"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L97"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L87" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L97" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -282,9 +313,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L90"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L100"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L100" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -294,9 +325,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L55"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L65"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L55" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -306,9 +337,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Looks up the ID that <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> is represented with in <tt class="docutils literal"><span class="pre"><span class="Identifier">tab</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> must have already been registered in the table.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L50"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L60"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L50" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -318,9 +349,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 If <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> was not yet added to <tt class="docutils literal"><span class="pre"><span class="Identifier">tab</span></span></tt>, translates <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> to the corresponding MIR representation and returns the ID to fetch the entity from <tt class="docutils literal"><span class="pre"><span class="Identifier">tab</span></span></tt> with. If <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> was already added, returns the ID of the already-translated entity.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L62"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L72"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L62" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L72" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -330,9 +361,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates a snapshot of <tt class="docutils literal"><span class="pre"><span class="Identifier">env</span></span></tt>. This is a low-cost operation, where no copies are involved.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L93"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L115"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L93" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L115" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -342,9 +373,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates a checkpoint that represents the current state of <tt class="docutils literal"><span class="pre"><span class="Identifier">tab</span></span></tt>. This is a very low-cost operation, which doesn't perform any heap allocation.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L77"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L87"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L77" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L87" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -354,9 +385,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns whether <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt> was already registered with <tt class="docutils literal"><span class="pre"><span class="Identifier">tab</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L58"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L68"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L58" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="dataFor,MirEnv,ConstId">
+<dt><pre><span class="Keyword">func</span> <a href="#dataFor%2CMirEnv%2CConstId"><span class="Identifier">dataFor</span></a><span class="Other">(</span><span class="Identifier">env</span><span class="Other">:</span> <a href="mirenv.html#MirEnv"><span class="Identifier">MirEnv</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <a href="mirtrees.html#ConstId"><span class="Identifier">ConstId</span></a><span class="Other">)</span><span class="Other">:</span> <a href="mirtrees.html#DataId"><span class="Identifier">DataId</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Returns the ID of the constant expression associated with <tt class="docutils literal"><span class="pre"><span class="Identifier">id</span></span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L111"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L111" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -366,21 +409,34 @@ class="link-seesrc" target="_blank">Source</a>
 
 The number of entities in <tt class="docutils literal"><span class="pre"><span class="Identifier">tab</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L73"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L83"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L73" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L83" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="rewind,MirEnv,EnvCheckpoint">
-<dt><pre><span class="Keyword">proc</span> <a href="#rewind%2CMirEnv%2CEnvCheckpoint"><span class="Identifier">rewind</span></a><span class="Other">(</span><span class="Identifier">env</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirenv.html#MirEnv"><span class="Identifier">MirEnv</span></a><span class="Other">;</span> <span class="Identifier">to</span><span class="Other">:</span> <a href="mirenv.html#EnvCheckpoint"><span class="Identifier">EnvCheckpoint</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#rewind%2CMirEnv%2CEnvCheckpoint"><span class="Identifier">rewind</span></a><span class="Other">(</span><span class="Identifier">env</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirenv.html#MirEnv"><span class="Identifier">MirEnv</span></a><span class="Other">;</span> <span class="Identifier">to</span><span class="Other">:</span> <a href="mirenv.html#EnvCheckpoint"><span class="Identifier">EnvCheckpoint</span></a><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Undoes all additions to <tt class="docutils literal"><span class="pre"><span class="Identifier">env</span></span></tt> since <tt class="docutils literal"><span class="pre"><span class="Identifier">to</span></span></tt> was created. Do note that all checkpoints created after <tt class="docutils literal"><span class="pre"><span class="Identifier">to</span></span></tt> are invalidated.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L98"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L121"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L98" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L121" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="setData,MirEnv,ConstId,DataId">
+<dt><pre><span class="Keyword">func</span> <a href="#setData%2CMirEnv%2CConstId%2CDataId"><span class="Identifier">setData</span></a><span class="Other">(</span><span class="Identifier">env</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirenv.html#MirEnv"><span class="Identifier">MirEnv</span></a><span class="Other">;</span> <span class="Identifier">id</span><span class="Other">:</span> <a href="mirtrees.html#ConstId"><span class="Identifier">ConstId</span></a><span class="Other">;</span> <span class="Identifier">data</span><span class="Other">:</span> <a href="mirtrees.html#DataId"><span class="Identifier">DataId</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Sets the body for the constant identified by <tt class="docutils literal"><span class="pre"><span class="Identifier">id</span></span></tt>.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L106"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L106" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -395,9 +451,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns all entities in <tt class="docutils literal"><span class="pre"><span class="Identifier">tab</span></span></tt> together with their ID.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L113"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L138"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L113" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L138" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -407,9 +463,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns all entities from <tt class="docutils literal"><span class="pre"><span class="Identifier">tab</span></span></tt> that were added since <tt class="docutils literal"><span class="pre"><span class="Identifier">p</span></span></tt> was created.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/dfd183bb41e2e1b0858b92f19a51bcbb6d2e92a6/compiler/mir/mirenv.nim#L118"
+href="https://github.com/nim-works/nimskull/tree/3eb7c736384de0b62c88c0dcedbb910fce47f190/compiler/mir/mirenv.nim#L143"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L118" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirenv.nim#L143" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -423,7 +479,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-24 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-26 00:00:00 UTC</small>
       </div>
     </div>
   </div>
