@@ -211,7 +211,9 @@ STATEMENT =
           | Emit VALUE ...
           | Asm VALUE ...
 
-BRANCH_LIST = (Branch &lt;Literal&gt; ... STATEMENT) ... # a list of branches
+BRANCH_LABEL = &lt;Literal&gt;
+             | &lt;Const&gt;
+BRANCH_LIST = (Branch BRANCH_LABEL ... STATEMENT) ... # a list of branches
 
 EXCEPT_BRANCH = Branch &lt;Type&gt; ... STATEMENT # exception handler
               | Branch &lt;Local&gt;    STATEMENT # exception handler for imported
