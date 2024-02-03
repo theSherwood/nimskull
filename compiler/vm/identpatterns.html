@@ -17,7 +17,7 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>compiler/vm/vmlinker</title>
+<title>compiler/vm/identpatterns</title>
 <link rel="stylesheet" type="text/css" href="../nimdoc.out.css">
 
 <script type="text/javascript" src="../dochack.js"></script>
@@ -69,7 +69,7 @@ window.addEventListener('DOMContentLoaded', main);
 <body>
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">compiler/vm/vmlinker</h1>
+    <h1 class="title">compiler/vm/identpatterns</h1>
     <div class="row">
   <div class="three columns">
   <div class="theme-switch-wrapper">
@@ -106,12 +106,8 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#IdentPattern"
     title="IdentPattern = distinct string">IdentPattern</a></li>
-  <li><a class="reference" href="#LinkerData"
-    title="LinkerData = object
-  symToIndexTbl*: Table[int, LinkIndex] ## the link table. Keeps track of all symbols known to the linker
-  callbackKeys*: seq[IdentPattern] ## the matcher patterns used for implementing overrides">LinkerData</a></li>
-  <li><a class="reference" href="#LinkIndex"
-    title="LinkIndex = uint32">LinkIndex</a></li>
+  <li><a class="reference" href="#Patterns"
+    title="Patterns = seq[IdentPattern]">Patterns</a></li>
 
   </ul>
 </li>
@@ -119,10 +115,8 @@ window.addEventListener('DOMContentLoaded', main);
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
       <ul class="simple nested-toc-section">lookup
-      <li><a class="reference" href="#lookup%2CLinkerData%2CPSym"
-    title="lookup(data: LinkerData; s: PSym): LinkIndex">lookup(data: LinkerData; s: PSym): LinkIndex</a></li>
-  <li><a class="reference" href="#lookup%2Cseq%5BIdentPattern%5D%2CPSym"
-    title="lookup(patterns: seq[IdentPattern]; s: PSym): int">lookup(patterns: seq[IdentPattern]; s: PSym): int</a></li>
+      <li><a class="reference" href="#lookup%2CPatterns%2CPSym"
+    title="lookup(patterns: Patterns; s: PSym): int">lookup(patterns: Patterns; s: PSym): int</a></li>
 
   </ul>
 
@@ -133,14 +127,14 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/7ce143deda449b2b8161fb32ef6f0958b6d53da5/compiler/vm/vmlinker.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/74bd23ed1c6580f85cfe629d921b777731e9d46d/compiler/vm/identpatterns.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmlinker.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/identpatterns.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">Implements types and procedures related to mapping symbols to their in-VM IDs.</p>
+  <p class="module-desc">Implements routines for matching <em>qualified identifier patterns</em> against symbols.</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
@@ -150,41 +144,26 @@ class="link-seesrc" target="_blank">Source</a>
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
 <div id="IdentPattern">
-<dt><pre><a href="vmlinker.html#IdentPattern"><span class="Identifier">IdentPattern</span></a> <span class="Other">=</span> <span class="Keyword">distinct</span> <span class="Identifier">string</span></pre></dt>
+<dt><pre><a href="identpatterns.html#IdentPattern"><span class="Identifier">IdentPattern</span></a> <span class="Other">=</span> <span class="Keyword">distinct</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
 A matcher pattern for a fully qualified symbol identifier
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/7ce143deda449b2b8161fb32ef6f0958b6d53da5/compiler/vm/vmlinker.nim#L22"
+href="https://github.com/nim-works/nimskull/tree/74bd23ed1c6580f85cfe629d921b777731e9d46d/compiler/vm/identpatterns.nim#L16"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmlinker.nim#L22" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/identpatterns.nim#L16" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
-<div id="LinkerData">
-<dt><pre><a href="vmlinker.html#LinkerData"><span class="Identifier">LinkerData</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">symToIndexTbl</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">Table</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">,</span> <a href="vmlinker.html#LinkIndex"><span class="Identifier">LinkIndex</span></a><span class="Other">]</span> <span class="Comment">## the link table. Keeps track of all symbols known to the linker</span>
-  <span class="Identifier">callbackKeys</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmlinker.html#IdentPattern"><span class="Identifier">IdentPattern</span></a><span class="Other">]</span> <span class="Comment">## the matcher patterns used for implementing overrides</span>
-  </pre></dt>
+<div id="Patterns">
+<dt><pre><a href="identpatterns.html#Patterns"><span class="Identifier">Patterns</span></a> <span class="Other">=</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="identpatterns.html#IdentPattern"><span class="Identifier">IdentPattern</span></a><span class="Other">]</span></pre></dt>
 <dd>
 
-All data required for mapping symbols to the entities they represent inside the VM (procedures, globals, constants).
+A list of identifier matcher patterns, where the order is significant.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/7ce143deda449b2b8161fb32ef6f0958b6d53da5/compiler/vm/vmlinker.nim#L25"
+href="https://github.com/nim-works/nimskull/tree/74bd23ed1c6580f85cfe629d921b777731e9d46d/compiler/vm/identpatterns.nim#L19"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmlinker.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="LinkIndex">
-<dt><pre><a href="vmlinker.html#LinkIndex"><span class="Identifier">LinkIndex</span></a> <span class="Other">=</span> <span class="Identifier">uint32</span></pre></dt>
-<dd>
-
-Identifies a linker-relevant entity. There are three namespaces, one for procedures, one for globals, and one for constants -- which namespace an index is part of is stored separately.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/7ce143deda449b2b8161fb32ef6f0958b6d53da5/compiler/vm/vmlinker.nim#L17"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmlinker.nim#L17" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/identpatterns.nim#L19" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -193,28 +172,15 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="lookup,LinkerData,PSym">
-<dt><pre><span class="Keyword">func</span> <a href="#lookup%2CLinkerData%2CPSym"><span class="Identifier">lookup</span></a><span class="Other">(</span><span class="Identifier">data</span><span class="Other">:</span> <a href="vmlinker.html#LinkerData"><span class="Identifier">LinkerData</span></a><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <a href="vmlinker.html#LinkIndex"><span class="Identifier">LinkIndex</span></a> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-<dd>
-
-Returns the link-index for the symbol <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt>, which must exist in the link table.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/7ce143deda449b2b8161fb32ef6f0958b6d53da5/compiler/vm/vmlinker.nim#L54"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmlinker.nim#L54" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-<div id="lookup,seq[IdentPattern],PSym">
-<dt><pre><span class="Keyword">func</span> <a href="#lookup%2Cseq%5BIdentPattern%5D%2CPSym"><span class="Identifier">lookup</span></a><span class="Other">(</span><span class="Identifier">patterns</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmlinker.html#IdentPattern"><span class="Identifier">IdentPattern</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="lookup,Patterns,PSym">
+<dt><pre><span class="Keyword">func</span> <a href="#lookup%2CPatterns%2CPSym"><span class="Identifier">lookup</span></a><span class="Other">(</span><span class="Identifier">patterns</span><span class="Other">:</span> <a href="identpatterns.html#Patterns"><span class="Identifier">Patterns</span></a><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <a href="../ast/ast_types.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
 Tries to find and return the index of the pattern matching <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt>. If none is found, -1 is returned
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/7ce143deda449b2b8161fb32ef6f0958b6d53da5/compiler/vm/vmlinker.nim#L42"
+href="https://github.com/nim-works/nimskull/tree/74bd23ed1c6580f85cfe629d921b777731e9d46d/compiler/vm/identpatterns.nim#L31"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmlinker.nim#L42" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/identpatterns.nim#L31" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
