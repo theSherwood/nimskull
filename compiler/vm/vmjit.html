@@ -118,6 +118,11 @@ window.addEventListener('DOMContentLoaded', main);
     title="compile(jit: var JitState; c: var TCtx; fnc: FunctionIndex): VmGenResult">compile(jit: var JitState; c: var TCtx; fnc: FunctionIndex): VmGenResult</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">constDataToMir
+      <li><a class="reference" href="#constDataToMir%2CTCtx%2CJitState%2CPNode"
+    title="constDataToMir(c: var TCtx; jit: var JitState; e: PNode): MirTree">constDataToMir(c: var TCtx; jit: var JitState; e: PNode): MirTree</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">genExpr
       <li><a class="reference" href="#genExpr%2CJitState%2CTCtx%2CPNode"
     title="genExpr(jit: var JitState; c: var TCtx; n: PNode): VmGenResult">genExpr(jit: var JitState; c: var TCtx; n: PNode): VmGenResult</a></li>
@@ -162,7 +167,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/420f87fd037b2e0480b59bbdf6ef0590bd461bc9/compiler/vm/vmjit.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmjit.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -176,7 +181,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/ast_query.html">../ast/ast_query</a>, <a class="reference external" href="../backend/backends.html">../backend/backends</a>, <a class="reference external" href="../backend/cgir.html">../backend/cgir</a>, <a class="reference external" href="../mir/datatables.html">../mir/datatables</a>, <a class="reference external" href="../mir/mirbodies.html">../mir/mirbodies</a>, <a class="reference external" href="../mir/mirbridge.html">../mir/mirbridge</a>, <a class="reference external" href="../mir/mirconstr.html">../mir/mirconstr</a>, <a class="reference external" href="../mir/mirenv.html">../mir/mirenv</a>, <a class="reference external" href="../mir/mirgen.html">../mir/mirgen</a>, <a class="reference external" href="../mir/mirpasses.html">../mir/mirpasses</a>, <a class="reference external" href="../mir/mirtrees.html">../mir/mirtrees</a>, <a class="reference external" href="../modules/magicsys.html">../modules/magicsys</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="vmaux.html">vmaux</a>, <a class="reference external" href="vmcompilerserdes.html">vmcompilerserdes</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmgen.html">vmgen</a>, <a class="reference external" href="vmjit_checks.html">vmjit_checks</a>, <a class="reference external" href="vmlinker.html">vmlinker</a>, <a class="reference external" href="vmmemory.html">vmmemory</a>, <a class="reference external" href="vmtypegen.html">vmtypegen</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>
+<a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/ast_query.html">../ast/ast_query</a>, <a class="reference external" href="../backend/backends.html">../backend/backends</a>, <a class="reference external" href="../backend/cgir.html">../backend/cgir</a>, <a class="reference external" href="../mir/datatables.html">../mir/datatables</a>, <a class="reference external" href="../mir/mirbodies.html">../mir/mirbodies</a>, <a class="reference external" href="../mir/mirbridge.html">../mir/mirbridge</a>, <a class="reference external" href="../mir/mirconstr.html">../mir/mirconstr</a>, <a class="reference external" href="../mir/mirenv.html">../mir/mirenv</a>, <a class="reference external" href="../mir/mirgen.html">../mir/mirgen</a>, <a class="reference external" href="../mir/mirpasses.html">../mir/mirpasses</a>, <a class="reference external" href="../mir/mirtrees.html">../mir/mirtrees</a>, <a class="reference external" href="../modules/magicsys.html">../modules/magicsys</a>, <a class="reference external" href="../sem/transf.html">../sem/transf</a>, <a class="reference external" href="vmaux.html">vmaux</a>, <a class="reference external" href="vmserialize.html">vmserialize</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmgen.html">vmgen</a>, <a class="reference external" href="vmjit_checks.html">vmjit_checks</a>, <a class="reference external" href="vmlinker.html">vmlinker</a>, <a class="reference external" href="vmmemory.html">vmmemory</a>, <a class="reference external" href="vmtypegen.html">vmtypegen</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -189,7 +194,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 State of the VM's just-in-time compiler that is kept across invocations.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/420f87fd037b2e0480b59bbdf6ef0590bd461bc9/compiler/vm/vmjit.nim#L64"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmjit.nim#L64"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L64" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -208,9 +213,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates code for the the given function and updates the execution environment. In addition, the function's table entry is updated with the bytecode position and execution requirements (i.e. register count). Make sure to only use <tt class="docutils literal"><span class="pre"><span class="Identifier">compile</span></span></tt> when you're sure the function wasn't generated yet
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/420f87fd037b2e0480b59bbdf6ef0590bd461bc9/compiler/vm/vmjit.nim#L318"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmjit.nim#L316"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L318" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L316" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="constDataToMir,TCtx,JitState,PNode">
+<dt><pre><span class="Keyword">proc</span> <a href="#constDataToMir%2CTCtx%2CJitState%2CPNode"><span class="Identifier">constDataToMir</span></a><span class="Other">(</span><span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">;</span> <span class="Identifier">jit</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmjit.html#JitState"><span class="Identifier">JitState</span></a><span class="Other">;</span> <span class="Identifier">e</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">)</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Translates the constant expression <tt class="docutils literal"><span class="pre"><span class="Identifier">e</span></span></tt> to a MIR constant expression and returns it. Entities referenced by the constant expression (e.g., procedures), are direclty registered with the environment.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmjit.nim#L355"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L355" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -223,9 +241,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates and emits code for the standalone expression <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/420f87fd037b2e0480b59bbdf6ef0590bd461bc9/compiler/vm/vmjit.nim#L229"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmjit.nim#L227"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L229" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L227" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -238,9 +256,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates and emits code for the standalone top-level statement <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/420f87fd037b2e0480b59bbdf6ef0590bd461bc9/compiler/vm/vmjit.nim#L201"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmjit.nim#L199"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L201" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L199" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -250,9 +268,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns whether the bytecode for <tt class="docutils literal"><span class="pre"><span class="Identifier">prc</span></span></tt> is already available.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/420f87fd037b2e0480b59bbdf6ef0590bd461bc9/compiler/vm/vmjit.nim#L301"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmjit.nim#L299"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L301" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L299" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -264,9 +282,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 The main entry point into the JIT code-generator. Retrieves the information required for executing <tt class="docutils literal"><span class="pre"><span class="Identifier">sym</span></span></tt>. A function table entry is created first if it doesn't exist yet, and the procedure is also generated via <tt class="docutils literal"><span class="pre"><span class="Identifier">compile</span></span></tt> if it wasn't already
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/420f87fd037b2e0480b59bbdf6ef0590bd461bc9/compiler/vm/vmjit.nim#L333"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmjit.nim#L331"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L333" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L331" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -277,9 +295,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Registers the <tt class="docutils literal"><span class="pre"><span class="Identifier">callback</span></span></tt> with <tt class="docutils literal"><span class="pre"><span class="Identifier">c</span></span></tt>. After the <tt class="docutils literal"><span class="pre">registerCallback</span></tt> call, when a procedures of which the fully qualified identifier matches <tt class="docutils literal"><span class="pre"><span class="Identifier">pattern</span></span></tt> is added to the VM's function table, all invocations of the procedure at run-time will invoke the callback instead.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/420f87fd037b2e0480b59bbdf6ef0590bd461bc9/compiler/vm/vmjit.nim#L347"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmjit.nim#L345"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L347" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L345" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -290,9 +308,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 If it hasn't been already, adds <tt class="docutils literal"><span class="pre"><span class="Identifier">prc</span></span></tt> to the set of procedures the JIT code-generator knowns about and sets up a function-table entry. <tt class="docutils literal"><span class="pre"><span class="Identifier">jit</span></span></tt> is required to not be in the process of generating code.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/420f87fd037b2e0480b59bbdf6ef0590bd461bc9/compiler/vm/vmjit.nim#L306"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmjit.nim#L304"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L306" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmjit.nim#L304" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>

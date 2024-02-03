@@ -237,6 +237,16 @@ TRY_STMT = Try STATEMENT (Except EXCEPT_BRANCH ...)? (Finally STATEMENT)?
 <h1 id="storage">Storage</h1><p>The MIR uses a tree-based representation similar to the AST. For easier processing and faster access, the whole code for a procedure is stored in a single sequence of <em>nodes</em>, with the nodes forming a tree.</p>
 <p>Sub-trees are currently delimited via an explicit <tt class="docutils literal"><span class="pre">End</span></tt> node.</p>
 
+<h1 id="constant-expressions">Constant Expressions</h1><p>MIR constant expression are stored separately from MIR trees representing routine bodies. Constant expressions describe a value not depending on any dynamic/run-time information. They use a variation/sub-set of the MIR that is better suited for statement-less trees.</p>
+<p>The syntax is similar to that of the normal MIR, with the biggest difference being that the representation is flat (i.e., a single tree rather than multiple ones).</p>
+<pre class="listing">VALUE = &lt;Proc&gt;
+      | &lt;Literal&gt;
+      | COMPLEX
+
+ARG = Arg VALUE
+
+COMPLEX = Constr ARG...
+        | ObjConstr (&lt;Field&gt; ARG)...</pre>
 
 
     <div class="row">

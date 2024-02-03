@@ -17,7 +17,7 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>compiler/vm/vmerrors</title>
+<title>compiler/vm/vmserialize</title>
 <link rel="stylesheet" type="text/css" href="../nimdoc.out.css">
 
 <script type="text/javascript" src="../dochack.js"></script>
@@ -69,7 +69,7 @@ window.addEventListener('DOMContentLoaded', main);
 <body>
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">compiler/vm/vmerrors</h1>
+    <h1 class="title">compiler/vm/vmserialize</h1>
     <div class="row">
   <div class="three columns">
   <div class="theme-switch-wrapper">
@@ -102,31 +102,11 @@ window.addEventListener('DOMContentLoaded', main);
   </ul>
 </li>
 <li>
-  <a class="reference reference-toplevel" href="#7" id="57">Types</a>
-  <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#VmError"
-    title="VmError = object of CatchableError
-  event*: VmEvent">VmError</a></li>
-
-  </ul>
-</li>
-<li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">raiseVmError
-      <li><a class="reference" href="#raiseVmError%2CsinkVmEvent%2CInstantiationInfo"
-    title="raiseVmError(event: sink VmEvent; inst: InstantiationInfo)">raiseVmError(event: sink VmEvent; inst: InstantiationInfo)</a></li>
-
-  </ul>
-
-  </ul>
-</li>
-<li>
-  <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
-  <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">raiseVmError
-      <li><a class="reference" href="#raiseVmError.t%2CVmEvent"
-    title="raiseVmError(event: VmEvent)">raiseVmError(event: VmEvent)</a></li>
+      <ul class="simple nested-toc-section">initFromExpr
+      <li><a class="reference" href="#initFromExpr%2CLocHandle%2CMirTree%2CTCtx"
+    title="initFromExpr(dest: LocHandle; tree: MirTree; c: var TCtx)">initFromExpr(dest: LocHandle; tree: MirTree; c: var TCtx)</a></li>
 
   </ul>
 
@@ -137,71 +117,32 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmerrors.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmserialize.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmerrors.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmserialize.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><p>This module contains the definitions for error reporting inside VM execution.</p>
-<p>To raise a <tt class="docutils literal"><span class="pre"><span class="Identifier">VmError</span></span></tt> use <tt class="docutils literal"><span class="pre"><span class="Identifier">raiseVmError</span></span></tt>. To override the source location where the error is reported to have happened, use the overload that takes an additional <tt class="docutils literal"><span class="pre"><span class="Identifier">TLineInfo</span></span></tt>.</p>
-<p><tt class="docutils literal"><span class="pre"><span class="Identifier">raiseVmError</span></span></tt> must not be used outside of VM execution (<tt class="docutils literal"><span class="pre"><span class="Identifier">rawExecute</span></span></tt>) nor inside VM code-generation (<tt class="docutils literal"><span class="pre"><span class="Identifier">vmgen</span></span></tt>)</p>
-</p>
+  <p class="module-desc">Implements routines for initializing VM memory locations directly from expressions.</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../front/msgs.html">../front/msgs</a>, <a class="reference external" href="vmdef.html">vmdef</a>
-</dl></div>
-<div class="section" id="7">
-<h1><a class="toc-backref" href="#7">Types</a></h1>
-<dl class="item">
-<div id="VmError">
-<dt><pre><a href="vmerrors.html#VmError"><span class="Identifier">VmError</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">CatchableError</span>
-  <span class="Identifier">event</span><span class="Operator">*</span><span class="Other">:</span> <a href="vmdef.html#VmEvent"><span class="Identifier">VmEvent</span></a>
-</pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmerrors.nim#L20"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmerrors.nim#L20" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-
+<a class="reference external" href="../ast/ast_query.html">../ast/ast_query</a>, <a class="reference external" href="../ast/ast_types.html">../ast/ast_types</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../mir/mirtrees.html">../mir/mirtrees</a>, <a class="reference external" href="vmaux.html">vmaux</a>, <a class="reference external" href="vmdef.html">vmdef</a>, <a class="reference external" href="vmobjects.html">vmobjects</a>, <a class="reference external" href="vmmemory.html">vmmemory</a>, <a class="reference external" href="vmtypegen.html">vmtypegen</a>, <a class="reference external" href="vmtypes.html">vmtypes</a>, <a class="reference external" href="../utils/bitsets.html">../utils/bitsets</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>, <a class="reference external" href="../utils/int128.html">../utils/int128</a>
 </dl></div>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<div id="raiseVmError,sinkVmEvent,InstantiationInfo">
-<dt><pre><span class="Keyword">func</span> <a href="#raiseVmError%2CsinkVmEvent%2CInstantiationInfo"><span class="Identifier">raiseVmError</span></a><span class="Other">(</span><span class="Identifier">event</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="vmdef.html#VmEvent"><span class="Identifier">VmEvent</span></a><span class="Other">;</span> <span class="Identifier">inst</span><span class="Other">:</span> <a href="../ast/lineinfos.html#InstantiationInfo"><span class="Identifier">InstantiationInfo</span></a><span class="Other">)</span> {.<span class="Identifier">noinline</span><span class="Other">,</span>
-    <span class="Identifier">noreturn</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">VmError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="initFromExpr,LocHandle,MirTree,TCtx">
+<dt><pre><span class="Keyword">proc</span> <a href="#initFromExpr%2CLocHandle%2CMirTree%2CTCtx"><span class="Identifier">initFromExpr</span></a><span class="Other">(</span><span class="Identifier">dest</span><span class="Other">:</span> <a href="vmdef.html#LocHandle"><span class="Identifier">LocHandle</span></a><span class="Other">;</span> <span class="Identifier">tree</span><span class="Other">:</span> <a href="../mir/mirtrees.html#MirTree"><span class="Identifier">MirTree</span></a><span class="Other">;</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="vmdef.html#TCtx"><span class="Identifier">TCtx</span></a><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Raises a <tt class="docutils literal"><span class="pre"><span class="Identifier">VmError</span></span></tt>.
+Intializes the memory location <tt class="docutils literal"><span class="pre"><span class="Identifier">dest</span></span></tt> with the value represented by the MIR contant expression <tt class="docutils literal"><span class="pre"><span class="Identifier">tree</span></span></tt>. The location is expected to be in its zero'ed state.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmerrors.nim#L23"
+href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmserialize.nim#L146"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmerrors.nim#L23" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-</div>
-
-</dl></div>
-<div class="section" id="18">
-<h1><a class="toc-backref" href="#18">Templates</a></h1>
-<dl class="item">
-<div id="raiseVmError.t,VmEvent">
-<dt><pre><span class="Keyword">template</span> <a href="#raiseVmError.t%2CVmEvent"><span class="Identifier">raiseVmError</span></a><span class="Other">(</span><span class="Identifier">event</span><span class="Other">:</span> <a href="vmdef.html#VmEvent"><span class="Identifier">VmEvent</span></a><span class="Other">)</span></pre></dt>
-<dd>
-
-Raises a <tt class="docutils literal"><span class="pre"><span class="Identifier">VmError</span></span></tt>, using the source code position of the callsite as the <tt class="docutils literal"><span class="pre"><span class="Identifier">inst</span></span></tt> value.
-&nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/6c9308a96f5e8583095d9bcceaa79e10c8fc7f6a/compiler/vm/vmerrors.nim#L33"
-class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmerrors.nim#L33" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmserialize.nim#L146" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
