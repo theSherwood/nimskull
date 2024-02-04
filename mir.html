@@ -100,6 +100,14 @@ VALUE = &lt;Literal&gt;
       | &lt;Type&gt;
       | LVALUE
 
+UNARY_OP = NegI VALUE
+
+BINARY_OP = AddI VALUE, VALUE
+          | SubI VALUE, VALUE
+          | MulI VALUE, VALUE
+          | DivI VALUE, VALUE
+          | ModI VALUE, VALUE
+
 CALL_ARG = Arg VALUE                    # pass-by-value argument
          | Arg &lt;none&gt;                   # argument that's going to be omitted
                                         # later
@@ -128,7 +136,11 @@ CHECKED_CALL_EXPR = CheckedCall &lt;Proc&gt; CALL_ARG ...
                   | CheckedCall LVALUE CALL_ARG ...
                   | CheckedCall &lt;Magic&gt; CALL_ARG ...
 
-RVALUE = CALL_EXPR
+
+RVALUE = UNARY_OP
+       | BINARY_OP
+       | CALL_EXPR
+       | CHECKED_CALL_EXPR
        | Constr   CONSTR_ARG ...       # construct a tuple, closure, set, or
        | ObjConstr (&lt;Field&gt; CONSTR_ARG) ... # construct an `object` or
                                        # `ref object`
@@ -253,7 +265,7 @@ COMPLEX = Constr ARG...
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-02-03 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-02-04 00:00:00 UTC</small>
       </div>
     </div>
   </div>
