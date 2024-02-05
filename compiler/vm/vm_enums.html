@@ -107,7 +107,7 @@ window.addEventListener('DOMContentLoaded', main);
                 ## of a location">AccessViolationReason</a></li>
   <li><a class="reference" href="#TOpcode"
     title="TOpcode = enum
-  opcEof, opcRet, opcYldYoid, opcYldVal, opcAsgnInt, opcAsgnFloat,
+  opcEof, opcRet, opcYldYoid, opcYldVal, opcSetEh, opcAsgnInt, opcAsgnFloat,
   opcAsgnComplex, opcCastIntToFloat32, opcCastIntToFloat64, opcCastFloatToInt32,
   opcCastFloatToInt64, opcCastPtrToInt, opcCastIntToPtr, opcFastAsgnComplex,
   opcNodeToReg, opcLdArr, opcLdArrAddr, opcWrArr, opcLdObj, opcLdObjAddr,
@@ -140,7 +140,7 @@ window.addEventListener('DOMContentLoaded', main);
   opcGetImplTransf, opcDataToAst, ## deserialize data to NimNode AST
   opcExpandToAst, opcEcho, opcIndCall, opcIndCallAsgn, opcRaise, opcNChild,
   opcNSetChild, opcCallSite, opcNewStr, opcTJmp, opcFJmp, opcJmp, opcJmpBack,
-  opcBranch, opcTry, opcExcept, opcFinally, opcFinallyEnd, opcNew, opcNewSeq,
+  opcBranch, opcEnter, opcLeave, opcFinally, opcFinallyEnd, opcNew, opcNewSeq,
   opcLdNull, opcLdNullReg, opcLdConst, opcLdGlobal, opcLdCmplxConst,
   opcLdImmInt, opcSetType, opcObjChck, opcNSetType, opcTypeTrait, opcSymOwner,
   opcSymIsInstantiationOf">TOpcode</a></li>
@@ -164,7 +164,7 @@ window.addEventListener('DOMContentLoaded', main);
   <li><a class="reference" href="#largeInstrs"
     title="largeInstrs = {opcConv, opcObjConv, opcCast, opcNewSeq, opcOf}">largeInstrs</a></li>
   <li><a class="reference" href="#relativeJumps"
-    title="relativeJumps = {opcTJmp, opcFJmp, opcJmp, opcJmpBack}">relativeJumps</a></li>
+    title="relativeJumps = {opcTJmp, opcFJmp, opcJmp, opcJmpBack, opcEnter, opcFinally}">relativeJumps</a></li>
 
   </ul>
 </li>
@@ -173,7 +173,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vm_enums.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vm_enums.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -195,15 +195,15 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vm_enums.nim#L162"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vm_enums.nim#L165"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L162" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L165" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="TOpcode">
 <dt><pre><a href="vm_enums.html#TOpcode"><span class="Identifier">TOpcode</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
-  <span class="Identifier">opcEof</span><span class="Other">,</span> <span class="Identifier">opcRet</span><span class="Other">,</span> <span class="Identifier">opcYldYoid</span><span class="Other">,</span> <span class="Identifier">opcYldVal</span><span class="Other">,</span> <span class="Identifier">opcAsgnInt</span><span class="Other">,</span> <span class="Identifier">opcAsgnFloat</span><span class="Other">,</span>
+  <span class="Identifier">opcEof</span><span class="Other">,</span> <span class="Identifier">opcRet</span><span class="Other">,</span> <span class="Identifier">opcYldYoid</span><span class="Other">,</span> <span class="Identifier">opcYldVal</span><span class="Other">,</span> <span class="Identifier">opcSetEh</span><span class="Other">,</span> <span class="Identifier">opcAsgnInt</span><span class="Other">,</span> <span class="Identifier">opcAsgnFloat</span><span class="Other">,</span>
   <span class="Identifier">opcAsgnComplex</span><span class="Other">,</span> <span class="Identifier">opcCastIntToFloat32</span><span class="Other">,</span> <span class="Identifier">opcCastIntToFloat64</span><span class="Other">,</span> <span class="Identifier">opcCastFloatToInt32</span><span class="Other">,</span>
   <span class="Identifier">opcCastFloatToInt64</span><span class="Other">,</span> <span class="Identifier">opcCastPtrToInt</span><span class="Other">,</span> <span class="Identifier">opcCastIntToPtr</span><span class="Other">,</span> <span class="Identifier">opcFastAsgnComplex</span><span class="Other">,</span>
   <span class="Identifier">opcNodeToReg</span><span class="Other">,</span> <span class="Identifier">opcLdArr</span><span class="Other">,</span> <span class="Identifier">opcLdArrAddr</span><span class="Other">,</span> <span class="Identifier">opcWrArr</span><span class="Other">,</span> <span class="Identifier">opcLdObj</span><span class="Other">,</span> <span class="Identifier">opcLdObjAddr</span><span class="Other">,</span>
@@ -236,7 +236,7 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">opcGetImplTransf</span><span class="Other">,</span> <span class="Identifier">opcDataToAst</span><span class="Other">,</span> <span class="Comment">## deserialize data to NimNode AST</span>
   <span class="Identifier">opcExpandToAst</span><span class="Other">,</span> <span class="Identifier">opcEcho</span><span class="Other">,</span> <span class="Identifier">opcIndCall</span><span class="Other">,</span> <span class="Identifier">opcIndCallAsgn</span><span class="Other">,</span> <span class="Identifier">opcRaise</span><span class="Other">,</span> <span class="Identifier">opcNChild</span><span class="Other">,</span>
   <span class="Identifier">opcNSetChild</span><span class="Other">,</span> <span class="Identifier">opcCallSite</span><span class="Other">,</span> <span class="Identifier">opcNewStr</span><span class="Other">,</span> <span class="Identifier">opcTJmp</span><span class="Other">,</span> <span class="Identifier">opcFJmp</span><span class="Other">,</span> <span class="Identifier">opcJmp</span><span class="Other">,</span> <span class="Identifier">opcJmpBack</span><span class="Other">,</span>
-  <span class="Identifier">opcBranch</span><span class="Other">,</span> <span class="Identifier">opcTry</span><span class="Other">,</span> <span class="Identifier">opcExcept</span><span class="Other">,</span> <span class="Identifier">opcFinally</span><span class="Other">,</span> <span class="Identifier">opcFinallyEnd</span><span class="Other">,</span> <span class="Identifier">opcNew</span><span class="Other">,</span> <span class="Identifier">opcNewSeq</span><span class="Other">,</span>
+  <span class="Identifier">opcBranch</span><span class="Other">,</span> <span class="Identifier">opcEnter</span><span class="Other">,</span> <span class="Identifier">opcLeave</span><span class="Other">,</span> <span class="Identifier">opcFinally</span><span class="Other">,</span> <span class="Identifier">opcFinallyEnd</span><span class="Other">,</span> <span class="Identifier">opcNew</span><span class="Other">,</span> <span class="Identifier">opcNewSeq</span><span class="Other">,</span>
   <span class="Identifier">opcLdNull</span><span class="Other">,</span> <span class="Identifier">opcLdNullReg</span><span class="Other">,</span> <span class="Identifier">opcLdConst</span><span class="Other">,</span> <span class="Identifier">opcLdGlobal</span><span class="Other">,</span> <span class="Identifier">opcLdCmplxConst</span><span class="Other">,</span>
   <span class="Identifier">opcLdImmInt</span><span class="Other">,</span> <span class="Identifier">opcSetType</span><span class="Other">,</span> <span class="Identifier">opcObjChck</span><span class="Other">,</span> <span class="Identifier">opcNSetType</span><span class="Other">,</span> <span class="Identifier">opcTypeTrait</span><span class="Other">,</span> <span class="Identifier">opcSymOwner</span><span class="Other">,</span>
   <span class="Identifier">opcSymIsInstantiationOf</span></pre></dt>
@@ -244,7 +244,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vm_enums.nim#L17"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vm_enums.nim#L17"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L17" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -263,7 +263,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vm_enums.nim#L2"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vm_enums.nim#L2"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L2" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -280,9 +280,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vm_enums.nim#L171"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vm_enums.nim#L174"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L171" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L174" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -292,21 +292,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vm_enums.nim#L172"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vm_enums.nim#L175"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L172" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L175" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="relativeJumps">
-<dt><pre><a href="vm_enums.html#relativeJumps"><span class="Identifier">relativeJumps</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">opcTJmp</span><span class="Other">,</span> <span class="DecNumber">opcFJmp</span><span class="Other">,</span> <span class="DecNumber">opcJmp</span><span class="Other">,</span> <span class="DecNumber">opcJmpBack</span><span class="Other">}</span></pre></dt>
+<dt><pre><a href="vm_enums.html#relativeJumps"><span class="Identifier">relativeJumps</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">opcTJmp</span><span class="Other">,</span> <span class="DecNumber">opcFJmp</span><span class="Other">,</span> <span class="DecNumber">opcJmp</span><span class="Other">,</span> <span class="DecNumber">opcJmpBack</span><span class="Other">,</span> <span class="DecNumber">opcEnter</span><span class="Other">,</span> <span class="DecNumber">opcFinally</span><span class="Other">}</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vm_enums.nim#L174"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vm_enums.nim#L177"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L174" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vm_enums.nim#L177" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -320,7 +320,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-02-04 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-02-05 00:00:00 UTC</small>
       </div>
     </div>
   </div>

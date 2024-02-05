@@ -116,6 +116,8 @@ window.addEventListener('DOMContentLoaded', main);
   callbackKeys*: Patterns
   code*: seq[TInstr]
   debug*: seq[TLineInfo]
+  ehTable*: seq[HandlerTableEntry]
+  ehCode*: seq[EhInstr]
   constants*: seq[VmConstant]
   typeInfoCache*: TypeInfoCache
   rtti*: seq[VmTypeInfo]">CodeGenCtx</a></li>
@@ -202,7 +204,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -230,6 +232,8 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">callbackKeys</span><span class="Operator">*</span><span class="Other">:</span> <a href="identpatterns.html#Patterns"><span class="Identifier">Patterns</span></a>
   <span class="Identifier">code</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmdef.html#TInstr"><span class="Identifier">TInstr</span></a><span class="Other">]</span>
   <span class="Identifier">debug</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="../ast/lineinfos.html#TLineInfo"><span class="Identifier">TLineInfo</span></a><span class="Other">]</span>
+  <span class="Identifier">ehTable</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmdef.html#HandlerTableEntry"><span class="Identifier">HandlerTableEntry</span></a><span class="Other">]</span>
+  <span class="Identifier">ehCode</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmdef.html#EhInstr"><span class="Identifier">EhInstr</span></a><span class="Other">]</span>
   <span class="Identifier">constants</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmdef.html#VmConstant"><span class="Identifier">VmConstant</span></a><span class="Other">]</span>
   <span class="Identifier">typeInfoCache</span><span class="Operator">*</span><span class="Other">:</span> <a href="vmdef.html#TypeInfoCache"><span class="Identifier">TypeInfoCache</span></a>
   <span class="Identifier">rtti</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="vmdef.html#VmTypeInfo"><span class="Identifier">VmTypeInfo</span></a><span class="Other">]</span>
@@ -238,9 +242,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Bundles all input, output, and other contextual data needed for the code generator
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L143"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L161"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L143" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -250,7 +254,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Result of a vmgen invocation
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L89"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L89"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L89" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -268,9 +272,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 the set of magics that are kept as normal procedure calls and thus need an entry in the function table.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L178"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L198"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L178" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L198" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -280,9 +284,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L187"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L207"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L187" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L207" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -298,9 +302,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Takes the registers <tt class="docutils literal"><span class="pre"><span class="Identifier">b</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">c</span></span></tt>, applies the operation <tt class="docutils literal"><span class="pre"><span class="Identifier">opc</span></span></tt> to them, and stores the result into register <tt class="docutils literal"><span class="pre"><span class="Identifier">a</span></span></tt> The node is needed for debug information
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L321"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L341"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L321" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L341" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -311,9 +315,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L351"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L371"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L351" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L371" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -325,9 +329,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates and emits the code for a standalone expression.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L3017"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L3231"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L3017" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L3231" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -339,9 +343,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L3211"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L3430"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L3211" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L3430" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -353,9 +357,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L3004"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L3216"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L3004" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L3216" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -366,9 +370,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L189"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L209"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L189" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L209" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -379,9 +383,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 return true to importc <tt class="docutils literal"><span class="pre"><span class="Identifier">s</span></span></tt>, false to execute its body instead (refs #8405)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L2431"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L2643"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L2431" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L2643" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -391,9 +395,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L2127"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L2339"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L2127" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L2339" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -404,9 +408,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L3229"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L3448"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L3229" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L3448" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -421,9 +425,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/093ffd7b5784745f23c0bd4f601d91c467defd08/compiler/vm/vmgen.nim#L371"
+href="https://github.com/nim-works/nimskull/tree/752029cd5121a53c65db3f44eeaebf93b651d519/compiler/vm/vmgen.nim#L391"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L371" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/vm/vmgen.nim#L391" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -437,7 +441,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-02-04 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-02-05 00:00:00 UTC</small>
       </div>
     </div>
   </div>
