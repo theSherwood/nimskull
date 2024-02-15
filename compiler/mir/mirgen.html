@@ -95,6 +95,7 @@ window.addEventListener('DOMContentLoaded', main);
   </div>
   
   <ul class="simple simple-toc" id="toc-list">
+<li><a class="reference" id="how-it-works_toc" href="#how-it-works">How It Works</a></li>
 <li><a class="reference" id="origin-information_toc" href="#origin-information">Origin information</a></li>
 <li>
   <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
@@ -147,20 +148,25 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3234e5b19a420a6a491393e38106b0eac2cb0021/compiler/mir/mirgen.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/330ae2ec52af462387605772e352c116cf968220/compiler/mir/mirgen.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><p>Implements the translation from AST to the MIR. The input AST is expected to have already been transformed by <tt class="docutils literal"><span class="pre">transf</span></tt>.</p>
-<p>In terms of operation, the input AST is traversed via recursion, with declarative constructs not relevant to the MIR being ignored.</p>
+  <p class="module-desc">Implements the translation from AST to the MIR. The input AST is expected to have already been transformed by <tt class="docutils literal"><span class="pre">transf</span></tt>.
+<h1><a class="toc-backref" id="how-it-works" href="#how-it-works">How It Works</a></h1><p>In terms of operation, the input AST is traversed via recursion, with declarative constructs not relevant to the MIR being ignored.</p>
 <p>None of the MIR operations that imply structured control-flow produce a value, so the input expression that do (<tt class="docutils literal"><span class="pre">if</span></tt>, <tt class="docutils literal"><span class="pre">case</span></tt>, <tt class="docutils literal"><span class="pre">block</span></tt>, and <tt class="docutils literal"><span class="pre">try</span></tt>) are translated into statements where the last expression in each clause is turned into an assignment to, depending on the context where they're used, either a temporary or existing lvalue expression. The latter are forwarded to the generation procedures via <tt class="docutils literal"><span class="pre">Destination</span></tt>.</p>
-<p>For efficiency, <tt class="docutils literal"><span class="pre">MirBuilder</span></tt> double-buffering functionality is used for emitting the trees. Statements are directly emitted into the final buffer (after all their operands were emitted), while expressions are first emitted into the staging buffer, with the callsite then deciding what to do with them.</p>
-<p>The values of rvalue operations, calls, and construction are first captured in temporaries (as the MIR doesn't support them being used as, e.g., call arguments directly). In general, all call arguments are first assigned to a temporary, except if the expression is stable (in case of by-name arguments) or pure (in case of non-sink by-value arguments).</p>
-<p>Pure expression are those that don't have side-effect and always refer to the exact same value, whereas stable expression are those that don't have side-effects and always refer to the same <em>location</em>.</p>
-<p>Whether a temporary is owning (that is, it needs to be destroyed later) depends on both the value it captures and how its used. If the captured value is coming from a call or construction of destructible value, the temporary, otherwise its non-owning, except if used in a consuming context (<tt class="docutils literal"><span class="pre"><span class="Identifier">sink</span></span></tt> parameter or aggregate construction).</p>
+<p>For efficiency, <tt class="docutils literal"><span class="pre">MirBuilder</span></tt>'s double-buffering functionality is used for emitting the trees. Statements are directly emitted into the final buffer (after all their operands were emitted), while expressions are first emitted into the staging buffer, with the callsite then deciding what to do with them.</p>
+<p>When translating expressions, they're first translated to the <a class="reference external" href="proto_mir.html">proto-MIR</a>, and then the proto-MIR expression is translated to the MIR. This allows the translation of expressions (besides calls) to focus only on syntax, leaving the semantics-related decision-making to the proto-MIR construction.</p>
+<p>For arguments, the translation uses temporaries (both owning and non-owning) to make sure that the following invariants are true:</p>
+<ul class="simple"><li>normal argument expressions are pure (the expression always evaluates to the same value)</li>
+<li>lvalue argument expressions are stable (the expression always has the same address)</li>
+<li>sink arguments are always moveable</li>
+<li>index and dereference targets are always pure</li>
+</ul>
+<p>These guarantees make the following analysis and transformation a lot easier.</p>
 
 <h1><a class="toc-backref" id="origin-information" href="#origin-information">Origin information</a></h1><p>Each produced <tt class="docutils literal"><span class="pre">MirNode</span></tt> is associated with the <tt class="docutils literal"><span class="pre">PNode</span></tt> it originated from (referred to as &quot;source information&quot;). The <tt class="docutils literal"><span class="pre">PNode</span></tt> is registered in the <tt class="docutils literal"><span class="pre">SourceMap</span></tt>, with the resulting <tt class="docutils literal"><span class="pre">SourceId</span></tt> then assigned to the nodes associated with the AST.</p>
 <p>In order to reduce the amount manual bookkeeping and to improve the ergonomics of producing MIR node sequences, assigning the <tt class="docutils literal"><span class="pre">SourceId</span></tt> is decoupled from the initial production. <tt class="docutils literal"><span class="pre">SourceProvider</span></tt> keeps track of the currently processed AST node and manages setting the <tt class="docutils literal"><span class="pre">info</span></tt> field on nodes.</p>
@@ -169,7 +175,7 @@ class="link-seesrc" target="_blank">Source</a>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/astmsgs.html">../ast/astmsgs</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/trees.html">../ast/trees</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../ast/wordrecg.html">../ast/wordrecg</a>, <a class="reference external" href="datatables.html">datatables</a>, <a class="reference external" href="mirbodies.html">mirbodies</a>, <a class="reference external" href="mirconstr.html">mirconstr</a>, <a class="reference external" href="mirenv.html">mirenv</a>, <a class="reference external" href="mirtrees.html">mirtrees</a>, <a class="reference external" href="sourcemaps.html">sourcemaps</a>, <a class="reference external" href="../modules/magicsys.html">../modules/magicsys</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../sem/ast_analysis.html">../sem/ast_analysis</a>, <a class="reference external" href="../utils/containers.html">../utils/containers</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>
+<a class="reference external" href="../ast/ast.html">../ast/ast</a>, <a class="reference external" href="../ast/astalgo.html">../ast/astalgo</a>, <a class="reference external" href="../ast/astmsgs.html">../ast/astmsgs</a>, <a class="reference external" href="../ast/lineinfos.html">../ast/lineinfos</a>, <a class="reference external" href="../ast/trees.html">../ast/trees</a>, <a class="reference external" href="../ast/types.html">../ast/types</a>, <a class="reference external" href="../ast/wordrecg.html">../ast/wordrecg</a>, <a class="reference external" href="datatables.html">datatables</a>, <a class="reference external" href="mirbodies.html">mirbodies</a>, <a class="reference external" href="mirconstr.html">mirconstr</a>, <a class="reference external" href="mirenv.html">mirenv</a>, <a class="reference external" href="mirtrees.html">mirtrees</a>, <a class="reference external" href="proto_mir.html">proto_mir</a>, <a class="reference external" href="sourcemaps.html">sourcemaps</a>, <a class="reference external" href="../modules/magicsys.html">../modules/magicsys</a>, <a class="reference external" href="../modules/modulegraphs.html">../modules/modulegraphs</a>, <a class="reference external" href="../front/options.html">../front/options</a>, <a class="reference external" href="../sem/ast_analysis.html">../sem/ast_analysis</a>, <a class="reference external" href="../utils/containers.html">../utils/containers</a>, <a class="reference external" href="../utils/idioms.html">../utils/idioms</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
@@ -184,9 +190,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3234e5b19a420a6a491393e38106b0eac2cb0021/compiler/mir/mirgen.nim#L125"
+href="https://github.com/nim-works/nimskull/tree/330ae2ec52af462387605772e352c116cf968220/compiler/mir/mirgen.nim#L131"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L131" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -201,9 +207,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Extra configuration for the AST -&gt; MIR translation.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3234e5b19a420a6a491393e38106b0eac2cb0021/compiler/mir/mirgen.nim#L131"
+href="https://github.com/nim-works/nimskull/tree/330ae2ec52af462387605772e352c116cf968220/compiler/mir/mirgen.nim#L137"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L131" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -218,9 +224,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Translates the construction expression AST <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> representing some constant data to its corresponding MIR representation.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3234e5b19a420a6a491393e38106b0eac2cb0021/compiler/mir/mirgen.nim#L2384"
+href="https://github.com/nim-works/nimskull/tree/330ae2ec52af462387605772e352c116cf968220/compiler/mir/mirgen.nim#L2043"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2384" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2043" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -234,9 +240,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates MIR code that is semantically equivalent to the expression or statement <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>, appending the resulting code and the corresponding origin information to <tt class="docutils literal"><span class="pre"><span class="Identifier">code</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">source</span></span></tt>, respectively.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3234e5b19a420a6a491393e38106b0eac2cb0021/compiler/mir/mirgen.nim#L2302"
+href="https://github.com/nim-works/nimskull/tree/330ae2ec52af462387605772e352c116cf968220/compiler/mir/mirgen.nim#L1961"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2302" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L1961" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -252,9 +258,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p><tt class="docutils literal"><span class="pre"><span class="Identifier">config</span></span></tt> provides additional configuration options that alter how some AST is translated.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/3234e5b19a420a6a491393e38106b0eac2cb0021/compiler/mir/mirgen.nim#L2342"
+href="https://github.com/nim-works/nimskull/tree/330ae2ec52af462387605772e352c116cf968220/compiler/mir/mirgen.nim#L2001"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2342" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2001" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -268,7 +274,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-02-14 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-02-15 00:00:00 UTC</small>
       </div>
     </div>
   </div>
