@@ -129,6 +129,15 @@ window.addEventListener('DOMContentLoaded', main);
     title="constDataToMir(env: var MirEnv; n: PNode): MirTree">constDataToMir(env: var MirEnv; n: PNode): MirTree</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">generateAssignment
+      <li><a class="reference" href="#generateAssignment%2CModuleGraph%2CMirEnv%2CTranslationConfig%2CPNode%2CMirBuilder%2CSourceMap"
+    title="generateAssignment(graph: ModuleGraph; env: var MirEnv;
+                   config: TranslationConfig; n: PNode; builder: var MirBuilder;
+                   source: var SourceMap)">generateAssignment(graph: ModuleGraph; env: var MirEnv;
+                   config: TranslationConfig; n: PNode; builder: var MirBuilder;
+                   source: var SourceMap)</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">generateCode
       <li><a class="reference" href="#generateCode%2CModuleGraph%2CMirEnv%2CTranslationConfig%2CPNode%2CMirBuilder%2CSourceMap"
     title="generateCode(graph: ModuleGraph; env: var MirEnv; config: TranslationConfig;
@@ -148,7 +157,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/mirgen.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/mirgen.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -190,7 +199,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/mirgen.nim#L131"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/mirgen.nim#L131"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L131" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -207,7 +216,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Extra configuration for the AST -&gt; MIR translation.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/mirgen.nim#L137"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/mirgen.nim#L137"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -224,9 +233,24 @@ class="link-seesrc" target="_blank">Source</a>
 
 Translates the construction expression AST <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> representing some constant data to its corresponding MIR representation.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/mirgen.nim#L2043"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/mirgen.nim#L2108"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2043" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2108" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="generateAssignment,ModuleGraph,MirEnv,TranslationConfig,PNode,MirBuilder,SourceMap">
+<dt><pre><span class="Keyword">proc</span> <a href="#generateAssignment%2CModuleGraph%2CMirEnv%2CTranslationConfig%2CPNode%2CMirBuilder%2CSourceMap"><span class="Identifier">generateAssignment</span></a><span class="Other">(</span><span class="Identifier">graph</span><span class="Other">:</span> <a href="../modules/modulegraphs.html#ModuleGraph"><span class="Identifier">ModuleGraph</span></a><span class="Other">;</span> <span class="Identifier">env</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirenv.html#MirEnv"><span class="Identifier">MirEnv</span></a><span class="Other">;</span>
+                        <span class="Identifier">config</span><span class="Other">:</span> <a href="mirgen.html#TranslationConfig"><span class="Identifier">TranslationConfig</span></a><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span>
+                        <span class="Identifier">builder</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirconstr.html#MirBuilder"><span class="Identifier">MirBuilder</span></a><span class="Other">;</span> <span class="Identifier">source</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="sourcemaps.html#SourceMap"><span class="Identifier">SourceMap</span></a><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ERecoverableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Translates an <tt class="docutils literal"><span class="pre"><span class="Identifier">nkIdentDefs</span></span></tt> AST into MIR and emits the result into <tt class="docutils literal"><span class="pre"><span class="Identifier">builder</span></span></tt>'s currently selected buffer.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/mirgen.nim#L2006"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2006" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -240,9 +264,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Generates MIR code that is semantically equivalent to the expression or statement <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>, appending the resulting code and the corresponding origin information to <tt class="docutils literal"><span class="pre"><span class="Identifier">code</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">source</span></span></tt>, respectively.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/mirgen.nim#L1961"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/mirgen.nim#L2026"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L1961" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2026" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -258,9 +282,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p><tt class="docutils literal"><span class="pre"><span class="Identifier">config</span></span></tt> provides additional configuration options that alter how some AST is translated.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/mirgen.nim#L2001"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/mirgen.nim#L2066"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2001" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirgen.nim#L2066" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>

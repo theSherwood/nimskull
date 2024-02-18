@@ -138,7 +138,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/injectdestructors.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/injectdestructors.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -152,10 +152,9 @@ class="link-seesrc" target="_blank">Source</a>
 </ul>
 
 <h1><a class="toc-backref" id="overview" href="#overview">Overview</a></h1><p>An analysis pass is performed that collects all entities that require destruction into an <tt class="docutils literal"><span class="pre">EntityDict</span></tt>. These are: locals, temporaries, <tt class="docutils literal"><span class="pre">sink</span></tt> parameters, and globals (with some exceptions). If a location has no type-bound <tt class="docutils literal"><span class="pre">=destroy</span></tt> hook (both user-provided and lifted), it is not included.</p>
-<p><tt class="docutils literal"><span class="pre">solveOwnership</span></tt> then computes for all lvalue expression appearing in consume (e.g., argument to <tt class="docutils literal"><span class="pre">sink</span></tt> parameter) or sink contexts (source lvalue in an assignment).</p>
-<p>Using the now resolved ownership status of all expressions, the next analysis step computes which locations need to be destroyed via a destructor call (see <tt class="docutils literal"><span class="pre">computeDestructors</span></tt>).</p>
+<p><tt class="docutils literal"><span class="pre">collapseSink</span></tt> then computes for all lvalue expression appearing as source operands to sink assignments whether it's the last use of the value currently stored in the location identified by the lvalue. All sinks where this is the case are remembered, and their corresponding data-flow operation is turned from a 'use' into a 'consume'.</p>
+<p>With all sink assignments either collapsed into copy or move assignments, the next analysis step computes which locations need to be destroyed via a destructor call (see <tt class="docutils literal"><span class="pre">computeDestructors</span></tt>).</p>
 <p>As the last step, the assignment rewriting and destructor injection is performed, using the previously gathered data.</p>
-<p>For the assignment rewriting, if the source operand of an assignment is owned, a move is used instead of a copy.</p>
 
 <h1><a class="toc-backref" id="ownership-analysis" href="#ownership-analysis">Ownership analysis</a></h1><p>Reassigning or reading from a location through a handle that is not the owning one is <strong>not</strong> detected by the analysis. In the following case (assuming no cursor inference):</p>
 <pre class="listing"><span class="Keyword">var</span> <span class="Identifier">a</span> <span class="Operator">=</span> <span class="Operator">@</span><span class="Punctuation">[</span><span class="DecNumber">1</span><span class="Punctuation">,</span> <span class="DecNumber">2</span><span class="Punctuation">]</span>
@@ -183,9 +182,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/injectdestructors.nim#L589"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/injectdestructors.nim#L587"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L589" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L587" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -196,9 +195,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/injectdestructors.nim#L255"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/injectdestructors.nim#L254"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L255" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L254" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -213,9 +212,9 @@ class="link-seesrc" target="_blank">Source</a>
 <p>For now, semantic errors and other diagnostics related to lifetime-hook usage are also reported here.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/injectdestructors.nim#L1127"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/injectdestructors.nim#L1116"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L1127" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L1116" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -225,9 +224,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/injectdestructors.nim#L1120"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/injectdestructors.nim#L1109"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L1120" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/injectdestructors.nim#L1109" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>

@@ -122,9 +122,7 @@ window.addEventListener('DOMContentLoaded', main);
   opInvalidate,             ## all information gathered about a value becomes invalid
   opMutate, ## mutation of a value. Can be viewed as a combined 'use' +
              ## 'def'
-  opConsume, ## a value is consumed. Counts as either a 'use' or a 'use'
-              ## + 'kill', 
-              ## depending on the context
+  opConsume,                ## a value is consumed. This is effectively a 'use' + 'kill'
   opMutateGlobal             ## an unspecified global is mutated">Opcode</a></li>
   <li><a class="reference" href="#Subgraph"
     title="Subgraph = Slice[InstrPos]">Subgraph</a></li>
@@ -146,6 +144,11 @@ window.addEventListener('DOMContentLoaded', main);
       <ul class="simple nested-toc-section">$
       <li><a class="reference" href="#%24%2CDataFlowGraph"
     title="`$`(c: DataFlowGraph): string">`$`(c: DataFlowGraph): string</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">change
+      <li><a class="reference" href="#change%2CDataFlowGraph%2CopenArray%5BInstrPos%5D%2COpcode"
+    title="change(dfg: var DataFlowGraph; instrs: openArray[InstrPos]; to: Opcode)">change(dfg: var DataFlowGraph; instrs: openArray[InstrPos]; to: Opcode)</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">computeDfg
@@ -203,7 +206,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -231,9 +234,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Encodes the data-flow graph of a local program as a sequence of control- and data-flow instructions.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L83"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L79"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L83" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L79" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -243,9 +246,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L66"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L62"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L66" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L62" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -261,15 +264,13 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">opInvalidate</span><span class="Other">,</span>             <span class="Comment">## all information gathered about a value becomes invalid</span>
   <span class="Identifier">opMutate</span><span class="Other">,</span> <span class="Comment">## mutation of a value. Can be viewed as a combined 'use' +</span>
              <span class="Comment">## 'def'</span>
-  <span class="Identifier">opConsume</span><span class="Other">,</span> <span class="Comment">## a value is consumed. Counts as either a 'use' or a 'use'</span>
-              <span class="Comment">## + 'kill', </span>
-              <span class="Comment">## depending on the context</span>
+  <span class="Identifier">opConsume</span><span class="Other">,</span>                <span class="Comment">## a value is consumed. This is effectively a 'use' + 'kill'</span>
   <span class="Identifier">opMutateGlobal</span>             <span class="Comment">## an unspecified global is mutated</span></pre></dt>
 <dd>
 
 The opcode of a data-/control-flow instruction, representing edges and nodes in the graph.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L37"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L37"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L37" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -281,9 +282,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Represents a sub-graph within the data-flow graph. Internally, this is a span of instructions.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L69"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L65"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L69" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -301,9 +302,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L91"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L87"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L91" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L87" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -318,9 +319,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 Renders the instructions of <tt class="docutils literal"><span class="pre"><span class="Identifier">c</span></span></tt> as a human-readable text representation
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L949"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L949"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L949" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="change,DataFlowGraph,openArray[InstrPos],Opcode">
+<dt><pre><span class="Keyword">func</span> <a href="#change%2CDataFlowGraph%2CopenArray%5BInstrPos%5D%2COpcode"><span class="Identifier">change</span></a><span class="Other">(</span><span class="Identifier">dfg</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="mirexec.html#DataFlowGraph"><span class="Identifier">DataFlowGraph</span></a><span class="Other">;</span> <span class="Identifier">instrs</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><a href="mirexec.html#InstrPos"><span class="Identifier">InstrPos</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">to</span><span class="Other">:</span> <a href="mirexec.html#Opcode"><span class="Identifier">Opcode</span></a><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Changes all data-flow instructions identified by <tt class="docutils literal"><span class="pre"><span class="Identifier">instrs</span></span></tt> to use the <tt class="docutils literal"><span class="pre"><span class="Identifier">to</span></span></tt> opcode.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L601"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L601" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -334,9 +348,9 @@ Computes the data-flow graph for the given <tt class="docutils literal"><span cl
 <p>The most amount of bookkeeping is required for finalizers and exceptions.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L332"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L330"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L332" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L330" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -346,9 +360,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the first data-/control-flow operation associated with <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>. If none are associated with <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>, the closest following (in terms of attached-to node position) operation is returned.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L603"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L595"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L603" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L595" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -359,9 +373,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Computes a reference to the sub-graph encompassing the <tt class="docutils literal"><span class="pre"><span class="Identifier">span</span></span></tt> of MIR instructions.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L597"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L589"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L597" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L589" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -377,7 +391,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns all data-flow operations in order of appearance together with their position.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L609"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L609"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L609" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -394,7 +408,7 @@ class="link-seesrc" target="_blank">Source</a>
 <p><tt class="docutils literal"><span class="pre"><span class="Identifier">state</span></span></tt> is used for bi-directional communication -- see the documentation of <tt class="docutils literal"><span class="pre">TraverseState</span></tt> for more information.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L616"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L616"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L616" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -410,7 +424,7 @@ class="link-seesrc" target="_blank">Source</a>
 <p><tt class="docutils literal"><span class="pre"><span class="Identifier">exit</span></span></tt> works the same way as it does for <tt class="docutils literal"><span class="pre">traverseReverse</span></tt></p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L869"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L869"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L869" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -427,7 +441,7 @@ class="link-seesrc" target="_blank">Source</a>
 <p>Similar to <tt class="docutils literal"><span class="pre">traverse</span></tt>, <tt class="docutils literal"><span class="pre"><span class="Identifier">exit</span></span></tt> is used, with the same meaning, for bi-directional communication.</p>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/sem/mirexec.nim#L761"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/mirexec.nim#L761"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/mirexec.nim#L761" class="link-seesrc" target="_blank" >Edit</a>
 

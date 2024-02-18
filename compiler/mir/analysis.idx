@@ -2,9 +2,9 @@ Values	mir/analysis.html#Values	analysis: Values
 skipConversions	mir/analysis.html#skipConversions,MirTree,OpValue	analysis: skipConversions(tree: MirTree; val: OpValue): OpValue	
 isOwned	mir/analysis.html#isOwned,Values,OpValue	analysis: isOwned(v: Values; val: OpValue): bool	
 markOwned	mir/analysis.html#markOwned,Values,OpValue	analysis: markOwned(v: var Values; val: OpValue)	
-isAlive	mir/analysis.html#isAlive,MirTree,DataFlowGraph,Values,Subgraph,Path,InstrPos	analysis: isAlive(tree: MirTree; cfg: DataFlowGraph; v: Values; span: Subgraph; loc: Path;\n        start: InstrPos): bool	
+isAlive	mir/analysis.html#isAlive,MirTree,DataFlowGraph,Subgraph,Path,InstrPos	analysis: isAlive(tree: MirTree; cfg: DataFlowGraph; span: Subgraph; loc: Path;\n        start: InstrPos): bool	
 isLastRead	mir/analysis.html#isLastRead,MirTree,DataFlowGraph,Subgraph,Path,InstrPos	analysis: isLastRead(tree: MirTree; cfg: DataFlowGraph; span: Subgraph; loc: Path;\n           start: InstrPos): bool	
 isLastWrite	mir/analysis.html#isLastWrite,MirTree,DataFlowGraph,Subgraph,Path,InstrPos	analysis: isLastWrite(tree: MirTree; cfg: DataFlowGraph; span: Subgraph; loc: Path;\n            start: InstrPos): tuple[result, exits, escapes: bool]	
-computeAliveOp	mir/analysis.html#computeAliveOp,MirTree,Values,T,Opcode,OpValue	analysis: computeAliveOp[T: PSym | GlobalId | TempId](tree: MirTree; values: Values;\n    loc: T; op: Opcode; n: OpValue): AliveState	
-computeAlive	mir/analysis.html#computeAlive,MirTree,DataFlowGraph,Values,Subgraph,T,staticComputeAliveProc[T]	analysis: computeAlive[T](tree: MirTree; cfg: DataFlowGraph; values: Values;\n                span: Subgraph; loc: T; op: static ComputeAliveProc[T]): tuple[\n    alive, escapes: bool]	
+computeAliveOp	mir/analysis.html#computeAliveOp,MirTree,T,Opcode,OpValue	analysis: computeAliveOp[T: PSym | GlobalId | TempId](tree: MirTree; loc: T; op: Opcode;\n    n: OpValue): AliveState	
+computeAlive	mir/analysis.html#computeAlive,MirTree,DataFlowGraph,Subgraph,T,staticComputeAliveProc[T]	analysis: computeAlive[T](tree: MirTree; cfg: DataFlowGraph; span: Subgraph; loc: T;\n                op: static ComputeAliveProc[T]): tuple[alive, escapes: bool]	
 doesGlobalEscape	mir/analysis.html#doesGlobalEscape,MirTree,Subgraph,InstrPos,GlobalId	analysis: doesGlobalEscape(tree: MirTree; scope: Subgraph; start: InstrPos; s: GlobalId): bool	

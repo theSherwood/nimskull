@@ -154,9 +154,9 @@ window.addEventListener('DOMContentLoaded', main);
   pirCheckedVariantAccess, pirCheckedObjConv, pirAddr, pirView, pirConv,
   pirStdConv, pirCast, pirToSlice, pirToSubSlice, pirCall, pirChckRange,
   pirStringToCString, pirCStringToString, pirComplex, ## a complex expression, such as an if-expression
-  pirStmtList, pirClosureConstr, pirSetConstr, pirObjConstr, pirRefConstr,
-  pirTupleConstr, pirArrayConstr, pirConstExpr, ## an expression that needs to be turned into an anonymous
-                                                 ## constant
+  pirStmtList, pirCopy, pirMove, pirDestructiveMove, pirSink, pirClosureConstr,
+  pirSetConstr, pirObjConstr, pirRefConstr, pirTupleConstr, pirArrayConstr, pirConstExpr, ## an expression that needs to be turned into an anonymous
+                                                                                           ## constant
   pirMat,                   ## materialize the value into an owning temporary
   pirMatCursor,             ## materialize the value into non-owning temporary
   pirMatLvalue               ## materialize the lvalue into a temporary reference">ProtoItemKind</a></li>
@@ -205,6 +205,11 @@ window.addEventListener('DOMContentLoaded', main);
     title="wantConsumeable(e: var seq[ProtoItem])">wantConsumeable(e: var seq[ProtoItem])</a></li>
 
   </ul>
+  <ul class="simple nested-toc-section">wantOwning
+      <li><a class="reference" href="#wantOwning%2Cseq%5BProtoItem%5D%2Cbool"
+    title="wantOwning(e: var seq[ProtoItem]; forceTemp: bool)">wantOwning(e: var seq[ProtoItem]; forceTemp: bool)</a></li>
+
+  </ul>
   <ul class="simple nested-toc-section">wantPure
       <li><a class="reference" href="#wantPure%2Cseq%5BProtoItem%5D"
     title="wantPure(e: var seq[ProtoItem])">wantPure(e: var seq[ProtoItem])</a></li>
@@ -233,7 +238,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -259,9 +264,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L150"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L157"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L150" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L157" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -276,9 +281,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L91"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L98"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L91" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L98" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -323,9 +328,9 @@ class="link-seesrc" target="_blank">Source</a>
 All fields of ref types are cursors, in order to eliminate costly copies and destructions. This is safe, because the AST is guaranteed to outlive the proto-MIR items.</div>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L98"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L105"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L98" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L105" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -338,9 +343,9 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">pirCheckedVariantAccess</span><span class="Other">,</span> <span class="Identifier">pirCheckedObjConv</span><span class="Other">,</span> <span class="Identifier">pirAddr</span><span class="Other">,</span> <span class="Identifier">pirView</span><span class="Other">,</span> <span class="Identifier">pirConv</span><span class="Other">,</span>
   <span class="Identifier">pirStdConv</span><span class="Other">,</span> <span class="Identifier">pirCast</span><span class="Other">,</span> <span class="Identifier">pirToSlice</span><span class="Other">,</span> <span class="Identifier">pirToSubSlice</span><span class="Other">,</span> <span class="Identifier">pirCall</span><span class="Other">,</span> <span class="Identifier">pirChckRange</span><span class="Other">,</span>
   <span class="Identifier">pirStringToCString</span><span class="Other">,</span> <span class="Identifier">pirCStringToString</span><span class="Other">,</span> <span class="Identifier">pirComplex</span><span class="Other">,</span> <span class="Comment">## a complex expression, such as an if-expression</span>
-  <span class="Identifier">pirStmtList</span><span class="Other">,</span> <span class="Identifier">pirClosureConstr</span><span class="Other">,</span> <span class="Identifier">pirSetConstr</span><span class="Other">,</span> <span class="Identifier">pirObjConstr</span><span class="Other">,</span> <span class="Identifier">pirRefConstr</span><span class="Other">,</span>
-  <span class="Identifier">pirTupleConstr</span><span class="Other">,</span> <span class="Identifier">pirArrayConstr</span><span class="Other">,</span> <span class="Identifier">pirConstExpr</span><span class="Other">,</span> <span class="Comment">## an expression that needs to be turned into an anonymous</span>
-                                                 <span class="Comment">## constant</span>
+  <span class="Identifier">pirStmtList</span><span class="Other">,</span> <span class="Identifier">pirCopy</span><span class="Other">,</span> <span class="Identifier">pirMove</span><span class="Other">,</span> <span class="Identifier">pirDestructiveMove</span><span class="Other">,</span> <span class="Identifier">pirSink</span><span class="Other">,</span> <span class="Identifier">pirClosureConstr</span><span class="Other">,</span>
+  <span class="Identifier">pirSetConstr</span><span class="Other">,</span> <span class="Identifier">pirObjConstr</span><span class="Other">,</span> <span class="Identifier">pirRefConstr</span><span class="Other">,</span> <span class="Identifier">pirTupleConstr</span><span class="Other">,</span> <span class="Identifier">pirArrayConstr</span><span class="Other">,</span> <span class="Identifier">pirConstExpr</span><span class="Other">,</span> <span class="Comment">## an expression that needs to be turned into an anonymous</span>
+                                                                                           <span class="Comment">## constant</span>
   <span class="Identifier">pirMat</span><span class="Other">,</span>                   <span class="Comment">## materialize the value into an owning temporary</span>
   <span class="Identifier">pirMatCursor</span><span class="Other">,</span>             <span class="Comment">## materialize the value into non-owning temporary</span>
   <span class="Identifier">pirMatLvalue</span>               <span class="Comment">## materialize the lvalue into a temporary reference</span></pre></dt>
@@ -348,7 +353,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L28"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L28"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L28" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -364,9 +369,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L144"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L151"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L144" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L151" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -381,9 +386,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the kind of the given proto-MIR expression.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L216"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L218"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L216" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L218" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -393,9 +398,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the kind of the given proto-MIR expression.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L181"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L188"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L181" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L188" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -407,9 +412,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Translates the expression <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> and all its relevant sub-expression into the corresponding proto-MIR representation, already performing some necessary lowering.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L712"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L810"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L712" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L810" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -419,9 +424,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L348"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L445"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L348" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L445" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -431,9 +436,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L441"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L539"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L441" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L539" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -443,9 +448,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L178"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L185"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L178" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L185" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -453,11 +458,23 @@ class="link-seesrc" target="_blank">Source</a>
 <dt><pre><span class="Keyword">func</span> <a href="#wantConsumeable%2Cseq%5BProtoItem%5D"><span class="Identifier">wantConsumeable</span></a><span class="Other">(</span><span class="Identifier">e</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="proto_mir.html#ProtoItem"><span class="Identifier">ProtoItem</span></a><span class="Other">]</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
-Makes sure <tt class="docutils literal"><span class="pre"><span class="Identifier">e</span></span></tt> is an expression that can be used in a context requiring a certainly-consumeable value.
+Makes sure <tt class="docutils literal"><span class="pre"><span class="Identifier">e</span></span></tt> is an expression that can be used in a context requiring a certainly-consumeable value (either a materialized temporary or a literal value).
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L289"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L379"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L289" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L379" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+</div>
+<div id="wantOwning,seq[ProtoItem],bool">
+<dt><pre><span class="Keyword">func</span> <a href="#wantOwning%2Cseq%5BProtoItem%5D%2Cbool"><span class="Identifier">wantOwning</span></a><span class="Other">(</span><span class="Identifier">e</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="proto_mir.html#ProtoItem"><span class="Identifier">ProtoItem</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">forceTemp</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+Makes sure <tt class="docutils literal"><span class="pre"><span class="Identifier">e</span></span></tt> produces an owning value. If <tt class="docutils literal"><span class="pre"><span class="Identifier">forceTemp</span></span></tt> is true, a temporary is materialized even if the expression would already produce an owning value.
+&nbsp;&nbsp;<a
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L346"
+class="link-seesrc" target="_blank">Source</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L346" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -467,9 +484,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Makes sure <tt class="docutils literal"><span class="pre"><span class="Identifier">e</span></span></tt> is a pure expression. An impure expression is turned into a pure expression by materializing it into a temporary and then using the temporary in its place.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L302"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L399"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L302" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L399" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -479,9 +496,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Makes sure <tt class="docutils literal"><span class="pre"><span class="Identifier">e</span></span></tt> is something that can be assigned to a non-owning destination.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L327"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L424"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L327" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L424" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -491,9 +508,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Makes sure <tt class="docutils literal"><span class="pre"><span class="Identifier">e</span></span></tt> is a stable lvalue expression. Rvalues and literal values are committed to temporaries.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L334"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L431"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L334" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L431" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -503,9 +520,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Makes sure <tt class="docutils literal"><span class="pre"><span class="Identifier">e</span></span></tt> is a literal value or lvalue expression.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/ee40a2f816400a3aea164f6e57cf3ca1f9fffbc7/compiler/mir/proto_mir.nim#L317"
+href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/mir/proto_mir.nim#L414"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L317" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/proto_mir.nim#L414" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
