@@ -184,7 +184,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/sem.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/sem.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sem.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -207,13 +207,10 @@ class="link-seesrc" target="_blank">Source</a>
 <li>expression templates (all types that are not <tt class="docutils literal"><span class="pre"><span class="Identifier">untyped</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">typed</span></span></tt>)</li>
 </ul>
 
-<h2><a class="toc-backref" id="template-taxonomy-substitution-positions" href="#template-taxonomy-substitution-positions">Substitution Positions</a></h2><p>Templates are ultimately AST level constructs regardless of output type, even they follow the grammar. There are two types of positions in a template body, one is <tt class="docutils literal"><span class="pre"><span class="Identifier">definition</span></span></tt> and the other is <tt class="docutils literal"><span class="pre"><span class="Identifier">usage</span></span></tt>. A <tt class="docutils literal"><span class="pre"><span class="Identifier">definition</span></span></tt> are any position where the grammar construct is intended to introduce a new symbol, i.e.: the name of a routine, including its parameters; names of variables (<tt class="docutils literal"><span class="pre"><span class="Keyword">const</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Keyword">let</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Keyword">var</span></span></tt>), and so on. All other sites are <tt class="docutils literal"><span class="pre"><span class="Identifier">usage</span></span></tt> sites, where a symbol of &quot;chunk&quot; of AST might be used.</p>
+<h2><a class="toc-backref" id="template-taxonomy-substitution-positions" href="#template-taxonomy-substitution-positions">Substitution Positions</a></h2><p>Templates are ultimately AST level constructs regardless of output type, they must be valid syntax. There are two types of positions in a template body, one is <tt class="docutils literal"><span class="pre"><span class="Identifier">definition</span></span></tt> and the other is <tt class="docutils literal"><span class="pre"><span class="Identifier">usage</span></span></tt>. A <tt class="docutils literal"><span class="pre"><span class="Identifier">definition</span></span></tt> is any position where the grammar construct is intended to introduce a new symbol, i.e.: the name of a routine, including its parameters; names of variables (<tt class="docutils literal"><span class="pre"><span class="Keyword">const</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Keyword">let</span></span></tt>, <tt class="docutils literal"><span class="pre"><span class="Keyword">var</span></span></tt>), and so on. All other sites are <tt class="docutils literal"><span class="pre"><span class="Identifier">usage</span></span></tt> sites, where a symbol referring to a &quot;chunk&quot; of AST might be used.</p>
 <p>This is a draft of subsitution rules:</p>
-<ul class="simple"><li><tt class="docutils literal"><span class="pre"><span class="Identifier">untyped</span></span></tt> template bodies accept <tt class="docutils literal"><span class="pre"><span class="Identifier">typed</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">untyped</span></span></tt> params in definition or usage positions; and all other params are usage only</li>
-<li><dl class="docutils"><dt><tt class="docutils literal"><span class="pre"><span class="Identifier">typed</span></span></tt> template bodies accept <tt class="docutils literal"><span class="pre"><span class="Identifier">typed</span></span></tt> and <tt class="docutils literal"><span class="pre"><span class="Identifier">untyped</span></span></tt> params in definition</dt>
-<dd>or usage positions; and all other params are usage only</dd>
-</dl>
-</li>
+<ul class="simple"><li><tt class="docutils literal"><span class="pre"><span class="Identifier">untyped</span></span></tt> template bodies accept <tt class="docutils literal"><span class="pre"><span class="Identifier">untyped</span></span></tt> params in definition or usage positions; and all other params are usage only</li>
+<li><tt class="docutils literal"><span class="pre"><span class="Identifier">typed</span></span></tt> template bodies accept <tt class="docutils literal"><span class="pre"><span class="Identifier">untyped</span></span></tt> params in definition or usage positions; and all other params are usage only</li>
 <li>non-ast template bodies only allow subsitutions within usage positions</li>
 </ul>
 <p>This implements the first pass over the generic body; it resolves some symbols. Thus for generics there is a two-phase symbol lookup.</p>
@@ -243,7 +240,7 @@ included from sem.nim</p>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/sem.nim#L1037"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/sem.nim#L1037"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sem.nim#L1037" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -256,7 +253,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/semmagic.nim#L139"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/semmagic.nim#L139"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semmagic.nim#L139" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -268,7 +265,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/semmagic.nim#L137"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/semmagic.nim#L137"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semmagic.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -280,7 +277,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/semmagic.nim#L134"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/semmagic.nim#L134"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semmagic.nim#L134" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -298,7 +295,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/sem.nim#L296"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/sem.nim#L296"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sem.nim#L296" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -311,7 +308,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/sem.nim#L385"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/sem.nim#L385"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sem.nim#L385" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -324,7 +321,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 true if <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> is an <tt class="docutils literal"><span class="pre"><span class="Identifier">nkError</span></span></tt> of kind <tt class="docutils literal"><span class="pre"><span class="Identifier">adSemSymNameSym</span></span></tt> and the error is minor enough to allow the recovery sym to be updated. Used to see if progress is allowed inspite of errors.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/sem.nim#L400"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/sem.nim#L400"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sem.nim#L400" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -336,7 +333,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 extracts the symbol from <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>, which must be an <tt class="docutils literal"><span class="pre"><span class="Identifier">nkSym</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">nkError</span></span></tt> with diagnostic kind of <tt class="docutils literal"><span class="pre"><span class="Identifier">adSemDefNameSym</span></span></tt>. If <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> is an error, a recovery symbol is extracted, allowing progress to be made.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/sem.nim#L407"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/sem.nim#L407"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sem.nim#L407" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -350,7 +347,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/semcall.nim#L408"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/semcall.nim#L408"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semcall.nim#L408" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -364,7 +361,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/semcall.nim#L418"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/semcall.nim#L418"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semcall.nim#L418" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -377,7 +374,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/semcall.nim#L93"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/semcall.nim#L93"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semcall.nim#L93" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -400,7 +397,7 @@ class="link-seesrc" target="_blank">Source</a>
 </ol>
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/sem.nim#L420"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/sem.nim#L420"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sem.nim#L420" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -412,7 +409,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/semtypes.nim#L866"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/semtypes.nim#L866"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/semtypes.nim#L866" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -429,7 +426,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/94837f4ca9c6b01c12ba4ae57986390b95fe887d/compiler/sem/sem.nim#L294"
+href="https://github.com/nim-works/nimskull/tree/4948ae809f7d84ef6d765111a7cd0c7cf2ae77d2/compiler/sem/sem.nim#L294"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/sem/sem.nim#L294" class="link-seesrc" target="_blank" >Edit</a>
 
