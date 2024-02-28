@@ -167,9 +167,6 @@ window.addEventListener('DOMContentLoaded', main);
   of mnkEnd:
       start*: MirNodeKind    ## the kind of the corresponding start node
     
-  of mnkPNode:
-      node*: PNode
-
   of mnkTag:
       effect*: EffectKind    ## the effect that happens when the operator the
                              ## tagged value is passed to is executed
@@ -322,13 +319,8 @@ window.addEventListener('DOMContentLoaded', main);
                ## location in an undefined state
   mnkAsm,                   ## embeds backend-dependent code directly into the output
   mnkEmit,                  ## embeds backend-dependent code directly into the output
-  mnkEnd, ## marks the end of a sub-tree. Has no behaviour associated with
-           ## it -- it's only required to know where a sub-tree ends
-  mnkPNode ## depending on the context, either statement or something else.
-           ## If it appears as a statement, it is expected to not have any
-           ## obsersvable effects
-           ## XXX: eventually, everything that currently requires
-           ##      ``mnkPNode`` should be expressable directly in the IR">MirNodeKind</a></li>
+  mnkEnd ## marks the end of a sub-tree. Has no behaviour associated with
+         ## it -- it's only required to know where a sub-tree ends">MirNodeKind</a></li>
   <li><a class="reference" href="#MirNodeSeq"
     title="MirNodeSeq = seq[MirNode]">MirNodeSeq</a></li>
   <li><a class="reference" href="#MirTree"
@@ -352,11 +344,11 @@ window.addEventListener('DOMContentLoaded', main);
   <a class="reference reference-toplevel" href="#10" id="60">Consts</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#AllNodeKinds"
-    title="AllNodeKinds = {mnkNone..mnkPNode}">AllNodeKinds</a></li>
+    title="AllNodeKinds = {mnkNone..mnkEnd}">AllNodeKinds</a></li>
   <li><a class="reference" href="#ArgumentNodes"
     title="ArgumentNodes = {mnkArg, mnkName, mnkConsume}">ArgumentNodes</a></li>
   <li><a class="reference" href="#AtomNodes"
-    title="AtomNodes = {mnkNone..mnkType, mnkMagic, mnkBreak, mnkReturn, mnkPNode}">AtomNodes</a></li>
+    title="AtomNodes = {mnkNone..mnkType, mnkMagic, mnkBreak, mnkReturn}">AtomNodes</a></li>
   <li><a class="reference" href="#Atoms"
     title="Atoms = {mnkNone..mnkAlias, mnkLiteral..mnkType}">Atoms</a></li>
   <li><a class="reference" href="#BinaryOps"
@@ -387,7 +379,7 @@ window.addEventListener('DOMContentLoaded', main);
                       mnkConsume, mnkVoid, mnkCopy, mnkMove, mnkSink, mnkDestroy}">SingleOperandNodes</a></li>
   <li><a class="reference" href="#StmtNodes"
     title="StmtNodes = {mnkDef..mnkSwitch, mnkRaise, mnkVoid..mnkTry, mnkBlock..mnkReturn,
-             mnkDestroy..mnkEmit, mnkPNode}">StmtNodes</a></li>
+             mnkDestroy..mnkEmit}">StmtNodes</a></li>
   <li><a class="reference" href="#SubTreeNodes"
     title="SubTreeNodes = {mnkDef..mnkBlock, mnkBranch..mnkEmit}">SubTreeNodes</a></li>
   <li><a class="reference" href="#SymbolLike"
@@ -603,7 +595,7 @@ window.addEventListener('DOMContentLoaded', main);
 
   </div>
   &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L1"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L1"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L1" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -627,7 +619,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Identifies a constant across all MIR code. This includes both user-defined constants as well as anonymous constants
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L18"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L18"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L18" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -639,7 +631,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Identifies a complete constant expression
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L29"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L29"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L29" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -658,9 +650,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L261"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L255"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L261" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L255" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -671,9 +663,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L270"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L264"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L270" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L264" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -683,7 +675,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Identifies a global across all MIR code
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L16"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L16"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L16" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -695,7 +687,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 ID of a label, used to identify a block (<tt class="docutils literal"><span class="pre">mnkBlock</span></tt>).
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L51"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L51"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L51" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -744,9 +736,6 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Keyword">of</span> <span class="Identifier">mnkEnd</span><span class="Other">:</span>
       <span class="Identifier">start</span><span class="Operator">*</span><span class="Other">:</span> <a href="mirtrees.html#MirNodeKind"><span class="Identifier">MirNodeKind</span></a>    <span class="Comment">## the kind of the corresponding start node</span>
     
-  <span class="Keyword">of</span> <span class="Identifier">mnkPNode</span><span class="Other">:</span>
-      <span class="Identifier">node</span><span class="Operator">*</span><span class="Other">:</span> <a href="../ast/ast_types.html#PNode"><span class="Identifier">PNode</span></a>
-
   <span class="Keyword">of</span> <span class="Identifier">mnkTag</span><span class="Other">:</span>
       <span class="Identifier">effect</span><span class="Operator">*</span><span class="Other">:</span> <a href="mirtrees.html#EffectKind"><span class="Identifier">EffectKind</span></a>    <span class="Comment">## the effect that happens when the operator the</span>
                              <span class="Comment">## tagged value is passed to is executed</span>
@@ -759,9 +748,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L273"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L267"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L273" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L267" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -911,18 +900,13 @@ class="link-seesrc" target="_blank">Source</a>
                <span class="Comment">## location in an undefined state</span>
   <span class="Identifier">mnkAsm</span><span class="Other">,</span>                   <span class="Comment">## embeds backend-dependent code directly into the output</span>
   <span class="Identifier">mnkEmit</span><span class="Other">,</span>                  <span class="Comment">## embeds backend-dependent code directly into the output</span>
-  <span class="Identifier">mnkEnd</span><span class="Other">,</span> <span class="Comment">## marks the end of a sub-tree. Has no behaviour associated with</span>
-           <span class="Comment">## it -- it's only required to know where a sub-tree ends</span>
-  <span class="Identifier">mnkPNode</span> <span class="Comment">## depending on the context, either statement or something else.</span>
-           <span class="Comment">## If it appears as a statement, it is expected to not have any</span>
-           <span class="Comment">## obsersvable effects</span>
-           <span class="Comment">## XXX: eventually, everything that currently requires</span>
-           <span class="Comment">##      ``mnkPNode`` should be expressable directly in the IR</span></pre></dt>
+  <span class="Identifier">mnkEnd</span> <span class="Comment">## marks the end of a sub-tree. Has no behaviour associated with</span>
+         <span class="Comment">## it -- it's only required to know where a sub-tree ends</span></pre></dt>
 <dd>
 
 Users of <tt class="docutils literal"><span class="pre">MirNodeKind</span></tt> should not depend on the absolute or relative order between the enum values
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L54"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L54"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L54" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -934,9 +918,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 A buffer of MIR nodes without any further meaning
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L313"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L305"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L313" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L305" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -946,9 +930,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L312"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L304"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L312" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L304" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -958,9 +942,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L316"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L308"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L316" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L308" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -970,9 +954,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 refers to a <tt class="docutils literal"><span class="pre">MirNode</span></tt> of which the position relative to other nodes has meaning. Uses a signed integer as the base
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L317"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L309"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L317" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L309" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -982,9 +966,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 refers to an node appearing in an expression/operand position
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L320"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L312"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L320" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L312" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -994,7 +978,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 Identifies a procedure
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L25"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L25"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -1006,7 +990,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 The ID of a source-mapping that's stored separately from the MIR nodes.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L37"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L37"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L37" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -1018,7 +1002,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 ID of a temporary location. A temporary location is created and inserted by the compiler. The only difference to other named locations is that temporaries are allowed to be elided (by an optimization pass, for example) if it's deemed to have no effect on the codes' semantics
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L46"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L46"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L46" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -1030,14 +1014,14 @@ class="link-seesrc" target="_blank">Source</a>
 <h1><a class="toc-backref" href="#10">Consts</a></h1>
 <dl class="item">
 <div id="AllNodeKinds">
-<dt><pre><a href="mirtrees.html#AllNodeKinds"><span class="Identifier">AllNodeKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">mnkNone</span><span class="Other">..</span><span class="DecNumber">mnkPNode</span><span class="Other">}</span></pre></dt>
+<dt><pre><a href="mirtrees.html#AllNodeKinds"><span class="Identifier">AllNodeKinds</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">mnkNone</span><span class="Other">..</span><span class="DecNumber">mnkEnd</span><span class="Other">}</span></pre></dt>
 <dd>
 
 Convenience set containing all existing node kinds
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L327"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L319"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L327" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L319" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1047,21 +1031,21 @@ class="link-seesrc" target="_blank">Source</a>
 
 Nodes only allowed in argument contexts.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L348"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L340"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L348" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L340" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="AtomNodes">
-<dt><pre><a href="mirtrees.html#AtomNodes"><span class="Identifier">AtomNodes</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">mnkNone</span><span class="Other">..</span><span class="DecNumber">mnkType</span><span class="Other">,</span> <span class="DecNumber">mnkMagic</span><span class="Other">,</span> <span class="DecNumber">mnkBreak</span><span class="Other">,</span> <span class="DecNumber">mnkReturn</span><span class="Other">,</span> <span class="DecNumber">mnkPNode</span><span class="Other">}</span></pre></dt>
+<dt><pre><a href="mirtrees.html#AtomNodes"><span class="Identifier">AtomNodes</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">mnkNone</span><span class="Other">..</span><span class="DecNumber">mnkType</span><span class="Other">,</span> <span class="DecNumber">mnkMagic</span><span class="Other">,</span> <span class="DecNumber">mnkBreak</span><span class="Other">,</span> <span class="DecNumber">mnkReturn</span><span class="Other">}</span></pre></dt>
 <dd>
 
 Nodes that don't support sub nodes.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L334"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L326"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L334" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L326" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1071,9 +1055,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Nodes that may be appear in atom-expecting slots.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L364"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L356"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L364" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L356" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1083,9 +1067,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 All binary operators
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L374"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L366"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L374" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L366" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1095,9 +1079,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L386"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L378"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L386" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L378" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1108,9 +1092,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Nodes that can appear in the MIR subset used for constant expressions.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L358"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L350"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L358" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L350" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1120,9 +1104,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Node kinds that represent definition statements (i.e. something that introduces a named entity)
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L330"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L322"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L330" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L322" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1133,9 +1117,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L383"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L375"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L383" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L375" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1147,9 +1131,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L377"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L369"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L377" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L369" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1159,9 +1143,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Assignment modifiers. Nodes that can only appear directly in the source slot of assignments.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L351"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L343"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L351" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L343" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1172,9 +1156,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L380"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L372"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L380" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L372" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1187,22 +1171,22 @@ class="link-seesrc" target="_blank">Source</a>
 
 Nodes that start sub-trees but that always have a single sub node.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L341"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L333"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L341" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L333" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
 <div id="StmtNodes">
 <dt><pre><a href="mirtrees.html#StmtNodes"><span class="Identifier">StmtNodes</span></a> <span class="Other">=</span> <span class="Other">{</span><span class="DecNumber">mnkDef</span><span class="Other">..</span><span class="DecNumber">mnkSwitch</span><span class="Other">,</span> <span class="DecNumber">mnkRaise</span><span class="Other">,</span> <span class="DecNumber">mnkVoid</span><span class="Other">..</span><span class="DecNumber">mnkTry</span><span class="Other">,</span> <span class="DecNumber">mnkBlock</span><span class="Other">..</span><span class="DecNumber">mnkReturn</span><span class="Other">,</span>
-             <span class="DecNumber">mnkDestroy</span><span class="Other">..</span><span class="DecNumber">mnkEmit</span><span class="Other">,</span> <span class="DecNumber">mnkPNode</span><span class="Other">}</span></pre></dt>
+             <span class="DecNumber">mnkDestroy</span><span class="Other">..</span><span class="DecNumber">mnkEmit</span><span class="Other">}</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L367"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L359"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L367" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L359" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1212,9 +1196,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Nodes that start a sub-tree. They're always matched with an <tt class="docutils literal"><span class="pre">mnkEnd</span></tt> node.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L337"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L329"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L337" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L329" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1224,9 +1208,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Nodes for which the <tt class="docutils literal"><span class="pre"><span class="Identifier">sym</span></span></tt> field is available
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L355"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L347"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L355" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L347" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1236,9 +1220,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 All unary operators
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L372"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L364"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L372" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L364" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1253,9 +1237,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L424"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L416"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L424" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L416" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1265,9 +1249,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L423"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L415"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L423" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L415" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1277,9 +1261,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L391"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L383"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L391" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L383" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1289,9 +1273,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L394"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L386"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L394" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L386" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1301,9 +1285,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L392"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L384"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L392" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L384" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1313,9 +1297,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L390"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L382"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L390" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L382" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1325,9 +1309,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L425"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L417"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L425" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L417" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1337,9 +1321,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L393"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L385"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L393" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L385" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1349,9 +1333,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L388"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L380"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L388" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L380" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1361,9 +1345,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L389"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L381"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L389" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L381" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1374,9 +1358,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L534"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L526"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L534" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L526" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1387,9 +1371,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L538"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L530"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L538" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L530" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1399,9 +1383,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L427"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L419"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L427" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L419" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1412,9 +1396,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the <tt class="docutils literal"><span class="pre"><span class="Identifier">i</span></span></tt>-th argument in the call-like tree at <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>, skipping tag nodes. It is expected that the call has at least <tt class="docutils literal"><span class="pre"><span class="Identifier">i</span></span></tt> + 1 arguments.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L576"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L568"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L576" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L568" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1425,9 +1409,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the position of the child node at index <tt class="docutils literal"><span class="pre"><span class="Identifier">index</span></span></tt>. <tt class="docutils literal"><span class="pre"><span class="Identifier">index</span></span></tt> <em>must</em> refer to a valid sub-node -- no validation is performed
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L521"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L513"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L521" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L513" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1438,9 +1422,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 If <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> refers to a leaf node, returns a span with the <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> as the single item. Otherwise, computes and returns the span of nodes part of the sub-tree at <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>. The 'end' node is included.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L496"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L488"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L496" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L488" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1450,9 +1434,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Extracts the <tt class="docutils literal"><span class="pre">DataId</span></tt> from <tt class="docutils literal"><span class="pre"><span class="Identifier">id</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L400"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L392"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L400" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L392" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1463,9 +1447,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Finds and returns the first definition for the name of the temporary at node <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>. No control-flow analysis is performed.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L618"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L610"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L618" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L610" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1476,9 +1460,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Finds the corresponding <tt class="docutils literal"><span class="pre">end</span></tt> node for the node <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> that starts a sub-tree
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L515"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L507"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L515" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L507" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1489,9 +1473,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Searches for the first enclosing sub-tree node of kind <tt class="docutils literal"><span class="pre"><span class="Identifier">kind</span></span></tt> (which is <em>required</em> to exist). The node at <tt class="docutils literal"><span class="pre"><span class="Identifier">start</span></span></tt> is itself also considered during the search
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L550"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L542"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L550" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L542" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1502,9 +1486,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 If <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> refers to an <tt class="docutils literal"><span class="pre">end</span></tt> node, returns the corresponding start node -- <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> otherwise
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L542"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L534"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L542" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L534" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1514,9 +1498,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns whether <tt class="docutils literal"><span class="pre"><span class="Identifier">id</span></span></tt> represents an anonymous constant.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L396"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L388"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L396" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L388" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1526,9 +1510,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Computes the number of arguments in the call tree.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L560"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L552"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L560" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L552" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1539,9 +1523,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the <tt class="docutils literal"><span class="pre"><span class="Identifier">i</span></span></tt>-th operand to the sub-tree at <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>. It is expected that the operation has at least <tt class="docutils literal"><span class="pre"><span class="Identifier">i</span></span></tt> + 1 operands.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L529"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L521"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L529" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L521" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1551,9 +1535,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the index (<tt class="docutils literal"><span class="pre">OpValue</span></tt>) of the operand for the single-input node at <tt class="docutils literal"><span class="pre"><span class="Identifier">op</span></span></tt>.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L567"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L559"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L567" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L559" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1563,9 +1547,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L433"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L425"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L433" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L425" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1576,9 +1560,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L443"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L435"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L443" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L435" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1589,9 +1573,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Computes the index of <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>'s the preceding sibling node. If there is none, returns the index of the parent node.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L478"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L470"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L478" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L470" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1602,9 +1586,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Computes the index of the next sibling node of <tt class="docutils literal"><span class="pre"><span class="Identifier">x</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L457"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L449"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L457" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L449" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1615,9 +1599,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 If <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> is of <tt class="docutils literal"><span class="pre"><span class="Identifier">kind</span></span></tt>, return its operand node, <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt> otherwise.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L591"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L583"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L591" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L583" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1627,9 +1611,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Find the corresponding start node for an <tt class="docutils literal"><span class="pre">mnkEnd</span></tt> node
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L503"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L495"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L503" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L495" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1639,9 +1623,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Creates the ID for an anonymous constant with <tt class="docutils literal"><span class="pre"><span class="Identifier">id</span></span></tt> as the content.
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L404"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L396"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L404" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L396" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1657,9 +1641,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Returns the argument kinds together with the operand node (or tag tree).
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L610"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L602"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L610" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L602" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1669,9 +1653,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L640"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L632"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L640" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L632" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1682,9 +1666,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L596"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L588"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L596" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L588" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1695,9 +1679,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 Iterates over and yields all direct child nodes of <tt class="docutils literal"><span class="pre"><span class="Identifier">n</span></span></tt>
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L603"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L595"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L603" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L595" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1712,9 +1696,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L414"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L406"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L414" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L406" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1724,9 +1708,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L411"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L403"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L411" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L403" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1736,9 +1720,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L430"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L422"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L430" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L422" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1748,9 +1732,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L417"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L409"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L417" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L409" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1760,9 +1744,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L420"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L412"
 class="link-seesrc" target="_blank">Source</a>
-&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L420" class="link-seesrc" target="_blank" >Edit</a>
+&nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L412" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 </div>
@@ -1772,7 +1756,7 @@ class="link-seesrc" target="_blank">Source</a>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/nim-works/nimskull/tree/8a6a476d89ecdd0d64394728910267a31c5a8dad/compiler/mir/mirtrees.nim#L41"
+href="https://github.com/nim-works/nimskull/tree/8b68b0d610b28ea47204ed0ca4fe9d1fcc19dad8/compiler/mir/mirtrees.nim#L41"
 class="link-seesrc" target="_blank">Source</a>
 &nbsp;&nbsp;<a href="https://github.com/nim-works/nimskull/edit/devel/compiler/mir/mirtrees.nim#L41" class="link-seesrc" target="_blank" >Edit</a>
 
@@ -1788,7 +1772,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-02-27 00:00:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-02-28 00:00:00 UTC</small>
       </div>
     </div>
   </div>
